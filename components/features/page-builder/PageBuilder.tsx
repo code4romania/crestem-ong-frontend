@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
-import { Eye, GripVertical, Plus, Trash2, X } from "lucide-react";
+import { Eye, GripVertical, Pencil, Plus, Trash2, X } from "lucide-react";
 import {
   DndContext,
   DragOverlay,
@@ -469,6 +469,14 @@ export function PageBuilder({
               className="absolute left-3 top-3 z-10 cursor-grab touch-none rounded-md bg-white/90 p-1 text-[#94a3b8] opacity-0 shadow-sm transition-opacity hover:text-[#64748b] group-hover:opacity-100"
             >
               <GripVertical size={16} aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleEditBlock(block.id, null)}
+              aria-label="Editează blocul"
+              className="absolute right-12 top-3 z-10 rounded-md bg-white/90 p-1.5 text-[#64748b] opacity-0 shadow-sm transition-opacity hover:bg-slate-50 focus-visible:opacity-100 group-hover:opacity-100"
+            >
+              <Pencil size={16} aria-hidden="true" />
             </button>
             <button
               type="button"
