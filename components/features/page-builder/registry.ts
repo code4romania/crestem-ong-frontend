@@ -4,6 +4,7 @@ import { heroCenteredBlock } from "./blocks/hero-centered";
 import { heroIntroBlock } from "./blocks/hero-intro";
 import { heroStatisticsBlock } from "./blocks/hero-statistics";
 import { featureCardsBlock } from "./blocks/feature-cards";
+import { partnersBlock } from "./blocks/partners";
 import { articleGridBlock } from "./blocks/article-grid";
 import { programmeGridBlock } from "./blocks/programme-grid";
 import { peopleGridBlock } from "./blocks/people-grid";
@@ -40,6 +41,7 @@ export const BLOCK_REGISTRY: Record<string, BlockDefinition> = {
   [heroIntroBlock.type]: heroIntroBlock,
   [heroStatisticsBlock.type]: heroStatisticsBlock,
   [featureCardsBlock.type]: featureCardsBlock,
+  [partnersBlock.type]: partnersBlock,
   [articleGridBlock.type]: articleGridBlock,
   [programmeGridBlock.type]: programmeGridBlock,
   [peopleGridBlock.type]: peopleGridBlock,

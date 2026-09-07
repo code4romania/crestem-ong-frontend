@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { getMediaUrl } from "@/lib/api/client";
 import { FEATURE_ICONS } from "./icons";
 import type { FeatureCard, FeatureCardsData } from "./schema";
 
@@ -24,12 +25,23 @@ function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
           : "border-border bg-white shadow-sm"
       }`}
     >
-      <span
-        className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
-        style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
-      >
-        <Icon size={22} />
-      </span>
+      {card.iconImage ? (
+        <span className="mb-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getMediaUrl(card.iconImage.url)}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+        </span>
+      ) : (
+        <span
+          className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
+          style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
+        >
+          <Icon size={22} />
+        </span>
+      )}
       <h3
         className={`mb-2 text-lg font-semibold wrap-break-word ${
           isDark ? "text-white" : "text-[#162040]"
@@ -79,30 +91,34 @@ export function FeatureCards({ data }: { data: FeatureCardsData }) {
   return (
     <section className="relative overflow-hidden" style={sectionStyle}>
       <div className="relative mx-auto max-w-7xl px-6 py-20">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
-          <h2
-            className="font-heading wrap-break-word"
-            style={{
-              fontSize: "clamp(2rem, 4vw, 2.75rem)",
-              fontWeight: 800,
-              lineHeight: 1.15,
-              color: isDark ? "#ffffff" : "#162040",
-            }}
-          >
-            {titluSectiune}
-          </h2>
-          {descriere ? (
-            <p
-              className="mt-4 leading-relaxed whitespace-pre-line wrap-break-word"
-              style={{
-                fontSize: "1.125rem",
-                color: isDark ? "rgba(255,255,255,0.72)" : "#475569",
-              }}
-            >
-              {descriere}
-            </p>
-          ) : null}
-        </div>
+        {titluSectiune || descriere ? (
+          <div className="mx-auto mb-12 max-w-2xl text-center">
+            {titluSectiune ? (
+              <h2
+                className="font-heading wrap-break-word"
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 2.75rem)",
+                  fontWeight: 800,
+                  lineHeight: 1.15,
+                  color: isDark ? "#ffffff" : "#162040",
+                }}
+              >
+                {titluSectiune}
+              </h2>
+            ) : null}
+            {descriere ? (
+              <p
+                className="mt-4 leading-relaxed whitespace-pre-line wrap-break-word"
+                style={{
+                  fontSize: "1.125rem",
+                  color: isDark ? "rgba(255,255,255,0.72)" : "#475569",
+                }}
+              >
+                {descriere}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
 
         {carduri.length > 0 ? (
           <div className={`grid grid-cols-1 gap-6 ${COL_CLASS[coloane]}`}>

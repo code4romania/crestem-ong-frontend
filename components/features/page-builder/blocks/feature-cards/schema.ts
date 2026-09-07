@@ -22,17 +22,35 @@ export const FEATURE_ICON_KEYS = [
 
 export type FeatureIconKey = (typeof FEATURE_ICON_KEYS)[number];
 
+/** A file uploaded via `uploadPageImageAction` — same shape as the `image` block. */
+const iconImageSchema = z.object({
+  id: z.number(),
+  url: z.string(),
+  name: z.string().default(""),
+});
+
 const cardSchema = z.object({
+  /**
+   * Preset key from the site's icon collection. Always present; used as the
+   * fallback when `iconImage` is not set.
+   */
   icon: z.enum(FEATURE_ICON_KEYS).default("layers"),
+  /**
+   * Optional custom image uploaded for this card. When set it replaces the
+   * preset `icon` in the same chip; clearing it returns the card to preset mode.
+   */
+  iconImage: iconImageSchema.nullable().default(null),
   titlu: z.string().trim().default(""),
   descriere: z.string().trim().default(""),
   href: z.string().trim().default(""),
   ctaLabel: z.string().trim().default(""),
 });
 
+export type FeatureCardIconImage = z.infer<typeof iconImageSchema>;
+
 export const featureCardsSchema = z
   .object({
-    titluSectiune: z.string().trim().min(1, "Titlul secțiunii este obligatoriu"),
+    titluSectiune: z.string().trim().default(""),
     descriere: z.string().trim().default(""),
     coloane: z.enum(["1", "2", "3", "4"]).default("3"),
     background: z.enum(["default", "light", "accent"]).default("default"),
@@ -52,8 +70,7 @@ export type FeatureCard = z.infer<typeof cardSchema>;
 
 /**
  * Plain literal, not `schema.parse({})` — the `.refine` chain makes that throw.
- * `titluSectiune: ""` is intentionally invalid so a blank draft can't pass
- * validation when the admin clicks "Adaugă blocul".
+ * The section title is optional; only each card needs its own title.
  */
 export const FEATURE_CARDS_DEFAULTS: FeatureCardsData = {
   titluSectiune: "",
@@ -65,6 +82,7 @@ export const FEATURE_CARDS_DEFAULTS: FeatureCardsData = {
 
 export const EMPTY_CARD: FeatureCard = {
   icon: "layers",
+  iconImage: null,
   titlu: "",
   descriere: "",
   href: "",
