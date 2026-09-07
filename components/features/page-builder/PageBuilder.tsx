@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
-import { Eye, GripVertical, Plus, X } from "lucide-react";
+import { Eye, GripVertical, Plus, Trash2, X } from "lucide-react";
 import {
   DndContext,
   DragOverlay,
@@ -20,6 +20,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { ModalPortal } from "@/components/ui/ModalPortal";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { AddBlockModal } from "./AddBlockModal";
 import { BlockConfigDrawer } from "./BlockConfigDrawer";
 import { BLOCK_REGISTRY } from "./registry";
@@ -178,6 +179,7 @@ export function PageBuilder({
   const [draftData, setDraftData] = useState<unknown>(null);
   const [draftErrors, setDraftErrors] = useState<BlockFieldErrors>({});
   const [editRef, setEditRef] = useState<EditRef>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [preview, setPreview] = useState(false);
   /** The block currently being dragged at the top level, shown in the overlay. */
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -457,16 +459,26 @@ export function PageBuilder({
     return (
       <div className="group relative">
         {dragHandle ? (
-          <button
-            type="button"
-            ref={dragHandle.setActivatorNodeRef}
-            {...dragHandle.attributes}
-            {...(dragHandle.listeners ?? {})}
-            aria-label="Trage pentru reordonare"
-            className="absolute left-3 top-3 z-10 cursor-grab touch-none rounded-md bg-white/90 p-1 text-[#94a3b8] opacity-0 shadow-sm transition-opacity hover:text-[#64748b] group-hover:opacity-100"
-          >
-            <GripVertical size={16} aria-hidden="true" />
-          </button>
+          <>
+            <button
+              type="button"
+              ref={dragHandle.setActivatorNodeRef}
+              {...dragHandle.attributes}
+              {...(dragHandle.listeners ?? {})}
+              aria-label="Trage pentru reordonare"
+              className="absolute left-3 top-3 z-10 cursor-grab touch-none rounded-md bg-white/90 p-1 text-[#94a3b8] opacity-0 shadow-sm transition-opacity hover:text-[#64748b] group-hover:opacity-100"
+            >
+              <GripVertical size={16} aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setPendingDeleteId(block.id)}
+              aria-label="Șterge blocul"
+              className="absolute right-3 top-3 z-10 rounded-md bg-white/90 p-1.5 text-[#ef4444] opacity-0 shadow-sm transition-opacity hover:bg-[#fef2f2] focus-visible:opacity-100 group-hover:opacity-100"
+            >
+              <Trash2 size={16} aria-hidden="true" />
+            </button>
+          </>
         ) : null}
         <div
           className={
@@ -590,6 +602,19 @@ export function PageBuilder({
           </div>
         </ModalPortal>
       )}
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        title="Ștergi blocul?"
+        description="Blocul și conținutul lui vor fi eliminate din pagină. Această acțiune nu poate fi anulată."
+        confirmLabel="Șterge"
+        cancelLabel="Anulează"
+        onConfirm={() => {
+          if (pendingDeleteId) deleteBlock(pendingDeleteId);
+          setPendingDeleteId(null);
+        }}
+        onCancel={() => setPendingDeleteId(null)}
+      />
 
       {draftDefinition && (
         <BlockConfigDrawer
