@@ -6,7 +6,7 @@ type Background = FeatureCardsData["background"];
 
 /** Small preview swatch shown inside each card. */
 const SWATCH_STYLE: Record<Background, React.CSSProperties> = {
-  default: { background: "#ffffff", border: "1px solid #e2e8f0" },
+  default: { background: "#f8faff", border: "1px solid #e2e8f0" },
   light: { background: "#eefaf4", border: "1px solid rgba(45,190,143,0.45)" },
   accent: { background: "#162040" },
 };

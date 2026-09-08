@@ -1,7 +1,17 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
-import { Eye, GripVertical, Plus, X } from "lucide-react";
+import { useEffect, useId, useState, type ReactNode } from "react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Copy,
+  Eye,
+  GripVertical,
+  Pencil,
+  Plus,
+  Trash2,
+  X,
+} from "lucide-react";
 import {
   DndContext,
   DragOverlay,
@@ -33,6 +43,9 @@ import {
   type ColumnsCanvasActions,
 } from "./blocks/columns/ColumnsCanvas";
 import type { SectionData } from "./blocks/section/schema";
+import { PageOptionsProvider } from "./blocks/shared/page-options";
+import { resolveBlockLinks } from "./blocks/shared/resolve-links";
+import type { PageOption } from "@/lib/api/pages-types";
 import type { ColumnsData } from "./blocks/columns/schema";
 import type { BlockFieldErrors, BlockInstance } from "./types";
 
@@ -160,10 +173,19 @@ function moveInArray<T>(items: T[], index: number, dir: -1 | 1): T[] {
 export function PageBuilder({
   value,
   onChange,
+  pages = [],
+  currentPageId = null,
+  currentPath = "",
 }: {
   /** Controlled tree. Omit both props to keep the standalone behaviour. */
   value?: BlockInstance[];
   onChange?: (blocks: BlockInstance[]) => void;
+  /** The site's pages, so a CTA can point at one and the preview can resolve it. */
+  pages?: PageOption[];
+  /** The page being edited, so a link can offer to file its target underneath. */
+  currentPageId?: string | null;
+  /** That page's path as it will be after saving. */
+  currentPath?: string;
 } = {}) {
   const [ownBlocks, setOwnBlocks] = useState<BlockInstance[]>([]);
   const blocks = value ?? ownBlocks;
@@ -354,6 +376,11 @@ export function PageBuilder({
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
+  // `DndContext` derives its draggables' `aria-describedby` from a module-level
+  // counter unless it gets an `id`. That counter keeps climbing on the Node
+  // server but restarts at 0 in the browser, so an id-less context hydrates
+  // mismatched. `useId` is stable across both.
+  const dndId = useId();
   const handleTopDragStart = (event: DragStartEvent) => {
     setActiveId(String(event.active.id));
   };
@@ -454,6 +481,9 @@ export function PageBuilder({
     }
 
     const { Renderer } = definition;
+    const cardBtn =
+      "rounded-md p-1 text-[#64748b] transition-colors hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent";
+
     return (
       <div className="group relative">
         {dragHandle ? (
@@ -468,6 +498,55 @@ export function PageBuilder({
             <GripVertical size={16} aria-hidden="true" />
           </button>
         ) : null}
+
+        {/* Sections carry these actions in their own header; a plain block had
+            none at all, so a block added by mistake could not be removed. */}
+        {dragHandle ? (
+          <span className="absolute right-3 top-3 z-10 flex items-center gap-0.5 rounded-lg bg-white/95 p-1 opacity-0 shadow-sm transition-opacity group-hover:opacity-100">
+            <button
+              type="button"
+              onClick={() => handleEditBlock(block.id, null)}
+              aria-label="Editează blocul"
+              className={cardBtn}
+            >
+              <Pencil size={15} />
+            </button>
+            <button
+              type="button"
+              onClick={() => duplicateBlock(block.id)}
+              aria-label="Duplică blocul"
+              className={cardBtn}
+            >
+              <Copy size={15} />
+            </button>
+            <button
+              type="button"
+              onClick={() => moveBlock(block.id, -1)}
+              disabled={index === 0}
+              aria-label="Mută mai sus"
+              className={cardBtn}
+            >
+              <ChevronUp size={15} />
+            </button>
+            <button
+              type="button"
+              onClick={() => moveBlock(block.id, 1)}
+              disabled={index === blocks.length - 1}
+              aria-label="Mută mai jos"
+              className={cardBtn}
+            >
+              <ChevronDown size={15} />
+            </button>
+            <button
+              type="button"
+              onClick={() => deleteBlock(block.id)}
+              aria-label="Șterge blocul"
+              className="rounded-md p-1 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
+            >
+              <Trash2 size={15} />
+            </button>
+          </span>
+        ) : null}
         <div
           className={
             definition.bare
@@ -475,13 +554,14 @@ export function PageBuilder({
               : "overflow-hidden rounded-2xl border border-border bg-white"
           }
         >
-          <Renderer data={block.data} />
+          <Renderer data={resolveBlockLinks(block.data, pages)} />
         </div>
       </div>
     );
   };
 
   return (
+    <PageOptionsProvider value={{ pages, currentPageId, currentPath }}>
     <div className="mx-auto max-w-6xl">
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
@@ -522,6 +602,10 @@ export function PageBuilder({
         </div>
       ) : (
         <DndContext
+          // Explicit id: dnd-kit otherwise numbers its accessibility description
+          // from a module counter that differs between server and browser, and
+          // hydration fails on `aria-describedby`.
+          id={dndId}
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragStart={handleTopDragStart}
@@ -584,7 +668,7 @@ export function PageBuilder({
                 const definition = BLOCK_REGISTRY[block.type];
                 if (!definition) return null;
                 const { Renderer } = definition;
-                return <Renderer key={block.id} data={block.data} />;
+                return <Renderer key={block.id} data={resolveBlockLinks(block.data, pages)} />;
               })}
             </div>
           </div>
@@ -606,5 +690,6 @@ export function PageBuilder({
         />
       )}
     </div>
+    </PageOptionsProvider>
   );
 }

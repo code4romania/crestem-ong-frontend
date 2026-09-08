@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ctaHasTarget } from "../shared/cta";
 
 /**
  * Fixed icon palette for a programme card — same set as Feature Cards. Stored as
@@ -38,6 +39,9 @@ const programSchema = z.object({
   descriere: z.string().trim().default(""),
   perioada: z.string().trim().default(""),
   href: z.string().trim().default(""),
+  /** Page-backed link target; see `blocks/shared/cta.ts`. */
+  pagina: z.string().trim().default(""),
+  subPagina: z.boolean().default(false),
   ctaLabel: z.string().trim().default(""),
 });
 
@@ -56,7 +60,7 @@ export const programmeGridSchema = z
     message: "Fiecare imagine are nevoie de un text alternativ",
   })
   .refine(
-    (d) => d.programe.every((p) => Boolean(p.href) === Boolean(p.ctaLabel)),
+    (d) => d.programe.every((p) => ctaHasTarget(p) === Boolean(p.ctaLabel)),
     {
       path: ["programe"],
       message: "La un program cu link completează și eticheta butonului (și invers)",
@@ -87,5 +91,7 @@ export const EMPTY_PROGRAM: Program = {
   descriere: "",
   perioada: "",
   href: "",
+  pagina: "",
+  subPagina: false,
   ctaLabel: "",
 };

@@ -9,9 +9,22 @@ interface StrapiErrorResponse {
   error?: { message?: string; details?: unknown };
 }
 
-export async function serverApiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+interface ServerFetchOptions {
+  /**
+   * Send the request with no `Authorization` header even when a session cookie
+   * exists. For public reads that must survive a session cookie the backend no
+   * longer accepts — see `getPublicPage`.
+   */
+  anonymous?: boolean;
+}
+
+export async function serverApiFetch<T>(
+  path: string,
+  init?: RequestInit,
+  options?: ServerFetchOptions,
+): Promise<T> {
   const cookieStore = await cookies();
-  const jwt = cookieStore.get(SESSION_COOKIE)?.value;
+  const jwt = options?.anonymous ? undefined : cookieStore.get(SESSION_COOKIE)?.value;
 
   const headers = new Headers(init?.headers);
   if (!headers.has("Content-Type")) {

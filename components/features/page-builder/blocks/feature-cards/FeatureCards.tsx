@@ -4,12 +4,24 @@ import { FEATURE_ICONS } from "./icons";
 import type { FeatureCard, FeatureCardsData } from "./schema";
 
 const NAVY_BG = "#162040";
+/**
+ * The "default" background is a tint, not page white — the white cards need
+ * something to sit on. Measured off the design.
+ */
+const DEFAULT_BG = "#f8faff";
 
+/**
+ * `auto-rows-fr` is what keeps every card the same height: 1fr rows all resolve
+ * to the tallest row's track, so a short card in row 1 matches a long one in
+ * row 2, not just its own row's siblings. Scoped to `sm:` — below it the grid
+ * is a single column, where stretching every card to the longest description
+ * would only add dead space.
+ */
 const COL_CLASS: Record<FeatureCardsData["coloane"], string> = {
   "1": "sm:grid-cols-1 lg:grid-cols-1",
-  "2": "sm:grid-cols-2 lg:grid-cols-2",
-  "3": "sm:grid-cols-2 lg:grid-cols-3",
-  "4": "sm:grid-cols-2 lg:grid-cols-4",
+  "2": "sm:auto-rows-fr sm:grid-cols-2 lg:grid-cols-2",
+  "3": "sm:auto-rows-fr sm:grid-cols-2 lg:grid-cols-3",
+  "4": "sm:auto-rows-fr sm:grid-cols-2 lg:grid-cols-4",
 };
 
 function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
@@ -18,7 +30,7 @@ function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
 
   return (
     <div
-      className={`flex min-w-0 flex-col rounded-2xl border p-6 ${
+      className={`flex h-full min-w-0 flex-col rounded-2xl border p-6 ${
         isDark
           ? "border-white/10 bg-white/[0.03]"
           : "border-border bg-white shadow-sm"
@@ -74,33 +86,33 @@ export function FeatureCards({ data }: { data: FeatureCardsData }) {
       ? { background: NAVY_BG }
       : background === "light"
         ? { background: "#eefaf4" }
-        : { background: "#ffffff" };
+        : { background: DEFAULT_BG };
 
   return (
     <section className="relative overflow-hidden" style={sectionStyle}>
       <div className="relative mx-auto max-w-7xl px-6 py-20">
+        {/* Section title is the small green eyebrow; the subtitle under it is
+            the display-size line, matching the rest of the site's section
+            headers (see `people-collection`). */}
         <div className="mx-auto mb-12 max-w-2xl text-center">
-          <h2
-            className="font-heading wrap-break-word"
-            style={{
-              fontSize: "clamp(2rem, 4vw, 2.75rem)",
-              fontWeight: 800,
-              lineHeight: 1.15,
-              color: isDark ? "#ffffff" : "#162040",
-            }}
+          <p
+            className="mb-3 text-sm font-bold uppercase tracking-[0.12em] wrap-break-word"
+            style={{ color: "#2dbe8f" }}
           >
             {titluSectiune}
-          </h2>
+          </p>
           {descriere ? (
-            <p
-              className="mt-4 leading-relaxed whitespace-pre-line wrap-break-word"
+            <h2
+              className="font-heading whitespace-pre-line wrap-break-word"
               style={{
-                fontSize: "1.125rem",
-                color: isDark ? "rgba(255,255,255,0.72)" : "#475569",
+                fontSize: "clamp(2rem, 4vw, 2.75rem)",
+                fontWeight: 800,
+                lineHeight: 1.15,
+                color: isDark ? "#ffffff" : "#162040",
               }}
             >
               {descriere}
-            </p>
+            </h2>
           ) : null}
         </div>
 

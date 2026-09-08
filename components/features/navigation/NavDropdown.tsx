@@ -45,7 +45,9 @@ export function NavDropdown({ label, items }: { label: string; items: MenuChild[
           className="absolute left-0 top-full mt-1.5 min-w-44 rounded-xl border border-border bg-white shadow-lg overflow-hidden z-50"
           style={{ boxShadow: "0 8px 32px rgba(22,32,64,0.12)" }}
         >
-          {items.map((item) => (
+          {/* An entry without an address is one whose page was deleted; the
+              editor flags it, visitors simply do not see it. */}
+          {items.map((item) => (item.url ? (
             <Link
               key={`${item.label}-${item.url}`}
               href={item.url}
@@ -57,7 +59,7 @@ export function NavDropdown({ label, items }: { label: string; items: MenuChild[
               {item.label}
               <LinkPendingIndicator />
             </Link>
-          ))}
+          ) : null))}
         </div>
       )}
     </div>

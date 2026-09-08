@@ -1,15 +1,11 @@
 import { z } from "zod";
+import { CTA_DEFAULTS, ctaHasTarget, ctaSchema } from "../shared/cta";
 import { sanitizeRichText, hasRichText } from "../../rich-text/sanitize";
 
 const uploadedImageSchema = z.object({
   id: z.number(),
   url: z.string(),
   name: z.string().default(""),
-});
-
-const ctaSchema = z.object({
-  label: z.string().trim().default(""),
-  href: z.string().trim().default(""),
 });
 
 export const imageTextSchema = z
@@ -37,8 +33,8 @@ export const imageTextSchema = z
     // "default" keeps the rounded corners the renderer applies; "drepte" is the
     // "Fără rotunjire" option.
     colturi: z.enum(["default", "drepte"]).default("default"),
-    primaryCta: ctaSchema.default({ label: "", href: "" }),
-    secondaryCta: ctaSchema.default({ label: "", href: "" }),
+    primaryCta: ctaSchema.default(CTA_DEFAULTS),
+    secondaryCta: ctaSchema.default(CTA_DEFAULTS),
   })
   .superRefine((d, ctx) => {
     if (!d.image) {
@@ -61,14 +57,14 @@ export const imageTextSchema = z
         message: "Textul nu poate fi gol",
       });
     }
-    if (Boolean(d.primaryCta.label) !== Boolean(d.primaryCta.href)) {
+    if (Boolean(d.primaryCta.label) !== ctaHasTarget(d.primaryCta)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["primaryCta"],
         message: "Completează și textul, și link-ul",
       });
     }
-    if (Boolean(d.secondaryCta.label) !== Boolean(d.secondaryCta.href)) {
+    if (Boolean(d.secondaryCta.label) !== ctaHasTarget(d.secondaryCta)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["secondaryCta"],
@@ -93,6 +89,6 @@ export const IMAGE_TEXT_DEFAULTS: ImageTextData = {
   aliniere: "stanga",
   proportie: "50-50",
   colturi: "default",
-  primaryCta: { label: "", href: "" },
-  secondaryCta: { label: "", href: "" },
+  primaryCta: { ...CTA_DEFAULTS },
+  secondaryCta: { ...CTA_DEFAULTS },
 };

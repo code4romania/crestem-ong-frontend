@@ -12,10 +12,16 @@ const WIDTH_CLASS: Record<DividerData["latime"], string> = {
   ingust: "max-w-3xl",
 };
 
+/**
+ * Breathing room around the rule, not a section break — the previous ladder
+ * started at `py-6`, so even "Mică" put 48px around a one-pixel line. Scaled
+ * down and made responsive, matching how the Spacer block steps up on wider
+ * screens.
+ */
 const SPACING_CLASS: Record<DividerData["spatiere"], string> = {
-  mic: "py-6",
-  mediu: "py-12",
-  mare: "py-20",
+  mic: "py-2 md:py-3",
+  mediu: "py-6 md:py-8",
+  mare: "py-12 md:py-16",
 };
 
 /**

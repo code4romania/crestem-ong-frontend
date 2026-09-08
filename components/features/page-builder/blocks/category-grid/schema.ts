@@ -29,6 +29,9 @@ const categorySchema = z.object({
   /** Resource count rendered as a pill; `null` hides it. */
   numarResurse: z.number().int().min(0).nullable().default(null),
   href: z.string().trim().default(""),
+  /** Page-backed link target; see `blocks/shared/cta.ts`. */
+  pagina: z.string().trim().default(""),
+  subPagina: z.boolean().default(false),
 });
 
 export const categoryGridSchema = z
@@ -62,4 +65,6 @@ export const EMPTY_CATEGORY: Category = {
   descriere: "",
   numarResurse: null,
   href: "",
+  pagina: "",
+  subPagina: false,
 };

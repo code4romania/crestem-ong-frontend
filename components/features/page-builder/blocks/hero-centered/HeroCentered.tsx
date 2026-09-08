@@ -92,7 +92,7 @@ export function HeroCentered({ data }: { data: HeroCenteredData }) {
             style={{
               fontSize: "1.125rem",
               color: isDark ? "rgba(255,255,255,0.72)" : "#475569",
-              maxWidth: "560px",
+              maxWidth: "760px",
             }}
           >
             {subtitlu}

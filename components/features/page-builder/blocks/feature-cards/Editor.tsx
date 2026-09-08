@@ -35,7 +35,7 @@ export function FeatureCardsEditor({
           className={inputClass}
           value={value.titluSectiune}
           onChange={(e) => set({ titluSectiune: e.target.value })}
-          placeholder="ex. Funcționalitățile platformei"
+          placeholder="ex. Ce ne ghidează"
           aria-invalid={Boolean(errors.titluSectiune)}
         />
         {errors.titluSectiune && (
@@ -44,16 +44,18 @@ export function FeatureCardsEditor({
       </div>
 
       <div>
+        {/* Stored as `descriere` for backwards compatibility with pages saved
+            before this became the display-size subtitle. */}
         <label htmlFor="fc-descriere" className={labelClass}>
-          Descriere
+          Subtitlu
         </label>
         <textarea
           id="fc-descriere"
-          rows={3}
+          rows={2}
           className={inputClass}
           value={value.descriere}
           onChange={(e) => set({ descriere: e.target.value })}
-          placeholder="Descriere opțională..."
+          placeholder="ex. Valorile noastre"
         />
       </div>
 

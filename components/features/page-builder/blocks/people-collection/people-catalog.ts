@@ -144,9 +144,12 @@ export const FALLBACK_PEOPLE: CatalogPerson[] = [
   },
 ];
 
-/** "Ana Moldovan" -> "AM". Used for the avatar fallback. */
-export function personInitials(nume: string): string {
-  return nume
+/**
+ * "Ana Moldovan" -> "AM". Used for the avatar fallback. Tolerates a missing
+ * name: legacy user rows can have no `nume`, and an empty badge beats a crash.
+ */
+export function personInitials(nume: string | null | undefined): string {
+  return (nume ?? "")
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)

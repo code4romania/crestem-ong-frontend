@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ArrowDown, ArrowUp, ChevronLeft, Plus, Trash2 } from "lucide-react";
 import { IconPicker } from "./IconPicker";
 import { CATEGORY_ICONS } from "./icons";
+import { CtaTargetField } from "../shared/CtaTargetField";
 import { EMPTY_CATEGORY, type Category } from "./schema";
 
 const labelClass =
@@ -150,15 +151,11 @@ export function CategoryList({
               />
             </div>
             <div>
-              <label htmlFor="cl-cat-href" className={labelClass}>
-                Link
-              </label>
-              <input
-                id="cl-cat-href"
-                className={inputClass}
-                value={draft.href}
-                onChange={(e) => setField({ href: e.target.value })}
-                placeholder="/resurse/categorie"
+              <span className={labelClass}>Link</span>
+              <CtaTargetField
+                value={draft}
+                onChange={(next) => setField({ href: next.href, pagina: next.pagina })}
+                ariaLabel="Link"
               />
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CTA_DEFAULTS, ctaHasTarget, ctaSchema } from "../shared/cta";
 import { sanitizeRichText, hasRichText } from "../../rich-text/sanitize";
 
 /**
@@ -38,11 +39,6 @@ export const CALLOUT_ICON_KEYS = [
 
 export type CalloutIconKey = (typeof CALLOUT_ICON_KEYS)[number];
 
-const ctaSchema = z.object({
-  label: z.string().trim().default(""),
-  href: z.string().trim().default(""),
-});
-
 export const calloutSchema = z
   .object({
     icon: z.enum(CALLOUT_ICON_KEYS).default("megaphone"),
@@ -56,19 +52,19 @@ export const calloutSchema = z
       .string()
       .default("")
       .transform((html) => sanitizeRichText(html)),
-    primaryCta: ctaSchema.default({ label: "", href: "" }),
-    secondaryCta: ctaSchema.default({ label: "", href: "" }),
+    primaryCta: ctaSchema.default(CTA_DEFAULTS),
+    secondaryCta: ctaSchema.default(CTA_DEFAULTS),
     aliniere: z.enum(["stanga", "centru", "dreapta"]).default("centru"),
   })
   .refine((d) => hasRichText(d.text), {
     path: ["text"],
     message: "Textul nu poate fi gol",
   })
-  .refine((d) => Boolean(d.primaryCta.label) === Boolean(d.primaryCta.href), {
+  .refine((d) => Boolean(d.primaryCta.label) === ctaHasTarget(d.primaryCta), {
     path: ["primaryCta"],
     message: "Completează și textul, și link-ul",
   })
-  .refine((d) => Boolean(d.secondaryCta.label) === Boolean(d.secondaryCta.href), {
+  .refine((d) => Boolean(d.secondaryCta.label) === ctaHasTarget(d.secondaryCta), {
     path: ["secondaryCta"],
     message: "Completează și textul, și link-ul",
   });
@@ -85,7 +81,7 @@ export const CALLOUT_DEFAULTS: CalloutData = {
   afiseazaIcon: true,
   titlu: "",
   text: "",
-  primaryCta: { label: "", href: "" },
-  secondaryCta: { label: "", href: "" },
+  primaryCta: { ...CTA_DEFAULTS },
+  secondaryCta: { ...CTA_DEFAULTS },
   aliniere: "centru",
 };

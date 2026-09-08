@@ -3,12 +3,14 @@ import { heroLargeSplitBlock } from "./blocks/hero-large-split";
 import { heroCenteredBlock } from "./blocks/hero-centered";
 import { heroIntroBlock } from "./blocks/hero-intro";
 import { heroStatisticsBlock } from "./blocks/hero-statistics";
+import { programHeaderBlock } from "./blocks/program-header";
 import { featureCardsBlock } from "./blocks/feature-cards";
 import { articleGridBlock } from "./blocks/article-grid";
 import { programmeGridBlock } from "./blocks/programme-grid";
 import { peopleGridBlock } from "./blocks/people-grid";
 import { categoryGridBlock } from "./blocks/category-grid";
 import { peopleCollectionBlock } from "./blocks/people-collection";
+import { partnerCollectionBlock } from "./blocks/partner-collection";
 import { testimonialsBlock } from "./blocks/testimonials";
 import { faqCollectionBlock } from "./blocks/faq-collection";
 import { richTextBlock } from "./blocks/rich-text";
@@ -39,12 +41,14 @@ export const BLOCK_REGISTRY: Record<string, BlockDefinition> = {
   [heroCenteredBlock.type]: heroCenteredBlock,
   [heroIntroBlock.type]: heroIntroBlock,
   [heroStatisticsBlock.type]: heroStatisticsBlock,
+  [programHeaderBlock.type]: programHeaderBlock,
   [featureCardsBlock.type]: featureCardsBlock,
   [articleGridBlock.type]: articleGridBlock,
   [programmeGridBlock.type]: programmeGridBlock,
   [peopleGridBlock.type]: peopleGridBlock,
   [categoryGridBlock.type]: categoryGridBlock,
   [peopleCollectionBlock.type]: peopleCollectionBlock,
+  [partnerCollectionBlock.type]: partnerCollectionBlock,
   [testimonialsBlock.type]: testimonialsBlock,
   [faqCollectionBlock.type]: faqCollectionBlock,
   [richTextBlock.type]: richTextBlock,

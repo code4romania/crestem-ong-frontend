@@ -1,9 +1,5 @@
 import { z } from "zod";
-
-const ctaSchema = z.object({
-  label: z.string().trim(),
-  href: z.string().trim(),
-});
+import { CTA_DEFAULTS, ctaHasTarget, ctaSchema } from "../shared/cta";
 
 export const heroCenteredSchema = z
   .object({
@@ -17,18 +13,18 @@ export const heroCenteredSchema = z
       .nullable()
       .default(null),
     overlay: z.boolean().default(true),
-    primaryCta: ctaSchema.default({ label: "", href: "" }),
-    secondaryCta: ctaSchema.default({ label: "", href: "" }),
+    primaryCta: ctaSchema.default(CTA_DEFAULTS),
+    secondaryCta: ctaSchema.default(CTA_DEFAULTS),
   })
   .refine((d) => d.background !== "imagine" || d.image !== null, {
     path: ["image"],
     message: "Adaugă o imagine de fundal",
   })
-  .refine((d) => Boolean(d.primaryCta.label) === Boolean(d.primaryCta.href), {
+  .refine((d) => Boolean(d.primaryCta.label) === ctaHasTarget(d.primaryCta), {
     path: ["primaryCta"],
     message: "Completează și textul, și link-ul",
   })
-  .refine((d) => Boolean(d.secondaryCta.label) === Boolean(d.secondaryCta.href), {
+  .refine((d) => Boolean(d.secondaryCta.label) === ctaHasTarget(d.secondaryCta), {
     path: ["secondaryCta"],
     message: "Completează și textul, și link-ul",
   });
@@ -48,6 +44,6 @@ export const HERO_CENTERED_DEFAULTS: HeroCenteredData = {
   background: "default",
   image: null,
   overlay: true,
-  primaryCta: { label: "", href: "" },
-  secondaryCta: { label: "", href: "" },
+  primaryCta: { ...CTA_DEFAULTS },
+  secondaryCta: { ...CTA_DEFAULTS },
 };

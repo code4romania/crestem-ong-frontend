@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
@@ -75,6 +75,11 @@ export function ColumnsCanvas({
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
+  // `DndContext` derives its draggables' `aria-describedby` from a module-level
+  // counter unless it gets an `id`. That counter keeps climbing on the Node
+  // server but restarts at 0 in the browser, so an id-less context hydrates
+  // mismatched. `useId` is stable across both.
+  const dndId = useId();
 
   const handleColumnDragEnd = (columnIndex: number) => (event: DragEndEvent) => {
     const { active, over } = event;
@@ -183,6 +188,10 @@ export function ColumnsCanvas({
 
               {column.blocuri.length > 0 ? (
                 <DndContext
+                  // Explicit id: dnd-kit otherwise numbers its accessibility description
+                  // from a module counter that differs between server and browser, and
+                  // hydration fails on `aria-describedby`.
+                  id={`${dndId}-${columnIndex}`}
                   sensors={sensors}
                   collisionDetection={closestCenter}
                   onDragEnd={handleColumnDragEnd(columnIndex)}

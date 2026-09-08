@@ -1,9 +1,5 @@
 import { z } from "zod";
-
-const ctaSchema = z.object({
-  label: z.string().trim().default(""),
-  href: z.string().trim().default(""),
-});
+import { CTA_DEFAULTS, ctaHasTarget, ctaSchema } from "../shared/cta";
 
 const statSchema = z.object({
   valoare: z.string().trim().default(""),
@@ -19,9 +15,11 @@ export const statisticsSchema = z
     statistici: z.array(statSchema).default([]),
     // Text spec says 1-4; the screenshot shows a 2-wide grid.
     coloane: z.enum(["1", "2", "3", "4"]).default("2"),
+    /** How each counter cell aligns its value, label and description. */
+    aliniere: z.enum(["stanga", "centru", "dreapta"]).default("stanga"),
     separator: z.boolean().default(false),
-    primaryCta: ctaSchema.default({ label: "", href: "" }),
-    secondaryCta: ctaSchema.default({ label: "", href: "" }),
+    primaryCta: ctaSchema.default(CTA_DEFAULTS),
+    secondaryCta: ctaSchema.default(CTA_DEFAULTS),
   })
   .refine((d) => d.statistici.length > 0, {
     path: ["statistici"],
@@ -31,11 +29,11 @@ export const statisticsSchema = z
     path: ["statistici"],
     message: "Fiecare statistică are nevoie de valoare și etichetă",
   })
-  .refine((d) => Boolean(d.primaryCta.label) === Boolean(d.primaryCta.href), {
+  .refine((d) => Boolean(d.primaryCta.label) === ctaHasTarget(d.primaryCta), {
     path: ["primaryCta"],
     message: "Completează și textul, și link-ul",
   })
-  .refine((d) => Boolean(d.secondaryCta.label) === Boolean(d.secondaryCta.href), {
+  .refine((d) => Boolean(d.secondaryCta.label) === ctaHasTarget(d.secondaryCta), {
     path: ["secondaryCta"],
     message: "Completează și textul, și link-ul",
   });
@@ -54,9 +52,10 @@ export const STATISTICS_DEFAULTS: StatisticsData = {
   descriere: "",
   statistici: [],
   coloane: "2",
+  aliniere: "stanga",
   separator: false,
-  primaryCta: { label: "", href: "" },
-  secondaryCta: { label: "", href: "" },
+  primaryCta: { ...CTA_DEFAULTS },
+  secondaryCta: { ...CTA_DEFAULTS },
 };
 
 export const EMPTY_STAT: Stat = { valoare: "", eticheta: "", descriere: "" };

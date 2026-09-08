@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
+import type { PageOption } from "@/lib/api/pages-types";
 
 export interface MenuItemValues {
   label: string;
-  url?: string;
+  pagina?: string;
 }
 
 const VARIANT = {
@@ -14,23 +15,29 @@ const VARIANT = {
 } as const;
 
 /**
- * The inline strip used both for adding an item and for editing one in place.
- * `withUrl` is false for a footer column heading, which names a group and never
- * redirects — there is no address to type.
+ * `hidden` is a footer column heading, which names a group and never redirects.
+ * `optional` is a header entry that already has sub-elements: it opens a
+ * dropdown, so a destination is a choice rather than a requirement.
  */
-/**
- * `hidden` is a footer column heading, which never redirects. `optional` is a
- * header entry that already has sub-elements: it opens a dropdown, so an address
- * is a choice rather than a requirement.
- */
-export type UrlMode = "required" | "optional" | "hidden";
+export type PageMode = "required" | "optional" | "hidden";
 
+const fieldBase =
+  "rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-[#2dbe8f] focus:outline-none";
+
+/**
+ * The inline strip used both for adding an item and for editing one in place.
+ *
+ * A menu entry points at a CMS page and nothing else. There is no free-text
+ * address: the link is a relation, so renaming a page follows through here
+ * instead of leaving a dead link behind.
+ */
 export function MenuItemForm({
   variant,
   title,
-  urlMode,
+  pageMode,
+  pages,
   initialLabel = "",
-  initialUrl = "",
+  initialPagina = "",
   submitLabel,
   pending = false,
   onSubmit,
@@ -38,50 +45,43 @@ export function MenuItemForm({
 }: {
   variant: "root" | "child";
   title: string;
-  urlMode: UrlMode;
+  pageMode: PageMode;
+  pages: PageOption[];
   initialLabel?: string;
-  initialUrl?: string;
+  initialPagina?: string;
   submitLabel: string;
   pending?: boolean;
   onSubmit: (values: MenuItemValues) => void;
   onCancel: () => void;
 }) {
   const [label, setLabel] = useState(initialLabel);
-  const [url, setUrl] = useState(initialUrl);
+  const [pagina, setPagina] = useState(initialPagina);
   const [error, setError] = useState<string | null>(null);
 
   const styles = VARIANT[variant];
-  const showUrl = urlMode !== "hidden";
+  const showPage = pageMode !== "hidden";
 
   const submit = () => {
     const trimmedLabel = label.trim();
-    const trimmedUrl = url.trim();
 
     if (!trimmedLabel) {
       setError("Eticheta este obligatorie.");
       return;
     }
-    if (urlMode === "required" && !trimmedUrl) {
-      setError("Adresa este obligatorie.");
-      return;
-    }
-    if (showUrl && trimmedUrl && !/^(\/|https?:\/\/)/.test(trimmedUrl)) {
-      setError("Adresa trebuie să înceapă cu „/” sau cu http:// ori https://");
+    if (showPage && pageMode === "required" && !pagina) {
+      setError("Alege o pagină.");
       return;
     }
 
     setError(null);
-    onSubmit(
-      showUrl && trimmedUrl
-        ? { label: trimmedLabel, url: trimmedUrl }
-        : { label: trimmedLabel },
-    );
+    onSubmit(showPage && pagina ? { label: trimmedLabel, pagina } : { label: trimmedLabel });
   };
 
   return (
     <div className={`border-b border-border px-5 py-4 ${styles.strip}`}>
       <p className="mb-3 text-xs font-semibold text-[#475569]">{title}</p>
-      <div className="flex flex-wrap items-start gap-2">
+
+      <div className="flex min-w-0 flex-wrap items-start gap-2">
         <input
           value={label}
           onChange={(event) => setLabel(event.target.value)}
@@ -89,18 +89,28 @@ export function MenuItemForm({
           placeholder="Etichetă"
           aria-label="Etichetă"
           autoFocus
-          className="min-w-0 flex-1 rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-[#2dbe8f] focus:outline-none"
+          className={`${fieldBase} min-w-0 flex-1`}
         />
-        {showUrl && (
-          <input
-            value={url}
-            onChange={(event) => setUrl(event.target.value)}
-            onKeyDown={(event) => event.key === "Enter" && submit()}
-            placeholder={urlMode === "optional" ? "/url (opțional)" : "/url"}
-            aria-label="Adresă"
-            className="w-40 rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-[#2dbe8f] focus:outline-none"
-          />
+
+        {showPage && (
+          <select
+            value={pagina}
+            onChange={(event) => setPagina(event.target.value)}
+            aria-label="Pagină"
+            className={`${fieldBase} w-56 shrink-0`}
+          >
+            <option value="">
+              {pageMode === "optional" ? "Fără pagină (doar dropdown)" : "Alege o pagină…"}
+            </option>
+            {pages.map((option) => (
+              <option key={option.documentId} value={option.documentId}>
+                {option.titlu}
+                {option.publicat ? "" : " (schiță)"}
+              </option>
+            ))}
+          </select>
         )}
+
         <button
           type="button"
           onClick={submit}
@@ -119,6 +129,13 @@ export function MenuItemForm({
           <X size={14} />
         </button>
       </div>
+
+      {showPage && pages.length === 0 && (
+        <p className="mt-2 text-xs text-muted-foreground">
+          Nu există încă pagini. Creează una în secțiunea Pagini, apoi revino aici.
+        </p>
+      )}
+
       {error && (
         <p role="alert" className="mt-2 text-xs text-[#ef4444]">
           {error}

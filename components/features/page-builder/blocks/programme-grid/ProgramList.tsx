@@ -10,6 +10,7 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
+import { CtaTargetField } from "../shared/CtaTargetField";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { IconPicker } from "./IconPicker";
@@ -286,15 +287,11 @@ export function ProgramList({
               />
             </div>
             <div>
-              <label htmlFor="pg-prog-href" className={labelClass}>
-                Link
-              </label>
-              <input
-                id="pg-prog-href"
-                className={inputClass}
-                value={draft.href}
-                onChange={(e) => setField({ href: e.target.value })}
-                placeholder="/programe/nume-program"
+              <span className={labelClass}>Link</span>
+              <CtaTargetField
+                value={draft}
+                onChange={(next) => setField({ href: next.href, pagina: next.pagina })}
+                ariaLabel="Link"
               />
             </div>
           </div>

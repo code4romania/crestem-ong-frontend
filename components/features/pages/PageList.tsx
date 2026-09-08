@@ -41,11 +41,7 @@ export function PageList({
 
   const togglePublished = (page: PageSummary) => {
     startTransition(async () => {
-      const result = await setPagePublishedAction(
-        page.documentId,
-        page.slug,
-        !page.publicat,
-      );
+      const result = await setPagePublishedAction(page.documentId, !page.publicat);
       if (result.error) toast.error(result.error);
       else router.refresh();
     });
@@ -56,7 +52,7 @@ export function PageList({
     const target = deleting;
     setDeleting(null);
     startTransition(async () => {
-      const result = await deletePageAction(target.documentId, target.slug);
+      const result = await deletePageAction(target.documentId);
       if (result.error) toast.error(result.error);
       else router.refresh();
     });
@@ -118,7 +114,7 @@ export function PageList({
                 </td>
                 <td className="px-4 py-3.5">
                   <code className="rounded bg-slate-100 px-2 py-0.5 text-xs text-[#475569]">
-                    /{page.slug}
+                    {page.cale}
                   </code>
                 </td>
                 <td className="px-4 py-3.5">

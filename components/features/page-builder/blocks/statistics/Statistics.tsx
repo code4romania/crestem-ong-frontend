@@ -2,6 +2,12 @@ import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import type { Stat, StatisticsData } from "./schema";
 
+const ALIGN_CLASS: Record<StatisticsData["aliniere"], string> = {
+  stanga: "text-left",
+  centru: "text-center",
+  dreapta: "text-right",
+};
+
 const COL_CLASS: Record<StatisticsData["coloane"], string> = {
   "1": "sm:grid-cols-1 lg:grid-cols-1",
   "2": "sm:grid-cols-2 lg:grid-cols-2",
@@ -43,6 +49,7 @@ export function Statistics({ data }: { data: StatisticsData }) {
     descriere,
     statistici,
     coloane,
+    aliniere,
     separator,
     primaryCta,
     secondaryCta,
@@ -54,13 +61,13 @@ export function Statistics({ data }: { data: StatisticsData }) {
   const hasStats = statistici.length > 0;
 
   // Separator variant: a 1px grid gap over a slate ground shows through as
-  // hairlines between cells — no sibling `divide-*` utilities.
+  // hairlines between cells — no sibling `divide-*` utilities. Without it the
+  // counters are bare numbers on the page ground: no card, no border, no fill,
+  // so a wider gap carries the separation the removed chrome used to.
   const gridClass = separator
     ? `grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-border bg-slate-200 ${COL_CLASS[coloane]}`
-    : `grid grid-cols-1 gap-4 ${COL_CLASS[coloane]}`;
-  const cellClass = separator
-    ? "bg-white p-6"
-    : "rounded-2xl border border-border bg-slate-50/60 p-6";
+    : `grid grid-cols-1 gap-8 ${COL_CLASS[coloane]}`;
+  const cellClass = `${separator ? "bg-white p-6" : ""} ${ALIGN_CLASS[aliniere]}`;
 
   return (
     <section>

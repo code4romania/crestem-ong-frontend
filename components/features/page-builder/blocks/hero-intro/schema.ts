@@ -1,9 +1,5 @@
 import { z } from "zod";
-
-const ctaSchema = z.object({
-  label: z.string().trim(),
-  href: z.string().trim(),
-});
+import { CTA_DEFAULTS, ctaHasTarget, ctaSchema } from "../shared/cta";
 
 export const heroIntroSchema = z
   .object({
@@ -12,14 +8,14 @@ export const heroIntroSchema = z
     textIntroductiv: z.string().trim().default(""),
     horizontalAlign: z.enum(["stanga", "centru", "dreapta"]).default("centru"),
     background: z.enum(["default", "light", "accent"]).default("default"),
-    primaryCta: ctaSchema.default({ label: "", href: "" }),
-    secondaryCta: ctaSchema.default({ label: "", href: "" }),
+    primaryCta: ctaSchema.default(CTA_DEFAULTS),
+    secondaryCta: ctaSchema.default(CTA_DEFAULTS),
   })
-  .refine((d) => Boolean(d.primaryCta.label) === Boolean(d.primaryCta.href), {
+  .refine((d) => Boolean(d.primaryCta.label) === ctaHasTarget(d.primaryCta), {
     path: ["primaryCta"],
     message: "Completează și textul, și link-ul",
   })
-  .refine((d) => Boolean(d.secondaryCta.label) === Boolean(d.secondaryCta.href), {
+  .refine((d) => Boolean(d.secondaryCta.label) === ctaHasTarget(d.secondaryCta), {
     path: ["secondaryCta"],
     message: "Completează și textul, și link-ul",
   });
@@ -37,6 +33,6 @@ export const HERO_INTRO_DEFAULTS: HeroIntroData = {
   textIntroductiv: "",
   horizontalAlign: "centru",
   background: "default",
-  primaryCta: { label: "", href: "" },
-  secondaryCta: { label: "", href: "" },
+  primaryCta: { ...CTA_DEFAULTS },
+  secondaryCta: { ...CTA_DEFAULTS },
 };

@@ -1,9 +1,5 @@
 import { z } from "zod";
-
-const ctaSchema = z.object({
-  label: z.string().trim(),
-  href: z.string().trim(),
-});
+import { CTA_DEFAULTS, ctaHasTarget, ctaSchema } from "../shared/cta";
 
 const statSchema = z.object({
   valoare: z.string().trim().default(""),
@@ -16,17 +12,17 @@ export const heroStatisticsSchema = z
     supratitlu: z.string().trim().default(""),
     titlu: z.string().trim().min(1, "Titlul este obligatoriu"),
     subtitlu: z.string().trim().default(""),
-    primaryCta: ctaSchema.default({ label: "", href: "" }),
-    secondaryCta: ctaSchema.default({ label: "", href: "" }),
+    primaryCta: ctaSchema.default(CTA_DEFAULTS),
+    secondaryCta: ctaSchema.default(CTA_DEFAULTS),
     statistici: z.array(statSchema).default([]),
     coloane: z.enum(["1", "2", "3", "4"]).default("2"),
     separator: z.boolean().default(false),
   })
-  .refine((d) => Boolean(d.primaryCta.label) === Boolean(d.primaryCta.href), {
+  .refine((d) => Boolean(d.primaryCta.label) === ctaHasTarget(d.primaryCta), {
     path: ["primaryCta"],
     message: "Completează și textul, și link-ul",
   })
-  .refine((d) => Boolean(d.secondaryCta.label) === Boolean(d.secondaryCta.href), {
+  .refine((d) => Boolean(d.secondaryCta.label) === ctaHasTarget(d.secondaryCta), {
     path: ["secondaryCta"],
     message: "Completează și textul, și link-ul",
   })
@@ -47,8 +43,8 @@ export const HERO_STATISTICS_DEFAULTS: HeroStatisticsData = {
   supratitlu: "",
   titlu: "",
   subtitlu: "",
-  primaryCta: { label: "", href: "" },
-  secondaryCta: { label: "", href: "" },
+  primaryCta: { ...CTA_DEFAULTS },
+  secondaryCta: { ...CTA_DEFAULTS },
   statistici: [],
   coloane: "2",
   separator: false,

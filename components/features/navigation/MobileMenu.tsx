@@ -60,7 +60,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                   </button>
                   {expanded && (
                     <div className="pl-4 flex flex-col gap-0.5">
-                      {item.children.map((child) => (
+                      {item.children.map((child) => (child.url ? (
                         <Link
                           key={`${child.label}-${child.url}`}
                           href={child.url}
@@ -70,7 +70,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                           {child.label}
                           <LinkPendingIndicator />
                         </Link>
-                      ))}
+                      ) : null))}
                     </div>
                   )}
                 </div>

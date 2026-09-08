@@ -22,20 +22,20 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { updateMenuItemsAction } from "@/lib/api/menus-actions";
 import type { Menu, MenuItem, MenuLocation } from "@/lib/api/menus";
 import type { FooterContent } from "@/lib/api/footer-types";
+import type { PageOption } from "@/lib/api/pages-types";
 import { FooterContentPanel } from "./FooterContentPanel";
-import { MenuItemForm, type MenuItemValues, type UrlMode } from "./MenuItemForm";
+import { MenuItemForm, type MenuItemValues, type PageMode } from "./MenuItemForm";
 import { MenuItemRow } from "./MenuItemRow";
 
 interface EditableChild {
   id: string;
   label: string;
-  url: string;
+  /** Resolved from `pagina` when the item points at a page. */
+  url?: string;
+  pagina?: string;
 }
 
-interface EditableItem {
-  id: string;
-  label: string;
-  url?: string;
+interface EditableItem extends EditableChild {
   children: EditableChild[];
 }
 
@@ -78,22 +78,39 @@ const toEditable = (menus: Menu[]): EditableMenu[] =>
       id: newId(),
       label: item.label,
       url: item.url,
+      pagina: item.pagina,
       children: (item.children ?? []).map((child) => ({
         id: newId(),
         label: child.label,
         url: child.url,
+        pagina: child.pagina,
       })),
     })),
   }));
 
+/**
+ * A page-linked item sends only its relation: the address is derived from the
+ * page's slug server-side, so storing a copy here would go stale the moment the
+ * page is renamed.
+ */
+const toLink = (entry: EditableChild) => (entry.pagina ? { pagina: entry.pagina } : {});
+
 const toPayload = (items: EditableItem[]): MenuItem[] =>
   items.map((item) => ({
     label: item.label,
-    ...(item.url ? { url: item.url } : {}),
-    children: item.children.map((child) => ({ label: child.label, url: child.url })),
+    ...toLink(item),
+    children: item.children.map((child) => ({ label: child.label, ...toLink(child) })),
   }));
 
-export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterContent }) {
+export function MenuBuilder({
+  menus,
+  footer,
+  pages,
+}: {
+  menus: Menu[];
+  footer: FooterContent;
+  pages: PageOption[];
+}) {
   const [state, setState] = useState<EditableMenu[]>(() => toEditable(menus));
   const [activeLocation, setActiveLocation] = useState<MenuLocation>(
     menus[0]?.location ?? "header",
@@ -110,17 +127,44 @@ export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterCo
   );
 
   /**
-   * A footer parent is a column heading and never redirects, so it gets no
-   * address field. A header parent that already has sub-elements only opens a
-   * dropdown, so its address is optional; without sub-elements it has nowhere to
-   * send the visitor and one is required.
+   * A footer parent is a column heading and never redirects, so it gets no page
+   * field at all. A header parent's page is optional: at the moment it is added
+   * nobody knows yet whether it will get sub-elements, and one that does is a
+   * dropdown that opens rather than a link that navigates.
    */
-  const rootUrlMode = (childCount: number): UrlMode => {
-    if (activeLocation === "footer") return "hidden";
-    return childCount > 0 ? "optional" : "required";
-  };
+  const rootPageMode: PageMode = activeLocation === "footer" ? "hidden" : "optional";
 
   const items = useMemo(() => activeMenu?.items ?? [], [activeMenu]);
+
+  const pageById = useMemo(
+    () => new Map(pages.map((option) => [option.documentId, option])),
+    [pages],
+  );
+
+  /**
+   * The address the server would resolve, worked out locally so a row stops
+   * reading "fără pagină" the moment a page is picked, instead of waiting for a
+   * reload. `url` is only ever a legacy value from before menus became
+   * page-only.
+   */
+  const displayUrl = (entry: { url?: string; pagina?: string }) => {
+    if (!entry.pagina) return entry.url;
+    const option = pageById.get(entry.pagina);
+    return option ? option.cale : undefined;
+  };
+
+  /** What a row says in place of an address, and each case means something different. */
+  const missingLabelFor = (
+    entry: { pagina?: string; children?: unknown[] },
+    isFooterRoot: boolean,
+  ) => {
+    if (entry.pagina) return "Pagina legată nu mai există";
+    if (isFooterRoot) return "Titlu de coloană — fără link";
+    // A parent with sub-elements is a dropdown: it opens, it does not navigate,
+    // and it is on the site whether or not it names a page of its own.
+    if ((entry.children?.length ?? 0) > 0) return "Deschide un dropdown — fără pagină";
+    return "Fără pagină — nu apare pe site";
+  };
 
   /**
    * Saves the whole tree, showing the change immediately and rolling back to the
@@ -151,7 +195,10 @@ export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterCo
     if (!form) return;
 
     if (form.mode === "add-root") {
-      commit([...items, { id: newId(), label: values.label, url: values.url, children: [] }]);
+      commit([
+        ...items,
+        { id: newId(), label: values.label, url: undefined, pagina: values.pagina, children: [] },
+      ]);
     }
 
     if (form.mode === "add-child") {
@@ -162,7 +209,7 @@ export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterCo
                 ...item,
                 children: [
                   ...item.children,
-                  { id: newId(), label: values.label, url: values.url ?? "" },
+                  { id: newId(), label: values.label, url: undefined, pagina: values.pagina },
                 ],
               }
             : item,
@@ -173,7 +220,9 @@ export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterCo
     if (form.mode === "edit-root") {
       commit(
         items.map((item) =>
-          item.id === form.itemId ? { ...item, label: values.label, url: values.url } : item,
+          item.id === form.itemId
+            ? { ...item, label: values.label, url: undefined, pagina: values.pagina }
+            : item,
         ),
       );
     }
@@ -186,7 +235,7 @@ export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterCo
                 ...item,
                 children: item.children.map((child) =>
                   child.id === form.childId
-                    ? { ...child, label: values.label, url: values.url ?? "" }
+                    ? { ...child, label: values.label, url: undefined, pagina: values.pagina }
                     : child,
                 ),
               }
@@ -346,7 +395,8 @@ export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterCo
               <MenuItemForm
                 variant="root"
                 title="Adaugă element la nivel principal"
-                urlMode={rootUrlMode(0)}
+                pageMode={rootPageMode}
+                pages={pages}
                 submitLabel="Adaugă"
                 pending={pending}
                 onSubmit={handleFormSubmit}
@@ -358,9 +408,11 @@ export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterCo
               <MenuItemForm
                 variant="root"
                 title="Editează elementul"
-                urlMode={rootUrlMode(editingRoot.children.length)}
+                pageMode={rootPageMode}
+                pages={pages}
+                initialPagina={editingRoot.pagina ?? ""}
                 initialLabel={editingRoot.label}
-                initialUrl={editingRoot.url ?? ""}
+                
                 submitLabel="Salvează"
                 pending={pending}
                 onSubmit={handleFormSubmit}
@@ -394,8 +446,9 @@ export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterCo
                       <MenuItemRow
                         id={item.id}
                         label={item.label}
-                        url={item.url}
+                        url={displayUrl(item)}
                         childCount={item.children.length}
+                        missingLabel={missingLabelFor(item, activeLocation === "footer")}
                         disabled={pending}
                         onAddChild={() => setForm({ mode: "add-child", parentId: item.id })}
                         onEdit={() => setForm({ mode: "edit-root", itemId: item.id })}
@@ -412,7 +465,8 @@ export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterCo
                         <MenuItemForm
                           variant="child"
                           title="Adaugă sub-element"
-                          urlMode="required"
+                          pageMode="required"
+                          pages={pages}
                           submitLabel="Adaugă"
                           pending={pending}
                           onSubmit={handleFormSubmit}
@@ -430,9 +484,11 @@ export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterCo
                               key={child.id}
                               variant="child"
                               title="Editează sub-elementul"
-                              urlMode="required"
+                              pageMode="required"
+                              pages={pages}
+                              initialPagina={child.pagina ?? ""}
                               initialLabel={child.label}
-                              initialUrl={child.url}
+                              
                               submitLabel="Salvează"
                               pending={pending}
                               onSubmit={handleFormSubmit}
@@ -443,8 +499,9 @@ export function MenuBuilder({ menus, footer }: { menus: Menu[]; footer: FooterCo
                               key={child.id}
                               id={child.id}
                               label={child.label}
-                              url={child.url}
+                              url={displayUrl(child)}
                               nested
+                              missingLabel={missingLabelFor(child, false)}
                               disabled={pending}
                               onEdit={() =>
                                 setForm({

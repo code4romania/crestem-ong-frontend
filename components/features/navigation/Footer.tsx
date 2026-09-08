@@ -69,16 +69,20 @@ export function Footer({ content, items }: { content: FooterContent; items: Menu
                 <div key={column.label} className="min-w-36">
                   <p className="font-heading text-sm font-bold text-white">{column.label}</p>
                   <ul className="mt-4 space-y-3">
-                    {column.children.map((child) => (
-                      <li key={`${child.label}-${child.url}`}>
-                        <Link
-                          href={child.url}
-                          className="text-sm text-white/60 transition-colors hover:text-white"
-                        >
-                          {child.label}
-                        </Link>
-                      </li>
-                    ))}
+                    {/* A link whose page was deleted has no address left; the
+                        editor shows it as broken, visitors never see it. */}
+                    {column.children.map((child) =>
+                      child.url ? (
+                        <li key={`${child.label}-${child.url}`}>
+                          <Link
+                            href={child.url}
+                            className="text-sm text-white/60 transition-colors hover:text-white"
+                          >
+                            {child.label}
+                          </Link>
+                        </li>
+                      ) : null,
+                    )}
                   </ul>
                 </div>
               ))}

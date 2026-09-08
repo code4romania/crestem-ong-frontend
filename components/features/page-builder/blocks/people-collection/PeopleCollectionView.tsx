@@ -10,12 +10,21 @@ export interface ViewPerson {
   avatarUrl: string | null;
 }
 
-const COL_CLASS: Record<PeopleCollectionData["coloane"], string> = {
-  "1": "sm:grid-cols-1 lg:grid-cols-1",
-  "2": "sm:grid-cols-2 lg:grid-cols-2",
-  "3": "sm:grid-cols-2 lg:grid-cols-3",
-  "4": "sm:grid-cols-2 lg:grid-cols-4",
-};
+/** Narrowest a person card may get before the row starts scrolling instead. */
+export const MIN_CELL_WIDTH = 180;
+
+/**
+ * Spread `total` people over `randuri` rows: the row width is whatever it takes
+ * to fit them, so "1 rând" really is one row at any viewport (it scrolls
+ * sideways rather than wrapping). Never returns 0, so an empty grid is inert
+ * rather than invalid CSS.
+ */
+export function peoplePerRow(
+  total: number,
+  randuri: PeopleCollectionData["randuri"],
+): number {
+  return Math.max(1, Math.ceil(total / Number(randuri)));
+}
 
 function PersonCell({
   person,
@@ -89,34 +98,53 @@ export function PeopleCollectionView({
   return (
     <section className="relative overflow-hidden">
       <div className="relative mx-auto max-w-7xl px-6 py-20">
-        {data.titlu ? (
+        {data.supratitlu || data.titlu ? (
           <div className="mx-auto mb-12 max-w-2xl text-center">
-            <h2
-              className="font-heading wrap-break-word"
-              style={{
-                fontSize: "clamp(2rem, 4vw, 2.75rem)",
-                fontWeight: 800,
-                lineHeight: 1.15,
-                color: "#162040",
-              }}
-            >
-              {data.titlu}
-            </h2>
+            {data.supratitlu ? (
+              <p
+                className="mb-3 text-sm font-bold uppercase tracking-[0.12em] wrap-break-word"
+                style={{ color: "#2dbe8f" }}
+              >
+                {data.supratitlu}
+              </p>
+            ) : null}
+            {data.titlu ? (
+              <h2
+                className="font-heading wrap-break-word"
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 2.75rem)",
+                  fontWeight: 800,
+                  lineHeight: 1.15,
+                  color: "#162040",
+                }}
+              >
+                {data.titlu}
+              </h2>
+            ) : null}
           </div>
         ) : null}
 
         {people.length > 0 ? (
-          <div
-            className={`grid grid-cols-1 gap-x-6 gap-y-10 ${COL_CLASS[data.coloane]}`}
-          >
-            {people.map((person) => (
-              <PersonCell
-                key={person.id}
-                person={person}
-                showPhoto={data.afiseazaFotografia}
-                showType={data.afiseazaTipul}
-              />
-            ))}
+          /* Bleeds past the section padding so the scroll runs edge to edge. */
+          <div className="-mx-6 overflow-x-auto px-6">
+            <div
+              className="grid gap-x-6 gap-y-10"
+              style={{
+                gridTemplateColumns: `repeat(${peoplePerRow(
+                  people.length,
+                  data.randuri,
+                )}, minmax(${MIN_CELL_WIDTH}px, 1fr))`,
+              }}
+            >
+              {people.map((person) => (
+                <PersonCell
+                  key={person.id}
+                  person={person}
+                  showPhoto={data.afiseazaFotografia}
+                  showType={data.afiseazaTipul}
+                />
+              ))}
+            </div>
           </div>
         ) : (
           <p className="rounded-2xl border-2 border-dashed border-border px-6 py-12 text-center text-sm text-muted-foreground">

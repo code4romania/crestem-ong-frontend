@@ -35,6 +35,14 @@ export interface PageSummary {
   documentId: string;
   titlu: string;
   slug: string;
+  /**
+   * The page's full URL path, parents included: `/programe/accelerator`. Derived
+   * by the backend from the `parinte` chain, never stored, so it is always the
+   * address the page actually answers at.
+   */
+  cale: string;
+  /** The parent page's documentId, or null for a top-level page. */
+  parinte: string | null;
   publicat: boolean;
   vizibilitate: VisibilityAudience[];
   actualizat: string;
@@ -47,4 +55,15 @@ export interface PageDetail extends PageSummary {
 export interface PageListResult {
   data: PageSummary[];
   meta: { pagination: { page: number; pageSize: number; total: number; pageCount: number } };
+}
+
+/** A page as the menu editor's picker needs it: enough to choose, and to warn. */
+export interface PageOption {
+  documentId: string;
+  titlu: string;
+  slug: string;
+  /** The page's full path, so a picker can show where the link actually goes. */
+  cale: string;
+  parinte: string | null;
+  publicat: boolean;
 }

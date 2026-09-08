@@ -1,5 +1,6 @@
+import { listPageOptions } from "@/lib/api/pages";
 import { PageForm } from "@/components/features/pages/PageForm";
 
-export default function Page() {
-  return <PageForm page={null} />;
+export default async function Page() {
+  return <PageForm page={null} pages={await listPageOptions()} />;
 }

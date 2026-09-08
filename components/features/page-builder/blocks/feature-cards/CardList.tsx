@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ArrowDown, ArrowUp, ChevronLeft, Plus, Trash2 } from "lucide-react";
 import { IconPicker } from "./IconPicker";
 import { FEATURE_ICONS } from "./icons";
+import { CtaTargetField } from "../shared/CtaTargetField";
 import { EMPTY_CARD, type FeatureCard } from "./schema";
 
 const labelClass =
@@ -120,15 +121,11 @@ export function CardList({
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label htmlFor="fc-card-href" className={labelClass}>
-                Link
-              </label>
-              <input
-                id="fc-card-href"
-                className={inputClass}
-                value={draft.href}
-                onChange={(e) => setField({ href: e.target.value })}
-                placeholder="/pagina-destinatie"
+              <span className={labelClass}>Link</span>
+              <CtaTargetField
+                value={draft}
+                onChange={(next) => setField({ href: next.href, pagina: next.pagina })}
+                ariaLabel="Link"
               />
             </div>
             <div>

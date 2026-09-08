@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getApiErrorMessage } from "./client";
 import { revalidateDashboardPath } from "./revalidate";
+import { getPage } from "./pages";
 import { serverApiFetch } from "./server";
 import { getCurrentUser } from "./session-server";
 import { isFdscStaff } from "@/lib/roles";
@@ -11,6 +12,8 @@ import type { PageBlock, VisibilityAudience } from "./pages-types";
 export interface PageInput {
   titlu: string;
   slug: string;
+  /** Parent page documentId, or null for a top-level page. */
+  parinte: string | null;
   vizibilitate: VisibilityAudience[];
   blocuri: PageBlock[];
 }
@@ -27,12 +30,22 @@ async function refuseNonStaff(): Promise<{ error: string } | null> {
   return isFdscStaff(user?.role?.type) ? null : { error: FORBIDDEN };
 }
 
-function revalidatePage(slug: string, previousSlug?: string) {
+/**
+ * A page is addressed by its full path, so the cache key is that path and not
+ * the bare slug. Moving a page also changes the path of everything beneath it,
+ * and of every menu item and CTA pointing at it, so a changed path invalidates
+ * the whole public tree; an edit in place costs only the page itself.
+ */
+function revalidatePage(
+  cale: string,
+  { previousCale, wholeTree }: { previousCale?: string; wholeTree?: boolean } = {},
+) {
   revalidateDashboardPath("/dashboard/fdsc/pagini");
-  revalidatePath(`/${slug}`);
-  if (previousSlug && previousSlug !== slug) {
-    revalidatePath(`/${previousSlug}`);
-  }
+  revalidatePath(cale);
+
+  const moved = Boolean(previousCale && previousCale !== cale);
+  if (previousCale && moved) revalidatePath(previousCale);
+  if (moved || wholeTree) revalidatePath("/", "layout");
 }
 
 export async function createPageAction(
@@ -42,11 +55,11 @@ export async function createPageAction(
   if (forbidden) return forbidden;
 
   try {
-    const { data } = await serverApiFetch<{ data: { documentId: string } }>("/api/pages", {
-      method: "POST",
-      body: JSON.stringify(input),
-    });
-    revalidatePage(input.slug);
+    const { data } = await serverApiFetch<{ data: { documentId: string; cale: string } }>(
+      "/api/pages",
+      { method: "POST", body: JSON.stringify(input) },
+    );
+    revalidatePage(data.cale);
     return { documentId: data.documentId };
   } catch (err) {
     return { error: getApiErrorMessage(err, "Nu am putut crea pagina.") };
@@ -56,30 +69,44 @@ export async function createPageAction(
 export async function updatePageAction(
   documentId: string,
   input: PageInput,
-  previousSlug?: string,
+  previousCale?: string,
 ): Promise<{ error?: string }> {
   const forbidden = await refuseNonStaff();
   if (forbidden) return forbidden;
 
+  let cale: string;
   try {
-    await serverApiFetch(`/api/pages/${documentId}`, {
-      method: "PUT",
-      body: JSON.stringify(input),
-    });
+    const { data } = await serverApiFetch<{ data: { cale: string } }>(
+      `/api/pages/${documentId}`,
+      { method: "PUT", body: JSON.stringify(input) },
+    );
+    cale = data.cale;
   } catch (err) {
     return { error: getApiErrorMessage(err, "Nu am putut salva pagina.") };
   }
 
-  revalidatePage(input.slug, previousSlug);
+  revalidatePage(cale, { previousCale });
   return {};
 }
 
-export async function deletePageAction(
-  documentId: string,
-  slug: string,
-): Promise<{ error?: string }> {
+/**
+ * The page's own path, read back from the backend. A caller would otherwise
+ * have to compute it from the parent chain to know which cache key to drop,
+ * which is exactly the duplication deriving the path was meant to avoid.
+ */
+async function currentCale(documentId: string): Promise<string | null> {
+  try {
+    return (await getPage(documentId)).cale;
+  } catch {
+    return null;
+  }
+}
+
+export async function deletePageAction(documentId: string): Promise<{ error?: string }> {
   const forbidden = await refuseNonStaff();
   if (forbidden) return forbidden;
+
+  const cale = await currentCale(documentId);
 
   try {
     await serverApiFetch(`/api/pages/${documentId}`, { method: "DELETE" });
@@ -87,17 +114,20 @@ export async function deletePageAction(
     return { error: getApiErrorMessage(err, "Nu am putut șterge pagina.") };
   }
 
-  revalidatePage(slug);
+  // Deleting a parent leaves its subpages at the top level, so their paths move
+  // too — the whole public tree is stale either way.
+  if (cale) revalidatePage(cale, { wholeTree: true });
   return {};
 }
 
 export async function setPagePublishedAction(
   documentId: string,
-  slug: string,
   published: boolean,
 ): Promise<{ error?: string }> {
   const forbidden = await refuseNonStaff();
   if (forbidden) return forbidden;
+
+  const cale = await currentCale(documentId);
 
   try {
     await serverApiFetch(
@@ -113,6 +143,6 @@ export async function setPagePublishedAction(
     };
   }
 
-  revalidatePage(slug);
+  if (cale) revalidatePage(cale);
   return {};
 }

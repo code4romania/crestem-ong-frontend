@@ -3,6 +3,7 @@
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
 import { StatList } from "./StatList";
+import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { StatisticsData } from "./schema";
 
@@ -88,6 +89,20 @@ export function StatisticsEditor({
         />
       </div>
 
+      <div>
+        <span className={labelClass}>Aliniere statistici</span>
+        <SegmentedControl
+          ariaLabel="Aliniere statistici"
+          value={value.aliniere}
+          onChange={(aliniere) => set({ aliniere })}
+          options={[
+            { value: "stanga", label: "Stânga" },
+            { value: "centru", label: "Centrat" },
+            { value: "dreapta", label: "Dreapta" },
+          ]}
+        />
+      </div>
+
       <div className="flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3">
         <span className="text-sm font-semibold text-[#162040]">
           Separator între statistici
@@ -111,14 +126,10 @@ export function StatisticsEditor({
             placeholder="Aplică acum"
             aria-label="Text primul buton"
           />
-          <input
-            className={inputClass}
-            value={value.primaryCta.href}
-            onChange={(e) =>
-              set({ primaryCta: { ...value.primaryCta, href: e.target.value } })
-            }
-            placeholder="/aplica"
-            aria-label="Link primul buton"
+          <CtaTargetField
+            value={value.primaryCta}
+            onChange={(primaryCta) => set({ primaryCta })}
+            ariaLabel="Link primul buton"
           />
         </div>
         {errors.primaryCta && <p className={errorClass}>{errors.primaryCta}</p>}
@@ -140,16 +151,10 @@ export function StatisticsEditor({
             placeholder="Află mai mult"
             aria-label="Text al doilea buton"
           />
-          <input
-            className={inputClass}
-            value={value.secondaryCta.href}
-            onChange={(e) =>
-              set({
-                secondaryCta: { ...value.secondaryCta, href: e.target.value },
-              })
-            }
-            placeholder="/despre-program"
-            aria-label="Link al doilea buton"
+          <CtaTargetField
+            value={value.secondaryCta}
+            onChange={(secondaryCta) => set({ secondaryCta })}
+            ariaLabel="Link al doilea buton"
           />
         </div>
         {errors.secondaryCta && (

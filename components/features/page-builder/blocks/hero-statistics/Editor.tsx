@@ -3,6 +3,7 @@
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
 import { StatList } from "./StatList";
+import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { HeroStatisticsData } from "./schema";
 
@@ -80,14 +81,10 @@ export function HeroStatisticsEditor({
             placeholder="Înregistrează-te acum"
             aria-label="Text primul buton"
           />
-          <input
-            className={inputClass}
-            value={value.primaryCta.href}
-            onChange={(e) =>
-              set({ primaryCta: { ...value.primaryCta, href: e.target.value } })
-            }
-            placeholder="/inregistrare"
-            aria-label="Link primul buton"
+          <CtaTargetField
+            value={value.primaryCta}
+            onChange={(primaryCta) => set({ primaryCta })}
+            ariaLabel="Link primul buton"
           />
         </div>
         {errors.primaryCta && <p className={errorClass}>{errors.primaryCta}</p>}
@@ -107,16 +104,10 @@ export function HeroStatisticsEditor({
             placeholder="Cum funcționează?"
             aria-label="Text al doilea buton"
           />
-          <input
-            className={inputClass}
-            value={value.secondaryCta.href}
-            onChange={(e) =>
-              set({
-                secondaryCta: { ...value.secondaryCta, href: e.target.value },
-              })
-            }
-            placeholder="/cum-functioneaza"
-            aria-label="Link al doilea buton"
+          <CtaTargetField
+            value={value.secondaryCta}
+            onChange={(secondaryCta) => set({ secondaryCta })}
+            ariaLabel="Link al doilea buton"
           />
         </div>
         {errors.secondaryCta && (

@@ -14,6 +14,7 @@ export function MenuItemRow({
   childCount = 0,
   nested = false,
   disabled = false,
+  missingLabel = "Titlu de coloană — fără link",
   onAddChild,
   onEdit,
   onDelete,
@@ -24,6 +25,11 @@ export function MenuItemRow({
   childCount?: number;
   nested?: boolean;
   disabled?: boolean;
+  /**
+   * Shown in place of the address. A footer column heading has none by design;
+   * anywhere else, an item without one is pointing at a page that was deleted.
+   */
+  missingLabel?: string;
   onAddChild?: () => void;
   onEdit: () => void;
   onDelete: () => void;
@@ -54,7 +60,7 @@ export function MenuItemRow({
               <p className="truncate text-xs text-muted-foreground">{url}</p>
             ) : (
               <p className="truncate text-xs italic text-muted-foreground">
-                Titlu de coloană — fără link
+                {missingLabel}
               </p>
             )}
           </div>

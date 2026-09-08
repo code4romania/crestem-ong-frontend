@@ -4,6 +4,7 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
 import { RichTextField } from "../../rich-text/RichTextField";
 import { IconPicker } from "./IconPicker";
+import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { CalloutData } from "./schema";
 
@@ -87,14 +88,10 @@ export function CalloutEditor({
             placeholder="Creează cont gratuit"
             aria-label="Text primul buton"
           />
-          <input
-            className={inputClass}
-            value={value.primaryCta.href}
-            onChange={(e) =>
-              set({ primaryCta: { ...value.primaryCta, href: e.target.value } })
-            }
-            placeholder="/inregistrare"
-            aria-label="Link primul buton"
+          <CtaTargetField
+            value={value.primaryCta}
+            onChange={(primaryCta) => set({ primaryCta })}
+            ariaLabel="Link primul buton"
           />
         </div>
         {errors.primaryCta && <p className={errorClass}>{errors.primaryCta}</p>}
@@ -114,16 +111,10 @@ export function CalloutEditor({
             placeholder="Contactează-ne"
             aria-label="Text al doilea buton"
           />
-          <input
-            className={inputClass}
-            value={value.secondaryCta.href}
-            onChange={(e) =>
-              set({
-                secondaryCta: { ...value.secondaryCta, href: e.target.value },
-              })
-            }
-            placeholder="/contact"
-            aria-label="Link al doilea buton"
+          <CtaTargetField
+            value={value.secondaryCta}
+            onChange={(secondaryCta) => set({ secondaryCta })}
+            ariaLabel="Link al doilea buton"
           />
         </div>
         {errors.secondaryCta && (

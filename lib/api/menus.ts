@@ -6,16 +6,17 @@ export type MenuLocation = (typeof MENU_LOCATIONS)[number];
 
 export interface MenuChild {
   label: string;
-  url: string;
-}
-
-export interface MenuItem {
-  label: string;
   /**
-   * Absent on a footer parent: those are column headings, not links. Present on
-   * every header item.
+   * Resolved server-side. Absent on a footer column heading, which is not a
+   * link, and also on an item whose linked page was deleted — the editor shows
+   * that as broken, the public renderer skips it.
    */
   url?: string;
+  /** documentId of the CMS page this item points at, when it points at one. */
+  pagina?: string;
+}
+
+export interface MenuItem extends MenuChild {
   children: MenuChild[];
 }
 

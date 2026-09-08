@@ -1,9 +1,5 @@
 import { z } from "zod";
-
-const ctaSchema = z.object({
-  label: z.string().trim(),
-  href: z.string().trim(),
-});
+import { CTA_DEFAULTS, ctaHasTarget, ctaSchema } from "../shared/cta";
 
 export const heroLargeSplitSchema = z
   .object({
@@ -17,18 +13,18 @@ export const heroLargeSplitSchema = z
     imageAlt: z.string().trim().default(""),
     imagePosition: z.enum(["dreapta", "stanga"]).default("dreapta"),
     verticalAlign: z.enum(["centru", "sus"]).default("centru"),
-    primaryCta: ctaSchema.default({ label: "", href: "" }),
-    secondaryCta: ctaSchema.default({ label: "", href: "" }),
+    primaryCta: ctaSchema.default(CTA_DEFAULTS),
+    secondaryCta: ctaSchema.default(CTA_DEFAULTS),
   })
   .refine((d) => !d.image || d.imageAlt.length > 0, {
     path: ["imageAlt"],
     message: "Adaugă un text alternativ pentru imagine",
   })
-  .refine((d) => Boolean(d.primaryCta.label) === Boolean(d.primaryCta.href), {
+  .refine((d) => Boolean(d.primaryCta.label) === ctaHasTarget(d.primaryCta), {
     path: ["primaryCta"],
     message: "Completează și textul, și link-ul",
   })
-  .refine((d) => Boolean(d.secondaryCta.label) === Boolean(d.secondaryCta.href), {
+  .refine((d) => Boolean(d.secondaryCta.label) === ctaHasTarget(d.secondaryCta), {
     path: ["secondaryCta"],
     message: "Completează și textul, și link-ul",
   });
@@ -48,6 +44,6 @@ export const HERO_LARGE_SPLIT_DEFAULTS: HeroLargeSplitData = {
   imageAlt: "",
   imagePosition: "dreapta",
   verticalAlign: "centru",
-  primaryCta: { label: "", href: "" },
-  secondaryCta: { label: "", href: "" },
+  primaryCta: { ...CTA_DEFAULTS },
+  secondaryCta: { ...CTA_DEFAULTS },
 };

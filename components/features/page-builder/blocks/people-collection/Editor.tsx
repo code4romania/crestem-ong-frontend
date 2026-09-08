@@ -48,6 +48,19 @@ export function PeopleCollectionEditor({
   return (
     <div className="space-y-5">
       <div>
+        <label htmlFor="pc-supratitlu" className={labelClass}>
+          Supratitlu
+        </label>
+        <input
+          id="pc-supratitlu"
+          className={inputClass}
+          value={value.supratitlu}
+          onChange={(e) => set({ supratitlu: e.target.value })}
+          placeholder="ex. Oamenii din spatele platformei"
+        />
+      </div>
+
+      <div>
         <label htmlFor="pc-titlu" className={labelClass}>
           Titlu secțiune
         </label>
@@ -126,13 +139,13 @@ export function PeopleCollectionEditor({
         <div className="mt-1.5">
           <SegmentedControl
             ariaLabel="Layout"
-            value={value.coloane}
-            onChange={(coloane) => set({ coloane })}
+            value={value.randuri}
+            onChange={(randuri) => set({ randuri })}
             options={[
-              { value: "1", label: "1 col." },
-              { value: "2", label: "2 col." },
-              { value: "3", label: "3 col." },
-              { value: "4", label: "4 col." },
+              { value: "1", label: "1 rând" },
+              { value: "2", label: "2 rânduri" },
+              { value: "3", label: "3 rânduri" },
+              { value: "4", label: "4 rânduri" },
             ]}
           />
         </div>

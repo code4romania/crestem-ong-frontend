@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ctaHasTarget } from "../shared/cta";
 
 /**
  * Fixed icon palette for a feature card. Stored as a string key (not a component
@@ -27,6 +28,9 @@ const cardSchema = z.object({
   titlu: z.string().trim().default(""),
   descriere: z.string().trim().default(""),
   href: z.string().trim().default(""),
+  /** Page-backed link target; see `blocks/shared/cta.ts`. */
+  pagina: z.string().trim().default(""),
+  subPagina: z.boolean().default(false),
   ctaLabel: z.string().trim().default(""),
 });
 
@@ -42,7 +46,7 @@ export const featureCardsSchema = z
     path: ["carduri"],
     message: "Fiecare card are nevoie de un titlu",
   })
-  .refine((d) => d.carduri.every((c) => Boolean(c.href) === Boolean(c.ctaLabel)), {
+  .refine((d) => d.carduri.every((c) => ctaHasTarget(c) === Boolean(c.ctaLabel)), {
     path: ["carduri"],
     message: "La un card cu link completează și eticheta CTA (și invers)",
   });
@@ -68,5 +72,7 @@ export const EMPTY_CARD: FeatureCard = {
   titlu: "",
   descriere: "",
   href: "",
+  pagina: "",
+  subPagina: false,
   ctaLabel: "",
 };

@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { getMediaUrl } from "@/lib/api/client";
 import { getDirectoryPeople, type DirectoryPerson } from "@/lib/api/people";
 import {
+  MIN_CELL_WIDTH,
   PeopleCollectionView,
+  peoplePerRow,
   type ViewPerson,
 } from "./PeopleCollectionView";
 import {
@@ -16,8 +18,8 @@ import type { PeopleCollectionData } from "./schema";
 function fromDirectory(person: DirectoryPerson): ViewPerson {
   return {
     id: person.documentId,
-    nume: person.nume,
-    functie: person.functie,
+    nume: person.nume ?? "",
+    functie: person.functie ?? "",
     tip: person.tip,
     avatarUrl: person.avatar ? getMediaUrl(person.avatar.url) : null,
   };
@@ -92,7 +94,12 @@ export function PeopleCollection({ data }: { data: PeopleCollectionData }) {
   }, [requestKey]);
 
   if (!result || result.key !== requestKey) {
-    return <PeopleCollectionSkeleton data={data} rows={Math.min(limit ?? 8, 8)} />;
+    return (
+      <PeopleCollectionSkeleton
+        data={data}
+        placeholders={Math.min(limit ?? 8, 8)}
+      />
+    );
   }
 
   return (
@@ -108,38 +115,52 @@ export function PeopleCollection({ data }: { data: PeopleCollectionData }) {
   );
 }
 
-const COL_CLASS: Record<PeopleCollectionData["coloane"], string> = {
-  "1": "",
-  "2": "sm:grid-cols-2 lg:grid-cols-2",
-  "3": "sm:grid-cols-2 lg:grid-cols-3",
-  "4": "sm:grid-cols-2 lg:grid-cols-4",
-};
-
 function PeopleCollectionSkeleton({
   data,
-  rows,
+  placeholders,
 }: {
   data: PeopleCollectionData;
-  rows: number;
+  /** How many placeholder cells to draw, not how many rows. */
+  placeholders: number;
 }) {
   return (
     <section>
       <div className="mx-auto max-w-7xl px-6 py-20">
-        {data.titlu ? (
-          <div className="mx-auto mb-12 h-10 max-w-sm animate-pulse rounded bg-muted" />
+        {data.supratitlu || data.titlu ? (
+          <div className="mx-auto mb-12 flex max-w-sm flex-col items-center gap-3">
+            {data.supratitlu ? (
+              <div className="h-4 w-56 animate-pulse rounded bg-muted" />
+            ) : null}
+            {data.titlu ? (
+              <div className="h-10 w-full animate-pulse rounded bg-muted" />
+            ) : null}
+          </div>
         ) : null}
-        <div
-          className={`grid grid-cols-1 gap-x-6 gap-y-10 ${COL_CLASS[data.coloane]}`}
-        >
-          {Array.from({ length: rows }).map((_, i) => (
-            <div key={i} className="flex flex-col items-center gap-3" aria-hidden>
-              {data.afiseazaFotografia ? (
-                <div className="h-20 w-20 animate-pulse rounded-2xl bg-muted" />
-              ) : null}
-              <div className="h-4 w-24 animate-pulse rounded bg-muted" />
-              <div className="h-3 w-16 animate-pulse rounded bg-muted" />
-            </div>
-          ))}
+        {/* Same row maths as the loaded view, so the layout doesn't jump. */}
+        <div className="-mx-6 overflow-x-auto px-6">
+          <div
+            className="grid gap-x-6 gap-y-10"
+            style={{
+              gridTemplateColumns: `repeat(${peoplePerRow(
+                placeholders,
+                data.randuri,
+              )}, minmax(${MIN_CELL_WIDTH}px, 1fr))`,
+            }}
+          >
+            {Array.from({ length: placeholders }).map((_, i) => (
+              <div
+                key={i}
+                className="flex flex-col items-center gap-3"
+                aria-hidden
+              >
+                {data.afiseazaFotografia ? (
+                  <div className="h-20 w-20 animate-pulse rounded-2xl bg-muted" />
+                ) : null}
+                <div className="h-4 w-24 animate-pulse rounded bg-muted" />
+                <div className="h-3 w-16 animate-pulse rounded bg-muted" />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

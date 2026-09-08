@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getPage } from "@/lib/api/pages";
+import { getPage, listPageOptions } from "@/lib/api/pages";
 import { PageForm } from "@/components/features/pages/PageForm";
 
 export default async function Page({
@@ -16,5 +16,5 @@ export default async function Page({
     notFound();
   }
 
-  return <PageForm page={page} />;
+  return <PageForm page={page} pages={await listPageOptions()} />;
 }
