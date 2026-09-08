@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { getMediaUrl } from "@/lib/api/client";
 import { FEATURE_ICONS } from "./icons";
 import type { FeatureCard, FeatureCardsData } from "./schema";
 
@@ -36,12 +37,23 @@ function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
           : "border-border bg-white shadow-sm"
       }`}
     >
-      <span
-        className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
-        style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
-      >
-        <Icon size={22} />
-      </span>
+      {card.iconImage ? (
+        <span className="mb-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getMediaUrl(card.iconImage.url)}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+        </span>
+      ) : (
+        <span
+          className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
+          style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
+        >
+          <Icon size={22} />
+        </span>
+      )}
       <h3
         className={`mb-2 text-lg font-semibold wrap-break-word ${
           isDark ? "text-white" : "text-[#162040]"

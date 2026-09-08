@@ -30,6 +30,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { ModalPortal } from "@/components/ui/ModalPortal";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { AddBlockModal } from "./AddBlockModal";
 import { BlockConfigDrawer } from "./BlockConfigDrawer";
 import { BLOCK_REGISTRY } from "./registry";
@@ -189,7 +190,9 @@ export function PageBuilder({
 } = {}) {
   const [ownBlocks, setOwnBlocks] = useState<BlockInstance[]>([]);
   const blocks = value ?? ownBlocks;
-  const setBlocks = (next: BlockInstance[] | ((current: BlockInstance[]) => BlockInstance[])) => {
+  const setBlocks = (
+    next: BlockInstance[] | ((current: BlockInstance[]) => BlockInstance[]),
+  ) => {
     const resolved = typeof next === "function" ? next(blocks) : next;
     if (onChange) onChange(resolved);
     else setOwnBlocks(resolved);
@@ -200,6 +203,7 @@ export function PageBuilder({
   const [draftData, setDraftData] = useState<unknown>(null);
   const [draftErrors, setDraftErrors] = useState<BlockFieldErrors>({});
   const [editRef, setEditRef] = useState<EditRef>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [preview, setPreview] = useState(false);
   /** The block currently being dragged at the top level, shown in the overlay. */
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -391,9 +395,7 @@ export function PageBuilder({
     setBlocks((current) => {
       const from = current.findIndex((b) => b.id === active.id);
       const to = current.findIndex((b) => b.id === over.id);
-      return from === -1 || to === -1
-        ? current
-        : arrayMove(current, from, to);
+      return from === -1 || to === -1 ? current : arrayMove(current, from, to);
     });
   };
 
@@ -460,7 +462,10 @@ export function PageBuilder({
                   onAddChild: (columnIndex) =>
                     openPickerForContainer({ blockId: block.id, columnIndex }),
                   onEditChild: (columnIndex, childId) =>
-                    handleEditBlock(childId, { blockId: block.id, columnIndex }),
+                    handleEditBlock(childId, {
+                      blockId: block.id,
+                      columnIndex,
+                    }),
                   onDuplicateChild: (columnIndex, childId) =>
                     duplicateChild({ blockId: block.id, columnIndex }, childId),
                   onMoveChild: (columnIndex, childId, dir) =>
@@ -562,134 +567,154 @@ export function PageBuilder({
 
   return (
     <PageOptionsProvider value={{ pages, currentPageId, currentPath }}>
-    <div className="mx-auto max-w-6xl">
-      <div className="mb-6 flex items-center justify-between gap-4">
-        <div>
-          <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
-            Pagini
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Adaugă secțiuni de conținut în pagină.
-          </p>
-        </div>
-        <div className="flex shrink-0 items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setPreview(true)}
-            disabled={blocks.length === 0}
-            className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-50"
-          >
-            <Eye size={16} />
-            Previzualizează
-          </button>
-          <button
-            type="button"
-            onClick={openPickerTop}
-            className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-            style={{ background: "#2dbe8f" }}
-          >
-            <Plus size={16} />
-            Adaugă bloc
-          </button>
-        </div>
-      </div>
-
-      {blocks.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border px-6 py-20 text-center">
-          <p className="text-sm text-muted-foreground">
-            Nicio secțiune adăugată. Apasă «Adaugă bloc» pentru a începe.
-          </p>
-        </div>
-      ) : (
-        <DndContext
-          // Explicit id: dnd-kit otherwise numbers its accessibility description
-          // from a module counter that differs between server and browser, and
-          // hydration fails on `aria-describedby`.
-          id={dndId}
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleTopDragStart}
-          onDragEnd={handleTopDragEnd}
-          onDragCancel={() => setActiveId(null)}
-        >
-          <SortableContext
-            items={blocks.map((b) => b.id)}
-            strategy={verticalListSortingStrategy}
-          >
-            <div className="space-y-6">
-              {blocks.map((block, index) =>
-                BLOCK_REGISTRY[block.type] ? (
-                  <SortableBlock key={block.id} id={block.id}>
-                    {(dragHandle) => renderBlockNode(block, index, dragHandle)}
-                  </SortableBlock>
-                ) : null,
-              )}
-            </div>
-          </SortableContext>
-          <DragOverlay>
-            {activeBlock ? (
-              <div className="cursor-grabbing">
-                {renderBlockNode(activeBlock, activeIndex, null)}
-              </div>
-            ) : null}
-          </DragOverlay>
-        </DndContext>
-      )}
-
-      {pickerOpen && (
-        <AddBlockModal
-          onSelect={handleSelectBlock}
-          onClose={() => {
-            setPickerOpen(false);
-            setAddTarget(null);
-          }}
-          excludeTypes={addTarget ? CONTAINER_TYPES : undefined}
-        />
-      )}
-
-      {preview && (
-        <ModalPortal>
-          <div className="fixed inset-0 z-50 flex flex-col bg-white">
-            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-border px-6 py-3">
-              <span className="text-sm font-semibold text-[#162040]">
-                Previzualizare
-              </span>
-              <button
-                type="button"
-                onClick={() => setPreview(false)}
-                className="inline-flex items-center gap-2 rounded-xl border border-border px-3.5 py-2 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50"
-              >
-                <X size={16} />
-                Închide
-              </button>
-            </div>
-            <div className="min-h-0 flex-1 overflow-y-auto">
-              {blocks.map((block) => {
-                const definition = BLOCK_REGISTRY[block.type];
-                if (!definition) return null;
-                const { Renderer } = definition;
-                return <Renderer key={block.id} data={resolveBlockLinks(block.data, pages)} />;
-              })}
-            </div>
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <div>
+            <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+              Pagini
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Adaugă secțiuni de conținut în pagină.
+            </p>
           </div>
-        </ModalPortal>
-      )}
+          <div className="flex shrink-0 items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setPreview(true)}
+              disabled={blocks.length === 0}
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-50"
+            >
+              <Eye size={16} />
+              Previzualizează
+            </button>
+            <button
+              type="button"
+              onClick={openPickerTop}
+              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              style={{ background: "#2dbe8f" }}
+            >
+              <Plus size={16} />
+              Adaugă bloc
+            </button>
+          </div>
+        </div>
 
-      {draftDefinition && (
-        <BlockConfigDrawer
-          definition={draftDefinition}
-          draft={draftData}
-          errors={draftErrors}
-          submitLabel={isEditing ? "Salvează" : "Adaugă blocul"}
-          onChange={(next) => {
-            setDraftData(next);
-            setDraftErrors({});
+        {blocks.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border px-6 py-20 text-center">
+            <p className="text-sm text-muted-foreground">
+              Nicio secțiune adăugată. Apasă «Adaugă bloc» pentru a începe.
+            </p>
+          </div>
+        ) : (
+          <DndContext
+            // Explicit id: dnd-kit otherwise numbers its accessibility description
+            // from a module counter that differs between server and browser, and
+            // hydration fails on `aria-describedby`.
+            id={dndId}
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleTopDragStart}
+            onDragEnd={handleTopDragEnd}
+            onDragCancel={() => setActiveId(null)}
+          >
+            <SortableContext
+              items={blocks.map((b) => b.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="space-y-6">
+                {blocks.map((block, index) =>
+                  BLOCK_REGISTRY[block.type] ? (
+                    <SortableBlock key={block.id} id={block.id}>
+                      {(dragHandle) =>
+                        renderBlockNode(block, index, dragHandle)
+                      }
+                    </SortableBlock>
+                  ) : null,
+                )}
+              </div>
+            </SortableContext>
+            <DragOverlay>
+              {activeBlock ? (
+                <div className="cursor-grabbing">
+                  {renderBlockNode(activeBlock, activeIndex, null)}
+                </div>
+              ) : null}
+            </DragOverlay>
+          </DndContext>
+        )}
+
+        {pickerOpen && (
+          <AddBlockModal
+            onSelect={handleSelectBlock}
+            onClose={() => {
+              setPickerOpen(false);
+              setAddTarget(null);
+            }}
+            excludeTypes={addTarget ? CONTAINER_TYPES : undefined}
+          />
+        )}
+
+        {preview && (
+          <ModalPortal>
+            <div className="fixed inset-0 z-50 flex flex-col bg-white">
+              <div className="flex shrink-0 items-center justify-between gap-4 border-b border-border px-6 py-3">
+                <span className="text-sm font-semibold text-[#162040]">
+                  Previzualizare
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPreview(false)}
+                  className="inline-flex items-center gap-2 rounded-xl border border-border px-3.5 py-2 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50"
+                >
+                  <X size={16} />
+                  Închide
+                </button>
+              </div>
+              <div className="min-h-0 flex-1 overflow-y-auto">
+                {blocks.map((block) => {
+                  const definition = BLOCK_REGISTRY[block.type];
+                  if (!definition) return null;
+                  const { Renderer } = definition;
+                  return (
+                    <Renderer
+                      key={block.id}
+                      data={resolveBlockLinks(block.data, pages)}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </ModalPortal>
+        )}
+
+        <ConfirmDialog
+          open={pendingDeleteId !== null}
+          title="Ștergi blocul?"
+          description="Blocul și conținutul lui vor fi eliminate din pagină. Această acțiune nu poate fi anulată."
+          confirmLabel="Șterge"
+          cancelLabel="Anulează"
+          onConfirm={() => {
+            if (pendingDeleteId) deleteBlock(pendingDeleteId);
+            setPendingDeleteId(null);
           }}
-          onCancel={closeDraft}
-          onSubmit={handleSubmitDraft}
+          onCancel={() => setPendingDeleteId(null)}
         />
-      )}
-    </div>
+
+        {draftDefinition && (
+          <BlockConfigDrawer
+            definition={draftDefinition}
+            draft={draftData}
+            errors={draftErrors}
+            submitLabel={isEditing ? "Salvează" : "Adaugă blocul"}
+            onChange={(next) => {
+              setDraftData(next);
+              setDraftErrors({});
+            }}
+            onCancel={closeDraft}
+            onSubmit={handleSubmitDraft}
+          />
+        )}
+      </div>
     </PageOptionsProvider>
   );
 }

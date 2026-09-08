@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUp, ChevronLeft, Plus, Trash2 } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
-import { IconPicker } from "./IconPicker";
-import { FEATURE_ICONS } from "./icons";
-import { CtaTargetField } from "../shared/CtaTargetField";
-import { EMPTY_CARD, type FeatureCard } from "./schema";
+import { IconPicker } from "../feature-cards/IconPicker";
+import { FEATURE_ICONS } from "../feature-cards/icons";
+import { EMPTY_PARTNER, type Partner } from "./schema";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -14,26 +13,25 @@ const inputClass =
   "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
 
 /**
- * The "Carduri" repeater for Feature Cards. Follows the mockup's master-detail
- * flow: a list of added cards, and a separate sub-form ("Card nou" / edit) with
- * its own draft buffer that only commits on "Salvează cardul". Co-located with
- * the block since no other block needs it.
+ * The "Parteneri" repeater. Master-detail flow cloned from Feature Cards'
+ * `CardList`: a list of added partners, plus a separate sub-form ("Partener nou"
+ * / edit) with its own draft buffer that only commits on "Salvează partenerul".
  */
-export function CardList({
+export function PartnerList({
   value,
   onChange,
   error,
 }: {
-  value: FeatureCard[];
-  onChange: (next: FeatureCard[]) => void;
+  value: Partner[];
+  onChange: (next: Partner[]) => void;
   error?: string;
 }) {
-  // `editing === value.length` means a brand-new card is being drafted.
+  // `editing === value.length` means a brand-new partner is being drafted.
   const [editing, setEditing] = useState<number | null>(null);
-  const [draft, setDraft] = useState<FeatureCard>(EMPTY_CARD);
+  const [draft, setDraft] = useState<Partner>(EMPTY_PARTNER);
 
   const openNew = () => {
-    setDraft({ ...EMPTY_CARD });
+    setDraft({ ...EMPTY_PARTNER });
     setEditing(value.length);
   };
 
@@ -45,12 +43,12 @@ export function CardList({
   const closeForm = () => setEditing(null);
 
   const saveDraft = () => {
-    if (!draft.titlu.trim()) return;
-    const clean: FeatureCard = { ...draft, titlu: draft.titlu.trim() };
+    if (!draft.nume.trim()) return;
+    const clean: Partner = { ...draft, nume: draft.nume.trim() };
     onChange(
       editing === value.length
         ? [...value, clean]
-        : value.map((c, i) => (i === editing ? clean : c)),
+        : value.map((p, i) => (i === editing ? clean : p)),
     );
     setEditing(null);
   };
@@ -67,7 +65,7 @@ export function CardList({
   };
 
   if (editing !== null) {
-    const setField = (patch: Partial<FeatureCard>) =>
+    const setField = (patch: Partial<Partner>) =>
       setDraft((d) => ({ ...d, ...patch }));
 
     return (
@@ -77,16 +75,16 @@ export function CardList({
           onClick={closeForm}
           className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-[#2563eb] hover:underline"
         >
-          <ChevronLeft size={16} /> Înapoi la lista de carduri
+          <ChevronLeft size={16} /> Înapoi la lista de parteneri
         </button>
 
         <p className="mb-4 text-sm font-bold text-[#162040]">
-          {editing === value.length ? "Card nou" : "Editează cardul"}
+          {editing === value.length ? "Partener nou" : "Editează partenerul"}
         </p>
 
         <div className="space-y-4">
           <div>
-            <span className={labelClass}>Pictogramă</span>
+            <span className={labelClass}>Iconiță</span>
             <IconPicker
               value={draft.icon}
               onChange={(icon) => setField({ icon })}
@@ -96,62 +94,38 @@ export function CardList({
           </div>
 
           <div>
-            <label htmlFor="fc-card-titlu" className={labelClass}>
-              Titlu <span className="text-[#ef4444]">*</span>
+            <label htmlFor="partner-nume" className={labelClass}>
+              Nume <span className="text-[#ef4444]">*</span>
             </label>
             <input
-              id="fc-card-titlu"
+              id="partner-nume"
               className={inputClass}
-              value={draft.titlu}
-              onChange={(e) => setField({ titlu: e.target.value })}
-              placeholder="ex. Resurse pentru organizații"
+              value={draft.nume}
+              onChange={(e) => setField({ nume: e.target.value })}
+              placeholder="ex. Fundația pentru Parteneriat"
             />
           </div>
 
           <div>
-            <label htmlFor="fc-card-descriere" className={labelClass}>
-              Descriere
+            <label htmlFor="partner-subtitlu" className={labelClass}>
+              Subtitlu
             </label>
-            <textarea
-              id="fc-card-descriere"
-              rows={3}
+            <input
+              id="partner-subtitlu"
               className={inputClass}
-              value={draft.descriere}
-              onChange={(e) => setField({ descriere: e.target.value })}
-              placeholder="Scurtă descriere a funcționalității..."
+              value={draft.subtitlu}
+              onChange={(e) => setField({ subtitlu: e.target.value })}
+              placeholder="ex. Partener strategic"
             />
-          </div>
-
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div>
-              <span className={labelClass}>Link</span>
-              <CtaTargetField
-                value={draft}
-                onChange={(next) => setField({ href: next.href, pagina: next.pagina })}
-                ariaLabel="Link"
-              />
-            </div>
-            <div>
-              <label htmlFor="fc-card-cta" className={labelClass}>
-                Label CTA
-              </label>
-              <input
-                id="fc-card-cta"
-                className={inputClass}
-                value={draft.ctaLabel}
-                onChange={(e) => setField({ ctaLabel: e.target.value })}
-                placeholder="Descoperă mai mult"
-              />
-            </div>
           </div>
 
           <button
             type="button"
             onClick={saveDraft}
-            disabled={!draft.titlu.trim()}
+            disabled={!draft.nume.trim()}
             className="rounded-xl bg-[#2563eb] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Salvează cardul
+            Salvează partenerul
           </button>
         </div>
       </div>
@@ -162,19 +136,19 @@ export function CardList({
     <div>
       <div className="mb-2 flex items-center justify-between">
         <span className="text-xs font-semibold uppercase tracking-wide text-[#475569]">
-          Carduri
+          Parteneri
         </span>
-        <span className="text-xs text-[#94a3b8]">{value.length} adăugate</span>
+        <span className="text-xs text-[#94a3b8]">{value.length} adăugați</span>
       </div>
 
       {value.length === 0 ? (
         <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-[#94a3b8]">
-          Niciun card adăugat încă.
+          Niciun partener adăugat încă.
         </p>
       ) : (
         <ul className="space-y-2">
-          {value.map((card, index) => {
-            const Icon = FEATURE_ICONS[card.icon];
+          {value.map((partner, index) => {
+            const Icon = FEATURE_ICONS[partner.icon];
             return (
               <li
                 key={index}
@@ -185,13 +159,13 @@ export function CardList({
                   onClick={() => openExisting(index)}
                   className="flex min-w-0 flex-1 items-center gap-3 text-left"
                 >
-                  {card.iconImage ? (
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg">
+                  {partner.iconImage ? (
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-white">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={getMediaUrl(card.iconImage.url)}
+                        src={getMediaUrl(partner.iconImage.url)}
                         alt=""
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-contain p-1"
                       />
                     </span>
                   ) : (
@@ -200,7 +174,7 @@ export function CardList({
                     </span>
                   )}
                   <span className="truncate text-sm font-semibold text-[#162040]">
-                    {card.titlu || "fără titlu"}
+                    {partner.nume || "fără nume"}
                   </span>
                 </button>
                 <span className="flex shrink-0 items-center gap-1">
@@ -225,7 +199,7 @@ export function CardList({
                   <button
                     type="button"
                     onClick={() => remove(index)}
-                    aria-label="Elimină cardul"
+                    aria-label="Elimină partenerul"
                     className="rounded-lg p-1.5 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
                   >
                     <Trash2 size={16} />
@@ -244,7 +218,7 @@ export function CardList({
         onClick={openNew}
         className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040]"
       >
-        <Plus size={16} /> Adaugă card
+        <Plus size={16} /> Adaugă partener
       </button>
     </div>
   );

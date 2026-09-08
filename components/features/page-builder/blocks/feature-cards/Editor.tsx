@@ -28,7 +28,7 @@ export function FeatureCardsEditor({
     <div className="space-y-5">
       <div>
         <label htmlFor="fc-titlu" className={labelClass}>
-          Titlu secțiune <span className="text-[#ef4444]">*</span>
+          Titlu secțiune
         </label>
         <input
           id="fc-titlu"
