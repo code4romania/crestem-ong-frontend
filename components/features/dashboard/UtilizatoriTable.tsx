@@ -35,8 +35,8 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
   const showActivationLink = users.some((user) => Boolean(user.activationLink));
 
   return (
-    <div className="bg-white rounded-xl border border-border overflow-hidden">
-      <table className="w-full text-sm">
+    <div className="bg-white rounded-xl border border-border overflow-hidden overflow-x-auto">
+      <table className="w-full min-w-[960px] text-sm">
         <thead>
           <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
             {[
@@ -51,7 +51,7 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
             ].map((h) => (
               <th
                 key={h}
-                className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider ${
+                className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider whitespace-nowrap ${
                   h === "Acțiuni" ? "text-center" : "text-left"
                 }`}
                 style={{ color: "#94a3b8" }}

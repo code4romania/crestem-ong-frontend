@@ -5,10 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, User } from "lucide-react";
 import { LinkPendingIndicator } from "@/components/ui/LinkPendingIndicator";
-import { DESPRE_SUBMENU, NAV_LINKS } from "./nav-data";
-import type { NavUser } from "./nav-data";
+import type { MenuItem } from "@/lib/api/menus";
+import type { NavUser } from "./types";
 
-export function MobileMenu({ user }: { user: NavUser | null }) {
+export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuItem[] }) {
   const pathname = usePathname();
 
   // Both panels remember the pathname they were opened on rather than a plain
@@ -17,13 +17,12 @@ export function MobileMenu({ user }: { user: NavUser | null }) {
   // actually rendered. Tapping the current page closes directly, since the
   // pathname never changes in that case.
   const [openedAt, setOpenedAt] = useState<string | null>(null);
-  const [despreOpenedAt, setDespreOpenedAt] = useState<string | null>(null);
+  const [expandedLabel, setExpandedLabel] = useState<string | null>(null);
   const open = openedAt !== null && openedAt === pathname;
-  const despreOpen = open && despreOpenedAt === pathname;
 
   const close = () => {
     setOpenedAt(null);
-    setDespreOpenedAt(null);
+    setExpandedLabel(null);
   };
 
   const closeIfSamePage = (href: string) => () => {
@@ -43,42 +42,56 @@ export function MobileMenu({ user }: { user: NavUser | null }) {
 
       {open && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-white border-t border-border px-6 py-4 flex flex-col gap-1">
-          <button
-            onClick={() => setDespreOpenedAt(despreOpen ? null : pathname)}
-            className="py-3 px-3 rounded-lg text-sm font-medium text-left flex items-center justify-between text-foreground hover:bg-muted transition-colors"
-          >
-            Despre noi
-            <ChevronDown size={14} className={`transition-transform duration-200 ${despreOpen ? "rotate-180" : ""}`} />
-          </button>
-          {despreOpen && (
-            <div className="pl-4 flex flex-col gap-0.5">
-              {DESPRE_SUBMENU.map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  onClick={closeIfSamePage(item.href)}
-                  className="flex items-center justify-between gap-2 py-2.5 px-3 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                >
-                  {item.label}
-                  <LinkPendingIndicator />
-                </Link>
-              ))}
-            </div>
-          )}
-          {NAV_LINKS.map((l) => {
-            const isActive = pathname === l.href;
+          {items.map((item) => {
+            if (item.children.length > 0) {
+              const expanded = expandedLabel === item.label;
+              return (
+                <div key={item.label} className="flex flex-col gap-0.5">
+                  <button
+                    onClick={() => setExpandedLabel(expanded ? null : item.label)}
+                    aria-expanded={expanded}
+                    className="py-3 px-3 rounded-lg text-sm font-medium text-left flex items-center justify-between text-foreground hover:bg-muted transition-colors"
+                  >
+                    {item.label}
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  {expanded && (
+                    <div className="pl-4 flex flex-col gap-0.5">
+                      {item.children.map((child) => (child.url ? (
+                        <Link
+                          key={`${child.label}-${child.url}`}
+                          href={child.url}
+                          onClick={closeIfSamePage(child.url)}
+                          className="flex items-center justify-between gap-2 py-2.5 px-3 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                        >
+                          {child.label}
+                          <LinkPendingIndicator />
+                        </Link>
+                      ) : null))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            if (!item.url) return null;
+            const isActive = pathname === item.url;
             return (
               <Link
-                key={l.label}
-                href={l.href}
-                onClick={closeIfSamePage(l.href)}
+                key={item.label}
+                href={item.url}
+                onClick={closeIfSamePage(item.url)}
                 className={`flex items-center justify-between gap-2 py-3 px-3 rounded-lg text-sm font-medium transition-colors ${isActive ? "bg-muted font-semibold" : "text-foreground"}`}
               >
-                {l.label}
+                {item.label}
                 <LinkPendingIndicator />
               </Link>
             );
           })}
+
           <div className="mt-2 border-t border-border pt-3 flex flex-col gap-2">
             {user ? (
               <>
