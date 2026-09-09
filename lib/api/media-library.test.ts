@@ -25,7 +25,11 @@ describe("listMediaAssets", () => {
 
 describe("listMediaTags", () => {
   it("unwraps data", async () => {
-    fetchMock.mockResolvedValue({ data: [{ nume: "logo", slug: "logo" }] });
-    expect(await listMediaTags()).toEqual([{ nume: "logo", slug: "logo" }]);
+    fetchMock.mockResolvedValue({
+      data: [{ id: 1, documentId: "t1", nume: "logo", slug: "logo" }],
+    });
+    expect(await listMediaTags()).toEqual([
+      { id: 1, documentId: "t1", nume: "logo", slug: "logo" },
+    ]);
   });
 });

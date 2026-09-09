@@ -1,4 +1,6 @@
 export interface MediaTag {
+  id: number;
+  documentId: string;
   nume: string;
   slug: string;
 }

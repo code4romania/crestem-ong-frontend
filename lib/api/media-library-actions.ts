@@ -151,11 +151,16 @@ export async function deleteMediaAssetAction(
 
 export async function createMediaTagAction(
   nume: string,
-): Promise<{ error?: string; tag?: { nume: string; slug: string } }> {
+): Promise<{
+  error?: string;
+  tag?: { id: number; documentId: string; nume: string; slug: string };
+}> {
   const forbidden = await refuseNonStaff();
   if (forbidden) return forbidden;
   try {
-    const { data } = await serverApiFetch<{ data: { nume: string; slug: string } }>(
+    const { data } = await serverApiFetch<{
+      data: { id: number; documentId: string; nume: string; slug: string };
+    }>(
       "/api/media-tags",
       { method: "POST", body: JSON.stringify({ nume }) },
     );
