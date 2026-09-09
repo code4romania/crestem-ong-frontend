@@ -47,7 +47,7 @@ export function AssetCard({
         {chips.length > 0 && (
           <span className="flex flex-wrap gap-1">
             {chips.map((t) => (
-              <span key={t.slug} className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-[#475569]">
+              <span key={t.id} className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-[#475569]">
                 {t.nume}
               </span>
             ))}

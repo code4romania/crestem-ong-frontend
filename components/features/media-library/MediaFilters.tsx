@@ -120,7 +120,7 @@ export function MediaFilters({
             const selected = tagSlugs.includes(tag.slug);
             return (
               <button
-                key={tag.slug}
+                key={tag.id}
                 type="button"
                 aria-pressed={selected}
                 onClick={() => toggleTag(tag.slug)}
