@@ -1,8 +1,11 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import type { MediaTag } from "@/lib/api/media-library-types";
+
+const SEARCH_DEBOUNCE_MS = 300;
 
 const TIP_OPTIONS = [
   { value: "", label: "Toate" },
@@ -24,11 +27,59 @@ export function MediaFilters({
   tags: MediaTag[];
   onChange: (next: { search: string; tip: string; tagSlugs: string[] }) => void;
 }) {
+  const [searchDraft, setSearchDraft] = useState(search);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Tracks the last `search` prop value we've reconciled the draft against, so a
+  // prop change from outside (back button, filter reset) re-seeds the input
+  // without a setState-in-effect — React's "adjust state on prop change"
+  // pattern, mirroring AssetDetailPanel's `seededFor` guard.
+  const [syncedTo, setSyncedTo] = useState(search);
+
+  // Only adopt the incoming prop when it genuinely changed from what we last
+  // synced AND no debounced push is in flight — otherwise the round-trip echo of
+  // a value the user is still typing would clobber the draft mid-keystroke.
+  if (search !== syncedTo) {
+    setSyncedTo(search);
+    if (debounceRef.current === null) {
+      setSearchDraft(search);
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
+
+  const handleSearchChange = (value: string) => {
+    setSearchDraft(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      debounceRef.current = null;
+      onChange({ search: value, tip, tagSlugs });
+    }, SEARCH_DEBOUNCE_MS);
+  };
+
+  // `tip` and tag changes apply immediately and must flush any pending search so
+  // the debounced keystrokes aren't lost on the navigation this triggers.
+  const flushSearch = () => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
+  };
+
+  const handleTipChange = (next: string) => {
+    flushSearch();
+    onChange({ search: searchDraft, tip: next, tagSlugs });
+  };
+
   const toggleTag = (slug: string) => {
     const nextTagSlugs = tagSlugs.includes(slug)
       ? tagSlugs.filter((s) => s !== slug)
       : [...tagSlugs, slug];
-    onChange({ search, tip, tagSlugs: nextTagSlugs });
+    flushSearch();
+    onChange({ search: searchDraft, tip, tagSlugs: nextTagSlugs });
   };
 
   return (
@@ -39,10 +90,8 @@ export function MediaFilters({
           className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
         />
         <input
-          value={search}
-          onChange={(event) =>
-            onChange({ search: event.target.value, tip, tagSlugs })
-          }
+          value={searchDraft}
+          onChange={(event) => handleSearchChange(event.target.value)}
           placeholder="Caută după titlu…"
           aria-label="Caută după titlu"
           className="w-full rounded-xl border border-border py-2.5 pl-10 pr-4 text-sm focus:border-[#2dbe8f] focus:outline-none"
@@ -52,7 +101,7 @@ export function MediaFilters({
       <SegmentedControl
         options={TIP_OPTIONS}
         value={tip}
-        onChange={(next) => onChange({ search, tip: next, tagSlugs })}
+        onChange={handleTipChange}
         ariaLabel="Filtrează după tip"
       />
 
