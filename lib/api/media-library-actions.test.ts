@@ -11,6 +11,7 @@ import {
   updateMediaAssetAction,
   deleteMediaAssetAction,
   replaceMediaAssetFileAction,
+  uploadMediaAssetsBatchAction,
 } from "./media-library-actions";
 import { ApiError } from "./client";
 
@@ -61,6 +62,88 @@ describe("replaceMediaAssetFileAction", () => {
     const res = await replaceMediaAssetFileAction("a1", form);
 
     expect(res).toEqual({ mismatch: true });
+    vi.unstubAllGlobals();
+  });
+});
+
+describe("uploadMediaAssetsBatchAction", () => {
+  const batchForm = () => {
+    const form = new FormData();
+    form.append("files", new File(["a"], "one.png", { type: "image/png" }));
+    form.append("files", new File(["b"], "two.png", { type: "image/png" }));
+    return form;
+  };
+
+  it("creates one asset per uploaded file", async () => {
+    getCurrentUser.mockResolvedValue({ role: { type: "super-admin" } });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 201,
+        json: async () => [
+          { id: 11, name: "one.png" },
+          { id: 12, name: "two.png" },
+        ],
+      }),
+    );
+    serverApiFetch
+      .mockResolvedValueOnce({ data: { documentId: "a11", titlu: "one" } })
+      .mockResolvedValueOnce({ data: { documentId: "a12", titlu: "two" } });
+
+    const res = await uploadMediaAssetsBatchAction(batchForm());
+
+    expect(res.error).toBeUndefined();
+    expect(res.failed).toEqual([]);
+    expect(res.assets.map((a) => a.documentId)).toEqual(["a11", "a12"]);
+    vi.unstubAllGlobals();
+  });
+
+  it("records a per-file create failure and purges its orphan", async () => {
+    getCurrentUser.mockResolvedValue({ role: { type: "super-admin" } });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 201,
+        json: async () => [
+          { id: 11, name: "one.png" },
+          { id: 12, name: "two.png" },
+        ],
+      }),
+    );
+    serverApiFetch
+      .mockResolvedValueOnce({ data: { documentId: "a11", titlu: "one" } })
+      .mockRejectedValueOnce(new ApiError("boom", 500))
+      .mockResolvedValueOnce({}); // cleanup-orphan-file
+
+    const res = await uploadMediaAssetsBatchAction(batchForm());
+
+    expect(res.assets.map((a) => a.documentId)).toEqual(["a11"]);
+    expect(res.failed).toEqual(["two.png"]);
+    expect(serverApiFetch).toHaveBeenCalledWith(
+      "/api/media-assets/cleanup-orphan-file",
+      expect.objectContaining({ method: "POST" }),
+    );
+    vi.unstubAllGlobals();
+  });
+
+  it("aborts with an error when the upload call fails", async () => {
+    getCurrentUser.mockResolvedValue({ role: { type: "super-admin" } });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 413,
+        json: async () => ({ error: { message: "prea mare" } }),
+      }),
+    );
+
+    const res = await uploadMediaAssetsBatchAction(batchForm());
+
+    expect(res.assets).toEqual([]);
+    expect(res.error).toBeTruthy();
+    expect(serverApiFetch).not.toHaveBeenCalled();
     vi.unstubAllGlobals();
   });
 });

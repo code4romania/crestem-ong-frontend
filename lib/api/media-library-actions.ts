@@ -17,6 +17,8 @@ import type {
 const FORBIDDEN = "Nu ai permisiunea necesară pentru această acțiune.";
 const LIBRARY_PATH = "/dashboard/fdsc/media-library";
 
+const stripExt = (name: string) => name.replace(/\.[^.]+$/, "");
+
 async function refuseNonStaff(): Promise<{ error: string } | null> {
   const user = await getCurrentUser();
   return isFdscStaff(user?.role?.type) ? null : { error: FORBIDDEN };
@@ -91,6 +93,83 @@ export async function uploadMediaAssetAction(
     }).catch(() => {});
     return { error: getApiErrorMessage(err, "Nu am putut adăuga fișierul în bibliotecă.") };
   }
+}
+
+/**
+ * Batch counterpart of `uploadMediaAssetAction`: uploads the whole selection in
+ * one `/api/upload` call, then creates one media-asset per file (title = the
+ * file name, no tags/description yet — those are set afterwards in the batch
+ * panel or the per-asset editor). A per-file create failure is recorded in
+ * `failed` and its orphaned upload row is best-effort purged; the rest still
+ * land. A failure of the upload call itself aborts the batch with `error`.
+ */
+export async function uploadMediaAssetsBatchAction(
+  formData: FormData,
+): Promise<{ error?: string; assets: MediaAssetDetail[]; failed: string[] }> {
+  const forbidden = await refuseNonStaff();
+  if (forbidden) return { error: forbidden.error, assets: [], failed: [] };
+
+  const files = formData
+    .getAll("files")
+    .filter((f): f is File => f instanceof File);
+  if (files.length === 0) {
+    return { error: "Selectează cel puțin un fișier.", assets: [], failed: [] };
+  }
+
+  const { cookies } = await import("next/headers");
+  const jwt = (await cookies()).get(SESSION_COOKIE)?.value;
+  const uploadForm = new FormData();
+  for (const f of files) uploadForm.append("files", f);
+
+  let uploaded: { id: number; name?: string }[];
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
+      method: "POST",
+      headers: jwt ? { Authorization: `Bearer ${jwt}` } : undefined,
+      body: uploadForm,
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !Array.isArray(data)) {
+      throw new ApiError(
+        data?.error?.message ?? "Încărcarea fișierelor a eșuat.",
+        res.status,
+      );
+    }
+    uploaded = data;
+  } catch (err) {
+    return {
+      error: getApiErrorMessage(err, "Nu am putut încărca fișierele."),
+      assets: [],
+      failed: [],
+    };
+  }
+
+  const assets: MediaAssetDetail[] = [];
+  const failed: string[] = [];
+  for (const row of uploaded) {
+    try {
+      const { data } = await serverApiFetch<{ data: MediaAssetDetail }>(
+        "/api/media-assets",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            fisierId: row.id,
+            titlu: stripExt(row.name ?? "fișier"),
+          }),
+        },
+      );
+      assets.push(data);
+    } catch {
+      failed.push(row.name ?? String(row.id));
+      await serverApiFetch("/api/media-assets/cleanup-orphan-file", {
+        method: "POST",
+        body: JSON.stringify({ fisierId: row.id }),
+      }).catch(() => {});
+    }
+  }
+
+  if (assets.length) revalidateDashboardPath(LIBRARY_PATH);
+  return { assets, failed };
 }
 
 export async function updateMediaAssetAction(

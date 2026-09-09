@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { AssetGrid } from "@/components/features/media-library/AssetGrid";
 import { MediaFilters } from "@/components/features/media-library/MediaFilters";
 import { AssetDetailPanel } from "@/components/features/media-library/AssetDetailPanel";
+import { BatchUploadPanel } from "@/components/features/media-library/BatchUploadPanel";
 import { useMediaUpload } from "@/components/features/media-library/useMediaUpload";
 import { getMediaAssetAction } from "@/lib/api/media-library-actions";
 import type {
@@ -29,6 +30,7 @@ export function MediaLibrary({
 }) {
   const router = useRouter();
   const [panelAsset, setPanelAsset] = useState<MediaAssetDetail | null>(null);
+  const [batchAssets, setBatchAssets] = useState<MediaAssetDetail[] | null>(null);
   const [navPending, startNav] = useTransition();
   const [detailPending, startDetail] = useTransition();
 
@@ -44,9 +46,10 @@ export function MediaLibrary({
   };
 
   const { open, isUploading, fileInputRef, onFileInputChange } = useMediaUpload(
-    (createdDocumentId) => {
+    (uploaded) => {
       router.refresh();
-      if (createdDocumentId) openDetail(createdDocumentId);
+      if (uploaded.length === 1) setPanelAsset(uploaded[0]);
+      else if (uploaded.length > 1) setBatchAssets(uploaded);
     },
   );
 
@@ -87,6 +90,7 @@ export function MediaLibrary({
         <input
           type="file"
           ref={fileInputRef}
+          multiple
           className="hidden"
           onChange={onFileInputChange}
         />
@@ -149,6 +153,17 @@ export function MediaLibrary({
           onClose={() => setPanelAsset(null)}
           onChanged={(updated) => {
             setPanelAsset(updated);
+            router.refresh();
+          }}
+        />
+      )}
+
+      {batchAssets && (
+        <BatchUploadPanel
+          assets={batchAssets}
+          tags={tags}
+          onClose={() => {
+            setBatchAssets(null);
             router.refresh();
           }}
         />

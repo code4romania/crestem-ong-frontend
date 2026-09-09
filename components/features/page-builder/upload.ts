@@ -40,6 +40,14 @@ export function uploadSizeError(file: File): string | null {
 }
 
 /**
+ * The media library sends a whole multi-select through one Server Action, so the
+ * batch has its own ceilings kept under `next.config.ts`'s `bodySizeLimit`.
+ */
+export const MAX_BATCH_FILES = 15;
+export const MAX_BATCH_BYTES = 60 * 1024 * 1024;
+export const MAX_BATCH_LABEL = "60 MB";
+
+/**
  * Shared image-upload logic for the page-builder editors (`image`,
  * `image-caption`, `hero-large-split`). Guards the file size before hitting the
  * Server Action — otherwise Next throws "Body exceeded N MB limit" at the
