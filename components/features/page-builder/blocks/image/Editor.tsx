@@ -106,7 +106,12 @@ export function ImageEditor({
           accept="image"
           onClose={() => setPickerOpen(false)}
           onPick={([file]) => {
-            set({ image: file });
+            set({
+              image: { id: file.id, url: file.url, name: file.name },
+              ...(file.alternativeText && !value.altText
+                ? { altText: file.alternativeText }
+                : {}),
+            });
             setPickerOpen(false);
           }}
         />

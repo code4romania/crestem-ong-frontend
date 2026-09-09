@@ -18,6 +18,7 @@ export interface MediaAssetFile {
   mime: string | null;
   ext: string | null;
   size: number | null;
+  alternativeText: string | null;
   width: number | null;
   height: number | null;
 }

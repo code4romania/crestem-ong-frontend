@@ -3,6 +3,7 @@
 import { FileText, Film } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import type { MediaAssetCard as Asset } from "@/lib/api/media-library-types";
+import { pluralPagini } from "./format";
 
 export function AssetCard({
   asset,
@@ -54,7 +55,9 @@ export function AssetCard({
           </span>
         )}
         <span className="mt-auto text-[11px] text-[#94a3b8]">
-          {asset.utilizariCount > 0 ? `folosit pe ${asset.utilizariCount} pagini` : "nefolosit"}
+          {asset.utilizariCount > 0
+            ? `folosit pe ${pluralPagini(asset.utilizariCount)}`
+            : "nefolosit"}
         </span>
       </div>
     </button>

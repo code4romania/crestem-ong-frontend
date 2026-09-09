@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { ApiError, getApiErrorMessage } from "./client";
+import { revalidateDashboardPath } from "@/lib/api/revalidate";
 import { serverApiFetch } from "./server";
 import { getCurrentUser } from "./session-server";
 import { SESSION_COOKIE } from "./session-cookies";
@@ -62,8 +63,14 @@ export async function uploadMediaAssetAction(
     }
   }
 
+  let fisierId: number;
   try {
-    const fisierId = await uploadRawFile(file);
+    fisierId = await uploadRawFile(file);
+  } catch (err) {
+    return { error: getApiErrorMessage(err, "Nu am putut adăuga fișierul în bibliotecă.") };
+  }
+
+  try {
     const { data } = await serverApiFetch<{ data: MediaAssetDetail }>("/api/media-assets", {
       method: "POST",
       body: JSON.stringify({
@@ -73,9 +80,15 @@ export async function uploadMediaAssetAction(
         eticheteIds,
       }),
     });
-    revalidatePath(LIBRARY_PATH);
+    revalidateDashboardPath(LIBRARY_PATH);
     return { asset: data };
   } catch (err) {
+    // The upload.file row is now unreachable (the library only shows it once a
+    // media-asset owns it). Best-effort purge; keep the original error.
+    await serverApiFetch("/api/media-assets/cleanup-orphan-file", {
+      method: "POST",
+      body: JSON.stringify({ fisierId }),
+    }).catch(() => {});
     return { error: getApiErrorMessage(err, "Nu am putut adăuga fișierul în bibliotecă.") };
   }
 }
@@ -91,7 +104,7 @@ export async function updateMediaAssetAction(
       `/api/media-assets/${documentId}`,
       { method: "PUT", body: JSON.stringify(input) },
     );
-    revalidatePath(LIBRARY_PATH);
+    revalidateDashboardPath(LIBRARY_PATH);
     return { asset: data };
   } catch (err) {
     return { error: getApiErrorMessage(err, "Nu am putut salva modificările.") };
@@ -124,7 +137,7 @@ export async function replaceMediaAssetFileAction(
     if (res.status === 409) return { mismatch: true };
     if (!res.ok) throw new ApiError(data?.error?.message ?? "Înlocuirea a eșuat.", res.status);
     for (const cale of (data?.meta?.revalidate ?? []) as string[]) revalidatePath(cale);
-    revalidatePath(LIBRARY_PATH);
+    revalidateDashboardPath(LIBRARY_PATH);
     revalidatePath("/", "layout");
     return { asset: data.data };
   } catch (err) {
@@ -142,7 +155,7 @@ export async function deleteMediaAssetAction(
     await serverApiFetch(`/api/media-assets/${documentId}${opts.force ? "?force=true" : ""}`, {
       method: "DELETE",
     });
-    revalidatePath(LIBRARY_PATH);
+    revalidateDashboardPath(LIBRARY_PATH);
     revalidatePath("/", "layout");
     return { ok: true };
   } catch (err) {
@@ -184,7 +197,7 @@ export async function createMediaTagAction(
       "/api/media-tags",
       { method: "POST", body: JSON.stringify({ nume }) },
     );
-    revalidatePath(LIBRARY_PATH);
+    revalidateDashboardPath(LIBRARY_PATH);
     return { tag: data };
   } catch (err) {
     return { error: getApiErrorMessage(err, "Nu am putut crea eticheta.") };

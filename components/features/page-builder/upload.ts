@@ -24,6 +24,22 @@ export const MAX_DOCUMENT_BYTES = 25 * 1024 * 1024;
 export const MAX_DOCUMENT_LABEL = "25 MB";
 
 /**
+ * Shared upload-size guard for both the Media Library add flow and the
+ * replace-file flow. Images and video use the 5 MB ceiling; everything else
+ * (documents) uses 25 MB. Returns the Romanian error string when the file is
+ * over the applicable cap, else `null`.
+ */
+export function uploadSizeError(file: File): string | null {
+  const isMedia = file.type.startsWith("image/") || file.type.startsWith("video/");
+  const cap = isMedia ? MAX_UPLOAD_BYTES : MAX_DOCUMENT_BYTES;
+  const label = isMedia ? MAX_UPLOAD_LABEL : MAX_DOCUMENT_LABEL;
+  if (file.size > cap) {
+    return `Fișierul depășește limita de ${label}. Alege un fișier mai mic.`;
+  }
+  return null;
+}
+
+/**
  * Shared image-upload logic for the page-builder editors (`image`,
  * `image-caption`, `hero-large-split`). Guards the file size before hitting the
  * Server Action — otherwise Next throws "Body exceeded N MB limit" at the

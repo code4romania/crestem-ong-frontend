@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { ModalOverlay } from "@/components/ui/ModalOverlay";
 import { getMediaUrl } from "@/lib/api/client";
+import { uploadSizeError } from "@/components/features/page-builder/upload";
+import { pluralPagini } from "./format";
 import {
   createMediaTagAction,
   deleteMediaAssetAction,
@@ -139,7 +141,13 @@ export function AssetDetailPanel({
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
-    if (file) doReplace(file);
+    if (!file) return;
+    const sizeErr = uploadSizeError(file);
+    if (sizeErr) {
+      toast.error(sizeErr);
+      return;
+    }
+    doReplace(file);
   };
 
   const doDelete = (force = false) => {
@@ -157,12 +165,16 @@ export function AssetDetailPanel({
         setUsageBlocking(null);
         toast.success("Fișier șters din bibliotecă.");
         onChanged(null);
+        return;
       }
+      // 409 with no `details` payload → utilizari: [] and no error/ok. Don't
+      // let the button silently do nothing.
+      toast.error(res.error ?? "Nu am putut șterge fișierul.");
     });
   };
 
   const usageDescription = usageBlocking
-    ? `Acest fișier e folosit pe ${usageBlocking.length} pagini: ${usageBlocking
+    ? `Acest fișier e folosit pe ${pluralPagini(usageBlocking.length)}: ${usageBlocking
         .map((u) => u.titlu)
         .join(", ")}. Ștergi oricum? Blocurile care îl folosesc vor rămâne fără fișier.`
     : "";

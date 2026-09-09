@@ -16,7 +16,31 @@ import type {
   MediaTag,
 } from "@/lib/api/media-library-types";
 
-type PickedFile = { id: number; url: string; name: string; ext: string | null; size: number | null };
+export type PickedFile = {
+  id: number;
+  url: string;
+  name: string;
+  ext: string | null;
+  size: number | null;
+  alternativeText: string | null;
+};
+
+/**
+ * Pure card → block-payload mapping. Extracted from `finish()` so it can be
+ * unit-tested: this is the seam the six block editors depend on. Keeps only the
+ * file fields a block stores and drops everything else on the card
+ * (`documentId`, `titlu`, `tip`, `etichete`, `utilizariCount`).
+ */
+export function toPickedFiles(cards: MediaAssetCard[]): PickedFile[] {
+  return cards.map((c) => ({
+    id: c.fisier.id,
+    url: c.fisier.url,
+    name: c.fisier.name,
+    ext: c.fisier.ext,
+    size: c.fisier.size,
+    alternativeText: c.fisier.alternativeText,
+  }));
+}
 
 /**
  * In-builder picker: lets FDSC staff choose an existing library asset instead of
@@ -130,15 +154,7 @@ export function MediaLibraryPicker({
   const finish = (cards: MediaAssetCard[]) => {
     if (finishedRef.current) return;
     finishedRef.current = true;
-    onPick(
-      cards.map((c) => ({
-        id: c.fisier.id,
-        url: c.fisier.url,
-        name: c.fisier.name,
-        ext: c.fisier.ext,
-        size: c.fisier.size,
-      })),
-    );
+    onPick(toPickedFiles(cards));
     onClose();
   };
 

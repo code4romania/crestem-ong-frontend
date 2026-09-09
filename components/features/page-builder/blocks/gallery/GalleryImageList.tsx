@@ -265,7 +265,7 @@ export function GalleryImageList({
               id: f.id,
               url: f.url,
               name: f.name,
-              alt: "",
+              alt: f.alternativeText ?? "",
               caption: "",
             })),
           ])

@@ -3,12 +3,7 @@
 import { useRef, useTransition } from "react";
 import { toast } from "sonner";
 import { uploadMediaAssetAction } from "@/lib/api/media-library-actions";
-import {
-  MAX_UPLOAD_BYTES,
-  MAX_UPLOAD_LABEL,
-  MAX_DOCUMENT_BYTES,
-  MAX_DOCUMENT_LABEL,
-} from "@/components/features/page-builder/upload";
+import { uploadSizeError } from "@/components/features/page-builder/upload";
 
 const stripExt = (name: string) => name.replace(/\.[^.]+$/, "");
 
@@ -23,11 +18,9 @@ export function useMediaUpload(onDone: (createdDocumentId?: string) => void) {
     event.target.value = "";
     if (!file) return;
 
-    const isMedia = file.type.startsWith("image/") || file.type.startsWith("video/");
-    const cap = isMedia ? MAX_UPLOAD_BYTES : MAX_DOCUMENT_BYTES;
-    const label = isMedia ? MAX_UPLOAD_LABEL : MAX_DOCUMENT_LABEL;
-    if (file.size > cap) {
-      toast.error(`Fișierul depășește limita de ${label}. Alege un fișier mai mic.`);
+    const sizeErr = uploadSizeError(file);
+    if (sizeErr) {
+      toast.error(sizeErr);
       return;
     }
 

@@ -148,7 +148,12 @@ export function HeroLargeSplitEditor({
           accept="image"
           onClose={() => setPickerOpen(false)}
           onPick={([file]) => {
-            set({ image: file });
+            set({
+              image: { id: file.id, url: file.url, name: file.name },
+              ...(file.alternativeText && !value.imageAlt
+                ? { imageAlt: file.alternativeText }
+                : {}),
+            });
             setPickerOpen(false);
           }}
         />
