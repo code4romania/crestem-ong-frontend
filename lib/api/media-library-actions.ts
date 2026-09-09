@@ -5,7 +5,7 @@ import { ApiError, getApiErrorMessage } from "./client";
 import { serverApiFetch } from "./server";
 import { getCurrentUser } from "./session-server";
 import { SESSION_COOKIE } from "./session-cookies";
-import { isFdscStaff } from "../roles";
+import { isFdscStaff } from "@/lib/roles";
 import type { MediaAssetDetail, PageUsageRef } from "./media-library-types";
 
 const FORBIDDEN = "Nu ai permisiunea necesară pentru această acțiune.";
