@@ -149,6 +149,21 @@ export async function deleteMediaAssetAction(
   }
 }
 
+export async function getMediaAssetAction(
+  documentId: string,
+): Promise<{ error?: string; asset?: MediaAssetDetail }> {
+  const forbidden = await refuseNonStaff();
+  if (forbidden) return forbidden;
+  try {
+    const { data } = await serverApiFetch<{ data: MediaAssetDetail }>(
+      `/api/media-assets/${documentId}`,
+    );
+    return { asset: data };
+  } catch (err) {
+    return { error: getApiErrorMessage(err, "Nu am putut încărca detaliile fișierului.") };
+  }
+}
+
 export async function createMediaTagAction(
   nume: string,
 ): Promise<{
