@@ -173,24 +173,33 @@ export function MediaLibrary({
 
       {selectMode && (
         <div className="mb-4 flex flex-wrap items-center gap-3 rounded-xl border border-border bg-slate-50 px-4 py-3">
+          <label className="flex items-center gap-2 text-sm font-semibold text-[#162040]">
+            <input
+              type="checkbox"
+              className="h-4 w-4 rounded border-border accent-[#2dbe8f]"
+              checked={
+                initial.data.length > 0 && selected.size === initial.data.length
+              }
+              ref={(el) => {
+                if (el) {
+                  el.indeterminate =
+                    selected.size > 0 && selected.size < initial.data.length;
+                }
+              }}
+              onChange={() =>
+                setSelectedIds(
+                  selected.size === initial.data.length
+                    ? new Set()
+                    : new Set(initial.data.map((c) => c.documentId)),
+                )
+              }
+            />
+            Selectează tot
+          </label>
+          <span className="text-sm text-[#94a3b8]">·</span>
           <span className="text-sm font-semibold text-[#162040]">
             {selected.size} selectate
           </span>
-          <button
-            type="button"
-            onClick={() =>
-              setSelectedIds(
-                selected.size === initial.data.length
-                  ? new Set()
-                  : new Set(initial.data.map((c) => c.documentId)),
-              )
-            }
-            className="text-sm font-semibold text-[#2563eb] hover:opacity-80"
-          >
-            {selected.size === initial.data.length
-              ? "Deselectează tot"
-              : "Selectează tot"}
-          </button>
           <button
             type="button"
             onClick={() => setConfirmingBulkDelete(true)}
