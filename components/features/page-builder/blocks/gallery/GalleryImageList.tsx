@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { ArrowDown, ArrowUp, ImagePlus, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
+import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL } from "../../upload";
 import type { GalleryImage } from "./schema";
 
@@ -30,6 +31,7 @@ export function GalleryImageList({
   error?: string;
 }) {
   const [isUploading, startUpload] = useTransition();
+  const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // The upload below resolves after the user may have edited other fields (or
@@ -246,12 +248,29 @@ export function GalleryImageList({
 
       <button
         type="button"
-        disabled
-        title="În curând"
-        className="mt-2 text-xs font-semibold text-[#94a3b8]"
+        onClick={() => setPickerOpen(true)}
+        className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
       >
-        Alege din Media Library · în curând
+        Alege din bibliotecă
       </button>
+      <MediaLibraryPicker
+        open={pickerOpen}
+        multiple
+        accept="image"
+        onClose={() => setPickerOpen(false)}
+        onPick={(files) =>
+          onChange([
+            ...value,
+            ...files.map((f) => ({
+              id: f.id,
+              url: f.url,
+              name: f.name,
+              alt: "",
+              caption: "",
+            })),
+          ])
+        }
+      />
 
       <input
         ref={fileInputRef}

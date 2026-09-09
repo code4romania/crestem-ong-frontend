@@ -16,7 +16,7 @@ import type {
   MediaTag,
 } from "@/lib/api/media-library-types";
 
-type PickedFile = { id: number; url: string; name: string };
+type PickedFile = { id: number; url: string; name: string; ext: string | null; size: number | null };
 
 /**
  * In-builder picker: lets FDSC staff choose an existing library asset instead of
@@ -135,6 +135,8 @@ export function MediaLibraryPicker({
         id: c.fisier.id,
         url: c.fisier.url,
         name: c.fisier.name,
+        ext: c.fisier.ext,
+        size: c.fisier.size,
       })),
     );
     onClose();
