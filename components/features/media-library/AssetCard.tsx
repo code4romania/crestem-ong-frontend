@@ -1,0 +1,62 @@
+"use client";
+
+import { FileText, Film } from "lucide-react";
+import { getMediaUrl } from "@/lib/api/client";
+import type { MediaAssetCard as Asset } from "@/lib/api/media-library-types";
+
+export function AssetCard({
+  asset,
+  selected = false,
+  onClick,
+}: {
+  asset: Asset;
+  selected?: boolean;
+  onClick?: () => void;
+}) {
+  const chips = asset.etichete.slice(0, 3);
+  const overflow = asset.etichete.length - chips.length;
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={`group flex flex-col overflow-hidden rounded-xl border text-left transition-colors ${
+        selected ? "border-[#2dbe8f] ring-2 ring-[#2dbe8f]/30" : "border-border hover:border-[#2dbe8f]"
+      }`}
+    >
+      <div className="flex aspect-[4/3] items-center justify-center bg-slate-50">
+        {asset.tip === "image" ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={getMediaUrl(asset.fisier.url)}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+        ) : asset.tip === "video" ? (
+          <Film size={28} className="text-[#94a3b8]" />
+        ) : (
+          <FileText size={28} className="text-[#94a3b8]" />
+        )}
+      </div>
+      <div className="flex flex-1 flex-col gap-2 p-3">
+        <span className="truncate font-heading text-sm font-semibold text-[#162040]">
+          {asset.titlu}
+        </span>
+        {chips.length > 0 && (
+          <span className="flex flex-wrap gap-1">
+            {chips.map((t) => (
+              <span key={t.slug} className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-[#475569]">
+                {t.nume}
+              </span>
+            ))}
+            {overflow > 0 && <span className="text-[11px] text-[#94a3b8]">+{overflow}</span>}
+          </span>
+        )}
+        <span className="mt-auto text-[11px] text-[#94a3b8]">
+          {asset.utilizariCount > 0 ? `folosit pe ${asset.utilizariCount} pagini` : "nefolosit"}
+        </span>
+      </div>
+    </button>
+  );
+}
