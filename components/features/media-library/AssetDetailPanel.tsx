@@ -8,6 +8,7 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { ModalPortal } from "@/components/ui/ModalPortal";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadSizeError } from "@/components/features/page-builder/upload";
+import { useGalleryLightbox } from "@/components/features/page-builder/blocks/gallery/useGalleryLightbox";
 import { FileTypeBadge } from "./FileTypeBadge";
 import { pluralPagini } from "./format";
 import {
@@ -49,6 +50,23 @@ export function AssetDetailPanel({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Click the preview to see the image full-size, uncropped. Reuses the gallery
+  // block's zoom overlay (Esc, scroll-lock, focus restore) with a one-item list.
+  const { open: openZoom, overlay: zoomOverlay, isOpen: zoomOpen } =
+    useGalleryLightbox(
+      asset.tip === "image"
+        ? [
+            {
+              id: asset.fisier.id,
+              url: asset.fisier.url,
+              name: asset.fisier.name,
+              alt: asset.altText,
+              caption: "",
+            },
+          ]
+        : [],
+    );
+
   // Slide-in on mount, and close on Escape — mirrors BlockConfigDrawer so the
   // media panel and the page-block panel behave identically.
   const [entered, setEntered] = useState(false);
@@ -58,11 +76,12 @@ export function AssetDetailPanel({
   }, []);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      // While the zoom overlay is up, Esc closes just that (it has its own handler).
+      if (e.key === "Escape" && !zoomOpen) onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [onClose, zoomOpen]);
 
   const [savePending, startSave] = useTransition();
   const [tagsPending, startTags] = useTransition();
@@ -236,12 +255,19 @@ export function AssetDetailPanel({
             <div>
               <div className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl border border-border bg-slate-50">
                 {asset.tip === "image" ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={getMediaUrl(asset.fisier.url)}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
+                  <button
+                    type="button"
+                    onClick={() => openZoom(0)}
+                    aria-label="Vezi imaginea la dimensiune completă"
+                    className="h-full w-full"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={getMediaUrl(asset.fisier.url)}
+                      alt=""
+                      className="h-full w-full cursor-zoom-in object-cover"
+                    />
+                  </button>
                 ) : asset.tip === "video" ? (
                   <Film size={28} className="text-[#94a3b8]" />
                 ) : (
@@ -440,6 +466,8 @@ export function AssetDetailPanel({
         onConfirm={() => doDelete(true)}
         onCancel={() => setUsageBlocking(null)}
       />
+
+      {zoomOverlay}
     </ModalPortal>
   );
 }
