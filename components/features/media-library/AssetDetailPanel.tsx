@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { FileText, Film, X } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { ModalOverlay } from "@/components/ui/ModalOverlay";
+import { ModalPortal } from "@/components/ui/ModalPortal";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadSizeError } from "@/components/features/page-builder/upload";
 import { pluralPagini } from "./format";
@@ -46,6 +46,21 @@ export function AssetDetailPanel({
   const [usageBlocking, setUsageBlocking] = useState<PageUsageRef[] | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Slide-in on mount, and close on Escape — mirrors BlockConfigDrawer so the
+  // media panel and the page-block panel behave identically.
+  const [entered, setEntered] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setEntered(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   const [savePending, startSave] = useTransition();
   const [tagsPending, startTags] = useTransition();
@@ -180,190 +195,205 @@ export function AssetDetailPanel({
     : "";
 
   return (
-    <ModalOverlay labelledBy="asset-detail-title">
-      <div className="ml-auto flex h-full w-full max-w-md flex-col self-stretch overflow-y-auto bg-white">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
-          <h2
-            id="asset-detail-title"
-            className="font-heading text-base font-extrabold text-[#162040]"
-          >
-            {asset.titlu}
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Închide panoul"
-            className="shrink-0 rounded-lg p-1 text-[#475569] transition-colors hover:bg-slate-50"
-          >
-            <X size={18} />
-          </button>
-        </div>
-
-        <div className="flex flex-col gap-6 px-5 py-5">
-          {/* Preview */}
-          <div>
-            <div className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl border border-border bg-slate-50">
-              {asset.tip === "image" ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={getMediaUrl(asset.fisier.url)}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
-              ) : asset.tip === "video" ? (
-                <Film size={28} className="text-[#94a3b8]" />
-              ) : (
-                <FileText size={28} className="text-[#94a3b8]" />
-              )}
-            </div>
-            <p className="mt-2 truncate text-xs text-[#94a3b8]">{asset.fisier.name}</p>
-          </div>
-
-          {/* Metadata form */}
-          <div className="flex flex-col gap-4">
-            <div>
-              <label htmlFor="asset-titlu" className={labelClass}>
-                Titlu
-              </label>
-              <input
-                id="asset-titlu"
-                className={inputClass}
-                value={titlu}
-                onChange={(e) => setTitlu(e.target.value)}
-                disabled={savePending}
-              />
-            </div>
-            <div>
-              <label htmlFor="asset-descriere" className={labelClass}>
-                Descriere
-              </label>
-              <textarea
-                id="asset-descriere"
-                rows={3}
-                className={inputClass}
-                value={descriere}
-                onChange={(e) => setDescriere(e.target.value)}
-                disabled={savePending}
-              />
-            </div>
-            <div>
-              <label htmlFor="asset-alt" className={labelClass}>
-                Text alternativ
-              </label>
-              <input
-                id="asset-alt"
-                className={inputClass}
-                value={altText}
-                onChange={(e) => setAltText(e.target.value)}
-                disabled={savePending}
-              />
-            </div>
+    <ModalPortal>
+      <div className="fixed inset-0 z-50 flex justify-end">
+        <button
+          type="button"
+          aria-label="Închide"
+          onClick={onClose}
+          className="absolute inset-0 h-full w-full cursor-default bg-black/40"
+        />
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="asset-detail-title"
+          className={`relative flex h-full w-full max-w-md flex-col bg-white shadow-2xl transition-transform duration-200 ${
+            entered ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {/* Header */}
+          <div className="flex items-start justify-between gap-4 border-b border-border px-6 py-5">
+            <h2
+              id="asset-detail-title"
+              className="min-w-0 truncate font-heading text-lg font-extrabold text-[#162040]"
+            >
+              {asset.titlu}
+            </h2>
             <button
               type="button"
-              onClick={handleSave}
-              disabled={savePending}
-              className="self-start rounded-xl bg-[#2dbe8f] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+              onClick={onClose}
+              aria-label="Închide panoul"
+              className="shrink-0 text-muted-foreground hover:text-foreground"
             >
-              {savePending ? "Se salvează..." : "Salvează"}
+              <X size={20} />
             </button>
           </div>
 
-          {/* Tag editor */}
-          <div className="flex flex-col gap-3">
-            <span className={sectionTitleClass}>Etichete</span>
-            <div className="flex flex-col gap-2">
-              {tags.map((tag) => (
-                <label key={tag.id} className="flex items-center gap-2 text-sm text-[#475569]">
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-border accent-[#2dbe8f]"
-                    checked={asset.etichete.some((e) => e.id === tag.id)}
-                    onChange={() => toggleTag(tag)}
-                    disabled={tagsPending}
+          <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-6 py-5">
+            {/* Preview */}
+            <div>
+              <div className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl border border-border bg-slate-50">
+                {asset.tip === "image" ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={getMediaUrl(asset.fisier.url)}
+                    alt=""
+                    className="h-full w-full object-cover"
                   />
-                  {tag.nume}
-                </label>
-              ))}
-              {tags.length === 0 && (
-                <p className="text-xs text-[#94a3b8]">Nicio etichetă definită încă.</p>
-              )}
+                ) : asset.tip === "video" ? (
+                  <Film size={28} className="text-[#94a3b8]" />
+                ) : (
+                  <FileText size={28} className="text-[#94a3b8]" />
+                )}
+              </div>
+              <p className="mt-2 truncate text-xs text-[#94a3b8]">{asset.fisier.name}</p>
             </div>
-            <div className="flex items-center gap-2">
+
+            {/* Metadata form */}
+            <div className="flex flex-col gap-4">
+              <div>
+                <label htmlFor="asset-titlu" className={labelClass}>
+                  Titlu
+                </label>
+                <input
+                  id="asset-titlu"
+                  className={inputClass}
+                  value={titlu}
+                  onChange={(e) => setTitlu(e.target.value)}
+                  disabled={savePending}
+                />
+              </div>
+              <div>
+                <label htmlFor="asset-descriere" className={labelClass}>
+                  Descriere
+                </label>
+                <textarea
+                  id="asset-descriere"
+                  rows={3}
+                  className={inputClass}
+                  value={descriere}
+                  onChange={(e) => setDescriere(e.target.value)}
+                  disabled={savePending}
+                />
+              </div>
+              <div>
+                <label htmlFor="asset-alt" className={labelClass}>
+                  Text alternativ
+                </label>
+                <input
+                  id="asset-alt"
+                  className={inputClass}
+                  value={altText}
+                  onChange={(e) => setAltText(e.target.value)}
+                  disabled={savePending}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={savePending}
+                className="self-start rounded-xl bg-[#2dbe8f] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+              >
+                {savePending ? "Se salvează..." : "Salvează"}
+              </button>
+            </div>
+
+            {/* Tag editor */}
+            <div className="flex flex-col gap-3">
+              <span className={sectionTitleClass}>Etichete</span>
+              <div className="flex flex-col gap-2">
+                {tags.map((tag) => (
+                  <label key={tag.id} className="flex items-center gap-2 text-sm text-[#475569]">
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-border accent-[#2dbe8f]"
+                      checked={asset.etichete.some((e) => e.id === tag.id)}
+                      onChange={() => toggleTag(tag)}
+                      disabled={tagsPending}
+                    />
+                    {tag.nume}
+                  </label>
+                ))}
+                {tags.length === 0 && (
+                  <p className="text-xs text-[#94a3b8]">Nicio etichetă definită încă.</p>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  className={inputClass}
+                  placeholder="adaugă etichetă"
+                  value={newTag}
+                  onChange={(e) => setNewTag(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleCreateTag();
+                    }
+                  }}
+                  disabled={tagsPending}
+                />
+                <button
+                  type="button"
+                  onClick={handleCreateTag}
+                  disabled={tagsPending || !newTag.trim()}
+                  className="shrink-0 rounded-xl border border-border px-3 py-2 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
+                >
+                  Adaugă
+                </button>
+              </div>
+            </div>
+
+            {/* Replace file */}
+            <div className="flex flex-col gap-2">
+              <span className={sectionTitleClass}>Înlocuiește fișierul</span>
               <input
-                className={inputClass}
-                placeholder="adaugă etichetă"
-                value={newTag}
-                onChange={(e) => setNewTag(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleCreateTag();
-                  }
-                }}
-                disabled={tagsPending}
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={onFileInputChange}
               />
               <button
                 type="button"
-                onClick={handleCreateTag}
-                disabled={tagsPending || !newTag.trim()}
-                className="shrink-0 rounded-xl border border-border px-3 py-2 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={replacePending}
+                className="self-start rounded-xl border border-border px-4 py-2 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
               >
-                Adaugă
+                {replacePending ? "Se înlocuiește..." : "Alege un fișier nou"}
               </button>
             </div>
-          </div>
 
-          {/* Replace file */}
-          <div className="flex flex-col gap-2">
-            <span className={sectionTitleClass}>Înlocuiește fișierul</span>
-            <input
-              type="file"
-              ref={fileInputRef}
-              className="hidden"
-              onChange={onFileInputChange}
-            />
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={replacePending}
-              className="self-start rounded-xl border border-border px-4 py-2 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
-            >
-              {replacePending ? "Se înlocuiește..." : "Alege un fișier nou"}
-            </button>
-          </div>
+            {/* Usage */}
+            <div className="flex flex-col gap-2">
+              <span className={sectionTitleClass}>Folosit pe</span>
+              {asset.utilizari.length > 0 ? (
+                <ul className="flex flex-col gap-1">
+                  {asset.utilizari.map((u) => (
+                    <li key={u.documentId}>
+                      <Link
+                        href={u.cale}
+                        className="text-sm text-[#2563eb] hover:underline"
+                      >
+                        {u.titlu || u.cale}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-[#94a3b8]">Nefolosit încă.</p>
+              )}
+            </div>
 
-          {/* Usage */}
-          <div className="flex flex-col gap-2">
-            <span className={sectionTitleClass}>Folosit pe</span>
-            {asset.utilizari.length > 0 ? (
-              <ul className="flex flex-col gap-1">
-                {asset.utilizari.map((u) => (
-                  <li key={u.documentId}>
-                    <Link
-                      href={u.cale}
-                      className="text-sm text-[#2563eb] hover:underline"
-                    >
-                      {u.titlu || u.cale}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-[#94a3b8]">Nefolosit încă.</p>
-            )}
-          </div>
-
-          {/* Delete */}
-          <div className="border-t border-border pt-5">
-            <button
-              type="button"
-              onClick={() => doDelete(false)}
-              disabled={deletePending}
-              className="rounded-xl bg-[#dc2626] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-            >
-              {deletePending ? "Se șterge..." : "Șterge din bibliotecă"}
-            </button>
+            {/* Delete */}
+            <div className="border-t border-border pt-5">
+              <button
+                type="button"
+                onClick={() => doDelete(false)}
+                disabled={deletePending}
+                className="rounded-xl bg-[#dc2626] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+              >
+                {deletePending ? "Se șterge..." : "Șterge din bibliotecă"}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -393,6 +423,6 @@ export function AssetDetailPanel({
         onConfirm={() => doDelete(true)}
         onCancel={() => setUsageBlocking(null)}
       />
-    </ModalOverlay>
+    </ModalPortal>
   );
 }
