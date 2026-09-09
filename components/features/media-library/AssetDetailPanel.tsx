@@ -43,6 +43,7 @@ export function AssetDetailPanel({
   const [altText, setAltText] = useState(asset.altText);
   const [newTag, setNewTag] = useState("");
   const [pendingReplace, setPendingReplace] = useState<File | null>(null);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [usageBlocking, setUsageBlocking] = useState<PageUsageRef[] | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -387,7 +388,7 @@ export function AssetDetailPanel({
             <div className="border-t border-border pt-5">
               <button
                 type="button"
-                onClick={() => doDelete(false)}
+                onClick={() => setConfirmingDelete(true)}
                 disabled={deletePending}
                 className="rounded-xl bg-[#dc2626] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
               >
@@ -410,6 +411,21 @@ export function AssetDetailPanel({
           if (pendingReplace) doReplace(pendingReplace, true);
         }}
         onCancel={() => setPendingReplace(null)}
+      />
+
+      <ConfirmDialog
+        open={confirmingDelete}
+        title="Ștergi acest fișier?"
+        description={`„${asset.titlu}" va fi șters definitiv din bibliotecă. Acțiunea nu poate fi anulată.`}
+        confirmLabel="Șterge"
+        confirmVariant="danger"
+        loading={deletePending}
+        loadingLabel="Se șterge..."
+        onConfirm={() => {
+          setConfirmingDelete(false);
+          doDelete(false);
+        }}
+        onCancel={() => setConfirmingDelete(false)}
       />
 
       <ConfirmDialog
