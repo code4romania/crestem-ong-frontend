@@ -31,6 +31,7 @@
 - On every read, the Strapi page controller overwrites each block file node's `url` / `name` / `alternativeText` from the current `plugin::upload.file` row — see `crestem-ong-backend/src/api/page/utils/media-resolve.ts` (`applyResolvedMedia`), applied via `resolveBlocksMedia` in `src/api/page/controllers/page.ts` for `detail`, `byPath`, `createOne`, and `updateOne`.
 - Consequence: replacing or renaming a file in the Media Library propagates to every page that uses it with no page re-save. Do not "fix" a stale block URL by migrating block JSON — the resolver already handles it.
 - A block file node whose `id` no longer exists in `plugin::upload.file` is dropped from the served response.
+- The `alternativeText` the resolver injects into block file nodes is NOT read by any renderer — block schemas are non-strict `z.object` and strip it. The block-level alt field (`altText`, or `imageAlt` for `hero-large-split`) is authoritative, and is seeded from the library asset's `alternativeText` at pick time (only when the block's own alt is still empty).
 
 ## Component Architecture
 
