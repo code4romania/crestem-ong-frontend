@@ -46,6 +46,7 @@ export function MediaLibraryPicker({
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState<MediaTag[]>([]);
   const tagsRequested = useRef(false);
+  const finishedRef = useRef(false);
 
   // Selected cards kept whole so the confirm payload is built without having to
   // re-find them in a grid that may have paged past the selection.
@@ -56,6 +57,25 @@ export function MediaLibraryPicker({
     () => new Set(selectedCards.keys()),
     [selectedCards],
   );
+
+  // The component stays mounted while `open` is false, so reset every piece of
+  // per-session state each time it (re)opens — render-phase "adjust state on
+  // prop change" pattern (see MediaFilters `syncedTo`, AssetDetailPanel
+  // `seededFor`), not an effect. Converges: after `setWasOpen(open)` the next
+  // render sees `open === wasOpen`. The `tagsRequested` cache is deliberately
+  // kept across opens.
+  const [wasOpen, setWasOpen] = useState(open);
+  if (open !== wasOpen) {
+    setWasOpen(open);
+    if (open) {
+      setSearch("");
+      setTip(accept ?? "");
+      setTagSlugs([]);
+      setPage(1);
+      setSelectedCards(new Map());
+      setResult(null);
+    }
+  }
 
   const tagKey = tagSlugs.join(",");
 
@@ -97,9 +117,19 @@ export function MediaLibraryPicker({
     });
   }, [open]);
 
+  // Re-arm the single-select double-fire guard on each open. Kept out of the
+  // render-phase reset block because ref writes aren't allowed during render
+  // (react-hooks/refs); an effect touches no state so set-state-in-effect is
+  // not in play.
+  useEffect(() => {
+    if (open) finishedRef.current = false;
+  }, [open]);
+
   if (!open) return null;
 
   const finish = (cards: MediaAssetCard[]) => {
+    if (finishedRef.current) return;
+    finishedRef.current = true;
     onPick(
       cards.map((c) => ({
         id: c.fisier.id,
