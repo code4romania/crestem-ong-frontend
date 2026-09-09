@@ -6,11 +6,14 @@ import type { MediaAssetCard as Asset } from "@/lib/api/media-library-types";
 export function AssetGrid({
   assets,
   selectedIds,
+  selectable = false,
   onSelect,
   emptyLabel = "Niciun fișier găsit.",
 }: {
   assets: Asset[];
   selectedIds?: Set<string>;
+  /** Render cards with a checkbox and toggle semantics. */
+  selectable?: boolean;
   onSelect: (asset: Asset) => void;
   emptyLabel?: string;
 }) {
@@ -29,6 +32,7 @@ export function AssetGrid({
           key={asset.documentId}
           asset={asset}
           selected={selectedIds?.has(asset.documentId)}
+          selectable={selectable}
           onClick={() => onSelect(asset)}
         />
       ))}

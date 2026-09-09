@@ -246,6 +246,36 @@ export async function deleteMediaAssetAction(
   }
 }
 
+/**
+ * Deletes several assets in one round trip. Always forces past the usage guard
+ * (the caller confirms up front), so a file used on pages is removed and its
+ * blocks fall back to nothing. Returns which ids went and which failed;
+ * revalidates once.
+ */
+export async function deleteMediaAssetsBatchAction(
+  documentIds: string[],
+): Promise<{ error?: string; deleted: string[]; failed: string[] }> {
+  const forbidden = await refuseNonStaff();
+  if (forbidden) return { error: forbidden.error, deleted: [], failed: [] };
+
+  const deleted: string[] = [];
+  const failed: string[] = [];
+  for (const id of documentIds) {
+    try {
+      await serverApiFetch(`/api/media-assets/${id}?force=true`, { method: "DELETE" });
+      deleted.push(id);
+    } catch {
+      failed.push(id);
+    }
+  }
+
+  if (deleted.length) {
+    revalidateDashboardPath(LIBRARY_PATH);
+    revalidatePath("/", "layout");
+  }
+  return { deleted, failed };
+}
+
 export async function getMediaAssetAction(
   documentId: string,
 ): Promise<{ error?: string; asset?: MediaAssetDetail }> {

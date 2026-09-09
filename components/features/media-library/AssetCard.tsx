@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText, Film } from "lucide-react";
+import { Check, FileText, Film } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import type { MediaAssetCard as Asset } from "@/lib/api/media-library-types";
 import { pluralPagini } from "./format";
@@ -8,10 +8,13 @@ import { pluralPagini } from "./format";
 export function AssetCard({
   asset,
   selected = false,
+  selectable = false,
   onClick,
 }: {
   asset: Asset;
   selected?: boolean;
+  /** Show a checkbox and announce as a toggle (selection mode / picker). */
+  selectable?: boolean;
   onClick?: () => void;
 }) {
   const chips = asset.etichete.slice(0, 3);
@@ -21,11 +24,23 @@ export function AssetCard({
     <button
       type="button"
       onClick={onClick}
-      aria-pressed={selected}
-      className={`group flex flex-col overflow-hidden rounded-xl border text-left transition-colors ${
+      aria-pressed={selectable ? selected : undefined}
+      className={`group relative flex flex-col overflow-hidden rounded-xl border text-left transition-colors ${
         selected ? "border-[#2dbe8f] ring-2 ring-[#2dbe8f]/30" : "border-border hover:border-[#2dbe8f]"
       }`}
     >
+      {selectable && (
+        <span
+          aria-hidden="true"
+          className={`absolute left-2 top-2 z-10 flex h-5 w-5 items-center justify-center rounded-md border ${
+            selected
+              ? "border-[#2dbe8f] bg-[#2dbe8f] text-white"
+              : "border-white/80 bg-black/30 text-transparent"
+          }`}
+        >
+          <Check size={13} strokeWidth={3} />
+        </span>
+      )}
       <div className="flex aspect-[4/3] items-center justify-center bg-slate-50">
         {asset.tip === "image" ? (
           // eslint-disable-next-line @next/next/no-img-element

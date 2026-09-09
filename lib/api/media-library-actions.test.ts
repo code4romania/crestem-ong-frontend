@@ -10,6 +10,7 @@ vi.mock("next/headers", () => ({ cookies: async () => ({ get: () => ({ value: "j
 import {
   updateMediaAssetAction,
   deleteMediaAssetAction,
+  deleteMediaAssetsBatchAction,
   replaceMediaAssetFileAction,
   uploadMediaAssetsBatchAction,
 } from "./media-library-actions";
@@ -44,6 +45,34 @@ describe("deleteMediaAssetAction", () => {
     getCurrentUser.mockResolvedValue({ role: { type: "super-admin" } });
     serverApiFetch.mockResolvedValue({ data: { documentId: "a1" } });
     expect(await deleteMediaAssetAction("a1", { force: true })).toEqual({ ok: true });
+  });
+});
+
+describe("deleteMediaAssetsBatchAction", () => {
+  it("force-deletes every id and reports failures", async () => {
+    getCurrentUser.mockResolvedValue({ role: { type: "super-admin" } });
+    serverApiFetch
+      .mockResolvedValueOnce({})
+      .mockRejectedValueOnce(new ApiError("boom", 500))
+      .mockResolvedValueOnce({});
+
+    const res = await deleteMediaAssetsBatchAction(["a1", "a2", "a3"]);
+
+    expect(res.deleted).toEqual(["a1", "a3"]);
+    expect(res.failed).toEqual(["a2"]);
+    expect(serverApiFetch).toHaveBeenNthCalledWith(
+      1,
+      "/api/media-assets/a1?force=true",
+      { method: "DELETE" },
+    );
+  });
+
+  it("refuses a non-staff user before any request", async () => {
+    getCurrentUser.mockResolvedValue({ role: { type: "mentor" } });
+    const res = await deleteMediaAssetsBatchAction(["a1"]);
+    expect(res.error).toMatch(/permisiune/i);
+    expect(res.deleted).toEqual([]);
+    expect(serverApiFetch).not.toHaveBeenCalled();
   });
 });
 
