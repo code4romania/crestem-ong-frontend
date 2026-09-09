@@ -1,8 +1,9 @@
 "use client";
 
-import { Check, FileText, Film } from "lucide-react";
+import { Check, Film } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import type { MediaAssetCard as Asset } from "@/lib/api/media-library-types";
+import { FileTypeBadge } from "./FileTypeBadge";
 import { pluralPagini } from "./format";
 
 export function AssetCard({
@@ -52,7 +53,7 @@ export function AssetCard({
         ) : asset.tip === "video" ? (
           <Film size={28} className="text-[#94a3b8]" />
         ) : (
-          <FileText size={28} className="text-[#94a3b8]" />
+          <FileTypeBadge ext={asset.fisier.ext} url={asset.fisier.url} />
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2 p-3">

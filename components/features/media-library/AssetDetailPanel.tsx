@@ -2,12 +2,13 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { FileText, Film, X } from "lucide-react";
+import { Film, X } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { ModalPortal } from "@/components/ui/ModalPortal";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadSizeError } from "@/components/features/page-builder/upload";
+import { FileTypeBadge } from "./FileTypeBadge";
 import { pluralPagini } from "./format";
 import {
   createMediaTagAction,
@@ -244,7 +245,7 @@ export function AssetDetailPanel({
                 ) : asset.tip === "video" ? (
                   <Film size={28} className="text-[#94a3b8]" />
                 ) : (
-                  <FileText size={28} className="text-[#94a3b8]" />
+                  <FileTypeBadge ext={asset.fisier.ext} url={asset.fisier.url} />
                 )}
               </div>
               <p className="mt-2 truncate text-xs text-[#94a3b8]">{asset.fisier.name}</p>

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
-import { FileText, Film, X } from "lucide-react";
+import { Film, X } from "lucide-react";
 import { toast } from "sonner";
 import { ModalPortal } from "@/components/ui/ModalPortal";
 import { getMediaUrl } from "@/lib/api/client";
+import { FileTypeBadge } from "./FileTypeBadge";
 import {
   createMediaTagAction,
   updateMediaAssetAction,
@@ -253,7 +254,11 @@ export function BatchUploadPanel({
                       ) : asset.tip === "video" ? (
                         <Film size={22} className="text-[#94a3b8]" />
                       ) : (
-                        <FileText size={22} className="text-[#94a3b8]" />
+                        <FileTypeBadge
+                          ext={asset.fisier.ext}
+                          url={asset.fisier.url}
+                          size="sm"
+                        />
                       )}
                     </div>
                     <span className="block truncate px-2 pt-2 text-xs font-semibold text-[#162040]">
