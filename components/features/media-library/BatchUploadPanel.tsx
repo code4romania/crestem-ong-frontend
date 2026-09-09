@@ -142,7 +142,7 @@ export function BatchUploadPanel({
           role="dialog"
           aria-modal="true"
           aria-labelledby="batch-upload-title"
-          className={`relative flex h-full w-full max-w-lg flex-col bg-white shadow-2xl transition-transform duration-200 ${
+          className={`relative flex h-full w-full max-w-2xl flex-col bg-white shadow-2xl transition-transform duration-200 ${
             entered ? "translate-x-0" : "translate-x-full"
           }`}
         >
@@ -229,7 +229,7 @@ export function BatchUploadPanel({
           </div>
 
           {/* Cards */}
-          <div className="grid min-h-0 flex-1 grid-cols-2 gap-3 overflow-y-auto px-6 py-5 sm:grid-cols-3">
+          <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 overflow-y-auto px-6 py-5 sm:grid-cols-2">
             {items.map((asset) => {
               const assigned = new Set(tagIdsOf(asset));
               return (
@@ -240,7 +240,7 @@ export function BatchUploadPanel({
                   <button
                     type="button"
                     onClick={() => setOpenId(asset.documentId)}
-                    className="group text-left"
+                    className="group block w-full text-left"
                   >
                     <div className="flex aspect-[4/3] items-center justify-center bg-slate-50">
                       {asset.tip === "image" ? (
