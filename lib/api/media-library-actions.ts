@@ -6,7 +6,12 @@ import { serverApiFetch } from "./server";
 import { getCurrentUser } from "./session-server";
 import { SESSION_COOKIE } from "./session-cookies";
 import { isFdscStaff } from "@/lib/roles";
-import type { MediaAssetDetail, PageUsageRef } from "./media-library-types";
+import type {
+  MediaAssetDetail,
+  MediaAssetListResult,
+  MediaTag,
+  PageUsageRef,
+} from "./media-library-types";
 
 const FORBIDDEN = "Nu ai permisiunea necesară pentru această acțiune.";
 const LIBRARY_PATH = "/dashboard/fdsc/media-library";
@@ -183,5 +188,38 @@ export async function createMediaTagAction(
     return { tag: data };
   } catch (err) {
     return { error: getApiErrorMessage(err, "Nu am putut crea eticheta.") };
+  }
+}
+
+export async function listMediaAssetsAction(params: {
+  search?: string;
+  tip?: string;
+  etichete?: string[];
+  page?: number;
+}): Promise<{ error?: string; result?: MediaAssetListResult }> {
+  const forbidden = await refuseNonStaff();
+  if (forbidden) return forbidden;
+  try {
+    const query = new URLSearchParams();
+    if (params.search) query.set("search", params.search);
+    if (params.tip) query.set("tip", params.tip);
+    if (params.etichete?.length) query.set("etichete", params.etichete.join(","));
+    if (params.page && params.page > 1) query.set("page", String(params.page));
+    const suffix = query.toString() ? `?${query}` : "";
+    const result = await serverApiFetch<MediaAssetListResult>(`/api/media-assets${suffix}`);
+    return { result };
+  } catch (err) {
+    return { error: getApiErrorMessage(err, "Nu am putut încărca biblioteca.") };
+  }
+}
+
+export async function listMediaTagsAction(): Promise<{ error?: string; tags?: MediaTag[] }> {
+  const forbidden = await refuseNonStaff();
+  if (forbidden) return forbidden;
+  try {
+    const { data } = await serverApiFetch<{ data: MediaTag[] }>("/api/media-tags");
+    return { tags: data };
+  } catch (err) {
+    return { error: getApiErrorMessage(err, "Nu am putut încărca etichetele.") };
   }
 }

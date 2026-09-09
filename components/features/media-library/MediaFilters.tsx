@@ -19,12 +19,19 @@ export function MediaFilters({
   tip,
   tagSlugs,
   tags,
+  lockedTip,
   onChange,
 }: {
   search: string;
   tip: string;
   tagSlugs: string[];
   tags: MediaTag[];
+  /**
+   * When set, the type filter is fixed to this value: the segmented control is
+   * hidden and every emitted payload carries `tip: lockedTip` regardless of the
+   * `tip` prop. Used by the in-builder picker, which locks the asset type.
+   */
+  lockedTip?: "image" | "video" | "file";
   onChange: (next: { search: string; tip: string; tagSlugs: string[] }) => void;
 }) {
   const [searchDraft, setSearchDraft] = useState(search);
@@ -56,7 +63,7 @@ export function MediaFilters({
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       debounceRef.current = null;
-      onChange({ search: value, tip, tagSlugs });
+      onChange({ search: value, tip: lockedTip ?? tip, tagSlugs });
     }, SEARCH_DEBOUNCE_MS);
   };
 
@@ -71,7 +78,7 @@ export function MediaFilters({
 
   const handleTipChange = (next: string) => {
     flushSearch();
-    onChange({ search: searchDraft, tip: next, tagSlugs });
+    onChange({ search: searchDraft, tip: lockedTip ?? next, tagSlugs });
   };
 
   const toggleTag = (slug: string) => {
@@ -79,7 +86,7 @@ export function MediaFilters({
       ? tagSlugs.filter((s) => s !== slug)
       : [...tagSlugs, slug];
     flushSearch();
-    onChange({ search: searchDraft, tip, tagSlugs: nextTagSlugs });
+    onChange({ search: searchDraft, tip: lockedTip ?? tip, tagSlugs: nextTagSlugs });
   };
 
   return (
@@ -98,12 +105,14 @@ export function MediaFilters({
         />
       </div>
 
-      <SegmentedControl
-        options={TIP_OPTIONS}
-        value={tip}
-        onChange={handleTipChange}
-        ariaLabel="Filtrează după tip"
-      />
+      {!lockedTip && (
+        <SegmentedControl
+          options={TIP_OPTIONS}
+          value={tip}
+          onChange={handleTipChange}
+          ariaLabel="Filtrează după tip"
+        />
+      )}
 
       {tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
