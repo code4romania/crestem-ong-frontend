@@ -25,6 +25,13 @@
 - Some schemas in the spec are incomplete (empty `{}` bodies, blank response descriptions) — if a needed shape isn't defined there, say so explicitly rather than inventing one.
 - The spec hardcodes `http://localhost:1337` as the server URL — use the app's own env-based API base URL instead, not the one in the file.
 
+## Media Library & block file URLs
+
+- Page block JSON stores each file as a `{ id, url, name }` snapshot captured at write time.
+- On every read, the Strapi page controller overwrites each block file node's `url` / `name` / `alternativeText` from the current `plugin::upload.file` row — see `crestem-ong-backend/src/api/page/utils/media-resolve.ts` (`applyResolvedMedia`), applied via `resolveBlocksMedia` in `src/api/page/controllers/page.ts` for `detail`, `byPath`, `createOne`, and `updateOne`.
+- Consequence: replacing or renaming a file in the Media Library propagates to every page that uses it with no page re-save. Do not "fix" a stale block URL by migrating block JSON — the resolver already handles it.
+- A block file node whose `id` no longer exists in `plugin::upload.file` is dropped from the served response.
+
 ## Component Architecture
 
 - Structure:
