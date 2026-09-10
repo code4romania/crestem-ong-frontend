@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { Film, X } from "lucide-react";
+import { ArrowUpRight, Download, FileText, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { ModalPortal } from "@/components/ui/ModalPortal";
@@ -14,6 +14,7 @@ import { pluralPagini } from "./format";
 import {
   createMediaTagAction,
   deleteMediaAssetAction,
+  deleteMediaTagAction,
   replaceMediaAssetFileAction,
   updateMediaAssetAction,
 } from "@/lib/api/media-library-actions";
@@ -44,7 +45,7 @@ export function AssetDetailPanel({
   const [descriere, setDescriere] = useState(asset.descriere);
   const [altText, setAltText] = useState(asset.altText);
   const [newTag, setNewTag] = useState("");
-  const [pendingReplace, setPendingReplace] = useState<File | null>(null);
+  const [deletingTag, setDeletingTag] = useState<MediaTag | null>(null);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [usageBlocking, setUsageBlocking] = useState<PageUsageRef[] | null>(null);
 
@@ -155,20 +156,29 @@ export function AssetDetailPanel({
     });
   };
 
-  const doReplace = (file: File, force = false) => {
+  const handleDeleteTag = (tag: MediaTag) => {
+    startTags(async () => {
+      const res = await deleteMediaTagAction(tag.documentId);
+      if (res.error) {
+        toast.error(res.error);
+        return;
+      }
+      toast.success("Etichetă ștearsă.");
+      setDeletingTag(null);
+      // Re-pull the tag list (and the asset, in case it carried this tag).
+      onChanged(asset);
+    });
+  };
+
+  const doReplace = (file: File) => {
     startReplace(async () => {
       const form = new FormData();
       form.append("files", file);
-      const res = await replaceMediaAssetFileAction(asset.documentId, form, { force });
-      if (res.mismatch) {
-        setPendingReplace(file);
-        return;
-      }
+      const res = await replaceMediaAssetFileAction(asset.documentId, form);
       if (res.error || !res.asset) {
         toast.error(res.error ?? "Înlocuirea a eșuat.");
         return;
       }
-      setPendingReplace(null);
       toast.success("Fișier înlocuit.");
       onChanged(res.asset);
     });
@@ -269,12 +279,27 @@ export function AssetDetailPanel({
                     />
                   </button>
                 ) : asset.tip === "video" ? (
-                  <Film size={28} className="text-[#94a3b8]" />
+                  <video
+                    src={getMediaUrl(asset.fisier.url)}
+                    aria-label={asset.altText || asset.fisier.name}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="h-full w-full bg-black object-contain"
+                  />
                 ) : (
                   <FileTypeBadge ext={asset.fisier.ext} url={asset.fisier.url} />
                 )}
               </div>
               <p className="mt-2 truncate text-xs text-[#94a3b8]">{asset.fisier.name}</p>
+              <a
+                href={`/api/media-library/download/${asset.documentId}`}
+                download={asset.fisier.name}
+                className="mt-3 inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50"
+              >
+                <Download className="h-4 w-4" />
+                Descarcă fișierul
+              </a>
             </div>
 
             {/* Metadata form */}
@@ -329,21 +354,32 @@ export function AssetDetailPanel({
             {/* Tag editor */}
             <div className="flex flex-col gap-3">
               <span className={sectionTitleClass}>Etichete</span>
-              <div className="flex flex-col gap-2">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                 {tags.map((tag) => (
-                  <label key={tag.id} className="flex items-center gap-2 text-sm text-[#475569]">
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-border accent-[#2dbe8f]"
-                      checked={asset.etichete.some((e) => e.id === tag.id)}
-                      onChange={() => toggleTag(tag)}
+                  <div key={tag.id} className="flex items-center gap-1">
+                    <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-[#475569]">
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-border accent-[#2dbe8f]"
+                        checked={asset.etichete.some((e) => e.id === tag.id)}
+                        onChange={() => toggleTag(tag)}
+                        disabled={tagsPending}
+                      />
+                      <span className="truncate">{tag.nume}</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setDeletingTag(tag)}
                       disabled={tagsPending}
-                    />
-                    {tag.nume}
-                  </label>
+                      aria-label={`Șterge eticheta ${tag.nume}`}
+                      className="shrink-0 rounded p-1 text-[#94a3b8] transition-colors hover:bg-red-50 hover:text-[#dc2626] disabled:opacity-60"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
                 ))}
                 {tags.length === 0 && (
-                  <p className="text-xs text-[#94a3b8]">Nicio etichetă definită încă.</p>
+                  <p className="col-span-2 text-xs text-[#94a3b8]">Nicio etichetă definită încă.</p>
                 )}
               </div>
               <div className="flex items-center gap-2">
@@ -374,9 +410,19 @@ export function AssetDetailPanel({
             {/* Replace file */}
             <div className="flex flex-col gap-2">
               <span className={sectionTitleClass}>Înlocuiește fișierul</span>
+              <p className="text-xs text-[#94a3b8]">
+                Fișierul nou trebuie să aibă același format
+                {asset.fisier.ext
+                  ? ` (${asset.fisier.ext.replace(/^\./, "").toUpperCase()})`
+                  : asset.fisier.mime
+                    ? ` (${asset.fisier.mime})`
+                    : ""}
+                . Pentru alt format, încarcă un fișier nou în bibliotecă.
+              </p>
               <input
                 type="file"
                 ref={fileInputRef}
+                accept={asset.fisier.ext ?? asset.fisier.mime ?? undefined}
                 className="hidden"
                 onChange={onFileInputChange}
               />
@@ -392,22 +438,45 @@ export function AssetDetailPanel({
 
             {/* Usage */}
             <div className="flex flex-col gap-2">
-              <span className={sectionTitleClass}>Folosit pe</span>
+              <span className="flex items-center gap-2">
+                <span className={sectionTitleClass}>Folosit pe</span>
+                {asset.utilizari.length > 0 && (
+                  <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[#2dbe8f]/10 px-1.5 text-xs font-semibold text-[#2dbe8f]">
+                    {asset.utilizari.length}
+                  </span>
+                )}
+              </span>
               {asset.utilizari.length > 0 ? (
-                <ul className="flex flex-col gap-1">
+                <ul className="flex flex-col gap-2">
                   {asset.utilizari.map((u) => (
                     <li key={u.documentId}>
                       <Link
                         href={u.cale}
-                        className="text-sm text-[#2563eb] hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center gap-3 rounded-xl border border-border px-3 py-2 transition-colors hover:border-[#2dbe8f]/40 hover:bg-slate-50"
                       >
-                        {u.titlu || u.cale}
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#2dbe8f]/10 text-[#2dbe8f]">
+                          <FileText className="h-4 w-4" />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-medium text-[#162040]">
+                            {u.titlu || u.cale}
+                          </span>
+                          <span className="block truncate text-xs text-[#94a3b8]">
+                            {u.cale}
+                          </span>
+                        </span>
+                        <ArrowUpRight className="h-4 w-4 shrink-0 text-[#94a3b8] transition-colors group-hover:text-[#2dbe8f]" />
                       </Link>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm text-[#94a3b8]">Nefolosit încă.</p>
+                <div className="flex flex-col items-center gap-1.5 rounded-xl border border-dashed border-border px-3 py-6 text-center">
+                  <FileText className="h-5 w-5 text-[#cbd5e1]" />
+                  <p className="text-sm text-[#94a3b8]">Nefolosit încă.</p>
+                </div>
               )}
             </div>
 
@@ -425,20 +494,6 @@ export function AssetDetailPanel({
           </div>
         </div>
       </div>
-
-      <ConfirmDialog
-        open={pendingReplace !== null}
-        title="Tip diferit de fișier"
-        description="Fișierul nou are alt tip decât cel curent. Continui?"
-        confirmLabel="Continuă"
-        confirmVariant="accent"
-        loading={replacePending}
-        loadingLabel="Se înlocuiește..."
-        onConfirm={() => {
-          if (pendingReplace) doReplace(pendingReplace, true);
-        }}
-        onCancel={() => setPendingReplace(null)}
-      />
 
       <ConfirmDialog
         open={confirmingDelete}
@@ -465,6 +520,22 @@ export function AssetDetailPanel({
         loadingLabel="Se șterge..."
         onConfirm={() => doDelete(true)}
         onCancel={() => setUsageBlocking(null)}
+      />
+
+      <ConfirmDialog
+        open={deletingTag !== null}
+        title="Ștergi eticheta?"
+        description={
+          deletingTag
+            ? `Eticheta „${deletingTag.nume}” va fi ștearsă definitiv și eliminată de pe toate imaginile.`
+            : ""
+        }
+        confirmLabel="Șterge eticheta"
+        confirmVariant="danger"
+        loading={tagsPending}
+        loadingLabel="Se șterge..."
+        onConfirm={() => deletingTag && handleDeleteTag(deletingTag)}
+        onCancel={() => setDeletingTag(null)}
       />
 
       {zoomOverlay}

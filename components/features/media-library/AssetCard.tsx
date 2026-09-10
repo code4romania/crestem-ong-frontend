@@ -51,7 +51,25 @@ export function AssetCard({
             className="h-full w-full object-cover"
           />
         ) : asset.tip === "video" ? (
-          <Film size={28} className="text-[#94a3b8]" />
+          <div className="relative h-full w-full">
+            {/* Fallback shown through the transparent <video> until (or unless)
+                the browser can decode a frame — e.g. an unsupported .mov codec. */}
+            <Film
+              size={28}
+              aria-hidden="true"
+              className="absolute inset-0 m-auto text-[#94a3b8]"
+            />
+            {/* `#t=0.1` makes the browser seek ~0.1s in and paint that frame as
+                a still poster, no server-side thumbnail needed. */}
+            <video
+              src={`${getMediaUrl(asset.fisier.url)}#t=0.1`}
+              muted
+              playsInline
+              preload="metadata"
+              tabIndex={-1}
+              className="relative h-full w-full object-cover"
+            />
+          </div>
         ) : (
           <FileTypeBadge ext={asset.fisier.ext} url={asset.fisier.url} />
         )}

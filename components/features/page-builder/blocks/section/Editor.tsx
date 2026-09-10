@@ -6,6 +6,7 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
+import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { BackgroundPicker } from "./BackgroundPicker";
 import { SpacingRadioGroup } from "./SpacingRadioGroup";
 import { slugifyAnchor, type SectionData } from "./schema";
@@ -30,6 +31,7 @@ export function SectionEditor({
 }) {
   const [isUploading, startUpload] = useTransition();
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const set = (patch: Partial<SectionData>) => onChange({ ...value, ...patch });
@@ -136,6 +138,24 @@ export function SectionEditor({
           />
           {errors.imagine && <p className={errorClass}>{errors.imagine}</p>}
           {uploadError && <p className={errorClass}>{uploadError}</p>}
+
+          <button
+            type="button"
+            onClick={() => setPickerOpen(true)}
+            className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+          >
+            Alege din bibliotecă
+          </button>
+          <MediaLibraryPicker
+            open={pickerOpen}
+            multiple={false}
+            accept="image"
+            onClose={() => setPickerOpen(false)}
+            onPick={([file]) => {
+              set({ imagine: { id: file.id, url: file.url, name: file.name } });
+              setPickerOpen(false);
+            }}
+          />
 
           <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3">
             <span>

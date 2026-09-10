@@ -77,20 +77,28 @@ describe("deleteMediaAssetsBatchAction", () => {
 });
 
 describe("replaceMediaAssetFileAction", () => {
-  it("returns { mismatch: true } on a 409", async () => {
+  it("surfaces the backend message as an error on a 409 (format mismatch)", async () => {
     getCurrentUser.mockResolvedValue({ role: { type: "super-admin" } });
     const fetchMock = vi.fn().mockResolvedValue({
       ok: false,
       status: 409,
-      json: async () => ({}),
+      json: async () => ({
+        error: { message: "Fișierul nou trebuie să aibă același format ca fișierul curent (PNG)." },
+      }),
     });
     vi.stubGlobal("fetch", fetchMock);
 
     const form = new FormData();
-    form.append("files", new File(["x"], "new.png", { type: "image/png" }));
+    form.append("files", new File(["x"], "new.pdf", { type: "application/pdf" }));
     const res = await replaceMediaAssetFileAction("a1", form);
 
-    expect(res).toEqual({ mismatch: true });
+    expect(res).toEqual({
+      error: "Fișierul nou trebuie să aibă același format ca fișierul curent (PNG).",
+    });
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.not.stringContaining("force"),
+      expect.any(Object),
+    );
     vi.unstubAllGlobals();
   });
 });

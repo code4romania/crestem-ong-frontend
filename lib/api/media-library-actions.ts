@@ -193,8 +193,7 @@ export async function updateMediaAssetAction(
 export async function replaceMediaAssetFileAction(
   documentId: string,
   formData: FormData,
-  opts: { force?: boolean } = {},
-): Promise<{ error?: string; asset?: MediaAssetDetail; mismatch?: boolean }> {
+): Promise<{ error?: string; asset?: MediaAssetDetail }> {
   const forbidden = await refuseNonStaff();
   if (forbidden) return forbidden;
 
@@ -206,14 +205,17 @@ export async function replaceMediaAssetFileAction(
   const body = new FormData();
   body.append("files", file);
 
-  const suffix = opts.force ? "?force=true" : "";
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/media-assets/${documentId}/replace${suffix}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/media-assets/${documentId}/replace`,
       { method: "POST", headers: jwt ? { Authorization: `Bearer ${jwt}` } : undefined, body },
     );
     const data = await res.json().catch(() => null);
-    if (res.status === 409) return { mismatch: true };
+    // 409 = the new file's format differs from the current one. The backend
+    // message names the required format; surface it as a plain error.
+    if (res.status === 409) {
+      return { error: data?.error?.message ?? "Fișierul nou are alt format decât cel curent." };
+    }
     if (!res.ok) throw new ApiError(data?.error?.message ?? "Înlocuirea a eșuat.", res.status);
     for (const cale of (data?.meta?.revalidate ?? []) as string[]) revalidatePath(cale);
     revalidateDashboardPath(LIBRARY_PATH);
@@ -310,6 +312,20 @@ export async function createMediaTagAction(
     return { tag: data };
   } catch (err) {
     return { error: getApiErrorMessage(err, "Nu am putut crea eticheta.") };
+  }
+}
+
+export async function deleteMediaTagAction(
+  documentId: string,
+): Promise<{ error?: string; ok?: boolean }> {
+  const forbidden = await refuseNonStaff();
+  if (forbidden) return forbidden;
+  try {
+    await serverApiFetch(`/api/media-tags/${documentId}`, { method: "DELETE" });
+    revalidateDashboardPath(LIBRARY_PATH);
+    return { ok: true };
+  } catch (err) {
+    return { error: getApiErrorMessage(err, "Nu am putut șterge eticheta.") };
   }
 }
 

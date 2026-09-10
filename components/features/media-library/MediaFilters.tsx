@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Search } from "lucide-react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { Search, X } from "lucide-react";
+import { toast } from "sonner";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { deleteMediaTagAction } from "@/lib/api/media-library-actions";
 import type { MediaTag } from "@/lib/api/media-library-types";
 
 const SEARCH_DEBOUNCE_MS = 300;
@@ -21,6 +24,7 @@ export function MediaFilters({
   tags,
   lockedTip,
   onChange,
+  onTagDeleted,
 }: {
   search: string;
   tip: string;
@@ -33,6 +37,13 @@ export function MediaFilters({
    */
   lockedTip?: "image" | "video" | "file";
   onChange: (next: { search: string; tip: string; tagSlugs: string[] }) => void;
+  /**
+   * When provided, each tag chip gets a delete control that removes the tag from
+   * the library (via `deleteMediaTagAction`), and this fires afterwards so the
+   * caller can re-pull the tag list. Omit it to render read-only filter chips
+   * (the in-builder picker does this).
+   */
+  onTagDeleted?: () => void;
 }) {
   const [searchDraft, setSearchDraft] = useState(search);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -41,6 +52,8 @@ export function MediaFilters({
   // without a setState-in-effect — React's "adjust state on prop change"
   // pattern, mirroring AssetDetailPanel's `seededFor` guard.
   const [syncedTo, setSyncedTo] = useState(search);
+  const [deletingTag, setDeletingTag] = useState<MediaTag | null>(null);
+  const [deletePending, startDelete] = useTransition();
 
   // Only adopt the incoming prop when it genuinely changed from what we last
   // synced AND no debounced push is in flight — otherwise the round-trip echo of
@@ -76,6 +89,12 @@ export function MediaFilters({
     }
   };
 
+  const clearSearch = () => {
+    flushSearch();
+    setSearchDraft("");
+    onChange({ search: "", tip: lockedTip ?? tip, tagSlugs });
+  };
+
   const handleTipChange = (next: string) => {
     flushSearch();
     onChange({ search: searchDraft, tip: lockedTip ?? next, tagSlugs });
@@ -87,6 +106,28 @@ export function MediaFilters({
       : [...tagSlugs, slug];
     flushSearch();
     onChange({ search: searchDraft, tip: lockedTip ?? tip, tagSlugs: nextTagSlugs });
+  };
+
+  const handleDeleteTag = (tag: MediaTag) => {
+    startDelete(async () => {
+      const res = await deleteMediaTagAction(tag.documentId);
+      if (res.error) {
+        toast.error(res.error);
+        return;
+      }
+      toast.success("Etichetă ștearsă.");
+      setDeletingTag(null);
+      // Drop a filter for the now-deleted tag before asking the caller to refetch.
+      if (tagSlugs.includes(tag.slug)) {
+        flushSearch();
+        onChange({
+          search: searchDraft,
+          tip: lockedTip ?? tip,
+          tagSlugs: tagSlugs.filter((s) => s !== tag.slug),
+        });
+      }
+      onTagDeleted?.();
+    });
   };
 
   return (
@@ -101,8 +142,20 @@ export function MediaFilters({
           onChange={(event) => handleSearchChange(event.target.value)}
           placeholder="Caută după titlu…"
           aria-label="Caută după titlu"
-          className="w-full rounded-xl border border-border py-2.5 pl-10 pr-4 text-sm focus:border-[#2dbe8f] focus:outline-none"
+          className={`w-full rounded-xl border border-border py-2.5 pl-10 text-sm focus:border-[#2dbe8f] focus:outline-none ${
+            searchDraft ? "pr-10" : "pr-4"
+          }`}
         />
+        {searchDraft && (
+          <button
+            type="button"
+            onClick={clearSearch}
+            aria-label="Șterge căutarea"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-[#94a3b8] transition-colors hover:bg-slate-100 hover:text-[#475569]"
+          >
+            <X size={14} />
+          </button>
+        )}
       </div>
 
       {!lockedTip && (
@@ -118,24 +171,56 @@ export function MediaFilters({
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => {
             const selected = tagSlugs.includes(tag.slug);
+            const chipTone = selected
+              ? "bg-[#2dbe8f] text-white"
+              : "bg-slate-100 text-[#475569]";
             return (
-              <button
+              <span
                 key={tag.id}
-                type="button"
-                aria-pressed={selected}
-                onClick={() => toggleTag(tag.slug)}
-                className={`rounded-full px-3 py-1 text-xs transition-colors ${
-                  selected
-                    ? "bg-[#2dbe8f] text-white"
-                    : "bg-slate-100 text-[#475569]"
-                }`}
+                className={`inline-flex items-center rounded-full text-xs transition-colors ${chipTone}`}
               >
-                {tag.nume}
-              </button>
+                <button
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => toggleTag(tag.slug)}
+                  className={`rounded-full py-1 pl-3 ${onTagDeleted ? "pr-1.5" : "pr-3"}`}
+                >
+                  {tag.nume}
+                </button>
+                {onTagDeleted && (
+                  <button
+                    type="button"
+                    onClick={() => setDeletingTag(tag)}
+                    disabled={deletePending}
+                    aria-label={`Șterge eticheta ${tag.nume}`}
+                    className={`mr-1 rounded-full p-0.5 transition-colors disabled:opacity-50 ${
+                      selected ? "hover:bg-white/20" : "hover:bg-slate-200"
+                    }`}
+                  >
+                    <X size={12} />
+                  </button>
+                )}
+              </span>
             );
           })}
         </div>
       )}
+
+      <ConfirmDialog
+        open={deletingTag !== null}
+        title="Ștergi eticheta?"
+        description={
+          deletingTag
+            ? `Eticheta „${deletingTag.nume}” va fi ștearsă definitiv și eliminată de pe toate imaginile.`
+            : ""
+        }
+        confirmLabel="Șterge eticheta"
+        confirmVariant="danger"
+        loading={deletePending}
+        loadingLabel="Se șterge…"
+        onConfirm={() => deletingTag && handleDeleteTag(deletingTag)}
+        onCancel={() => setDeletingTag(null)}
+      />
     </div>
   );
 }

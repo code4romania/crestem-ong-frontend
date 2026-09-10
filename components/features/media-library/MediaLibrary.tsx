@@ -219,6 +219,7 @@ export function MediaLibrary({
           tagSlugs={query.etichete}
           tags={tags}
           onChange={applyFilters}
+          onTagDeleted={() => router.refresh()}
         />
       </div>
 

@@ -1,27 +1,5 @@
 import { zip, type Zippable } from "fflate";
-
-/**
- * Media origins this endpoint is allowed to fetch from. Always the API host
- * (relative `/uploads/...` paths resolve here); `MEDIA_ALLOWED_ORIGINS` adds
- * any extra host that serves uploads in a given deployment (e.g. the S3 bucket
- * `https://<bucket>.s3.<region>.amazonaws.com`).
- */
-const API_ORIGIN = (() => {
-  try {
-    return new URL(process.env.NEXT_PUBLIC_API_URL ?? "").origin;
-  } catch {
-    return "";
-  }
-})();
-
-const ALLOWED_ORIGINS = new Set(
-  [
-    API_ORIGIN,
-    ...(process.env.MEDIA_ALLOWED_ORIGINS ?? "")
-      .split(",")
-      .map((s) => s.trim()),
-  ].filter(Boolean),
-);
+import { resolveMediaUrl, safeSegment } from "@/lib/api/media-download";
 
 /** Public endpoint guardrails — a crafted body can only ever hit the media host. */
 const MAX_FILES = 50;
@@ -33,35 +11,6 @@ const FETCH_TIMEOUT_MS = 15_000;
 interface ReqFile {
   url: string;
   name: string;
-}
-
-/**
- * Resolve a block file URL to an absolute URL on an allowed media origin, or
- * `null` if it points anywhere else. This is what keeps the public endpoint
- * from being an open SSRF proxy: only relative paths (served by the API host)
- * and absolute URLs whose origin is allow-listed get fetched.
- */
-function resolveMediaUrl(raw: string): string | null {
-  if (typeof raw !== "string" || raw === "") return null;
-  // Relative path on the API host. Reject protocol-relative ("//evil.com").
-  if (raw.startsWith("/") && !raw.startsWith("//")) {
-    return API_ORIGIN ? `${API_ORIGIN}${raw}` : null;
-  }
-  let url: URL;
-  try {
-    url = new URL(raw);
-  } catch {
-    return null;
-  }
-  if (url.protocol !== "http:" && url.protocol !== "https:") return null;
-  if (!ALLOWED_ORIGINS.has(url.origin)) return null;
-  return url.toString();
-}
-
-/** Strip characters that are illegal in a zip entry / filesystem path. */
-function safeSegment(raw: string, fallback: string): string {
-  const cleaned = raw.replace(/[/\\?%*:|"<>]/g, "_").trim();
-  return cleaned || fallback;
 }
 
 /**
