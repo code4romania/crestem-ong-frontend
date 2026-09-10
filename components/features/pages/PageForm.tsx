@@ -3,46 +3,44 @@
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { PageBuilder } from "@/components/features/page-builder/PageBuilder";
 import type { BlockInstance } from "@/components/features/page-builder/types";
+import {
+  ContentEditorShell,
+  inputClass,
+  type ContentEditorValue,
+} from "@/components/features/content-editor/ContentEditorShell";
 import {
   createPageAction,
   setPagePublishedAction,
   updatePageAction,
 } from "@/lib/api/pages-actions";
-import type { PageDetail, PageOption, VisibilityAudience } from "@/lib/api/pages-types";
-import { VisibilityField } from "./VisibilityField";
+import type { PageDetail, PageOption } from "@/lib/api/pages-types";
+import type { LibraryCategory } from "@/lib/api/library-categories-types";
 
 /** A page's path may hold at most this many segments, matching the backend. */
 const MAX_PATH_DEPTH = 4;
 
-const inputClass =
-  "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#2dbe8f] focus:outline-none";
-
-/** `Despre noi` -> `despre-noi`. Diacritics folded so the slug stays url-safe. */
-function slugify(value: string): string {
-  return value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-export function PageForm({ page, pages }: { page: PageDetail | null; pages: PageOption[] }) {
+export function PageForm({
+  page,
+  pages,
+  categories = [],
+}: {
+  page: PageDetail | null;
+  pages: PageOption[];
+  categories?: LibraryCategory[];
+}) {
   const router = useRouter();
-  const [titlu, setTitlu] = useState(page?.titlu ?? "");
-  const [slug, setSlug] = useState(page?.slug ?? "");
-  const [slugTouched, setSlugTouched] = useState(Boolean(page));
+  const [content, setContent] = useState<ContentEditorValue>({
+    titlu: page?.titlu ?? "",
+    slug: page?.slug ?? "",
+    vizibilitate: page?.vizibilitate ?? ["public"],
+    blocuri: (page?.blocuri as BlockInstance[]) ?? [],
+  });
   const [parinte, setParinte] = useState<string | null>(page?.parinte ?? null);
-  const [vizibilitate, setVizibilitate] = useState<VisibilityAudience[]>(
-    page?.vizibilitate ?? ["public"],
-  );
-  const [blocuri, setBlocuri] = useState<BlockInstance[]>(
-    (page?.blocuri as BlockInstance[]) ?? [],
-  );
   const [publicat, setPublicat] = useState(page?.publicat ?? false);
   const [pending, startTransition] = useTransition();
+
+  const { titlu, slug, vizibilitate, blocuri } = content;
 
   /**
    * A page cannot sit under itself or under one of its own subpages — that
@@ -88,13 +86,6 @@ export function PageForm({ page, pages }: { page: PageDetail | null; pages: Page
     const parentCale = pages.find((option) => option.documentId === parinte)?.cale ?? "";
     return `${parentCale}/${slug.trim() || "…"}`;
   }, [pages, parinte, slug]);
-
-  const changeTitlu = (value: string) => {
-    setTitlu(value);
-    // The slug follows the title until the editor writes one by hand; after
-    // that it is theirs, and a rename must not silently break existing links.
-    if (!slugTouched) setSlug(slugify(value));
-  };
 
   /**
    * `asDraft` is the "Salvează ca draft" shortcut: it saves the content and
@@ -176,126 +167,89 @@ export function PageForm({ page, pages }: { page: PageDetail | null; pages: Page
         {page ? page.cale : "Completează informațiile, apoi adaugă conținutul."}
       </p>
 
-      <div className="mb-6 space-y-5 rounded-xl border border-border bg-white p-6">
-        <div className="grid gap-5 sm:grid-cols-2">
-          <div>
-            <label htmlFor="page-titlu" className="mb-1.5 block text-xs font-semibold text-[#475569]">
-              Titlu
-            </label>
-            <input
-              id="page-titlu"
-              value={titlu}
-              onChange={(event) => changeTitlu(event.target.value)}
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="page-slug" className="mb-1.5 block text-xs font-semibold text-[#475569]">
-              Slug
-            </label>
-            <input
-              id="page-slug"
-              value={slug}
-              onChange={(event) => {
-                setSlugTouched(true);
-                setSlug(event.target.value);
-              }}
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="page-parinte"
-              className="mb-1.5 block text-xs font-semibold text-[#475569]"
-            >
-              Pagină părinte
-            </label>
-            <select
-              id="page-parinte"
-              value={parinte ?? ""}
-              onChange={(event) => setParinte(event.target.value || null)}
-              className={inputClass}
-            >
-              <option value="">Fără (pagină de nivel principal)</option>
-              {parentOptions.map((option) => (
-                <option key={option.documentId} value={option.documentId}>
-                  {option.titlu} ({option.cale})
-                </option>
-              ))}
-            </select>
-            <p className="mt-1.5 text-xs text-muted-foreground">
-              Adresa paginii: <span className="font-medium">{previewCale}</span>
-            </p>
-          </div>
-          <div>
-            <label
-              htmlFor="page-status"
-              className="mb-1.5 block text-xs font-semibold text-[#475569]"
-            >
-              Status
-            </label>
-            <select
-              id="page-status"
-              value={publicat ? "publicat" : "schita"}
-              onChange={(event) => setPublicat(event.target.value === "publicat")}
-              className={inputClass}
-            >
-              <option value="schita">Schiță</option>
-              <option value="publicat">Publicat</option>
-            </select>
-            <p className="mt-1.5 text-xs text-muted-foreground">
-              O schiță nu apare pe site. Statusul se aplică la salvare.
-            </p>
-          </div>
-        </div>
-
-        <VisibilityField value={vizibilitate} onChange={setVizibilitate} />
-      </div>
-
-      <PageBuilder
-        value={blocuri}
-        onChange={setBlocuri}
+      <ContentEditorShell
+        value={content}
+        onChange={setContent}
+        hasExistingRecord={Boolean(page)}
+        pending={pending}
+        onSave={() => save()}
+        onCancel={() => router.push("/dashboard/pagini")}
         pages={pages}
         currentPageId={page?.documentId ?? null}
         currentPath={previewCale}
-      />
-
-      <div className="mt-6 flex justify-end gap-3">
-        <button
-          type="button"
-          onClick={() => router.push("/dashboard/pagini")}
-          disabled={pending}
-          className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
-        >
-          Anulează
-        </button>
-        {/* The draft shortcut only makes sense while creating: an existing page
-            already has a status, and the select above is where it changes. */}
-        {!page && (
-          <button
-            type="button"
-            onClick={() => save(true)}
-            disabled={pending}
-            className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
-          >
-            Salvează ca draft
-          </button>
-        )}
-        <button
-          type="button"
-          onClick={() => save()}
-          disabled={pending}
-          className="rounded-xl bg-[#2dbe8f] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-        >
-          {pending
+        categories={categories}
+        saveLabel={
+          pending
             ? "Se salvează…"
             : page
               ? "Salvează modificările"
               : publicat
                 ? "Publică pagina"
-                : "Salvează"}
-        </button>
-      </div>
+                : "Salvează"
+        }
+        extraFields={
+          <>
+            <div>
+              <label
+                htmlFor="page-parinte"
+                className="mb-1.5 block text-xs font-semibold text-[#475569]"
+              >
+                Pagină părinte
+              </label>
+              <select
+                id="page-parinte"
+                value={parinte ?? ""}
+                onChange={(event) => setParinte(event.target.value || null)}
+                className={inputClass}
+              >
+                <option value="">Fără (pagină de nivel principal)</option>
+                {parentOptions.map((option) => (
+                  <option key={option.documentId} value={option.documentId}>
+                    {option.titlu} ({option.cale})
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1.5 text-xs text-muted-foreground">
+                Adresa paginii: <span className="font-medium">{previewCale}</span>
+              </p>
+            </div>
+            <div>
+              <label
+                htmlFor="page-status"
+                className="mb-1.5 block text-xs font-semibold text-[#475569]"
+              >
+                Status
+              </label>
+              <select
+                id="page-status"
+                value={publicat ? "publicat" : "schita"}
+                onChange={(event) => setPublicat(event.target.value === "publicat")}
+                className={inputClass}
+              >
+                <option value="schita">Schiță</option>
+                <option value="publicat">Publicat</option>
+              </select>
+              <p className="mt-1.5 text-xs text-muted-foreground">
+                O schiță nu apare pe site. Statusul se aplică la salvare.
+              </p>
+            </div>
+          </>
+        }
+        extraActions={
+          /* The draft shortcut only makes sense while creating: an existing page
+             already has a status, and the select above is where it changes. */
+          !page ? (
+            <button
+              type="button"
+              onClick={() => save(true)}
+              disabled={pending}
+              className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
+            >
+              Salvează ca draft
+            </button>
+          ) : null
+        }
+      />
     </div>
   );
 }

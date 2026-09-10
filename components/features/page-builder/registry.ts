@@ -4,9 +4,10 @@ import { heroCenteredBlock } from "./blocks/hero-centered";
 import { heroIntroBlock } from "./blocks/hero-intro";
 import { heroStatisticsBlock } from "./blocks/hero-statistics";
 import { programHeaderBlock } from "./blocks/program-header";
+import { articleHeaderBlock } from "./blocks/article-header";
 import { featureCardsBlock } from "./blocks/feature-cards";
 import { partnersBlock } from "./blocks/partners";
-import { articleGridBlock } from "./blocks/article-grid";
+import { bibliotecaCategoriiBlock } from "./blocks/biblioteca-categorii";
 import { programmeGridBlock } from "./blocks/programme-grid";
 import { peopleGridBlock } from "./blocks/people-grid";
 import { categoryGridBlock } from "./blocks/category-grid";
@@ -32,6 +33,7 @@ import { numberedProcessBlock } from "./blocks/numbered-process";
 import { statisticsBlock } from "./blocks/statistics";
 import { spacerBlock } from "./blocks/spacer";
 import { dividerBlock } from "./blocks/divider";
+import { customHtmlBlock } from "./blocks/custom-html";
 
 /**
  * Every working block, keyed by `type`. Adding another is a new folder under
@@ -43,9 +45,10 @@ export const BLOCK_REGISTRY: Record<string, BlockDefinition> = {
   [heroIntroBlock.type]: heroIntroBlock,
   [heroStatisticsBlock.type]: heroStatisticsBlock,
   [programHeaderBlock.type]: programHeaderBlock,
+  [articleHeaderBlock.type]: articleHeaderBlock,
   [featureCardsBlock.type]: featureCardsBlock,
   [partnersBlock.type]: partnersBlock,
-  [articleGridBlock.type]: articleGridBlock,
+  [bibliotecaCategoriiBlock.type]: bibliotecaCategoriiBlock,
   [programmeGridBlock.type]: programmeGridBlock,
   [peopleGridBlock.type]: peopleGridBlock,
   [categoryGridBlock.type]: categoryGridBlock,
@@ -71,6 +74,7 @@ export const BLOCK_REGISTRY: Record<string, BlockDefinition> = {
   [statisticsBlock.type]: statisticsBlock,
   [spacerBlock.type]: spacerBlock,
   [dividerBlock.type]: dividerBlock,
+  [customHtmlBlock.type]: customHtmlBlock,
 };
 
 export const CATEGORY_ORDER: BlockCategory[] = [
