@@ -2,6 +2,7 @@
 
 import { createContext, useContext, type ReactNode } from "react";
 import type { PageOption } from "@/lib/api/pages-types";
+import type { LibraryCategory } from "@/lib/api/library-categories-types";
 
 /** What a link field needs to know about the page it is being edited on. */
 export interface PageOptionsValue {
@@ -10,16 +11,25 @@ export interface PageOptionsValue {
   currentPageId: string | null;
   /** That page's path as it will be after saving, shown on the offer. */
   currentPath: string;
+  /** The library taxonomy, so `biblioteca-categorii` previews on the canvas. */
+  categories: LibraryCategory[];
 }
 
-const EMPTY: PageOptionsValue = { pages: [], currentPageId: null, currentPath: "" };
+const EMPTY: PageOptionsValue = {
+  pages: [],
+  currentPageId: null,
+  currentPath: "",
+
+  categories: [],
+};
 
 const PageOptionsContext = createContext<PageOptionsValue>(EMPTY);
 
 /**
- * The site's pages, offered to every CTA field in the builder. Block editors
- * receive only `value`/`onChange`/`errors`, so the list travels by context
- * rather than through each block's props.
+ * The site's pages and the library's taxonomy, offered to every
+ * block editor in the builder. Block editors receive only
+ * `value`/`onChange`/`errors`, so these lists travel by context rather than
+ * through each block's props.
  */
 export function PageOptionsProvider({
   value,

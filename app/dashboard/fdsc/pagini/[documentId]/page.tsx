@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getPage, listPageOptions } from "@/lib/api/pages";
+import { listLibraryCategories } from "@/lib/api/library-categories";
 import { PageForm } from "@/components/features/pages/PageForm";
 
 export default async function Page({
@@ -16,5 +17,12 @@ export default async function Page({
     notFound();
   }
 
-  return <PageForm page={page} pages={await listPageOptions()} />;
+  const [pages, categories] = await Promise.all([
+    listPageOptions(),
+    listLibraryCategories(),
+  ]);
+
+  return (
+    <PageForm page={page} pages={pages} categories={categories} />
+  );
 }

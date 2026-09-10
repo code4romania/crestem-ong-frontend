@@ -45,8 +45,11 @@ import {
 } from "./blocks/columns/ColumnsCanvas";
 import type { SectionData } from "./blocks/section/schema";
 import { PageOptionsProvider } from "./blocks/shared/page-options";
+import { RenderModeProvider } from "./blocks/shared/render-mode";
 import { resolveBlockLinks } from "./blocks/shared/resolve-links";
+import { resolveBlockCategories } from "./blocks/shared/resolve-categories";
 import type { PageOption } from "@/lib/api/pages-types";
+import type { LibraryCategory } from "@/lib/api/library-categories-types";
 import type { ColumnsData } from "./blocks/columns/schema";
 import type { BlockFieldErrors, BlockInstance } from "./types";
 
@@ -174,19 +177,34 @@ function moveInArray<T>(items: T[], index: number, dir: -1 | 1): T[] {
 export function PageBuilder({
   value,
   onChange,
+  title = "Pagini",
+  description = "Adaugă secțiuni de conținut în pagină.",
   pages = [],
   currentPageId = null,
   currentPath = "",
+
+  categories = [],
 }: {
   /** Controlled tree. Omit both props to keep the standalone behaviour. */
   value?: BlockInstance[];
   onChange?: (blocks: BlockInstance[]) => void;
+  /**
+   * The canvas heading and the line under it. Defaulted to the page wording the
+   * builder shipped with, so a consumer that says nothing is unchanged; an
+   * article supplies its own rather than reading "…în pagină".
+   */
+  title?: string;
+  description?: string;
   /** The site's pages, so a CTA can point at one and the preview can resolve it. */
   pages?: PageOption[];
   /** The page being edited, so a link can offer to file its target underneath. */
   currentPageId?: string | null;
   /** That page's path as it will be after saving. */
   currentPath?: string;
+
+
+  /** The library taxonomy, so `biblioteca-categorii` previews on the canvas. */
+  categories?: LibraryCategory[];
 } = {}) {
   const [ownBlocks, setOwnBlocks] = useState<BlockInstance[]>([]);
   const blocks = value ?? ownBlocks;
@@ -559,22 +577,24 @@ export function PageBuilder({
               : "overflow-hidden rounded-2xl border border-border bg-white"
           }
         >
-          <Renderer data={resolveBlockLinks(block.data, pages)} />
+          <Renderer
+            data={resolveBlockCategories(resolveBlockLinks(block.data, pages), categories, block.type)}
+          />
         </div>
       </div>
     );
   };
 
   return (
-    <PageOptionsProvider value={{ pages, currentPageId, currentPath }}>
+    <PageOptionsProvider value={{ pages, currentPageId, currentPath, categories }}>
       <div className="mx-auto max-w-6xl">
         <div className="mb-6 flex items-center justify-between gap-4">
           <div>
             <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
-              Pagini
+              {title}
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Adaugă secțiuni de conținut în pagină.
+              {description}
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-3">
@@ -671,17 +691,25 @@ export function PageBuilder({
                 </button>
               </div>
               <div className="min-h-0 flex-1 overflow-y-auto">
-                {blocks.map((block) => {
-                  const definition = BLOCK_REGISTRY[block.type];
-                  if (!definition) return null;
-                  const { Renderer } = definition;
-                  return (
-                    <Renderer
-                      key={block.id}
-                      data={resolveBlockLinks(block.data, pages)}
-                    />
-                  );
-                })}
+                {/* Overrides the surrounding "editor" mode: here a
+                    custom-html block renders for real, inside an iframe. */}
+                <RenderModeProvider value="preview">
+                  {blocks.map((block) => {
+                    const definition = BLOCK_REGISTRY[block.type];
+                    if (!definition) return null;
+                    const { Renderer } = definition;
+                    return (
+                      <Renderer
+                        key={block.id}
+                        data={resolveBlockCategories(
+                          resolveBlockLinks(block.data, pages),
+                          categories,
+                          block.type,
+                        )}
+                      />
+                    );
+                  })}
+                </RenderModeProvider>
               </div>
             </div>
           </ModalPortal>
