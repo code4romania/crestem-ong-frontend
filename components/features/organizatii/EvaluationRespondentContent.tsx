@@ -2,7 +2,10 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import type { OngEvaluationDetail, OngEvaluationRespondent } from "@/lib/api/ongs";
 import type { Dimension } from "@/lib/api/dimensions";
-import { DimensionsBreakdown } from "@/components/features/evaluari/DimensionsBreakdown";
+import {
+  DimensionsBreakdown,
+  type SelectedAnswers,
+} from "@/components/features/evaluari/DimensionsBreakdown";
 import { collectComments } from "./evaluation-comments";
 import { respondentIndex, respondentLabel } from "./respondent-label";
 
@@ -30,6 +33,19 @@ export function EvaluationRespondentContent({
     respondentIndex(respondents, respondent.documentId),
     anonymous,
   );
+
+  // This page exists to show what this one member answered — FDSC staff and the
+  // resource person need the picked options, not the percentages the aggregate
+  // report already carries.
+  const answers: SelectedAnswers = {};
+  for (const block of respondent.dimensions ?? []) {
+    for (const entry of block.quiz ?? []) {
+      answers[entry.questionId] = {
+        answer: entry.answer,
+        answerLabel: entry.answerLabel,
+      };
+    }
+  }
   return (
     <div>
       <Link
@@ -52,6 +68,7 @@ export function EvaluationRespondentContent({
         scores={respondent.scores}
         comments={collectComments([respondent], { attributed: false })}
         commentsOpen
+        answers={answers}
       />
     </div>
   );
