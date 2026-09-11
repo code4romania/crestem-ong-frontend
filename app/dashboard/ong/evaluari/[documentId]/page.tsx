@@ -118,10 +118,10 @@ export default async function OngEvaluareDetailPage({
         <div className="bg-white rounded-xl border border-border p-5">
           <p className="text-xs mb-2 text-muted-foreground">Scor total</p>
           <p className="text-3xl font-extrabold font-heading" style={{ color: "#162040" }}>
-            {report.scores.overall != null ? `${report.scores.overall}%` : "—"}
+            {report.finished && report.scores.overall != null ? `${report.scores.overall}%` : "—"}
           </p>
           <p className="text-xs mt-1 text-muted-foreground">
-            {report.scores.overall != null ? "" : "disponibil la finalizare"}
+            {report.finished && report.scores.overall != null ? "" : "disponibil la finalizare"}
           </p>
         </div>
       </div>
@@ -146,11 +146,22 @@ export default async function OngEvaluareDetailPage({
         </p>
       </div>
 
-      <DimensionsBreakdown
-        dimensions={dimensionsRes}
-        scores={report.scores}
-        comments={report.comments}
-      />
+      {report.finished ? (
+        <DimensionsBreakdown
+          dimensions={dimensionsRes}
+          scores={report.scores}
+          comments={report.comments}
+        />
+      ) : (
+        <div className="bg-white rounded-xl border border-border p-6 mb-8">
+          <h2 className="font-bold text-base mb-2" style={{ color: "#162040" }}>
+            Dimensiuni evaluate
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Scorurile și argumentele completate de membri vor fi disponibile după finalizarea evaluării.
+          </p>
+        </div>
+      )}
 
       <ReportMembersTable
         reportId={documentId}

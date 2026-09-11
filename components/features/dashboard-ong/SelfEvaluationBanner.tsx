@@ -88,7 +88,7 @@ export function SelfEvaluationBanner({
         className="shrink-0 inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
         style={{ background: "#2dbe8f", boxShadow: "0 4px 16px rgba(45,190,143,0.3)" }}
       >
-        {done ? "Vezi rezultatele" : started ? "Continuă evaluarea" : "Pornește evaluarea"}
+        {done ? "Vezi rezultatele tale" : started ? "Continuă evaluarea" : "Pornește evaluarea"}
       </Link>
     </div>
   );
