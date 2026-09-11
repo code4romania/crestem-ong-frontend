@@ -147,10 +147,12 @@ export default async function OngEvaluareDetailPage({
       </div>
 
       {report.finished ? (
+        // ONG admin sees scores only — arguments risk revealing who wrote them, so
+        // none are passed to this client component (comments stay FDSC/mentor-only).
         <DimensionsBreakdown
           dimensions={dimensionsRes}
           scores={report.scores}
-          comments={report.comments}
+          comments={{}}
         />
       ) : (
         <div className="bg-white rounded-xl border border-border p-6 mb-8">
