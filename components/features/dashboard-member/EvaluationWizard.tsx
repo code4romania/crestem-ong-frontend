@@ -188,7 +188,7 @@ export function EvaluationWizard({
   }
 
   if (evaluation.completedAt && wasAlreadyComplete) {
-    return <EvaluationResults evaluation={evaluation} backHref={backHref} />;
+    return <EvaluationResults evaluation={evaluation} dimensions={dimensions} backHref={backHref} />;
   }
 
   if (evaluation.completedAt) {
