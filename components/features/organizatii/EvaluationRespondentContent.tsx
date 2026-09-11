@@ -67,7 +67,7 @@ export function EvaluationRespondentContent({
         dimensions={dimensions}
         scores={respondent.scores}
         comments={collectComments([respondent], { attributed: false })}
-        commentsOpen
+        detailsOpen
         answers={answers}
       />
     </div>

@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { CheckCircle2, ChevronDown, Circle, MessageSquare } from "lucide-react";
-import type { Dimension } from "@/lib/api/dimensions";
+import type { Dimension, DimensionQuestion } from "@/lib/api/dimensions";
 import type { EvaluationAnswer } from "@/lib/api/evaluations";
 import type { DimensionComment, ReportScores } from "@/lib/api/reports";
-import { dimensionColor } from "@/lib/api/dimension-colors";
+import { dimensionColor, dimensionPillStyle } from "@/lib/api/dimension-colors";
 
 /** Selected option per question, keyed by `questionId` — see `answers` below. */
 export type SelectedAnswers = Record<
@@ -14,9 +14,9 @@ export type SelectedAnswers = Record<
 >;
 
 /**
- * The option a single respondent picked for one sub-indicator, shown under the
- * percentage bar. FDSC staff and the resource person open a member's own matrix
- * to read these; the bar alone never says which of the five answers was given.
+ * The option a single respondent picked for one sub-indicator, shown in the
+ * expanded details. FDSC staff and the resource person open a member's own matrix
+ * to read these; the chip alone only carries the score, not which answer it came from.
  */
 function SelectedAnswer({
   entry,
@@ -67,52 +67,129 @@ function ScoreBar({
   );
 }
 
-function CommentsToggle({
+/** One sub-indicator, rendered as a pill carrying its own tag/label and score. */
+function SubindicatorChip({ question, score }: { question: DimensionQuestion; score: number | null }) {
+  return (
+    <span
+      className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-semibold leading-none"
+      style={dimensionPillStyle(score)}
+    >
+      {question.tag ?? question.question}
+      <span className="opacity-70">· {score != null ? `${score}%` : "—"}</span>
+    </span>
+  );
+}
+
+/**
+ * One dimension card: name + description + overall score, the sub-indicators as
+ * chips, and (when there's anything to show) a "Detalii" toggle revealing the
+ * picked answer per sub-indicator and the free-text arguments respondents wrote.
+ */
+function DimensionCard({
+  dimension,
+  score,
+  questionScores,
   comments,
   defaultOpen,
+  answers,
 }: {
+  dimension: Dimension;
+  score: number | null;
+  questionScores: ReportScores["questions"];
   comments: DimensionComment[];
   defaultOpen: boolean;
+  answers?: SelectedAnswers;
 }) {
   const [open, setOpen] = useState(defaultOpen);
-
-  if (comments.length === 0) {
-    return null;
-  }
+  const hasDetails = Boolean(answers) || comments.length > 0;
 
   return (
-    <div className="ml-7 mt-3">
-      <button
-        type="button"
-        onClick={() => setOpen((value) => !value)}
-        aria-expanded={open}
-        className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
-        style={{ color: "#64748b" }}
-      >
-        <MessageSquare size={13} />
-        Argumente ({comments.length})
-        <ChevronDown
-          size={13}
-          className="transition-transform"
-          style={{ transform: open ? "rotate(180deg)" : undefined }}
-        />
-      </button>
-      {open && (
-        <div className="mt-2 space-y-2">
-          {comments.map((comment, index) => (
-            <div
-              key={index}
-              className="rounded-lg px-3 py-2.5 text-xs"
-              style={{ background: "#f8fafc", border: "1px solid #e2e8f0", color: "#334155" }}
-            >
-              {comment.author && (
-                <p className="font-semibold mb-1" style={{ color: "#162040" }}>
-                  {comment.author}
-                </p>
-              )}
-              <p className="whitespace-pre-wrap">{comment.text}</p>
+    <div className="py-4 border-b border-border last:border-0">
+      <div className="flex items-center gap-3">
+        {score != null ? (
+          <CheckCircle2 size={16} className="flex-shrink-0" style={{ color: "#2dbe8f" }} />
+        ) : (
+          <Circle size={16} className="flex-shrink-0" style={{ color: "#cbd5e1" }} />
+        )}
+        <span className="flex-1 text-sm font-semibold" style={{ color: "#162040" }}>
+          {dimension.name}
+        </span>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <ScoreBar score={score} width="w-28" height="h-2" />
+          <span className="text-sm font-bold w-12 text-right" style={{ color: dimensionColor(score) }}>
+            {score != null ? `${score}%` : "—"}
+          </span>
+        </div>
+      </div>
+
+      {dimension.description && (
+        <p className="ml-7 mt-1 text-xs" style={{ color: "#94a3b8" }}>
+          {dimension.description}
+        </p>
+      )}
+
+      <div className="ml-7 mt-3 flex flex-wrap gap-2">
+        {(dimension.quiz ?? []).map((question) => (
+          <SubindicatorChip key={question.id} question={question} score={questionScores?.[question.id] ?? null} />
+        ))}
+      </div>
+
+      {hasDetails && (
+        <button
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+          className="ml-7 mt-3 inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
+          style={{ color: "#64748b" }}
+        >
+          <MessageSquare size={13} />
+          Detalii{comments.length > 0 ? ` (${comments.length} argumente)` : ""}
+          <ChevronDown
+            size={13}
+            className="transition-transform"
+            style={{ transform: open ? "rotate(180deg)" : undefined }}
+          />
+        </button>
+      )}
+
+      {open && hasDetails && (
+        <div className="ml-7 mt-3 space-y-4">
+          {answers && (
+            <div className="space-y-3">
+              {(dimension.quiz ?? []).map((question) => (
+                <div key={question.id}>
+                  {question.tag && (
+                    <p className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#94a3b8" }}>
+                      {question.tag}
+                    </p>
+                  )}
+                  <p className="text-xs" style={{ color: "#64748b" }}>
+                    {question.question}
+                  </p>
+                  <SelectedAnswer entry={answers[question.id]} />
+                </div>
+              ))}
             </div>
-          ))}
+          )}
+
+          {comments.length > 0 && (
+            <div className="space-y-2">
+              {comments.map((comment, index) => (
+                <div
+                  key={index}
+                  className="rounded-lg px-3 py-2.5 text-xs"
+                  style={{ background: "#f8fafc", border: "1px solid #e2e8f0", color: "#334155" }}
+                >
+                  {comment.author && (
+                    <p className="font-semibold mb-1" style={{ color: "#162040" }}>
+                      {comment.author}
+                    </p>
+                  )}
+                  <p className="whitespace-pre-wrap">{comment.text}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -120,31 +197,30 @@ function CommentsToggle({
 }
 
 /**
- * The "Dimensiuni evaluate" panel: one row per dimension, the sub-indicator
- * (per-question) scores under it, and the arguments respondents wrote. Shared by
- * the ONG admin report page and the FDSC/mentor organization pages, which differ
- * only in the data they hand in — the ONG admin's `comments` never carry an
- * author.
+ * The "Dimensiuni evaluate" panel: one card per dimension with its description,
+ * sub-indicators as scored chips, and an overall score. Shared by the ONG admin
+ * report page and the FDSC/mentor organization pages, which differ only in the
+ * data they hand in — the ONG admin's `comments` never carry an author.
  *
- * `commentsOpen` expands every argument on mount, for the single-respondent page
- * where the text a member wrote is the point of the page rather than an aside.
+ * `detailsOpen` expands every card's details on mount, for the single-respondent
+ * page where the text a member wrote is the point of the page rather than an aside.
  *
- * `answers` adds, under each sub-indicator's percentage bar, the option the
- * respondent actually chose. Passed only on a single member's own matrix
- * (FDSC / resource-person view); omitted on the aggregate report, where a raw
- * answer would mean nothing.
+ * `answers` adds, inside each card's details, the option the respondent actually
+ * chose per sub-indicator. Passed only on a single member's own matrix (FDSC /
+ * resource-person view); omitted on the aggregate report, where a raw answer
+ * would mean nothing.
  */
 export function DimensionsBreakdown({
   dimensions,
   scores,
   comments,
-  commentsOpen = false,
+  detailsOpen = false,
   answers,
 }: {
   dimensions: Dimension[];
   scores: ReportScores;
   comments: Record<string, DimensionComment[]>;
-  commentsOpen?: boolean;
+  detailsOpen?: boolean;
   answers?: SelectedAnswers;
 }) {
   return (
@@ -153,81 +229,17 @@ export function DimensionsBreakdown({
         Dimensiuni evaluate
       </h2>
       <div className="space-y-0">
-        {dimensions.map((dimension) => {
-          const score = scores.dimensions?.[dimension.key] ?? null;
-          return (
-            <div key={dimension.key} className="py-4 border-b border-border last:border-0">
-              <div className="flex items-center gap-3 mb-3">
-                {score != null ? (
-                  <CheckCircle2 size={16} className="flex-shrink-0" style={{ color: "#2dbe8f" }} />
-                ) : (
-                  <Circle size={16} className="flex-shrink-0" style={{ color: "#cbd5e1" }} />
-                )}
-                <span className="flex-1 text-sm font-semibold" style={{ color: "#162040" }}>
-                  {dimension.name}
-                </span>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <ScoreBar score={score} width="w-28" height="h-2" />
-                  <span
-                    className="text-sm font-bold w-12 text-right"
-                    style={{ color: dimensionColor(score) }}
-                  >
-                    {score != null ? `${score}%` : "—"}
-                  </span>
-                </div>
-              </div>
-
-              <div className={answers ? "ml-7 space-y-3" : "ml-7 space-y-1.5"}>
-                {(dimension.quiz ?? []).map((question) => {
-                  const questionScore = scores.questions?.[question.id] ?? null;
-                  if (answers) {
-                    return (
-                      <div key={question.id}>
-                        {question.tag && (
-                          <p
-                            className="text-[11px] font-semibold uppercase tracking-wide"
-                            style={{ color: "#94a3b8" }}
-                          >
-                            {question.tag}
-                          </p>
-                        )}
-                        <div className="flex items-center gap-2">
-                          <span className="flex-1 text-xs" style={{ color: "#64748b" }}>
-                            {question.question}
-                          </span>
-                          <ScoreBar score={questionScore} width="w-24" height="h-1.5" />
-                          <span
-                            className="text-xs font-semibold w-12 text-right"
-                            style={{ color: dimensionColor(questionScore) }}
-                          >
-                            {questionScore != null ? `${questionScore}%` : "—"}
-                          </span>
-                        </div>
-                        <SelectedAnswer entry={answers[question.id]} />
-                      </div>
-                    );
-                  }
-                  return (
-                    <div key={question.id} className="flex items-center gap-2">
-                      <span className="flex-1 text-xs" style={{ color: "#64748b" }}>
-                        {question.tag ?? question.question}
-                      </span>
-                      <ScoreBar score={questionScore} width="w-24" height="h-1.5" />
-                      <span
-                        className="text-xs font-semibold w-12 text-right"
-                        style={{ color: dimensionColor(questionScore) }}
-                      >
-                        {questionScore != null ? `${questionScore}%` : "—"}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <CommentsToggle comments={comments[dimension.key] ?? []} defaultOpen={commentsOpen} />
-            </div>
-          );
-        })}
+        {dimensions.map((dimension) => (
+          <DimensionCard
+            key={dimension.key}
+            dimension={dimension}
+            score={scores.dimensions?.[dimension.key] ?? null}
+            questionScores={scores.questions}
+            comments={comments[dimension.key] ?? []}
+            defaultOpen={detailsOpen}
+            answers={answers}
+          />
+        ))}
       </div>
     </div>
   );

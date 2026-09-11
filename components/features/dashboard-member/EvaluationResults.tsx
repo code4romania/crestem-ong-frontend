@@ -96,7 +96,7 @@ export function EvaluationResults({
         dimensions={dimensions}
         scores={evaluation.scores}
         comments={comments}
-        commentsOpen
+        detailsOpen
         answers={answers}
       />
     </div>
