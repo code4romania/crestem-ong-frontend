@@ -28,6 +28,7 @@ export function login(payload: LoginPayload) {
 
 export interface CurrentUser {
   id: number;
+  documentId: string;
   /** Accounts created by an admin (e.g. invited mentors) come back without a name. */
   nume: string | null;
   email: string;

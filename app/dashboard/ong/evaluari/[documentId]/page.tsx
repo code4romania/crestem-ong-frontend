@@ -1,4 +1,5 @@
 import { serverApiFetch } from "@/lib/api/server";
+import { getCurrentUser } from "@/lib/api/session-server";
 import { EvaluationTabs } from "@/components/features/overview/EvaluationTabs";
 import { findActiveReport } from "@/lib/api/reports";
 import type { ReportDetail, ReportMembers, OngMember, ReportsCurrent } from "@/lib/api/reports";
@@ -6,6 +7,7 @@ import type { Dimension } from "@/lib/api/dimensions";
 import { DimensionsBreakdown } from "@/components/features/evaluari/DimensionsBreakdown";
 import { ReportDetailActions } from "@/components/features/dashboard-ong/ReportDetailActions";
 import { ReportMembersTable } from "@/components/features/dashboard-ong/ReportMembersTable";
+import { SelfEvaluationBanner } from "@/components/features/dashboard-ong/SelfEvaluationBanner";
 
 const BASE_PATH = "/dashboard/evaluari";
 
@@ -22,12 +24,13 @@ export default async function OngEvaluareDetailPage({
 }) {
   const { documentId } = await params;
 
-  const [reportRes, membersRes, ongMembersRes, dimensionsRes, currentRes] = await Promise.all([
+  const [reportRes, membersRes, ongMembersRes, dimensionsRes, currentRes, currentUser] = await Promise.all([
     serverApiFetch<{ data: ReportDetail }>(`/api/reports/${documentId}`),
     serverApiFetch<{ data: ReportMembers }>(`/api/reports/${documentId}/members`),
     serverApiFetch<{ data: OngMember[] }>("/api/ongs/members"),
     serverApiFetch<Dimension[]>("/api/dimensions"),
     serverApiFetch<{ data: ReportsCurrent }>("/api/reports/current"),
+    getCurrentUser(),
   ]);
 
   const report = reportRes.data;
@@ -54,6 +57,10 @@ export default async function OngEvaluareDetailPage({
 
   const completion = report.invitedCount > 0 ? Math.round((report.completedCount / report.invitedCount) * 100) : 0;
 
+  const myEntry = currentUser
+    ? (membersRes.data.invited.find((entry) => entry.user?.documentId === currentUser.documentId) ?? null)
+    : null;
+
   return (
     <div>
       <EvaluationTabs
@@ -64,6 +71,15 @@ export default async function OngEvaluareDetailPage({
         }
         comparisonHref={`${BASE_PATH}/comparatie`}
       />
+
+      {currentUser && (
+        <SelfEvaluationBanner
+          reportId={documentId}
+          currentUserDocumentId={currentUser.documentId}
+          myEntry={myEntry}
+          canSelfInvite={!report.finished}
+        />
+      )}
 
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>

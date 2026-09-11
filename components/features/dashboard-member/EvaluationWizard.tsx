@@ -63,11 +63,14 @@ export function EvaluationWizard({
   evaluationDocumentId,
   dimensions,
   initialEvaluation,
+  backHref: backHrefProp,
 }: {
-  ongDocumentId: string;
+  ongDocumentId?: string;
   evaluationDocumentId: string;
   dimensions: Dimension[];
   initialEvaluation: EvaluationDetail;
+  /** Defaults to the ngo-member's own org page (needs ongDocumentId); the ngo-admin self-fill route overrides it directly. */
+  backHref?: string;
 }) {
   const router = useRouter();
   const [evaluation, setEvaluation] = useState(initialEvaluation);
@@ -78,7 +81,7 @@ export function EvaluationWizard({
   const [activeAction, setActiveAction] = useState<"dimension" | "draft" | "finalize" | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const backHref = `/dashboard/${ongDocumentId}`;
+  const backHref = backHrefProp ?? `/dashboard/${ongDocumentId}`;
   const currentKey = evaluation.progress.nextDimension;
   const closedEarly = Boolean(evaluation.report?.finished) && !evaluation.completedAt;
   const hasStarted = evaluation.progress.completedDimensions.length > 0 || evaluation.progress.draftDimensions.length > 0;
