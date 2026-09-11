@@ -5,6 +5,7 @@ import { Film, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
+import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { uploadPageVideoAction } from "@/lib/api/page-blocks-actions";
 import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL } from "../../upload";
 import type { BlockFieldErrors } from "../../types";
@@ -34,6 +35,7 @@ export function VideoEditor({
 }) {
   const [isUploading, startUpload] = useTransition();
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const set = (patch: Partial<VideoData>) => onChange({ ...value, ...patch });
@@ -142,6 +144,29 @@ export function VideoEditor({
           />
           {uploadError && <p className={errorClass}>{uploadError}</p>}
 
+          <button
+            type="button"
+            onClick={() => setPickerOpen(true)}
+            className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+          >
+            Alege din bibliotecă
+          </button>
+          <MediaLibraryPicker
+            open={pickerOpen}
+            multiple={false}
+            accept="video"
+            onClose={() => setPickerOpen(false)}
+            onPick={([file]) => {
+              set({
+                fisier: { id: file.id, url: file.url, name: file.name },
+                ...(file.alternativeText && !value.altText
+                  ? { altText: file.alternativeText }
+                  : {}),
+              });
+              setPickerOpen(false);
+            }}
+          />
+
           <label htmlFor="video-sursa-url" className={`${labelClass} mt-3`}>
             sau lipește un URL
           </label>
@@ -154,7 +179,7 @@ export function VideoEditor({
             aria-invalid={Boolean(errors.sursaUrl)}
           />
           <p className={hintClass}>
-            Fișierul încărcat are prioritate față de URL. Media Library urmează.
+            Fișierul încărcat are prioritate față de URL.
           </p>
           {errors.sursaUrl && <p className={errorClass}>{errors.sursaUrl}</p>}
         </div>

@@ -138,5 +138,5 @@ export function useGalleryLightbox(images: GalleryImage[]) {
     </div>
   ) : null;
 
-  return { open, overlay };
+  return { open, overlay, isOpen };
 }

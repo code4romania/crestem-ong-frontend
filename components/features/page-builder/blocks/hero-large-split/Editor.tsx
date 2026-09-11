@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { ImagePlus, Loader2 } from "lucide-react";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { getMediaUrl } from "@/lib/api/client";
 import { usePageImageUpload } from "../../upload";
 import { CtaTargetField } from "../shared/CtaTargetField";
@@ -31,6 +33,8 @@ export function HeroLargeSplitEditor({
     error: uploadError,
     fileInputRef,
   } = usePageImageUpload((image) => set({ image }));
+
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   return (
     <div className="space-y-5">
@@ -133,12 +137,26 @@ export function HeroLargeSplitEditor({
         />
         <button
           type="button"
-          disabled
-          title="În curând"
-          className="mt-2 text-xs font-semibold text-[#94a3b8]"
+          onClick={() => setPickerOpen(true)}
+          className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
         >
-          Alege din Media Library · în curând
+          Alege din bibliotecă
         </button>
+        <MediaLibraryPicker
+          open={pickerOpen}
+          multiple={false}
+          accept="image"
+          onClose={() => setPickerOpen(false)}
+          onPick={([file]) => {
+            set({
+              image: { id: file.id, url: file.url, name: file.name },
+              ...(file.alternativeText && !value.imageAlt
+                ? { imageAlt: file.alternativeText }
+                : {}),
+            });
+            setPickerOpen(false);
+          }}
+        />
         {uploadError && <p className={errorClass}>{uploadError}</p>}
       </div>
 

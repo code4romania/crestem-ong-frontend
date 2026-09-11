@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import type { Dimension } from "@/lib/api/dimensions";
 import type { EvaluationDetail } from "@/lib/api/evaluations";
-import { dimensionColor, dimensionPillStyle } from "@/lib/api/dimension-colors";
+import { DimensionsBreakdown, type SelectedAnswers } from "@/components/features/evaluari/DimensionsBreakdown";
+import { collectComments } from "@/components/features/organizatii/evaluation-comments";
 
 const MONTHS_RO = ["ian", "feb", "mar", "apr", "mai", "iun", "iul", "aug", "sep", "oct", "noi", "dec"];
 
@@ -24,10 +26,27 @@ function formatIndependentPeriod(createdAt: string, finished: boolean, finishedA
   return `${formatShortDate(createdAt)} – ${end}`;
 }
 
-export function EvaluationResults({ evaluation, backHref }: { evaluation: EvaluationDetail; backHref: string }) {
+export function EvaluationResults({
+  evaluation,
+  dimensions,
+  backHref,
+}: {
+  evaluation: EvaluationDetail;
+  dimensions: Dimension[];
+  backHref: string;
+}) {
   const phase = evaluation.report?.phases[0] ?? null;
   const programName = phase?.program?.name ?? null;
-  const blockByKey = new Map(evaluation.dimensions.map((block) => [block.dimensionKey, block]));
+
+  // Same shape the FDSC/mentor single-respondent view uses (EvaluationRespondentContent) —
+  // the member should see the same sub-indicator scores and picked answers on their own matrix.
+  const answers: SelectedAnswers = {};
+  for (const block of evaluation.dimensions ?? []) {
+    for (const entry of block.quiz ?? []) {
+      answers[entry.questionId] = { answer: entry.answer, answerLabel: entry.answerLabel };
+    }
+  }
+  const comments = collectComments([evaluation], { attributed: false });
 
   return (
     <div>
@@ -73,51 +92,13 @@ export function EvaluationResults({ evaluation, backHref }: { evaluation: Evalua
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-border p-6">
-        <h2 className="font-bold text-base mb-5" style={{ color: "#162040" }}>
-          Răspunsurile mele pe dimensiuni
-        </h2>
-        <div className="space-y-0">
-          {evaluation.progress.completedDimensions.map((dimensionKey) => {
-            const block = blockByKey.get(dimensionKey);
-            if (!block) return null;
-            const score = evaluation.scores.dimensions[dimensionKey] ?? null;
-            const color = dimensionColor(score);
-            const tags = Array.from(new Set(block.quiz.map((q) => q.tag).filter((tag): tag is string => !!tag)));
-            return (
-              <div key={dimensionKey} className="py-4 border-b border-border last:border-0">
-                <div className="flex items-center gap-3 mb-2">
-                  <CheckCircle2 size={18} className="flex-shrink-0" style={{ color: "#2dbe8f" }} />
-                  <span className="flex-1 text-base font-semibold" style={{ color: "#162040" }}>
-                    {block.name}
-                  </span>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <div className="w-28 h-2 rounded-full overflow-hidden" style={{ background: "#e2e8f0" }}>
-                      <div className="h-full rounded-full" style={{ width: `${score ?? 0}%`, background: color }} />
-                    </div>
-                    <span className="text-base font-bold w-12 text-right" style={{ color }}>
-                      {score != null ? `${score}%` : "—"}
-                    </span>
-                  </div>
-                </div>
-                {tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 ml-7">
-                    {tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2.5 py-0.5 rounded-full text-xs font-medium"
-                        style={dimensionPillStyle(score)}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <DimensionsBreakdown
+        dimensions={dimensions}
+        scores={evaluation.scores}
+        comments={comments}
+        detailsOpen
+        answers={answers}
+      />
     </div>
   );
 }

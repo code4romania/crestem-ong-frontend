@@ -16,7 +16,9 @@ export function OngCard({ ong }: { ong: Ong }) {
           </div>
           <div className="min-w-0">
             {/* The badge is a sibling of the truncating heading, not inside it —
-              inside, a long organization name would ellipsize it away. */}
+              inside, a long organization name would ellipsize it away. The
+              description sits below the title, not beside it, so a narrow
+              content column can't squeeze the name down to an ellipsis. */}
             <div className="flex items-center gap-2 min-w-0">
               <h3
                 className="font-semibold truncate min-w-0"
@@ -24,19 +26,19 @@ export function OngCard({ ong }: { ong: Ong }) {
               >
                 {ong.name}
               </h3>
-              {ong.descriere && (
-                <p
-                  className="mt-0.5 text-sm line-clamp-2"
-                  style={{ color: "#64748b" }}
-                >
-                  {ong.descriere}
-                </p>
+              {isRetras(ong) && (
+                <span className="shrink-0 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">
+                  Retras
+                </span>
               )}
             </div>
-            {isRetras(ong) && (
-              <span className="shrink-0 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">
-                Retras
-              </span>
+            {ong.descriere && (
+              <p
+                className="mt-0.5 text-sm line-clamp-2"
+                style={{ color: "#64748b" }}
+              >
+                {ong.descriere}
+              </p>
             )}
           </div>
         </div>
