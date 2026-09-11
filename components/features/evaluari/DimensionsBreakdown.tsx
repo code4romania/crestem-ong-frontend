@@ -82,8 +82,10 @@ function SubindicatorChip({ question, score }: { question: DimensionQuestion; sc
 
 /**
  * One dimension card: name + description + overall score, the sub-indicators as
- * chips, and (when there's anything to show) a "Detalii" toggle revealing the
- * picked answer per sub-indicator and the free-text arguments respondents wrote.
+ * chips with their full question text listed below (the chip's tag alone isn't
+ * descriptive enough to place the sub-indicator), and (when there's anything to
+ * show) a "Detalii" toggle revealing the picked answer per sub-indicator and the
+ * free-text arguments respondents wrote.
  */
 function DimensionCard({
   dimension,
@@ -134,6 +136,20 @@ function DimensionCard({
         ))}
       </div>
 
+      <div className="ml-7 mt-2 space-y-1">
+        {(dimension.quiz ?? []).map((question) => (
+          <p key={question.id} className="text-xs" style={{ color: "#64748b" }}>
+            {question.tag && (
+              <span className="font-semibold" style={{ color: "#94a3b8" }}>
+                {question.tag}
+                {" · "}
+              </span>
+            )}
+            {question.question}
+          </p>
+        ))}
+      </div>
+
       {hasDetails && (
         <button
           type="button"
@@ -143,7 +159,7 @@ function DimensionCard({
           style={{ color: "#64748b" }}
         >
           <MessageSquare size={13} />
-          Detalii{comments.length > 0 ? ` (${comments.length} argumente)` : ""}
+          Detalii{comments.length > 0 ? ` (${comments.length} ${comments.length === 1 ? "comentariu" : "comentarii"})` : ""}
           <ChevronDown
             size={13}
             className="transition-transform"
