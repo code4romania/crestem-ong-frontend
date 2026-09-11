@@ -5,6 +5,7 @@ import { DashboardStatCard } from "@/components/features/dashboard/DashboardStat
 import { MissingReportsAlert } from "@/components/features/dashboard-mentor/MissingReportsAlert";
 import { NextMeetingBanner } from "@/components/features/dashboard-mentor/NextMeetingBanner";
 import { CurrentProgramsCard } from "@/components/features/dashboard-mentor/CurrentProgramsCard";
+import { MentoredOngsCard } from "@/components/features/dashboard-mentor/MentoredOngsCard";
 
 export default async function MentorDashboardPage() {
   const { data } = await getMentorDashboard();
@@ -59,6 +60,8 @@ export default async function MentorDashboardPage() {
       <NextMeetingBanner meeting={data.nextMeeting} />
 
       <CurrentProgramsCard programs={data.currentPrograms} />
+
+      <MentoredOngsCard mentoredOngs={data.mentoredOngs} />
     </div>
   );
 }

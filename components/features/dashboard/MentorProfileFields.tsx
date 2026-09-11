@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ChangeEvent, DragEvent, MouseEvent } from "react";
 import { Upload, X } from "lucide-react";
 import type { Dimension } from "@/lib/api/dimensions";
+import { RichTextField } from "@/components/features/page-builder/rich-text/RichTextField";
 
 const ACCEPTED_AVATAR_TYPES = ["image/png", "image/jpeg", "image/webp"];
 const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
@@ -149,16 +150,12 @@ export function MentorProfileFields({
       </div>
 
       <div>
-        <label htmlFor="fdsc-user-bio" className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
+        <label className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
           Bio
         </label>
-        <textarea
-          id="fdsc-user-bio"
-          className={inputClass}
-          rows={3}
+        <RichTextField
           value={value.bio}
-          onChange={(e) => onChange({ ...value, bio: e.target.value })}
-          placeholder="Câteva rânduri despre experiența mentorului"
+          onChange={(bio) => onChange({ ...value, bio })}
         />
       </div>
 

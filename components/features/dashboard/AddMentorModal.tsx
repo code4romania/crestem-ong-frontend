@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Loader2, X } from "lucide-react";
 import { createFdscUserAction, uploadUserAvatarAction } from "@/lib/api/users-actions";
 import type { Dimension } from "@/lib/api/dimensions";
+import { hasRichText, sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize";
 import { MentorProfileFields, type MentorProfileFieldsValue } from "./MentorProfileFields";
 import { ModalOverlay } from "@/components/ui/ModalOverlay";
 
@@ -51,7 +52,7 @@ export function AddMentorModal({ dimensions, onClose }: { dimensions: Dimension[
           role: "mentor",
           nume,
           email,
-          ...(mentorFields.bio.trim() ? { bio: mentorFields.bio.trim() } : {}),
+          ...(hasRichText(mentorFields.bio) ? { bio: sanitizeRichText(mentorFields.bio) } : {}),
           ...(avatarId !== undefined ? { avatar: avatarId } : {}),
           ...(mentorFields.selectedDimensions.length > 0
             ? { dimensiuni: mentorFields.selectedDimensions }

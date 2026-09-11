@@ -7,6 +7,8 @@ import { userDisplayName } from "@/lib/api/auth";
 import type { Dimension } from "@/lib/api/dimensions";
 import type { MentorProfile } from "@/lib/api/mentor-profile";
 import { EditMentorProfileModal } from "./EditMentorProfileModal";
+import { hasRichText, sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize";
+import { RICH_TEXT_PROSE } from "@/components/features/page-builder/rich-text/prose";
 
 function formatJoinDate(iso: string) {
   return new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "long", year: "numeric" }).format(new Date(iso));
@@ -81,9 +83,16 @@ export function MentorProfileDetailsCard({
       <div className="space-y-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">Bio</p>
-          <p className="text-sm" style={{ color: "#334155" }}>
-            {profile.bio || "Nicio descriere adăugată încă."}
-          </p>
+          {profile.bio && hasRichText(profile.bio) ? (
+            <div
+              className={RICH_TEXT_PROSE}
+              dangerouslySetInnerHTML={{ __html: sanitizeRichText(profile.bio) }}
+            />
+          ) : (
+            <p className="text-sm" style={{ color: "#334155" }}>
+              Nicio descriere adăugată încă.
+            </p>
+          )}
         </div>
 
         <div>

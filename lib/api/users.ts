@@ -14,7 +14,11 @@ export interface AdminUser {
   bio: string | null;
   dimensiuni: string[];
   ariiDeExpertiza: string[];
-  programs: { documentId: string; name: string }[];
+  programs: {
+    documentId: string;
+    name: string;
+    ongs: { documentId: string; name: string }[];
+  }[];
   activationLink?: string;
 }
 
