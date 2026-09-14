@@ -8,7 +8,6 @@ import { Loader2, MailCheck, X } from "lucide-react";
 import { toast } from "sonner";
 import { requestEmailChangeAction } from "@/lib/api/auth-actions";
 import { PasswordInput } from "@/components/features/auth/PasswordInput";
-import { CopyableLink } from "@/components/ui/CopyableLink";
 import { ModalOverlay } from "@/components/ui/ModalOverlay";
 
 /** Mirrors `requestEmailChangeSchema` in the backend's auth validation. */
@@ -26,7 +25,7 @@ const inputClass =
 
 export function ChangeEmailModal({ onClose }: { onClose: () => void }) {
   const [isPending, startTransition] = useTransition();
-  const [sent, setSent] = useState<{ email: string; link?: string } | null>(null);
+  const [sent, setSent] = useState<{ email: string } | null>(null);
   const {
     register,
     handleSubmit,
@@ -43,7 +42,13 @@ export function ChangeEmailModal({ onClose }: { onClose: () => void }) {
         toast.error(result.error);
         return;
       }
-      setSent({ email: data.email, link: result.confirmationLink });
+      if (!result.emailSent) {
+        toast.error(
+          "Nu am putut trimite emailul de confirmare. Încearcă din nou mai târziu.",
+        );
+        return;
+      }
+      setSent({ email: data.email });
     });
   };
 
@@ -57,7 +62,7 @@ export function ChangeEmailModal({ onClose }: { onClose: () => void }) {
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
               {sent
-                ? "Deschide linkul de confirmare pentru a finaliza schimbarea."
+                ? "Ți-am trimis un email de confirmare pe noua adresă."
                 : "Confirmă parola curentă, apoi introdu noua adresă."}
             </p>
           </div>
@@ -84,23 +89,10 @@ export function ChangeEmailModal({ onClose }: { onClose: () => void }) {
                 </p>
               </div>
 
-              {sent.link ? (
-                <div>
-                  <p className="text-xs font-semibold mb-1.5" style={{ color: "#475569" }}>
-                    Link de confirmare
-                  </p>
-                  <CopyableLink
-                    href={sent.link}
-                    inputLabel="Link de confirmare a adresei de email"
-                    copyLabel="Copiază linkul de confirmare"
-                    className="w-full"
-                  />
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  Ți-am trimis un email de confirmare la noua adresă.
-                </p>
-              )}
+              <p className="text-sm text-muted-foreground">
+                Ți-am trimis un email de confirmare la noua adresă. Dacă nu
+                ajunge în câteva minute, verifică și folderul de spam.
+              </p>
             </div>
 
             <div className="px-6 py-4 border-t border-border">

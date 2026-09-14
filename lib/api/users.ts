@@ -15,7 +15,6 @@ export interface AdminUser {
   dimensiuni: string[];
   ariiDeExpertiza: string[];
   programs: { documentId: string; name: string }[];
-  activationLink?: string;
 }
 
 export interface UsersPagination {

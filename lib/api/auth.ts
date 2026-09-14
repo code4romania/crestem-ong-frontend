@@ -105,3 +105,28 @@ export function activateAccount(payload: ActivateAccountPayload) {
     body: JSON.stringify(payload),
   });
 }
+
+/**
+ * Always resolves with the same message whether or not an account matches —
+ * the backend answers identically on purpose, so callers must not treat a
+ * success as proof the address exists.
+ */
+export function forgotPassword(payload: { email: string }) {
+  return apiFetch<{ message: string }>("/api/auth/forgot-password", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  password: string;
+  confirmedPassword: string;
+}
+
+export function resetPassword(payload: ResetPasswordPayload) {
+  return apiFetch<{ message: string }>("/api/auth/reset-password", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -105,9 +106,18 @@ export function LoginForm() {
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
-          Parolă
-        </label>
+        <div className="flex items-baseline justify-between gap-3 mb-1.5">
+          <label htmlFor="password" className="block text-sm font-semibold" style={{ color: "#334155" }}>
+            Parolă
+          </label>
+          <Link
+            href="/parola-uitata"
+            className="text-xs font-semibold transition-opacity hover:opacity-75"
+            style={{ color: "#2dbe8f" }}
+          >
+            Ai uitat parola?
+          </Link>
+        </div>
         <PasswordInput
           id="password"
           autoComplete="current-password"

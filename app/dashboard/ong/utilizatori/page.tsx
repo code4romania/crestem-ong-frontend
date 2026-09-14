@@ -1,11 +1,9 @@
-import { headers } from "next/headers";
 import { serverApiFetch } from "@/lib/api/server";
 import type { OngMember } from "@/lib/api/reports";
 import type { OngJoinRequest } from "@/lib/api/membership";
 import { OngUtilizatoriHeaderActions } from "@/components/features/organizatii/OngUtilizatoriHeaderActions";
 import { RemoveOngMemberButton } from "@/components/features/organizatii/RemoveOngMemberButton";
 import { ResendInvitationButton } from "@/components/features/organizatii/ResendInvitationButton";
-import { MemberActivationLink } from "@/components/features/organizatii/MemberActivationLink";
 import { JoinRequestsSection } from "@/components/features/organizatii/JoinRequestsSection";
 
 function statusBadge(status: OngMember["accountStatus"]) {
@@ -19,34 +17,11 @@ function formatDate(iso: string) {
   return dateFormatter.format(new Date(iso));
 }
 
-/**
- * The API may hand back either an absolute activation URL or a path. Resolving
- * a path needs an origin, and reading it from the request keeps the rendered
- * markup identical on server and client (no post-mount rewrite, no mismatch).
- */
-async function requestOrigin(): Promise<string> {
-  const headerList = await headers();
-  const host = headerList.get("x-forwarded-host") ?? headerList.get("host") ?? "";
-  const proto = headerList.get("x-forwarded-proto") ?? "http";
-  return host ? `${proto}://${host}` : "";
-}
-
-function activationHref(link: string, origin: string): string {
-  if (/^https?:\/\//i.test(link)) return link;
-  return origin ? new URL(link, origin).toString() : link;
-}
-
 export default async function UtilizatoriPage() {
   const [{ data: members }, { data: joinRequests }] = await Promise.all([
     serverApiFetch<{ data: OngMember[] }>("/api/ongs/members"),
     serverApiFetch<{ data: OngJoinRequest[] }>("/api/ongs/join-requests"),
   ]);
-
-  // Temporary column: the API only returns `activationLink` while invitation
-  // emails are unavailable. Guarding on the field — not on `accountStatus` —
-  // makes the column disappear on its own once the backend stops sending it.
-  const showActivationLink = members.some((member) => Boolean(member.activationLink));
-  const origin = showActivationLink ? await requestOrigin() : "";
 
   return (
     <div>
@@ -88,7 +63,6 @@ export default async function UtilizatoriPage() {
                   "Rol",
                   "Status",
                   "Afiliat din",
-                  ...(showActivationLink ? ["Link activare"] : []),
                   "Acțiuni",
                 ].map((h) => (
                   <th
@@ -133,18 +107,6 @@ export default async function UtilizatoriPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3.5" style={{ color: "#475569" }}>{formatDate(member.createdAt)}</td>
-                    {showActivationLink && (
-                      <td className="px-4 py-3.5">
-                        {member.activationLink ? (
-                          <MemberActivationLink
-                            href={activationHref(member.activationLink, origin)}
-                            nume={member.nume}
-                          />
-                        ) : (
-                          <span style={{ color: "#94a3b8" }}>—</span>
-                        )}
-                      </td>
-                    )}
                     <td className="px-4 py-3.5">
                       <div className="flex items-start gap-2">
                         {member.accountStatus === "pending" && (
