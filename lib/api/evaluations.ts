@@ -22,6 +22,8 @@ export interface MyOng {
   /** The member's own function in this organization. Null for memberships created before roles existed. */
   rol: string | null;
   programs: MyOngProgram[];
+  /** The newest evaluation round this member still owes a response on, or null if none is open. */
+  pendingEvaluation: { documentId: string; status: EvaluationStatus } | null;
 }
 
 export interface EvaluationProgress {
