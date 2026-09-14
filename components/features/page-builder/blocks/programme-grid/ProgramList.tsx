@@ -13,6 +13,7 @@ import {
 import { CtaTargetField } from "../shared/CtaTargetField";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
+import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { IconPicker } from "./IconPicker";
 import { PROGRAMME_ICONS } from "./icons";
 import { EMPTY_PROGRAM, type Program } from "./schema";
@@ -44,17 +45,20 @@ export function ProgramList({
   const [draft, setDraft] = useState<Program>(EMPTY_PROGRAM);
   const [isUploading, startUpload] = useTransition();
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const openNew = () => {
     setDraft({ ...EMPTY_PROGRAM });
     setUploadError(null);
+    setPickerOpen(false);
     setEditing(value.length);
   };
 
   const openExisting = (index: number) => {
     setDraft({ ...value[index] });
     setUploadError(null);
+    setPickerOpen(false);
     setEditing(index);
   };
 
@@ -190,12 +194,26 @@ export function ProgramList({
             />
             <button
               type="button"
-              disabled
-              title="În curând"
-              className="mt-2 text-xs font-semibold text-[#94a3b8]"
+              onClick={() => setPickerOpen(true)}
+              className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
             >
-              Alege din Media Library · în curând
+              Alege din bibliotecă
             </button>
+            <MediaLibraryPicker
+              open={pickerOpen}
+              multiple={false}
+              accept="image"
+              onClose={() => setPickerOpen(false)}
+              onPick={([file]) => {
+                setField({
+                  imagine: { id: file.id, url: file.url, name: file.name },
+                  ...(file.alternativeText && !draft.imagineAlt
+                    ? { imagineAlt: file.alternativeText }
+                    : {}),
+                });
+                setPickerOpen(false);
+              }}
+            />
             {uploadError && <p className={errorClass}>{uploadError}</p>}
           </div>
 

@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { ImagePlus, Loader2 } from "lucide-react";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
+import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { getMediaUrl } from "@/lib/api/client";
 import { usePageImageUpload } from "../../upload";
 import type { BlockFieldErrors } from "../../types";
@@ -31,6 +33,8 @@ export function ImageEditor({
     error: uploadError,
     fileInputRef,
   } = usePageImageUpload((image) => set({ image }));
+
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   return (
     <div className="space-y-5">
@@ -91,12 +95,26 @@ export function ImageEditor({
         />
         <button
           type="button"
-          disabled
-          title="În curând"
-          className="mt-2 text-xs font-semibold text-[#94a3b8]"
+          onClick={() => setPickerOpen(true)}
+          className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
         >
-          Alege din Media Library · în curând
+          Alege din bibliotecă
         </button>
+        <MediaLibraryPicker
+          open={pickerOpen}
+          multiple={false}
+          accept="image"
+          onClose={() => setPickerOpen(false)}
+          onPick={([file]) => {
+            set({
+              image: { id: file.id, url: file.url, name: file.name },
+              ...(file.alternativeText && !value.altText
+                ? { altText: file.alternativeText }
+                : {}),
+            });
+            setPickerOpen(false);
+          }}
+        />
         {errors.image && <p className={errorClass}>{errors.image}</p>}
         {uploadError && <p className={errorClass}>{uploadError}</p>}
       </div>

@@ -1,9 +1,47 @@
 "use server";
 
 import { getApiErrorMessage, ApiError } from "./client";
+import { serverApiFetch } from "./server";
+import { revalidateDashboardPath } from "@/lib/api/revalidate";
 import { getCurrentUser } from "./session-server";
 import { SESSION_COOKIE } from "./session-cookies";
 import { isFdscStaff } from "@/lib/roles";
+
+const LIBRARY_PATH = "/dashboard/fdsc/media-library";
+
+const stripExt = (name: string) => name.replace(/\.[^.]+$/, "");
+
+/**
+ * Best-effort: mirror a just-uploaded page-block file into the Media Library
+ * (`media-asset`) so it shows up next to manually-added assets and can be
+ * reused from the "Alege din bibliotecă" picker on other blocks — matching what
+ * `uploadMediaAssetsBatchAction` does (title = file name without extension, no
+ * tags). The block only needs the `/api/upload` result to work, so any failure
+ * here is logged and swallowed and the upload row is left in place for the
+ * block/page media resolver. A 409 means the file is already registered.
+ */
+async function registerInMediaLibrary(
+  fisierId: number,
+  rawName: unknown,
+  fallbackTitlu: string,
+): Promise<void> {
+  const stripped =
+    typeof rawName === "string" ? stripExt(rawName).trim() : "";
+  const titlu = (stripped || fallbackTitlu).slice(0, 200);
+  try {
+    await serverApiFetch("/api/media-assets", {
+      method: "POST",
+      body: JSON.stringify({ fisierId, titlu }),
+    });
+    revalidateDashboardPath(LIBRARY_PATH);
+  } catch (err) {
+    console.error(
+      "[page-blocks-actions] media-library registration failed",
+      fisierId,
+      err,
+    );
+  }
+}
 
 export interface UploadedPageImage {
   id: number;
@@ -47,6 +85,7 @@ export async function uploadPageImageAction(
     if (typeof file?.id !== "number" || typeof file?.url !== "string") {
       return { error: "Nu am putut încărca imaginea." };
     }
+    await registerInMediaLibrary(file.id, file.name, "Imagine");
     return {
       image: {
         id: file.id,
@@ -98,6 +137,7 @@ export async function uploadPageVideoAction(
     if (typeof file?.id !== "number" || typeof file?.url !== "string") {
       return { error: "Nu am putut încărca fișierul video." };
     }
+    await registerInMediaLibrary(file.id, file.name, "Fișier video");
     return {
       video: {
         id: file.id,
@@ -165,6 +205,7 @@ export async function uploadPageDocumentAction(
       );
       return { error: "Nu am putut încărca documentul." };
     }
+    await registerInMediaLibrary(file.id, file.name, "Document");
     return {
       document: {
         id: file.id,

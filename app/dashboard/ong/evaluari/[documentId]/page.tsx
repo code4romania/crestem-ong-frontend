@@ -1,4 +1,5 @@
 import { serverApiFetch } from "@/lib/api/server";
+import { getCurrentUser } from "@/lib/api/session-server";
 import { EvaluationTabs } from "@/components/features/overview/EvaluationTabs";
 import { findActiveReport } from "@/lib/api/reports";
 import type { ReportDetail, ReportMembers, OngMember, ReportsCurrent } from "@/lib/api/reports";
@@ -6,6 +7,7 @@ import type { Dimension } from "@/lib/api/dimensions";
 import { DimensionsBreakdown } from "@/components/features/evaluari/DimensionsBreakdown";
 import { ReportDetailActions } from "@/components/features/dashboard-ong/ReportDetailActions";
 import { ReportMembersTable } from "@/components/features/dashboard-ong/ReportMembersTable";
+import { SelfEvaluationBanner } from "@/components/features/dashboard-ong/SelfEvaluationBanner";
 
 const BASE_PATH = "/dashboard/evaluari";
 
@@ -22,12 +24,13 @@ export default async function OngEvaluareDetailPage({
 }) {
   const { documentId } = await params;
 
-  const [reportRes, membersRes, ongMembersRes, dimensionsRes, currentRes] = await Promise.all([
+  const [reportRes, membersRes, ongMembersRes, dimensionsRes, currentRes, currentUser] = await Promise.all([
     serverApiFetch<{ data: ReportDetail }>(`/api/reports/${documentId}`),
     serverApiFetch<{ data: ReportMembers }>(`/api/reports/${documentId}/members`),
     serverApiFetch<{ data: OngMember[] }>("/api/ongs/members"),
     serverApiFetch<Dimension[]>("/api/dimensions"),
     serverApiFetch<{ data: ReportsCurrent }>("/api/reports/current"),
+    getCurrentUser(),
   ]);
 
   const report = reportRes.data;
@@ -54,6 +57,10 @@ export default async function OngEvaluareDetailPage({
 
   const completion = report.invitedCount > 0 ? Math.round((report.completedCount / report.invitedCount) * 100) : 0;
 
+  const myEntry = currentUser
+    ? (membersRes.data.invited.find((entry) => entry.user?.documentId === currentUser.documentId) ?? null)
+    : null;
+
   return (
     <div>
       <EvaluationTabs
@@ -64,6 +71,15 @@ export default async function OngEvaluareDetailPage({
         }
         comparisonHref={`${BASE_PATH}/comparatie`}
       />
+
+      {currentUser && (
+        <SelfEvaluationBanner
+          reportId={documentId}
+          currentUserDocumentId={currentUser.documentId}
+          myEntry={myEntry}
+          canSelfInvite={!report.finished}
+        />
+      )}
 
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
@@ -102,10 +118,10 @@ export default async function OngEvaluareDetailPage({
         <div className="bg-white rounded-xl border border-border p-5">
           <p className="text-xs mb-2 text-muted-foreground">Scor total</p>
           <p className="text-3xl font-extrabold font-heading" style={{ color: "#162040" }}>
-            {report.scores.overall != null ? `${report.scores.overall}%` : "—"}
+            {report.finished && report.scores.overall != null ? `${report.scores.overall}%` : "—"}
           </p>
           <p className="text-xs mt-1 text-muted-foreground">
-            {report.scores.overall != null ? "" : "disponibil la finalizare"}
+            {report.finished && report.scores.overall != null ? "" : "disponibil la finalizare"}
           </p>
         </div>
       </div>
@@ -130,11 +146,24 @@ export default async function OngEvaluareDetailPage({
         </p>
       </div>
 
-      <DimensionsBreakdown
-        dimensions={dimensionsRes}
-        scores={report.scores}
-        comments={report.comments}
-      />
+      {report.finished ? (
+        // ONG admin sees scores only — arguments risk revealing who wrote them, so
+        // none are passed to this client component (comments stay FDSC/mentor-only).
+        <DimensionsBreakdown
+          dimensions={dimensionsRes}
+          scores={report.scores}
+          comments={{}}
+        />
+      ) : (
+        <div className="bg-white rounded-xl border border-border p-6 mb-8">
+          <h2 className="font-bold text-base mb-2" style={{ color: "#162040" }}>
+            Dimensiuni evaluate
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Scorurile și argumentele completate de membri vor fi disponibile după finalizarea evaluării.
+          </p>
+        </div>
+      )}
 
       <ReportMembersTable
         reportId={documentId}

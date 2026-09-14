@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { ImagePlus, Loader2 } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
+import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { usePageImageUpload } from "../../upload";
 import { FEATURE_ICONS } from "./icons";
 import {
@@ -33,6 +35,8 @@ export function IconPicker({
     error: uploadError,
     fileInputRef,
   } = usePageImageUpload((image) => onIconImageChange(image));
+
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   return (
     <div className="space-y-3">
@@ -113,11 +117,10 @@ export function IconPicker({
 
           <button
             type="button"
-            disabled
-            title="În curând"
-            className="text-xs font-semibold text-[#94a3b8]"
+            onClick={() => setPickerOpen(true)}
+            className="text-xs font-semibold text-[#2563eb] hover:opacity-80"
           >
-            Alege din Media Library · în curând
+            Alege din bibliotecă
           </button>
         </>
       )}
@@ -128,6 +131,16 @@ export function IconPicker({
         accept="image/*"
         className="hidden"
         onChange={onFileInputChange}
+      />
+      <MediaLibraryPicker
+        open={pickerOpen}
+        multiple={false}
+        accept="image"
+        onClose={() => setPickerOpen(false)}
+        onPick={([file]) => {
+          onIconImageChange({ id: file.id, url: file.url, name: file.name });
+          setPickerOpen(false);
+        }}
       />
       {uploadError && <p className="text-xs text-[#ef4444]">{uploadError}</p>}
     </div>

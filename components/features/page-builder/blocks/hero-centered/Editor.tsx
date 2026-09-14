@@ -5,6 +5,7 @@ import { ImagePlus, Loader2 } from "lucide-react";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
 import { BackgroundPicker } from "./BackgroundPicker";
+import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { CtaTargetField } from "../shared/CtaTargetField";
@@ -28,6 +29,7 @@ export function HeroCenteredEditor({
 }) {
   const [isUploading, startUpload] = useTransition();
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const set = (patch: Partial<HeroCenteredData>) => onChange({ ...value, ...patch });
@@ -173,6 +175,24 @@ export function HeroCenteredEditor({
           />
           {errors.image && <p className={errorClass}>{errors.image}</p>}
           {uploadError && <p className={errorClass}>{uploadError}</p>}
+
+          <button
+            type="button"
+            onClick={() => setPickerOpen(true)}
+            className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+          >
+            Alege din bibliotecă
+          </button>
+          <MediaLibraryPicker
+            open={pickerOpen}
+            multiple={false}
+            accept="image"
+            onClose={() => setPickerOpen(false)}
+            onPick={([file]) => {
+              set({ image: { id: file.id, url: file.url, name: file.name } });
+              setPickerOpen(false);
+            }}
+          />
 
           <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3">
             <span>

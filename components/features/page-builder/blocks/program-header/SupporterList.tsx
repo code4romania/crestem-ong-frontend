@@ -13,6 +13,7 @@ import {
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { IconPicker } from "./IconPicker";
 import { PROGRAM_HEADER_ICONS } from "./icons";
 import { EMPTY_SUPPORTER, type ProgramSupporter } from "./schema";
@@ -43,17 +44,20 @@ export function SupporterList({
   const [draft, setDraft] = useState<ProgramSupporter>(EMPTY_SUPPORTER);
   const [isUploading, startUpload] = useTransition();
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const openNew = () => {
     setDraft({ ...EMPTY_SUPPORTER });
     setUploadError(null);
+    setPickerOpen(false);
     setEditing(value.length);
   };
 
   const openExisting = (index: number) => {
     setDraft({ ...value[index] });
     setUploadError(null);
+    setPickerOpen(false);
     setEditing(index);
   };
 
@@ -206,6 +210,29 @@ export function SupporterList({
                 onChange={handleFile}
               />
               {uploadError && <p className={errorClass}>{uploadError}</p>}
+
+              <button
+                type="button"
+                onClick={() => setPickerOpen(true)}
+                className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+              >
+                Alege din bibliotecă
+              </button>
+              <MediaLibraryPicker
+                open={pickerOpen}
+                multiple={false}
+                accept="image"
+                onClose={() => setPickerOpen(false)}
+                onPick={([file]) => {
+                  setField({
+                    imagine: { id: file.id, url: file.url, name: file.name },
+                    ...(file.alternativeText && !draft.imagineAlt
+                      ? { imagineAlt: file.alternativeText }
+                      : {}),
+                  });
+                  setPickerOpen(false);
+                }}
+              />
             </div>
           ) : (
             <IconPicker

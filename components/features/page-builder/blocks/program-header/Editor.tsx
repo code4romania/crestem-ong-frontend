@@ -5,6 +5,7 @@ import { ImagePlus, Loader2 } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { IconPicker } from "./IconPicker";
 import { ProgramSelect } from "./ProgramSelect";
 import { StatList } from "./StatList";
@@ -30,6 +31,7 @@ export function ProgramHeaderEditor({
 }) {
   const [isUploading, startUpload] = useTransition();
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const set = (patch: Partial<ProgramHeaderData>) =>
@@ -154,6 +156,29 @@ export function ProgramHeaderEditor({
           />
           {uploadError && <p className={errorClass}>{uploadError}</p>}
           {errors.imagine && <p className={errorClass}>{errors.imagine}</p>}
+
+          <button
+            type="button"
+            onClick={() => setPickerOpen(true)}
+            className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+          >
+            Alege din bibliotecă
+          </button>
+          <MediaLibraryPicker
+            open={pickerOpen}
+            multiple={false}
+            accept="image"
+            onClose={() => setPickerOpen(false)}
+            onPick={([file]) => {
+              set({
+                imagine: { id: file.id, url: file.url, name: file.name },
+                ...(file.alternativeText && !value.imagineAlt
+                  ? { imagineAlt: file.alternativeText }
+                  : {}),
+              });
+              setPickerOpen(false);
+            }}
+          />
         </div>
       ) : (
         <IconPicker
