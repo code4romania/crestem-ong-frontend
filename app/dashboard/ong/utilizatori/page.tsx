@@ -112,7 +112,11 @@ export default async function UtilizatoriPage() {
                         {member.accountStatus === "pending" && (
                           <ResendInvitationButton id={member.id} nume={member.nume} />
                         )}
-                        <RemoveOngMemberButton documentId={member.documentId} nume={member.nume} />
+                        <RemoveOngMemberButton
+                          documentId={member.documentId}
+                          nume={member.nume}
+                          accountStatus={member.accountStatus}
+                        />
                       </div>
                     </td>
                   </tr>

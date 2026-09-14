@@ -4,10 +4,19 @@ import { useState, useTransition } from "react";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { removeOngMemberAction } from "@/lib/api/ongs-actions";
 
-export function RemoveOngMemberButton({ documentId, nume }: { documentId: string; nume: string }) {
+export function RemoveOngMemberButton({
+  documentId,
+  nume,
+  accountStatus,
+}: {
+  documentId: string;
+  nume: string;
+  accountStatus: "pending" | "active";
+}) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const isInvite = accountStatus === "pending";
 
   const handleConfirm = () => {
     setError(null);
@@ -21,6 +30,10 @@ export function RemoveOngMemberButton({ documentId, nume }: { documentId: string
     });
   };
 
+  const buttonLabel = isInvite
+    ? "Anulează invitația"
+    : "Marchează ca neafiliat";
+
   return (
     <>
       <button
@@ -32,13 +45,17 @@ export function RemoveOngMemberButton({ documentId, nume }: { documentId: string
         className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-border hover:bg-red-50 hover:border-[#fca5a5] transition-colors"
         style={{ color: "#ef4444" }}
       >
-        Marchează ca neafiliat
+        {buttonLabel}
       </button>
       <ConfirmDialog
         open={open}
-        title="Elimină utilizatorul"
-        description={`Ești sigur că vrei să marchezi „${nume}” ca neafiliat? Contul rămâne activ, dar va pierde accesul la această organizație.`}
-        confirmLabel="Marchează ca neafiliat"
+        title={isInvite ? "Anulează invitația" : "Elimină utilizatorul"}
+        description={
+          isInvite
+            ? `Ești sigur că vrei să anulezi invitația pentru ${nume}? Nu a activat contul încă, așa că va fi șters definitiv.`
+            : `Ești sigur că vrei să marchezi „${nume}” ca neafiliat? Contul rămâne activ, dar va pierde accesul la această organizație.`
+        }
+        confirmLabel={buttonLabel}
         loading={isPending}
         loadingLabel="Se elimină..."
         error={error}
