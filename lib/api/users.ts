@@ -50,9 +50,10 @@ export function listUsers(params: ListUsersParams = {}) {
   if (params.page && params.page > 1) query.set("page", String(params.page));
 
   const qs = query.toString();
-  return serverApiFetch<{ data: AdminUser[]; meta: { pagination: UsersPagination } }>(
-    `/api/admin/users${qs ? `?${qs}` : ""}`,
-  );
+  return serverApiFetch<{
+    data: AdminUser[];
+    meta: { pagination: UsersPagination };
+  }>(`/api/admin/users${qs ? `?${qs}` : ""}`);
 }
 
 export function getUser(documentId: string) {

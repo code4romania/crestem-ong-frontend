@@ -8,7 +8,6 @@ import type { AdminUser } from "@/lib/api/users";
 import type { Dimension } from "@/lib/api/dimensions";
 import { ROLE_BADGES } from "@/lib/roles";
 import { formatDate } from "@/lib/utils/date";
-import { MemberActivationLink } from "@/components/features/organizatii/MemberActivationLink";
 import { EditFdscUserModal } from "./EditFdscUserModal";
 
 const STATUS_BADGES: Record<AdminUser["accountStatus"], { label: string; bg: string; color: string }> = {
@@ -32,8 +31,6 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
     );
   }
 
-  const showActivationLink = users.some((user) => Boolean(user.activationLink));
-
   return (
     <div className="bg-white rounded-xl border border-border overflow-hidden overflow-x-auto">
       <table className="w-full min-w-[960px] text-sm">
@@ -45,7 +42,6 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
               "Rol",
               "Organizație",
               "Status",
-              ...(showActivationLink ? ["Link activare"] : []),
               "Ultima autentificare",
               "Acțiuni",
             ].map((h) => (
@@ -126,15 +122,6 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
                     <span style={{ color: "#94a3b8" }}>—</span>
                   )}
                 </td>
-                {showActivationLink && (
-                  <td className="px-4 py-3.5">
-                    {user.activationLink ? (
-                      <MemberActivationLink href={user.activationLink} nume={displayName} />
-                    ) : (
-                      <span style={{ color: "#94a3b8" }}>—</span>
-                    )}
-                  </td>
-                )}
                 <td className="px-4 py-3.5" style={{ color: "#475569" }}>
                   {formatDate(user.lastLoginAt)}
                 </td>

@@ -244,5 +244,4 @@ export interface OngMember {
    * the field being present, never on `accountStatus`, so the UI degrades
    * cleanly the day the backend stops sending it.
    */
-  activationLink?: string;
 }

@@ -7,7 +7,6 @@ import { userDisplayName } from "@/lib/api/auth";
 import type { AdminUser } from "@/lib/api/users";
 import { formatShortDate } from "@/lib/utils/date";
 import { avatarColorFor } from "@/lib/utils/avatar";
-import { MemberActivationLink } from "@/components/features/organizatii/MemberActivationLink";
 import { DeletedAccountBadge } from "@/components/ui/DeletedAccountBadge";
 
 export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
@@ -19,8 +18,6 @@ export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
     );
   }
 
-  const showActivationLink = mentors.some((mentor) => Boolean(mentor.activationLink));
-
   return (
     <div className="bg-white rounded-xl border border-border overflow-hidden">
       <table className="w-full text-sm">
@@ -30,7 +27,6 @@ export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
               "Persoană resursă",
               "Data adăugării",
               "Programe alocate",
-              ...(showActivationLink ? ["Link activare"] : []),
               "Acțiuni",
             ].map((h) => (
               <th
@@ -106,15 +102,6 @@ export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
                     <span style={{ color: "#94a3b8" }}>—</span>
                   )}
                 </td>
-                {showActivationLink && (
-                  <td className="px-4 py-3.5">
-                    {mentor.activationLink ? (
-                      <MemberActivationLink href={mentor.activationLink} nume={displayName} />
-                    ) : (
-                      <span style={{ color: "#94a3b8" }}>—</span>
-                    )}
-                  </td>
-                )}
                 <td className="px-4 py-3.5">
                   <div className="flex items-center gap-2">
                     <Link

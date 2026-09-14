@@ -50,19 +50,18 @@ export interface RequestEmailChangeInput {
 }
 
 /**
- * `confirmationLink` comes back only while invitation emails are unavailable —
- * the backend gates it behind DEV_EXPOSE_ACTIVATION_LINK, so the UI that shows
- * it disappears on its own once real sending lands.
+ * The confirmation link is mailed to the new address — `emailSent` is false
+ * when delivery failed, and the token is then unreachable until a retry.
  */
 export async function requestEmailChangeAction(
   input: RequestEmailChangeInput,
-): Promise<{ ok: true; confirmationLink?: string } | { error: string }> {
+): Promise<{ ok: true; emailSent: boolean } | { error: string }> {
   try {
-    const res = await serverApiFetch<{ confirmationLink?: string }>(
+    const res = await serverApiFetch<{ emailSent: boolean }>(
       "/api/auth/change-email",
       { method: "POST", body: JSON.stringify(input) },
     );
-    return { ok: true, confirmationLink: res.confirmationLink };
+    return { ok: true, emailSent: res.emailSent };
   } catch (err) {
     return {
       error: getApiErrorMessage(err, "Nu am putut schimba adresa de email. Încearcă din nou."),
