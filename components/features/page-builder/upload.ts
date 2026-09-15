@@ -16,11 +16,15 @@ export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 export const MAX_UPLOAD_LABEL = "5 MB";
 
 /**
- * Ceiling for the Documents block — reports (PDF/DOCX/XLSX). `bodySizeLimit` in
- * `next.config.ts` is set above this for multipart overhead; Strapi/S3 accept
- * far more still.
+ * Ceiling for the Documents block — reports (PDF/DOCX/XLSX). Set slightly above
+ * the advertised 10 MB to absorb real-world padding/overhead in files people
+ * label "10MB" (a sample PDF measured at 10,490,314 bytes — ~4.5KB over a
+ * strict 10 * 1024 * 1024 cap — was the case that prompted this). The label
+ * stays "10 MB" since that's the intended limit; this is tolerance, not a
+ * policy change. `bodySizeLimit` in `next.config.ts` is set above this for
+ * multipart overhead; Strapi/S3 accept far more still.
  */
-export const MAX_DOCUMENT_BYTES = 10 * 1024 * 1024;
+export const MAX_DOCUMENT_BYTES = 10.5 * 1024 * 1024;
 export const MAX_DOCUMENT_LABEL = "10 MB";
 
 /**

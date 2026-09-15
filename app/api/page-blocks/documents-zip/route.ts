@@ -4,7 +4,7 @@ import { resolveMediaUrl, safeSegment } from "@/lib/api/media-download";
 /** Public endpoint guardrails — a crafted body can only ever hit the media host. */
 const MAX_FILES = 50;
 /** Per file; matches the client upload guard `MAX_DOCUMENT_BYTES`. */
-const MAX_FILE_BYTES = 10 * 1024 * 1024;
+const MAX_FILE_BYTES = 10.5 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 200 * 1024 * 1024;
 const FETCH_TIMEOUT_MS = 15_000;
 
