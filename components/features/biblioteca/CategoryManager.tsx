@@ -23,6 +23,39 @@ import { CategoryIconPicker } from "./CategoryIconPicker";
 const inputClass =
   "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#2dbe8f] focus:outline-none";
 
+// Mirrors the backend's `descriereBase` cap in library-category validation.
+const DESCRIERE_MAX_LENGTH = 2500;
+
+function DescriereField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const atLimit = value.length >= DESCRIERE_MAX_LENGTH;
+  return (
+    <div>
+      <textarea
+        value={value}
+        onChange={(event) => onChange(event.target.value.slice(0, DESCRIERE_MAX_LENGTH))}
+        rows={2}
+        maxLength={DESCRIERE_MAX_LENGTH}
+        placeholder="Scurtă descriere, afișată pe cardul din bibliotecă"
+        aria-label="Descriere"
+        className={inputClass}
+      />
+      <p
+        className={`mt-1 text-right text-xs ${atLimit ? "text-red-600" : "text-muted-foreground"}`}
+        aria-live="polite"
+      >
+        {value.length}/{DESCRIERE_MAX_LENGTH}
+        {atLimit ? " — ai atins limita maximă de caractere" : ""}
+      </p>
+    </div>
+  );
+}
+
 const articleLabel = (count: number) => `${count} ${count === 1 ? "articol" : "articole"}`;
 
 const subcategoryLabel = (count: number) =>
@@ -147,14 +180,7 @@ function AddForm({
           an option in that category's filter, so it needs neither. */}
       {isCategory ? (
         <>
-          <textarea
-            value={descriere}
-            onChange={(event) => setDescriere(event.target.value)}
-            rows={2}
-            placeholder="Scurtă descriere, afișată pe cardul din bibliotecă"
-            aria-label="Descriere"
-            className={inputClass}
-          />
+          <DescriereField value={descriere} onChange={setDescriere} />
           <CategoryIconPicker value={icon} onChange={setIcon} />
         </>
       ) : null}
@@ -224,14 +250,7 @@ function EditForm({
       {/* Top level only — see the note in `AddForm`. */}
       {isCategory ? (
         <>
-          <textarea
-            value={descriere}
-            onChange={(event) => setDescriere(event.target.value)}
-            rows={2}
-            placeholder="Scurtă descriere, afișată pe cardul din bibliotecă"
-            aria-label="Descriere"
-            className={inputClass}
-          />
+          <DescriereField value={descriere} onChange={setDescriere} />
           <CategoryIconPicker value={icon} onChange={setIcon} />
         </>
       ) : null}
