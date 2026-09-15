@@ -19,6 +19,9 @@ import type { LibraryCategory } from "@/lib/api/library-categories-types";
 import type { PageOption } from "@/lib/api/pages-types";
 import { TagsField } from "./TagsField";
 
+// Mirrors the backend's `rezumatBase` cap in article validation.
+const REZUMAT_MAX_LENGTH = 400;
+
 export function ArticleForm({
   article,
   categories,
@@ -206,11 +209,25 @@ export function ArticleForm({
               <textarea
                 id="articol-rezumat"
                 value={rezumat}
-                onChange={(event) => setRezumat(event.target.value)}
+                onChange={(event) =>
+                  setRezumat(event.target.value.slice(0, REZUMAT_MAX_LENGTH))
+                }
                 rows={2}
+                maxLength={REZUMAT_MAX_LENGTH}
                 placeholder="Scurtă descriere, afișată în listă și pe carduri"
                 className={inputClass}
               />
+              <p
+                className={`mt-1 text-right text-xs ${
+                  rezumat.length >= REZUMAT_MAX_LENGTH ? "text-red-600" : "text-muted-foreground"
+                }`}
+                aria-live="polite"
+              >
+                {rezumat.length}/{REZUMAT_MAX_LENGTH}
+                {rezumat.length >= REZUMAT_MAX_LENGTH
+                  ? " — ai atins limita maximă de caractere"
+                  : ""}
+              </p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
