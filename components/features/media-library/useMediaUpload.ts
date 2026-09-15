@@ -6,6 +6,7 @@ import {
   uploadMediaAssetAction,
   uploadMediaAssetsBatchAction,
 } from "@/lib/api/media-library-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import {
   uploadSizeError,
   MAX_BATCH_FILES,
@@ -68,10 +69,11 @@ export function useMediaUpload(
     startUpload(async () => {
       try {
         if (valid.length === 1) {
-          const form = new FormData();
-          form.append("file", valid[0]);
-          form.append("titlu", stripExt(valid[0].name));
-          const result = await uploadMediaAssetAction(form);
+          const [uploaded] = await uploadFilesDirect(valid);
+          const result = await uploadMediaAssetAction({
+            fisierId: uploaded.id,
+            titlu: stripExt(valid[0].name),
+          });
           if (result.error || !result.asset) {
             toast.error(result.error ?? "Nu am putut încărca fișierul.");
             return;
@@ -81,9 +83,10 @@ export function useMediaUpload(
           return;
         }
 
-        const form = new FormData();
-        for (const file of valid) form.append("files", file);
-        const result = await uploadMediaAssetsBatchAction(form);
+        const uploaded = await uploadFilesDirect(valid);
+        const result = await uploadMediaAssetsBatchAction(
+          uploaded.map((f) => ({ id: f.id, name: f.name })),
+        );
         if (result.error) {
           toast.error(result.error);
           return;
@@ -98,11 +101,13 @@ export function useMediaUpload(
           `${result.assets.length} fișiere adăugate în bibliotecă.`,
         );
         onUploaded(result.assets);
-      } catch {
-        // A Server Action can throw before our own code runs (e.g. the framework
-        // failing to parse a malformed/truncated multipart body) — surface that
+      } catch (err) {
+        // `uploadFilesDirect` throws on a failed direct-to-Strapi upload, and a
+        // Server Action can throw before our own code runs too — surface either
         // as a toast instead of letting it bubble to the route's error boundary.
-        toast.error("Nu am putut încărca fișierul. Încearcă din nou.");
+        toast.error(
+          err instanceof Error ? err.message : "Nu am putut încărca fișierul. Încearcă din nou.",
+        );
       }
     });
   };

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { TagInput } from "./TagInput";
 import { EMPTY_PERSON, type Person } from "./schema";
@@ -102,14 +103,17 @@ export function PersonList({
       if (!file) return;
       setUploadError(null);
       startUpload(async () => {
-        const form = new FormData();
-        form.append("files", file);
-        const result = await uploadPageImageAction(form);
-        if (result.error || !result.image) {
-          setUploadError(result.error ?? "Nu am putut încărca imaginea.");
-          return;
+        try {
+          const [uploaded] = await uploadFilesDirect([file]);
+          const result = await uploadPageImageAction(uploaded);
+          if (result.error || !result.image) {
+            setUploadError(result.error ?? "Nu am putut încărca imaginea.");
+            return;
+          }
+          setField({ imagine: result.image });
+        } catch (err) {
+          setUploadError(err instanceof Error ? err.message : "Nu am putut încărca imaginea.");
         }
-        setField({ imagine: result.image });
       });
     };
 

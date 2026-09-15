@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUp, ImagePlus, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL } from "../../upload";
 import type { GalleryImage } from "./schema";
@@ -80,10 +81,9 @@ export function GalleryImageList({
       const added: GalleryImage[] = [];
       let failed = 0;
       for (const file of withinLimit) {
-        const form = new FormData();
-        form.append("files", file);
         try {
-          const result = await uploadPageImageAction(form);
+          const [uploaded] = await uploadFilesDirect([file]);
+          const result = await uploadPageImageAction(uploaded);
           if (result.error || !result.image) {
             failed += 1;
             continue;

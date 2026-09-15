@@ -8,6 +8,7 @@ import { BackgroundPicker } from "./BackgroundPicker";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { HeroCenteredData } from "./schema";
@@ -40,14 +41,17 @@ export function HeroCenteredEditor({
     if (!file) return;
     setUploadError(null);
     startUpload(async () => {
-      const form = new FormData();
-      form.append("files", file);
-      const result = await uploadPageImageAction(form);
-      if (result.error || !result.image) {
-        setUploadError(result.error ?? "Nu am putut încărca imaginea.");
-        return;
+      try {
+        const [uploaded] = await uploadFilesDirect([file]);
+        const result = await uploadPageImageAction(uploaded);
+        if (result.error || !result.image) {
+          setUploadError(result.error ?? "Nu am putut încărca imaginea.");
+          return;
+        }
+        set({ image: result.image });
+      } catch (err) {
+        setUploadError(err instanceof Error ? err.message : "Nu am putut încărca imaginea.");
       }
-      set({ image: result.image });
     });
   };
 

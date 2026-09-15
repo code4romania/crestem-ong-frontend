@@ -6,6 +6,7 @@ import {
   uploadPageImageAction,
   type UploadedPageImage,
 } from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 
 /**
  * Client-side upload ceiling for page-block images/video. Kept below the Server
@@ -87,17 +88,16 @@ export function usePageImageUpload(
       return;
     }
     startUpload(async () => {
-      const form = new FormData();
-      form.append("files", file);
       try {
-        const result = await uploadPageImageAction(form);
+        const [uploaded] = await uploadFilesDirect([file]);
+        const result = await uploadPageImageAction(uploaded);
         if (result.error || !result.image) {
           fail(result.error ?? "Nu am putut încărca imaginea.");
           return;
         }
         latestOnUploaded.current(result.image);
-      } catch {
-        fail("Nu am putut încărca imaginea.");
+      } catch (err) {
+        fail(err instanceof Error ? err.message : "Nu am putut încărca imaginea.");
       }
     });
   };

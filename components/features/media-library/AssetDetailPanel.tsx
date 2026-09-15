@@ -9,13 +9,14 @@ import { ModalPortal } from "@/components/ui/ModalPortal";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadSizeError } from "@/components/features/page-builder/upload";
 import { useGalleryLightbox } from "@/components/features/page-builder/blocks/gallery/useGalleryLightbox";
+import { postFileDirect } from "@/lib/api/upload-direct";
 import { FileTypeBadge } from "./FileTypeBadge";
 import { pluralPagini } from "./format";
 import {
   createMediaTagAction,
   deleteMediaAssetAction,
   deleteMediaTagAction,
-  replaceMediaAssetFileAction,
+  finalizeMediaAssetReplaceAction,
   updateMediaAssetAction,
 } from "@/lib/api/media-library-actions";
 import type {
@@ -173,20 +174,40 @@ export function AssetDetailPanel({
   const doReplace = (file: File) => {
     startReplace(async () => {
       try {
+        // Goes straight from the browser to Strapi (bypassing the Server Action
+        // for the raw bytes) — a Server Action would otherwise hit Vercel's hard
+        // 4.5MB Function body limit for anything above that size.
         const form = new FormData();
         form.append("files", file);
-        const res = await replaceMediaAssetFileAction(asset.documentId, form);
+        const { ok, status, data } = await postFileDirect(
+          `/api/media-assets/${asset.documentId}/replace`,
+          form,
+        );
+        const body = data as { data?: MediaAssetDetail; error?: { message?: string } } | null;
+        // 409 = the new file's format differs from the current one. The backend
+        // message names the required format; surface it as a plain error.
+        if (status === 409) {
+          toast.error(body?.error?.message ?? "Fișierul nou are alt format decât cel curent.");
+          return;
+        }
+        if (!ok || !body?.data) {
+          toast.error(body?.error?.message ?? "Înlocuirea a eșuat.");
+          return;
+        }
+        const res = await finalizeMediaAssetReplaceAction(
+          body as { data: MediaAssetDetail; meta?: { revalidate?: string[] } },
+        );
         if (res.error || !res.asset) {
           toast.error(res.error ?? "Înlocuirea a eșuat.");
           return;
         }
         toast.success("Fișier înlocuit.");
         onChanged(res.asset);
-      } catch {
-        // A Server Action can throw before our own code runs (e.g. the framework
-        // failing to parse a malformed/truncated multipart body) — surface that
-        // as a toast instead of letting it bubble to the route's error boundary.
-        toast.error("Înlocuirea a eșuat. Încearcă din nou.");
+      } catch (err) {
+        // `postFileDirect` throws on a failed direct upload, and a Server Action
+        // can throw before our own code runs too — surface either as a toast
+        // instead of letting it bubble to the route's error boundary.
+        toast.error(err instanceof Error ? err.message : "Înlocuirea a eșuat. Încearcă din nou.");
       }
     });
   };

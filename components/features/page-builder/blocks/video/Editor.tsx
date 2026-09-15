@@ -7,6 +7,7 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { uploadPageVideoAction } from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL } from "../../upload";
 import type { BlockFieldErrors } from "../../types";
 import type { VideoData } from "./schema";
@@ -52,10 +53,9 @@ export function VideoEditor({
       return;
     }
     startUpload(async () => {
-      const form = new FormData();
-      form.append("files", file);
       try {
-        const result = await uploadPageVideoAction(form);
+        const [uploaded] = await uploadFilesDirect([file]);
+        const result = await uploadPageVideoAction(uploaded);
         if (result.error || !result.video) {
           const message =
             result.error ?? "Nu am putut încărca fișierul video.";
@@ -64,8 +64,9 @@ export function VideoEditor({
           return;
         }
         set({ fisier: result.video });
-      } catch {
-        const message = "Nu am putut încărca fișierul video.";
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Nu am putut încărca fișierul video.";
         setUploadError(message);
         toast.error(message);
       }

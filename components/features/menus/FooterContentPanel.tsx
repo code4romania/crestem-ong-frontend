@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { RichTextField } from "@/components/features/page-builder/rich-text/RichTextField";
 import { getMediaUrl } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { updateFooterAction } from "@/lib/api/footer-actions";
 import { SOCIAL_LABEL, type FooterContent, type SocialLink } from "@/lib/api/footer-types";
 import { SocialLinksField, type EditableSocial } from "./SocialLinksField";
@@ -49,15 +50,19 @@ export function FooterContentPanel({ footer }: { footer: FooterContent }) {
    * page builder uses; the editor stores the returned URL in the HTML.
    */
   const uploadImage = async (file: File): Promise<string | null> => {
-    const formData = new FormData();
-    formData.append("files", file);
-    const result = await uploadPageImageAction(formData);
+    try {
+      const [uploaded] = await uploadFilesDirect([file]);
+      const result = await uploadPageImageAction(uploaded);
 
-    if (result.error || !result.image) {
-      toast.error(result.error ?? "Nu am putut încărca imaginea.");
+      if (result.error || !result.image) {
+        toast.error(result.error ?? "Nu am putut încărca imaginea.");
+        return null;
+      }
+      return getMediaUrl(result.image.url);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Nu am putut încărca imaginea.");
       return null;
     }
-    return getMediaUrl(result.image.url);
   };
 
   const collectSocials = (): SocialLink[] | null => {
