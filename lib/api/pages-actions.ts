@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getApiErrorMessage } from "./client";
 import { revalidateDashboardPath } from "./revalidate";
 import { getPage } from "./pages";
+import { sanitizeBlocks } from "./page-blocks-sanitize";
 import { serverApiFetch } from "./server";
 import { getCurrentUser } from "./session-server";
 import { isFdscStaff } from "@/lib/roles";
@@ -19,6 +20,16 @@ export interface PageInput {
 }
 
 const FORBIDDEN = "Nu ai permisiunea necesară pentru această acțiune.";
+
+/**
+ * Rich-text blocks used to be sanitised by their zod schema, which also runs in
+ * the editor — that put DOMPurify (and jsdom) in the client bundle. It happens
+ * here instead, which is also the only place it counts: a Server Action is an
+ * addressable endpoint, so a caller can post block JSON the editor never saw.
+ */
+function withCleanBlocks(input: PageInput): PageInput {
+  return { ...input, blocuri: sanitizeBlocks(input.blocuri) };
+}
 
 /**
  * A Server Action is an addressable endpoint, so the staff check lives here as
@@ -57,7 +68,7 @@ export async function createPageAction(
   try {
     const { data } = await serverApiFetch<{ data: { documentId: string; cale: string } }>(
       "/api/pages",
-      { method: "POST", body: JSON.stringify(input) },
+      { method: "POST", body: JSON.stringify(withCleanBlocks(input)) },
     );
     revalidatePage(data.cale);
     return { documentId: data.documentId };
@@ -78,7 +89,7 @@ export async function updatePageAction(
   try {
     const { data } = await serverApiFetch<{ data: { cale: string } }>(
       `/api/pages/${documentId}`,
-      { method: "PUT", body: JSON.stringify(input) },
+      { method: "PUT", body: JSON.stringify(withCleanBlocks(input)) },
     );
     cale = data.cale;
   } catch (err) {

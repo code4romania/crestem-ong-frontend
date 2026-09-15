@@ -30,3 +30,11 @@ export const RICH_TEXT_PROSE_INVERSE = [
   "[&_strong]:font-semibold [&_strong]:text-white",
   "[&_a]:text-[#7ff0c9] [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-white",
 ].join(" ");
+
+/**
+ * Image styling for footer rich text, on top of the shared prose classes. Lives
+ * here rather than next to `sanitizeFooterRichText` so the footer — a client
+ * component — can import it without reaching a module that loads DOMPurify.
+ */
+export const FOOTER_IMAGE_PROSE =
+  "[&_img]:my-3 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg";

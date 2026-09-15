@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getApiErrorMessage } from "./client";
+import { sanitizeFooterRichText } from "@/lib/footer-rich-text.server";
 import { revalidateDashboardPath } from "./revalidate";
 import { serverApiFetch } from "./server";
 import { getCurrentUser } from "./session-server";
@@ -29,7 +30,12 @@ export async function updateFooterAction(
   try {
     await serverApiFetch("/api/footer", {
       method: "PUT",
-      body: JSON.stringify(input),
+      // The Server Action is an addressable endpoint, so sanitising in the
+      // editor was never a control. It happens here, on the way to the backend.
+      body: JSON.stringify({
+        ...input,
+        description: sanitizeFooterRichText(input.description),
+      }),
     });
   } catch (err) {
     return { error: getApiErrorMessage(err, "Nu am putut salva footerul.") };

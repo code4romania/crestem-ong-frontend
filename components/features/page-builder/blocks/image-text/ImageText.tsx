@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import { RICH_TEXT_PROSE } from "../../rich-text/prose";
-import { sanitizeRichText, hasRichText } from "../../rich-text/sanitize";
+import { hasRichText } from "../../rich-text/has-rich-text";
 import type { ImageTextData } from "./schema";
 
 /**
@@ -31,8 +31,10 @@ const GRID_COLS: Record<
  * `"use client"`) so it renders on the public page unchanged once a backend
  * feeds it the same shape.
  *
- * `text` is sanitised again here, right before the raw-HTML sink, in case the
- * data reached this component without passing through the block schema.
+ * `text` arrives sanitised: the page/article Server Actions run `sanitizeBlocks`
+ * before it ever reaches the backend. Sanitising here too would drag DOMPurify —
+ * and with it jsdom — into the client bundle, since the editor imports this
+ * renderer through the block registry.
  */
 export function ImageText({ data }: { data: ImageTextData }) {
   const {
@@ -45,8 +47,8 @@ export function ImageText({ data }: { data: ImageTextData }) {
     colturi,
     primaryCta,
     secondaryCta,
+    text,
   } = data;
-  const text = sanitizeRichText(data.text);
 
   const rounded = colturi === "default" ? "rounded-2xl" : "";
   const hasPrimary = Boolean(primaryCta.label && primaryCta.href);

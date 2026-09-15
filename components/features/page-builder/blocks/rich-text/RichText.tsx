@@ -1,5 +1,4 @@
 import { RICH_TEXT_PROSE } from "../../rich-text/prose";
-import { sanitizeRichText } from "../../rich-text/sanitize";
 import type { RichTextData } from "./schema";
 
 const ALIGN_CLASS: Record<RichTextData["aliniere"], string> = {
@@ -13,12 +12,13 @@ const ALIGN_CLASS: Record<RichTextData["aliniere"], string> = {
  * readable column. Pure (no hooks, no `"use client"`) so it renders on the
  * public page unchanged once a backend feeds it the same shape.
  *
- * `continut` is sanitised again here, right before the raw-HTML sink, in case
- * the data reached this component without passing through the block schema.
+ * `continut` arrives sanitised: the page/article Server Actions run
+ * `sanitizeBlocks` before it ever reaches the backend. Sanitising here too would
+ * drag DOMPurify — and with it jsdom — into the client bundle, since the editor
+ * imports this renderer through the block registry.
  */
 export function RichText({ data }: { data: RichTextData }) {
-  const { titlu, aliniere } = data;
-  const continut = sanitizeRichText(data.continut);
+  const { titlu, continut, aliniere } = data;
 
   return (
     <section>

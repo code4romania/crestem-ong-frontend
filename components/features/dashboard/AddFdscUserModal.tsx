@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { ArrowLeft, Loader2, PenSquare, ShieldCheck, UserCog, X } from "lucide-react";
 import { createFdscUserAction, uploadUserAvatarAction } from "@/lib/api/users-actions";
 import type { Dimension } from "@/lib/api/dimensions";
-import { hasRichText, sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize";
+import { hasRichText } from "@/components/features/page-builder/rich-text/has-rich-text";
 import { MentorProfileFields, type MentorProfileFieldsValue } from "./MentorProfileFields";
 import { ModalOverlay } from "@/components/ui/ModalOverlay";
 
@@ -92,7 +92,7 @@ export function AddFdscUserModal({ dimensions, onClose }: { dimensions: Dimensio
           role: "mentor",
           nume,
           email,
-          ...(hasRichText(mentorFields.bio) ? { bio: sanitizeRichText(mentorFields.bio) } : {}),
+          ...(hasRichText(mentorFields.bio) ? { bio: mentorFields.bio } : {}),
           ...(avatarId !== undefined ? { avatar: avatarId } : {}),
           ...(mentorFields.selectedDimensions.length > 0
             ? { dimensiuni: mentorFields.selectedDimensions }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { RICH_TEXT_PROSE_INVERSE } from "../../rich-text/prose";
-import { sanitizeRichText, hasRichText } from "../../rich-text/sanitize";
+import { hasRichText } from "../../rich-text/has-rich-text";
 import { CALLOUT_ICONS } from "./icons";
 import type { CalloutData } from "./schema";
 
@@ -25,12 +25,13 @@ const CTA_JUSTIFY: Record<CalloutData["aliniere"], string> = {
  * hooks, no `"use client"`) so it renders on the public page unchanged once a
  * backend feeds it the same shape.
  *
- * `text` is sanitised again here, right before the raw-HTML sink, in case the
- * data reached this component without passing through the block schema.
+ * `text` arrives sanitised: the page/article Server Actions run `sanitizeBlocks`
+ * before it ever reaches the backend. Sanitising here too would drag DOMPurify —
+ * and with it jsdom — into the client bundle, since the editor imports this
+ * renderer through the block registry.
  */
 export function Callout({ data }: { data: CalloutData }) {
-  const { icon, afiseazaIcon, titlu, primaryCta, secondaryCta, aliniere } = data;
-  const text = sanitizeRichText(data.text);
+  const { icon, afiseazaIcon, titlu, text, primaryCta, secondaryCta, aliniere } = data;
 
   const Icon = CALLOUT_ICONS[icon];
   const showIcon = afiseazaIcon && Boolean(Icon);

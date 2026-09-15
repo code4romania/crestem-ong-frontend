@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { SocialIcon } from "@/components/ui/SocialIcon";
-import { RICH_TEXT_PROSE_INVERSE } from "@/components/features/page-builder/rich-text/prose";
-import { FOOTER_IMAGE_PROSE, sanitizeFooterRichText } from "@/lib/footer-rich-text";
+import {
+  FOOTER_IMAGE_PROSE,
+  RICH_TEXT_PROSE_INVERSE,
+} from "@/components/features/page-builder/rich-text/prose";
 import { socialName, type FooterContent } from "@/lib/api/footer-types";
 import type { MenuItem } from "@/lib/api/menus";
 
@@ -35,9 +37,9 @@ export function Footer({ content, items }: { content: FooterContent; items: Menu
             {content.description && (
               <div
                 className={`max-w-sm ${RICH_TEXT_PROSE_INVERSE} ${FOOTER_IMAGE_PROSE}`}
-                // Sanitised again at the sink: stored data can reach the
-                // renderer without passing back through the editor.
-                dangerouslySetInnerHTML={{ __html: sanitizeFooterRichText(content.description) }}
+                // Already sanitised by `getFooter` / `updateFooterAction`; this
+                // is a client component, so DOMPurify must not be reachable here.
+                dangerouslySetInnerHTML={{ __html: content.description }}
               />
             )}
 

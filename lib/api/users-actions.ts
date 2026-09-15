@@ -4,8 +4,20 @@ import { revalidateDashboardPath } from "./revalidate";
 import { serverApiFetch } from "./server";
 import { getCurrentUser } from "./session-server";
 import { getApiErrorMessage, parseApiError } from "./client";
+import { sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize.server";
 
 const FORBIDDEN_MESSAGE = "Nu ai permisiunea necesară pentru această acțiune.";
+
+/**
+ * A mentor bio is rich text from the shared editor. The modals used to sanitise
+ * it before calling in, which was never a control — a Server Action is an
+ * addressable endpoint. Doing it here also keeps DOMPurify out of the client
+ * bundle, where it drags jsdom into the client-SSR chunks and breaks every HTML
+ * render once the build is packed into a serverless function.
+ */
+function withCleanBio<T extends { bio?: string }>(input: T): T {
+  return input.bio === undefined ? input : { ...input, bio: sanitizeRichText(input.bio) };
+}
 
 /**
  * Creating and editing accounts is the administrator's; `editor-fdsc` reads
@@ -43,7 +55,7 @@ export async function createFdscUserAction(
   if (forbidden) return forbidden;
 
   const path = input.role === "mentor" ? "/api/auth/register/mentor" : "/api/auth/register/staff";
-  const { role, ...body } = input;
+  const { role, ...body } = input.role === "mentor" ? withCleanBio(input) : input;
 
   try {
     await serverApiFetch(path, {
@@ -87,7 +99,7 @@ export async function updateFdscUserAction(
     input.role === "mentor"
       ? {
           nume: input.nume,
-          bio: input.bio,
+          bio: withCleanBio(input).bio,
           avatar: input.avatar,
           dimensiuni: input.dimensiuni,
           ariiDeExpertiza: input.ariiDeExpertiza,
@@ -137,7 +149,7 @@ export async function updateMentorProfileAction(
   try {
     await serverApiFetch("/api/mentors/me", {
       method: "PATCH",
-      body: JSON.stringify(input),
+      body: JSON.stringify(withCleanBio(input)),
     });
   } catch (err) {
     const parsed = parseApiError(err, "Nu am putut actualiza profilul.");

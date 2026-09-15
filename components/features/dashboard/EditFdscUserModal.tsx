@@ -7,7 +7,6 @@ import { getMediaUrl } from "@/lib/api/client";
 import type { Dimension } from "@/lib/api/dimensions";
 import type { AdminUser } from "@/lib/api/users";
 import { ROLE_BADGES } from "@/lib/roles";
-import { sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize";
 import { MentorProfileFields, type MentorProfileFieldsValue } from "./MentorProfileFields";
 import { ModalOverlay } from "@/components/ui/ModalOverlay";
 
@@ -89,7 +88,7 @@ export function EditFdscUserModal({
         const result = await updateFdscUserAction(user.documentId, {
           role: "mentor",
           nume,
-          bio: sanitizeRichText(mentorFields.bio),
+          bio: mentorFields.bio,
           ...(avatarId !== undefined ? { avatar: avatarId } : {}),
           dimensiuni: mentorFields.selectedDimensions,
           ariiDeExpertiza: ariiParsed,

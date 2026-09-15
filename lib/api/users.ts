@@ -1,4 +1,5 @@
 import { serverApiFetch } from "./server";
+import { sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize.server";
 import type { UserRoleType } from "@/lib/roles";
 
 export interface AdminUser {
@@ -56,6 +57,14 @@ export function listUsers(params: ListUsersParams = {}) {
   }>(`/api/admin/users${qs ? `?${qs}` : ""}`);
 }
 
-export function getUser(documentId: string) {
-  return serverApiFetch<{ data: AdminUser }>(`/api/admin/users/${documentId}`);
+/**
+ * `bio` is sanitised on the way out: the detail screen writes it to a raw-HTML
+ * sink, and rows stored before sanitising moved server-side may still carry
+ * markup the editor could never produce.
+ */
+export async function getUser(documentId: string) {
+  const { data } = await serverApiFetch<{ data: AdminUser }>(
+    `/api/admin/users/${documentId}`,
+  );
+  return { data: { ...data, bio: data.bio === null ? null : sanitizeRichText(data.bio) } };
 }

@@ -7,7 +7,7 @@ import { userDisplayName } from "@/lib/api/auth";
 import type { Dimension } from "@/lib/api/dimensions";
 import type { MentorProfile } from "@/lib/api/mentor-profile";
 import { EditMentorProfileModal } from "./EditMentorProfileModal";
-import { hasRichText, sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize";
+import { hasRichText } from "@/components/features/page-builder/rich-text/has-rich-text";
 import { RICH_TEXT_PROSE } from "@/components/features/page-builder/rich-text/prose";
 
 function formatJoinDate(iso: string) {
@@ -86,7 +86,7 @@ export function MentorProfileDetailsCard({
           {profile.bio && hasRichText(profile.bio) ? (
             <div
               className={RICH_TEXT_PROSE}
-              dangerouslySetInnerHTML={{ __html: sanitizeRichText(profile.bio) }}
+              dangerouslySetInnerHTML={{ __html: profile.bio }}
             />
           ) : (
             <p className="text-sm" style={{ color: "#334155" }}>

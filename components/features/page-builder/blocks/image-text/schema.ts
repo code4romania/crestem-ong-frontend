@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { CTA_DEFAULTS, ctaHasTarget, ctaSchema } from "../shared/cta";
-import { sanitizeRichText, hasRichText } from "../../rich-text/sanitize";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 const uploadedImageSchema = z.object({
   id: z.number(),
@@ -18,13 +18,11 @@ export const imageTextSchema = z
     supratitlu: z.string().trim().default(""),
     titlu: z.string().trim().default(""),
     /**
-     * HTML produced by the shared TipTap editor. Sanitised on the way in so
-     * stored data is always within the editor's allowlist, regardless of source.
+     * HTML produced by the shared TipTap editor. Sanitised server-side on the
+     * way to the backend (`sanitizeBlocks`), not here: this schema also runs in
+     * the editor, and DOMPurify must stay out of the client bundle.
      */
-    text: z
-      .string()
-      .default("")
-      .transform((html) => sanitizeRichText(html)),
+    text: z.string().default(""),
     // Image placement: "stanga"/"dreapta" put the image beside the text in a
     // two-column grid; "centru" stacks it centered above the text.
     aliniere: z.enum(["stanga", "centru", "dreapta"]).default("stanga"),

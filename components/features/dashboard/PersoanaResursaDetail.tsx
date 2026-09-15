@@ -6,7 +6,7 @@ import type { Dimension } from "@/lib/api/dimensions";
 import { formatShortDate } from "@/lib/utils/date";
 import { avatarColorFor } from "@/lib/utils/avatar";
 import { dimensionBadgeFor } from "@/lib/utils/dimension-badges";
-import { hasRichText, sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize";
+import { hasRichText } from "@/components/features/page-builder/rich-text/has-rich-text";
 import { RICH_TEXT_PROSE } from "@/components/features/page-builder/rich-text/prose";
 
 export function PersoanaResursaDetail({
@@ -112,7 +112,7 @@ export function PersoanaResursaDetail({
           {mentor.bio && hasRichText(mentor.bio) ? (
             <div
               className={`mt-3 ${RICH_TEXT_PROSE}`}
-              dangerouslySetInnerHTML={{ __html: sanitizeRichText(mentor.bio) }}
+              dangerouslySetInnerHTML={{ __html: mentor.bio }}
             />
           ) : (
             <p className="mt-3 text-sm leading-relaxed" style={{ color: "#475569" }}>

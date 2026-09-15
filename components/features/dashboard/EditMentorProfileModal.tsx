@@ -3,7 +3,6 @@
 import { useState, useTransition } from "react";
 import { Loader2, X } from "lucide-react";
 import { updateMentorProfileAction, uploadUserAvatarAction } from "@/lib/api/users-actions";
-import { sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize";
 import { getMediaUrl } from "@/lib/api/client";
 import type { Dimension } from "@/lib/api/dimensions";
 import type { MentorProfile } from "@/lib/api/mentor-profile";
@@ -64,7 +63,7 @@ export function EditMentorProfileModal({
 
         const result = await updateMentorProfileAction({
           nume,
-          bio: sanitizeRichText(mentorFields.bio),
+          bio: mentorFields.bio,
           ...(avatarId !== undefined ? { avatar: avatarId } : {}),
           dimensiuni: mentorFields.selectedDimensions,
           ariiDeExpertiza: ariiParsed,

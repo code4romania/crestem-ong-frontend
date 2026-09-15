@@ -1,17 +1,15 @@
 import { z } from "zod";
-import { sanitizeRichText, hasRichText } from "../../rich-text/sanitize";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 export const richTextSchema = z
   .object({
     titlu: z.string().trim().default(""),
     /**
-     * HTML produced by the TipTap editor. Sanitised on the way in so stored
-     * data is always within the editor's allowlist, regardless of source.
+     * HTML produced by the shared TipTap editor. Sanitised server-side on the
+     * way to the backend (`sanitizeBlocks`), not here: this schema also runs in
+     * the editor, and DOMPurify must stay out of the client bundle.
      */
-    continut: z
-      .string()
-      .default("")
-      .transform((html) => sanitizeRichText(html)),
+    continut: z.string().default(""),
     aliniere: z.enum(["stanga", "centru", "dreapta"]).default("stanga"),
   })
   .refine((d) => hasRichText(d.continut), {
