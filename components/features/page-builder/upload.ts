@@ -16,12 +16,12 @@ export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 export const MAX_UPLOAD_LABEL = "5 MB";
 
 /**
- * Higher ceiling for the Documents block — reports (PDF/DOCX/XLSX) routinely run
- * larger than a page image. `bodySizeLimit` in `next.config.ts` is set above
- * this for multipart overhead; Strapi/S3 accept far more still.
+ * Ceiling for the Documents block — reports (PDF/DOCX/XLSX). `bodySizeLimit` in
+ * `next.config.ts` is set above this for multipart overhead; Strapi/S3 accept
+ * far more still.
  */
-export const MAX_DOCUMENT_BYTES = 25 * 1024 * 1024;
-export const MAX_DOCUMENT_LABEL = "25 MB";
+export const MAX_DOCUMENT_BYTES = 10 * 1024 * 1024;
+export const MAX_DOCUMENT_LABEL = "10 MB";
 
 /**
  * Shared upload-size guard for both the Media Library add flow and the
