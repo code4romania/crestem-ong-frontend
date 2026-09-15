@@ -172,15 +172,22 @@ export function AssetDetailPanel({
 
   const doReplace = (file: File) => {
     startReplace(async () => {
-      const form = new FormData();
-      form.append("files", file);
-      const res = await replaceMediaAssetFileAction(asset.documentId, form);
-      if (res.error || !res.asset) {
-        toast.error(res.error ?? "Înlocuirea a eșuat.");
-        return;
+      try {
+        const form = new FormData();
+        form.append("files", file);
+        const res = await replaceMediaAssetFileAction(asset.documentId, form);
+        if (res.error || !res.asset) {
+          toast.error(res.error ?? "Înlocuirea a eșuat.");
+          return;
+        }
+        toast.success("Fișier înlocuit.");
+        onChanged(res.asset);
+      } catch {
+        // A Server Action can throw before our own code runs (e.g. the framework
+        // failing to parse a malformed/truncated multipart body) — surface that
+        // as a toast instead of letting it bubble to the route's error boundary.
+        toast.error("Înlocuirea a eșuat. Încearcă din nou.");
       }
-      toast.success("Fișier înlocuit.");
-      onChanged(res.asset);
     });
   };
 

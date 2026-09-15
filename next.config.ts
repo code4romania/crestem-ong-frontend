@@ -12,6 +12,13 @@ const nextConfig: NextConfig = {
       // headroom for multipart boundary/header overhead.
       bodySizeLimit: "64mb",
     },
+    // `proxy.ts` (matcher: /dashboard/:path*) buffers the request body so both
+    // proxy and the Server Action can read it; that buffer defaults to 10MB
+    // regardless of `bodySizeLimit` above, silently truncating any larger
+    // upload mid-multipart-boundary before the action runs (surfaces as an
+    // "Unexpected end of form" throw). Match it to `bodySizeLimit` so uploads
+    // up to our own caps aren't corrupted in transit.
+    proxyClientMaxBodySize: "64mb",
   },
   images: {
     remotePatterns: [

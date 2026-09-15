@@ -66,37 +66,44 @@ export function useMediaUpload(
     }
 
     startUpload(async () => {
-      if (valid.length === 1) {
-        const form = new FormData();
-        form.append("file", valid[0]);
-        form.append("titlu", stripExt(valid[0].name));
-        const result = await uploadMediaAssetAction(form);
-        if (result.error || !result.asset) {
-          toast.error(result.error ?? "Nu am putut încărca fișierul.");
+      try {
+        if (valid.length === 1) {
+          const form = new FormData();
+          form.append("file", valid[0]);
+          form.append("titlu", stripExt(valid[0].name));
+          const result = await uploadMediaAssetAction(form);
+          if (result.error || !result.asset) {
+            toast.error(result.error ?? "Nu am putut încărca fișierul.");
+            return;
+          }
+          toast.success("Fișier adăugat în bibliotecă.");
+          onUploaded([result.asset]);
           return;
         }
-        toast.success("Fișier adăugat în bibliotecă.");
-        onUploaded([result.asset]);
-        return;
-      }
 
-      const form = new FormData();
-      for (const file of valid) form.append("files", file);
-      const result = await uploadMediaAssetsBatchAction(form);
-      if (result.error) {
-        toast.error(result.error);
-        return;
-      }
-      if (result.failed.length) {
-        toast.error(
-          `${result.failed.length} din ${valid.length} fișiere nu au putut fi adăugate.`,
+        const form = new FormData();
+        for (const file of valid) form.append("files", file);
+        const result = await uploadMediaAssetsBatchAction(form);
+        if (result.error) {
+          toast.error(result.error);
+          return;
+        }
+        if (result.failed.length) {
+          toast.error(
+            `${result.failed.length} din ${valid.length} fișiere nu au putut fi adăugate.`,
+          );
+        }
+        if (result.assets.length === 0) return;
+        toast.success(
+          `${result.assets.length} fișiere adăugate în bibliotecă.`,
         );
+        onUploaded(result.assets);
+      } catch {
+        // A Server Action can throw before our own code runs (e.g. the framework
+        // failing to parse a malformed/truncated multipart body) — surface that
+        // as a toast instead of letting it bubble to the route's error boundary.
+        toast.error("Nu am putut încărca fișierul. Încearcă din nou.");
       }
-      if (result.assets.length === 0) return;
-      toast.success(
-        `${result.assets.length} fișiere adăugate în bibliotecă.`,
-      );
-      onUploaded(result.assets);
     });
   };
 
