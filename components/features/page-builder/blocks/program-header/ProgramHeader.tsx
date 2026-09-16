@@ -63,9 +63,9 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
     >
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-col items-center gap-8 pb-14 text-center md:flex-row-reverse md:items-center md:justify-between md:text-left">
-          <div className="flex w-full shrink-0 justify-center md:w-1/2 md:justify-center">
+          <div className="w-full shrink-0 md:w-1/2">
             <div
-              className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-3xl bg-white md:h-48 md:w-48"
+              className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-white"
               style={{
                 boxShadow: "0 4px 24px rgba(22,32,64,0.10)",
                 border: `1.5px solid ${BORDER}`,
@@ -79,7 +79,9 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <Icon size={56} style={{ color: "#2dbe8f" }} aria-hidden />
+                <div className="flex h-full w-full items-center justify-center">
+                  <Icon size={72} style={{ color: "#2dbe8f" }} aria-hidden />
+                </div>
               )}
             </div>
           </div>
