@@ -110,7 +110,7 @@ export function HeroLargeSplit({ data }: { data: HeroLargeSplitData }) {
       style={{ background: "#162040" }}
     >
       <div
-        className={`relative max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 gap-16 items-center w-full ${
+        className={`relative max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 gap-16 items-center w-full ${
           image ? "lg:grid-cols-2" : ""
         } ${VERTICAL_ALIGN_CLASS[verticalAlign]}`}
       >

@@ -71,7 +71,7 @@ export function Statistics({ data }: { data: StatisticsData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-7xl px-6 py-16">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         {hasHeader ? (
           <div className="mb-10">
             {subtitlu ? (

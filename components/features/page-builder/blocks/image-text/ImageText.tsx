@@ -134,7 +134,7 @@ export function ImageText({ data }: { data: ImageTextData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-6xl px-6 py-16">
+      <div className="mx-auto max-w-6xl px-6 py-8">
         {stacked ? (
           <div className="mx-auto max-w-3xl">
             {imageColumn}

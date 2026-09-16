@@ -14,7 +14,7 @@ export function Gallery({ data }: { data: GalleryData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-7xl px-6 py-16">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         {titlu ? (
           <h2
             className="mb-3 font-heading wrap-break-word"

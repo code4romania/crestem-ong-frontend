@@ -70,7 +70,7 @@ function CategoryCard({ category }: { category: Category }) {
 export function CategoryGrid({ data }: { data: CategoryGridData }) {
   return (
     <section className="relative overflow-hidden">
-      <div className="relative mx-auto max-w-7xl px-6 py-20">
+      <div className="relative mx-auto max-w-7xl px-6 py-10">
         {data.titlu ? (
           <div className="mx-auto mb-12 max-w-2xl text-center">
             <h2

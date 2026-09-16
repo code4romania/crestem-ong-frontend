@@ -26,7 +26,7 @@ export function Quote({ data }: { data: QuoteData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-3xl px-6 py-16">
+      <div className="mx-auto max-w-3xl px-6 py-8">
         <figure
           className={`flex flex-col ${COLUMN_ALIGN[aliniere]} ${
             evidentiat

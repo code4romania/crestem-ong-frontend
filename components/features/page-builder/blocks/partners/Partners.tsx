@@ -55,7 +55,7 @@ export function Partners({ data }: { data: PartnersData }) {
 
   return (
     <section className="relative overflow-hidden bg-[#f5f7fb]">
-      <div className="relative mx-auto max-w-7xl px-6 py-16">
+      <div className="relative mx-auto max-w-7xl px-6 py-8">
         {titluSectiune || subtitluSectiune ? (
           <div className="mx-auto mb-10 max-w-2xl text-center">
             {titluSectiune ? (

@@ -66,7 +66,7 @@ export function PartnerCollection({ data }: { data: PartnerCollectionData }) {
       className="relative overflow-hidden"
       style={{ background: SECTION_BG }}
     >
-      <div className="relative mx-auto max-w-7xl px-6 py-16">
+      <div className="relative mx-auto max-w-7xl px-6 py-8">
         {hasHeader ? (
           <div className="mx-auto mb-11 max-w-2xl text-center">
             {data.titlu ? (

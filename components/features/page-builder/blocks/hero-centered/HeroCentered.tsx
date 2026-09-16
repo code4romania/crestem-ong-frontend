@@ -60,7 +60,7 @@ export function HeroCentered({ data }: { data: HeroCenteredData }) {
       ) : null}
 
       <div
-        className={`relative max-w-4xl mx-auto px-6 py-20 flex flex-col w-full ${ALIGN_CLASS[horizontalAlign]}`}
+        className={`relative max-w-4xl mx-auto px-6 py-10 flex flex-col w-full ${ALIGN_CLASS[horizontalAlign]}`}
       >
         {supratitlu ? (
           <div

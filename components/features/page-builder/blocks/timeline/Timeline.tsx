@@ -86,8 +86,8 @@ export function Timeline({ data }: { data: TimelineData }) {
       <div
         className={
           isHorizontal
-            ? "mx-auto max-w-5xl px-6 py-16"
-            : "mx-auto max-w-3xl px-6 py-16"
+            ? "mx-auto max-w-5xl px-6 py-8"
+            : "mx-auto max-w-3xl px-6 py-8"
         }
       >
         {titlu ? (
