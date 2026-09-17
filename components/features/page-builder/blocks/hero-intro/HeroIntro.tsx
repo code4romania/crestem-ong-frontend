@@ -44,7 +44,7 @@ export function HeroIntro({ data }: { data: HeroIntroData }) {
       style={sectionStyle}
     >
       <div
-        className={`relative max-w-3xl mx-auto px-6 py-20 flex flex-col w-full ${ALIGN_CLASS[horizontalAlign]}`}
+        className={`relative max-w-3xl mx-auto px-6 py-10 flex flex-col w-full ${ALIGN_CLASS[horizontalAlign]}`}
       >
         {supratitlu ? (
           <p

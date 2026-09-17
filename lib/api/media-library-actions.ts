@@ -5,7 +5,6 @@ import { ApiError, getApiErrorMessage } from "./client";
 import { revalidateDashboardPath } from "@/lib/api/revalidate";
 import { serverApiFetch } from "./server";
 import { getCurrentUser } from "./session-server";
-import { SESSION_COOKIE } from "./session-cookies";
 import { isFdscStaff } from "@/lib/roles";
 import type {
   MediaAssetDetail,
@@ -24,62 +23,30 @@ async function refuseNonStaff(): Promise<{ error: string } | null> {
   return isFdscStaff(user?.role?.type) ? null : { error: FORBIDDEN };
 }
 
-async function uploadRawFile(file: File): Promise<number> {
-  const { cookies } = await import("next/headers");
-  const jwt = (await cookies()).get(SESSION_COOKIE)?.value;
-  const form = new FormData();
-  form.append("files", file);
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
-    method: "POST",
-    headers: jwt ? { Authorization: `Bearer ${jwt}` } : undefined,
-    body: form,
-  });
-  const data = await res.json().catch(() => null);
-  if (!res.ok) {
-    throw new ApiError(data?.error?.message ?? "Încărcarea fișierului a eșuat.", res.status);
-  }
-  const uploaded = Array.isArray(data) ? data[0] : undefined;
-  if (typeof uploaded?.id !== "number") throw new ApiError("Răspuns neașteptat la încărcare.", 502);
-  return uploaded.id;
-}
-
-export async function uploadMediaAssetAction(
-  formData: FormData,
-): Promise<{ error?: string; asset?: MediaAssetDetail }> {
+/**
+ * Creates the media-asset row for a file the browser already uploaded directly
+ * to Strapi's `/api/upload` (`lib/api/upload-direct.ts`) — bypassing this
+ * Server Action for the raw bytes avoids Vercel's hard 4.5MB Function body
+ * limit, which a multipart file upload here would otherwise hit.
+ */
+export async function uploadMediaAssetAction(input: {
+  fisierId: number;
+  titlu: string;
+  descriere?: string;
+  eticheteIds?: number[];
+}): Promise<{ error?: string; asset?: MediaAssetDetail }> {
   const forbidden = await refuseNonStaff();
   if (forbidden) return forbidden;
-
-  const file = formData.get("file");
-  const titlu = String(formData.get("titlu") ?? "").trim();
-  if (!(file instanceof File)) return { error: "Selectează un fișier." };
-  if (!titlu) return { error: "Adaugă un titlu." };
-
-  const descriereRaw = formData.get("descriere");
-  const eticheteRaw = formData.get("eticheteIds");
-  let eticheteIds: number[] | undefined;
-  if (typeof eticheteRaw === "string" && eticheteRaw) {
-    try {
-      eticheteIds = JSON.parse(eticheteRaw);
-    } catch {
-      return { error: "Etichete invalide." };
-    }
-  }
-
-  let fisierId: number;
-  try {
-    fisierId = await uploadRawFile(file);
-  } catch (err) {
-    return { error: getApiErrorMessage(err, "Nu am putut adăuga fișierul în bibliotecă.") };
-  }
+  if (!input.titlu.trim()) return { error: "Adaugă un titlu." };
 
   try {
     const { data } = await serverApiFetch<{ data: MediaAssetDetail }>("/api/media-assets", {
       method: "POST",
       body: JSON.stringify({
-        fisierId,
-        titlu,
-        descriere: typeof descriereRaw === "string" && descriereRaw ? descriereRaw : undefined,
-        eticheteIds,
+        fisierId: input.fisierId,
+        titlu: input.titlu,
+        descriere: input.descriere,
+        eticheteIds: input.eticheteIds,
       }),
     });
     revalidateDashboardPath(LIBRARY_PATH);
@@ -89,64 +56,33 @@ export async function uploadMediaAssetAction(
     // media-asset owns it). Best-effort purge; keep the original error.
     await serverApiFetch("/api/media-assets/cleanup-orphan-file", {
       method: "POST",
-      body: JSON.stringify({ fisierId }),
+      body: JSON.stringify({ fisierId: input.fisierId }),
     }).catch(() => {});
     return { error: getApiErrorMessage(err, "Nu am putut adăuga fișierul în bibliotecă.") };
   }
 }
 
 /**
- * Batch counterpart of `uploadMediaAssetAction`: uploads the whole selection in
- * one `/api/upload` call, then creates one media-asset per file (title = the
- * file name, no tags/description yet — those are set afterwards in the batch
- * panel or the per-asset editor). A per-file create failure is recorded in
- * `failed` and its orphaned upload row is best-effort purged; the rest still
- * land. A failure of the upload call itself aborts the batch with `error`.
+ * Batch counterpart of `uploadMediaAssetAction`: the browser has already
+ * uploaded every file directly to Strapi (same reasoning as above), so this
+ * only creates one media-asset per uploaded file (title = the file name, no
+ * tags/description yet — those are set afterwards in the batch panel or the
+ * per-asset editor). A per-file create failure is recorded in `failed` and its
+ * orphaned upload row is best-effort purged; the rest still land.
  */
 export async function uploadMediaAssetsBatchAction(
-  formData: FormData,
+  fisiere: { id: number; name?: string }[],
 ): Promise<{ error?: string; assets: MediaAssetDetail[]; failed: string[] }> {
   const forbidden = await refuseNonStaff();
   if (forbidden) return { error: forbidden.error, assets: [], failed: [] };
 
-  const files = formData
-    .getAll("files")
-    .filter((f): f is File => f instanceof File);
-  if (files.length === 0) {
+  if (fisiere.length === 0) {
     return { error: "Selectează cel puțin un fișier.", assets: [], failed: [] };
-  }
-
-  const { cookies } = await import("next/headers");
-  const jwt = (await cookies()).get(SESSION_COOKIE)?.value;
-  const uploadForm = new FormData();
-  for (const f of files) uploadForm.append("files", f);
-
-  let uploaded: { id: number; name?: string }[];
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
-      method: "POST",
-      headers: jwt ? { Authorization: `Bearer ${jwt}` } : undefined,
-      body: uploadForm,
-    });
-    const data = await res.json().catch(() => null);
-    if (!res.ok || !Array.isArray(data)) {
-      throw new ApiError(
-        data?.error?.message ?? "Încărcarea fișierelor a eșuat.",
-        res.status,
-      );
-    }
-    uploaded = data;
-  } catch (err) {
-    return {
-      error: getApiErrorMessage(err, "Nu am putut încărca fișierele."),
-      assets: [],
-      failed: [],
-    };
   }
 
   const assets: MediaAssetDetail[] = [];
   const failed: string[] = [];
-  for (const row of uploaded) {
+  for (const row of fisiere) {
     try {
       const { data } = await serverApiFetch<{ data: MediaAssetDetail }>(
         "/api/media-assets",
@@ -190,40 +126,25 @@ export async function updateMediaAssetAction(
   }
 }
 
-export async function replaceMediaAssetFileAction(
-  documentId: string,
-  formData: FormData,
+/**
+ * Finishes a file replace the browser already sent directly to Strapi's
+ * `POST /api/media-assets/:id/replace` (`lib/api/upload-direct.ts`'s
+ * `postFileDirect` — bypassing this Server Action for the raw bytes, same
+ * reasoning as `uploadMediaAssetAction`). Strapi's response is passed straight
+ * through; this only applies the resulting cache invalidation, which the
+ * browser can't do itself. The caller is expected to have already handled a
+ * non-OK response (e.g. a 409 format mismatch) before calling this.
+ */
+export async function finalizeMediaAssetReplaceAction(
+  replaceResponse: { data: MediaAssetDetail; meta?: { revalidate?: string[] } },
 ): Promise<{ error?: string; asset?: MediaAssetDetail }> {
   const forbidden = await refuseNonStaff();
   if (forbidden) return forbidden;
 
-  const file = formData.get("files");
-  if (!(file instanceof File)) return { error: "Selectează un fișier." };
-
-  const { cookies } = await import("next/headers");
-  const jwt = (await cookies()).get(SESSION_COOKIE)?.value;
-  const body = new FormData();
-  body.append("files", file);
-
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/media-assets/${documentId}/replace`,
-      { method: "POST", headers: jwt ? { Authorization: `Bearer ${jwt}` } : undefined, body },
-    );
-    const data = await res.json().catch(() => null);
-    // 409 = the new file's format differs from the current one. The backend
-    // message names the required format; surface it as a plain error.
-    if (res.status === 409) {
-      return { error: data?.error?.message ?? "Fișierul nou are alt format decât cel curent." };
-    }
-    if (!res.ok) throw new ApiError(data?.error?.message ?? "Înlocuirea a eșuat.", res.status);
-    for (const cale of (data?.meta?.revalidate ?? []) as string[]) revalidatePath(cale);
-    revalidateDashboardPath(LIBRARY_PATH);
-    revalidatePath("/", "layout");
-    return { asset: data.data };
-  } catch (err) {
-    return { error: getApiErrorMessage(err, "Nu am putut înlocui fișierul.") };
-  }
+  for (const cale of replaceResponse.meta?.revalidate ?? []) revalidatePath(cale);
+  revalidateDashboardPath(LIBRARY_PATH);
+  revalidatePath("/", "layout");
+  return { asset: replaceResponse.data };
 }
 
 export async function deleteMediaAssetAction(

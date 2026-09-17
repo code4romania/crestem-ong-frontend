@@ -6,6 +6,7 @@ import { revalidateDashboardPath } from "./revalidate";
 import { serverApiFetch } from "./server";
 import { getCurrentUser } from "./session-server";
 import { isFdscStaff } from "@/lib/roles";
+import { sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize.server";
 import type { LibraryIconKey } from "./library-categories-types";
 
 export interface CategoryInput {
@@ -18,6 +19,18 @@ export interface CategoryInput {
 }
 
 const FORBIDDEN = "Nu ai permisiunea necesară pentru această acțiune.";
+
+/**
+ * `descriere` is rich text from the shared editor. Sanitising here, the same
+ * way `withCleanBio` does in `users-actions.ts`, keeps it a Server Action's
+ * job — an addressable endpoint, not the client's — and keeps `sanitize-html`
+ * out of the client bundle.
+ */
+function withCleanDescriere<T extends { descriere?: string }>(input: T): T {
+  return input.descriere === undefined
+    ? input
+    : { ...input, descriere: sanitizeRichText(input.descriere) };
+}
 
 /**
  * A Server Action is an addressable endpoint, so the staff check lives here as
@@ -48,7 +61,7 @@ export async function createCategoryAction(
   try {
     const { data } = await serverApiFetch<{ data: { documentId: string } }>(
       "/api/library-categories",
-      { method: "POST", body: JSON.stringify(input) },
+      { method: "POST", body: JSON.stringify(withCleanDescriere(input)) },
     );
     revalidateTaxonomy();
     return { documentId: data.documentId };
@@ -67,7 +80,7 @@ export async function updateCategoryAction(
   try {
     await serverApiFetch(`/api/library-categories/${documentId}`, {
       method: "PUT",
-      body: JSON.stringify(input),
+      body: JSON.stringify(withCleanDescriere(input)),
     });
   } catch (err) {
     return { error: getApiErrorMessage(err, "Nu am putut salva categoria.") };

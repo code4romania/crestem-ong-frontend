@@ -102,7 +102,7 @@ export function FeatureCards({ data }: { data: FeatureCardsData }) {
 
   return (
     <section className="relative overflow-hidden" style={sectionStyle}>
-      <div className="relative mx-auto max-w-7xl px-6 py-20">
+      <div className="relative mx-auto max-w-7xl px-6 py-10">
         {/* Section title is the small green eyebrow; the subtitle under it is
             the display-size line, matching the rest of the site's section
             headers (see `people-collection`). */}

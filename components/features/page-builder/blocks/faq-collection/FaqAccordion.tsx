@@ -66,7 +66,7 @@ export function FaqAccordion({
                 id={panelId}
                 role="region"
                 aria-labelledby={headerId}
-                className="px-6 pb-5 text-sm leading-relaxed text-[#475569] wrap-break-word"
+                className="border-t border-border px-6 pt-4 pb-5 text-sm leading-relaxed text-[#475569] wrap-break-word"
               >
                 {item.raspuns}
               </div>

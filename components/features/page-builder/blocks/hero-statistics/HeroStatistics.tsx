@@ -63,7 +63,7 @@ export function HeroStatistics({ data }: { data: HeroStatisticsData }) {
       style={{ background: NAVY_BG }}
     >
       <div
-        className={`relative max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 gap-16 items-center w-full ${
+        className={`relative max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 gap-16 items-center w-full ${
           hasStats ? "lg:grid-cols-2" : ""
         }`}
       >

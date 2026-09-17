@@ -33,7 +33,7 @@ export function ArticleHeader({ data }: { data: ArticleHeaderData }) {
 
   return (
     <section className="relative overflow-hidden" style={sectionStyle}>
-      <div className="mx-auto flex w-full max-w-4xl flex-col px-6 py-16">
+      <div className="mx-auto flex w-full max-w-4xl flex-col px-6 py-8">
         <Link
           href={LIBRARY_PATH}
           className="mb-6 inline-flex w-fit items-center gap-2 text-sm transition-opacity hover:opacity-80"

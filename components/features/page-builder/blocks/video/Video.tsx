@@ -76,7 +76,7 @@ export function Video({ data }: { data: VideoData }) {
 
   return (
     <section>
-      <div className={`mx-auto px-6 py-16 ${WIDTH_CLASS[latime]}`}>
+      <div className={`mx-auto px-6 py-8 ${WIDTH_CLASS[latime]}`}>
         {titlu && (
           <h2 className="text-2xl font-bold text-[#162040]">{titlu}</h2>
         )}

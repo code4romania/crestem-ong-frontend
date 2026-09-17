@@ -1,4 +1,5 @@
-import { BookOpen, GraduationCap } from "lucide-react";
+import { BookOpen } from "lucide-react";
+// import { GraduationCap } from "lucide-react"; // E-learning: not implemented yet, section commented out below
 
 export function ProfileActivitySections() {
   return (
@@ -39,6 +40,7 @@ export function ProfileActivitySections() {
         </table>
       </div>
 
+      {/* E-learning: module not implemented yet, hidden until it ships.
       <div className="bg-white rounded-xl border border-border overflow-hidden mb-6">
         <div className="px-5 py-4 border-b border-border flex items-center gap-2">
           <GraduationCap size={16} style={{ color: "#162040" }} />
@@ -74,6 +76,7 @@ export function ProfileActivitySections() {
           </tbody>
         </table>
       </div>
+      */}
     </>
   );
 }

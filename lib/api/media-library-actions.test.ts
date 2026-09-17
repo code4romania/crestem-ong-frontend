@@ -11,7 +11,7 @@ import {
   updateMediaAssetAction,
   deleteMediaAssetAction,
   deleteMediaAssetsBatchAction,
-  replaceMediaAssetFileAction,
+  finalizeMediaAssetReplaceAction,
   uploadMediaAssetsBatchAction,
 } from "./media-library-actions";
 import { ApiError } from "./client";
@@ -76,85 +76,59 @@ describe("deleteMediaAssetsBatchAction", () => {
   });
 });
 
-describe("replaceMediaAssetFileAction", () => {
-  it("surfaces the backend message as an error on a 409 (format mismatch)", async () => {
+describe("finalizeMediaAssetReplaceAction", () => {
+  // The raw file now goes straight from the browser to Strapi's `/replace`
+  // endpoint (see `lib/api/upload-direct.ts`), so this action only ever
+  // receives an already-successful response to finalize (cache invalidation).
+  // A 409 format mismatch is handled client-side before this is ever called.
+  it("returns the asset from Strapi's response", async () => {
     getCurrentUser.mockResolvedValue({ role: { type: "super-admin" } });
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: false,
-      status: 409,
-      json: async () => ({
-        error: { message: "Fișierul nou trebuie să aibă același format ca fișierul curent (PNG)." },
-      }),
-    });
-    vi.stubGlobal("fetch", fetchMock);
 
-    const form = new FormData();
-    form.append("files", new File(["x"], "new.pdf", { type: "application/pdf" }));
-    const res = await replaceMediaAssetFileAction("a1", form);
-
-    expect(res).toEqual({
-      error: "Fișierul nou trebuie să aibă același format ca fișierul curent (PNG).",
+    const res = await finalizeMediaAssetReplaceAction({
+      data: { documentId: "a1" } as never,
+      meta: { revalidate: ["/pagina"] },
     });
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.not.stringContaining("force"),
-      expect.any(Object),
-    );
-    vi.unstubAllGlobals();
+
+    expect(res).toEqual({ asset: { documentId: "a1" } });
+  });
+
+  it("refuses a non-staff user", async () => {
+    getCurrentUser.mockResolvedValue({ role: { type: "mentor" } });
+    const res = await finalizeMediaAssetReplaceAction({ data: { documentId: "a1" } as never });
+    expect(res.error).toMatch(/permisiune/i);
   });
 });
 
 describe("uploadMediaAssetsBatchAction", () => {
-  const batchForm = () => {
-    const form = new FormData();
-    form.append("files", new File(["a"], "one.png", { type: "image/png" }));
-    form.append("files", new File(["b"], "two.png", { type: "image/png" }));
-    return form;
-  };
+  // The raw files now go straight from the browser to Strapi's `/api/upload`
+  // (see `lib/api/upload-direct.ts`), so this action only ever receives the
+  // already-uploaded `{ id, name }` pairs and creates the media-asset rows.
+  const uploadedFiles = () => [
+    { id: 11, name: "one.png" },
+    { id: 12, name: "two.png" },
+  ];
 
   it("creates one asset per uploaded file", async () => {
     getCurrentUser.mockResolvedValue({ role: { type: "super-admin" } });
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 201,
-        json: async () => [
-          { id: 11, name: "one.png" },
-          { id: 12, name: "two.png" },
-        ],
-      }),
-    );
     serverApiFetch
       .mockResolvedValueOnce({ data: { documentId: "a11", titlu: "one" } })
       .mockResolvedValueOnce({ data: { documentId: "a12", titlu: "two" } });
 
-    const res = await uploadMediaAssetsBatchAction(batchForm());
+    const res = await uploadMediaAssetsBatchAction(uploadedFiles());
 
     expect(res.error).toBeUndefined();
     expect(res.failed).toEqual([]);
     expect(res.assets.map((a) => a.documentId)).toEqual(["a11", "a12"]);
-    vi.unstubAllGlobals();
   });
 
   it("records a per-file create failure and purges its orphan", async () => {
     getCurrentUser.mockResolvedValue({ role: { type: "super-admin" } });
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 201,
-        json: async () => [
-          { id: 11, name: "one.png" },
-          { id: 12, name: "two.png" },
-        ],
-      }),
-    );
     serverApiFetch
       .mockResolvedValueOnce({ data: { documentId: "a11", titlu: "one" } })
       .mockRejectedValueOnce(new ApiError("boom", 500))
       .mockResolvedValueOnce({}); // cleanup-orphan-file
 
-    const res = await uploadMediaAssetsBatchAction(batchForm());
+    const res = await uploadMediaAssetsBatchAction(uploadedFiles());
 
     expect(res.assets.map((a) => a.documentId)).toEqual(["a11"]);
     expect(res.failed).toEqual(["two.png"]);
@@ -162,25 +136,15 @@ describe("uploadMediaAssetsBatchAction", () => {
       "/api/media-assets/cleanup-orphan-file",
       expect.objectContaining({ method: "POST" }),
     );
-    vi.unstubAllGlobals();
   });
 
-  it("aborts with an error when the upload call fails", async () => {
+  it("returns an error when given no files", async () => {
     getCurrentUser.mockResolvedValue({ role: { type: "super-admin" } });
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: false,
-        status: 413,
-        json: async () => ({ error: { message: "prea mare" } }),
-      }),
-    );
 
-    const res = await uploadMediaAssetsBatchAction(batchForm());
+    const res = await uploadMediaAssetsBatchAction([]);
 
     expect(res.assets).toEqual([]);
     expect(res.error).toBeTruthy();
     expect(serverApiFetch).not.toHaveBeenCalled();
-    vi.unstubAllGlobals();
   });
 });

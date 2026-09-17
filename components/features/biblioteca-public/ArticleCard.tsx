@@ -22,7 +22,7 @@ export function ArticleCard({ article }: { article: ArticleSummary }) {
           {article.titlu}
         </h3>
         {article.rezumat ? (
-          <p className="mt-2 text-sm leading-relaxed text-[#475569] wrap-break-word">
+          <p className="mt-2 text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3">
             {article.rezumat}
           </p>
         ) : null}

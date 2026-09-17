@@ -30,7 +30,7 @@ export function ColumnsBlock({ data }: { data: ColumnsData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-5xl px-6 py-16">
+      <div className="mx-auto max-w-5xl px-6 py-8">
         <div className={`grid gap-8 ${gridClass}`}>
           {columns.map((column, index) => (
             <div key={index} className={`flex flex-col gap-8 ${spanFor(index)}`}>

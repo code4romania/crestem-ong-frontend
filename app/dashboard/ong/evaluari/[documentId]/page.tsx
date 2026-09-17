@@ -170,6 +170,7 @@ export default async function OngEvaluareDetailPage({
         invited={membersRes.data.invited}
         candidates={candidates}
         canAddMembers={!report.finished}
+        canRemoveMembers={!report.finished}
       />
     </div>
   );

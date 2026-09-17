@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ChevronRight, type LucideIcon } from "lucide-react";
 import { CATEGORY_ICONS } from "@/components/features/page-builder/blocks/category-grid/icons";
+import { hasRichText } from "@/components/features/page-builder/rich-text/has-rich-text";
+import { RICH_TEXT_PROSE } from "@/components/features/page-builder/rich-text/prose";
 
 /**
  * Indexed by a plain string on purpose: a category can carry an icon key this
@@ -64,10 +66,11 @@ export function CategoryCard({ category }: { category: CategoryCardData }) {
       <h2 className="font-heading text-lg font-bold text-[#162040] wrap-break-word">
         {category.nume}
       </h2>
-      {category.descriere ? (
-        <p className="mt-2 text-sm leading-relaxed text-[#475569] wrap-break-word">
-          {category.descriere}
-        </p>
+      {category.descriere && hasRichText(category.descriere) ? (
+        <div
+          className={`mt-2 wrap-break-word line-clamp-5 ${RICH_TEXT_PROSE}`}
+          dangerouslySetInnerHTML={{ __html: category.descriere }}
+        />
       ) : null}
 
       {/* `mt-auto` absorbs the leftover height, so the count and the link sit on

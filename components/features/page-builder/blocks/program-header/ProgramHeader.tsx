@@ -12,23 +12,23 @@ function SupporterLogo({ supporter }: { supporter: ProgramSupporter }) {
   const useImage = supporter.sursaIcon === "imagine" && supporter.imagine;
 
   return (
-    <div className="flex min-w-0 items-center gap-2.5">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden text-[#2563eb]">
-        {useImage && supporter.imagine ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            src={getMediaUrl(supporter.imagine.url)}
-            alt={supporter.imagineAlt || supporter.nume}
-            className="h-full w-full object-contain"
-          />
-        ) : (
-          <Icon size={26} aria-hidden />
-        )}
-      </span>
-      <span className="min-w-0 text-xs font-bold leading-tight text-[#162040] wrap-break-word">
-        {supporter.nume}
-      </span>
-    </div>
+    <span className="flex h-16 shrink-0 items-center justify-center text-[#2563eb]">
+      {useImage && supporter.imagine ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
+          src={getMediaUrl(supporter.imagine.url)}
+          alt={supporter.imagineAlt || supporter.nume}
+          className="h-full w-auto object-contain"
+        />
+      ) : (
+        <span
+          className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white"
+          style={{ border: `1.5px solid ${BORDER}` }}
+        >
+          <Icon size={32} aria-hidden />
+        </span>
+      )}
+    </span>
   );
 }
 
@@ -62,62 +62,68 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
       style={{ borderBottom: `1px solid ${BORDER}` }}
     >
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col items-center pb-14 text-center">
-          <div
-            className="mb-6 flex h-24 w-24 items-center justify-center overflow-hidden rounded-3xl bg-white"
-            style={{
-              boxShadow: "0 4px 24px rgba(22,32,64,0.10)",
-              border: `1.5px solid ${BORDER}`,
-            }}
-          >
-            {useImage && imagine ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={getMediaUrl(imagine.url)}
-                alt={imagineAlt || titlu}
-                className="h-full w-full object-contain"
-              />
-            ) : (
-              <Icon size={40} style={{ color: "#2dbe8f" }} aria-hidden />
-            )}
-          </div>
-
-          <h1
-            className="mb-3 font-heading text-[#162040] wrap-break-word"
-            style={{
-              fontSize: "clamp(2rem, 5vw, 3rem)",
-              fontWeight: 800,
-              lineHeight: 1.15,
-              maxWidth: "640px",
-            }}
-          >
-            {titlu}
-          </h1>
-
-          {subtitlu ? (
-            <p
-              className="text-[#64748b] wrap-break-word"
+        <div className="flex flex-col items-center gap-8 pb-14 text-center md:flex-row-reverse md:items-center md:justify-between md:text-left">
+          <div className="w-full shrink-0 md:w-1/2">
+            <div
+              className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-white"
               style={{
-                fontSize: "1.0625rem",
-                lineHeight: 1.7,
-                maxWidth: "520px",
+                boxShadow: "0 4px 24px rgba(22,32,64,0.10)",
+                border: `1.5px solid ${BORDER}`,
               }}
             >
-              {subtitlu}
-            </p>
-          ) : null}
+              {useImage && imagine ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={getMediaUrl(imagine.url)}
+                  alt={imagineAlt || titlu}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                  <Icon size={72} style={{ color: "#2dbe8f" }} aria-hidden />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex w-full flex-col items-center md:w-1/2 md:items-start">
+            <h1
+              className="mb-3 font-heading text-[#162040] wrap-break-word"
+              style={{
+                fontSize: "clamp(2rem, 5vw, 3rem)",
+                fontWeight: 800,
+                lineHeight: 1.15,
+                maxWidth: "640px",
+              }}
+            >
+              {titlu}
+            </h1>
+
+            {subtitlu ? (
+              <p
+                className="text-[#64748b] wrap-break-word"
+                style={{
+                  fontSize: "1.0625rem",
+                  lineHeight: 1.7,
+                  maxWidth: "520px",
+                }}
+              >
+                {subtitlu}
+              </p>
+            ) : null}
+          </div>
         </div>
       </div>
 
       {hasSupporters ? (
         <div style={{ background: SUPPORTER_BG, borderTop: `1px solid ${BORDER}` }}>
-          <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-6 py-4">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-8 px-6 py-6">
             {sustinutDeTitlu ? (
               <span className="text-xs font-semibold uppercase tracking-widest text-[#94a3b8]">
                 {sustinutDeTitlu}
               </span>
             ) : null}
-            <div className="flex flex-wrap items-center gap-8">
+            <div className="flex flex-wrap items-center gap-10">
               {sustinatori.map((supporter, index) => (
                 <SupporterLogo key={index} supporter={supporter} />
               ))}

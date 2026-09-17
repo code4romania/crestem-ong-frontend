@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronDown, Search } from "lucide-react";
 import { ROLE_OPTIONS } from "@/lib/roles";
+import { useDebouncedCallback } from "@/lib/hooks/useDebouncedCallback";
 
 interface OngOption {
   documentId: string;
@@ -37,13 +38,6 @@ export function UtilizatoriFilters({
   const [role, setRole] = useState(initialRole);
   const [ong, setOng] = useState(initialOng);
   const [status, setStatus] = useState(initialStatus);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, []);
 
   // Any filter change navigates back to page 1 — otherwise a match found by a new
   // search/filter could land on a page number that no longer exists for the new results.
@@ -57,26 +51,30 @@ export function UtilizatoriFilters({
     router.replace(qs ? `${pathname}?${qs}` : pathname);
   }
 
+  const { debounced: debouncedNavigate, cancel: cancelNavigate } = useDebouncedCallback(
+    navigate,
+    SEARCH_DEBOUNCE_MS,
+  );
+
   function handleSearchChange(value: string) {
     setSearch(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => navigate({ search: value, role, ong, status }), SEARCH_DEBOUNCE_MS);
+    debouncedNavigate({ search: value, role, ong, status });
   }
 
   function handleRoleChange(value: string) {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    cancelNavigate();
     setRole(value);
     navigate({ search, role: value, ong, status });
   }
 
   function handleOngChange(value: string) {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    cancelNavigate();
     setOng(value);
     navigate({ search, role, ong: value, status });
   }
 
   function handleStatusChange(value: string) {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    cancelNavigate();
     setStatus(value);
     navigate({ search, role, ong, status: value });
   }

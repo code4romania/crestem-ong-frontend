@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Plus, AlertCircle, Mail } from "lucide-react";
 import { AddReportMembersModal } from "./AddReportMembersModal";
+import { RemoveReportMemberButton } from "./RemoveReportMemberButton";
 import type { OngMember, ReportMember } from "@/lib/api/reports";
 import {
   MEMBER_STATUS_COLORS,
@@ -22,11 +23,13 @@ export function ReportMembersTable({
   invited,
   candidates,
   canAddMembers,
+  canRemoveMembers,
 }: {
   reportId: string;
   invited: ReportMember[];
   candidates: OngMember[];
   canAddMembers: boolean;
+  canRemoveMembers: boolean;
 }) {
   const [adding, setAdding] = useState(false);
   const completedCount = invited.filter((entry) => entry.status === "completat").length;
@@ -95,17 +98,26 @@ export function ReportMembersTable({
                     {entry.completedAt ? formatDate(entry.completedAt.slice(0, 10)) : "—"}
                   </td>
                   <td className="px-5 py-3.5 text-center">
-                    {entry.status !== "completat" && (
-                      <button
-                        type="button"
-                        disabled
-                        title="Retrimiterea invitației nu este disponibilă încă"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-border opacity-40 cursor-not-allowed"
-                        style={{ color: "#475569" }}
-                      >
-                        <Mail size={11} /> Trimite reminder
-                      </button>
-                    )}
+                    <div className="flex items-center justify-center gap-2">
+                      {entry.status !== "completat" && (
+                        <button
+                          type="button"
+                          disabled
+                          title="Retrimiterea invitației nu este disponibilă încă"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-border opacity-40 cursor-not-allowed"
+                          style={{ color: "#475569" }}
+                        >
+                          <Mail size={11} /> Trimite reminder
+                        </button>
+                      )}
+                      {canRemoveMembers && entry.status !== "completat" && (
+                        <RemoveReportMemberButton
+                          reportId={reportId}
+                          evaluationId={entry.documentId}
+                          nume={entry.user?.nume ?? "acest membru"}
+                        />
+                      )}
+                    </div>
                   </td>
                 </tr>
               );

@@ -6,6 +6,7 @@ import {
   uploadPageImageAction,
   type UploadedPageImage,
 } from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 
 /**
  * Client-side upload ceiling for page-block images/video. Kept below the Server
@@ -16,12 +17,16 @@ export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 export const MAX_UPLOAD_LABEL = "5 MB";
 
 /**
- * Higher ceiling for the Documents block — reports (PDF/DOCX/XLSX) routinely run
- * larger than a page image. `bodySizeLimit` in `next.config.ts` is set above
- * this for multipart overhead; Strapi/S3 accept far more still.
+ * Ceiling for the Documents block — reports (PDF/DOCX/XLSX). Set slightly above
+ * the advertised 10 MB to absorb real-world padding/overhead in files people
+ * label "10MB" (a sample PDF measured at 10,490,314 bytes — ~4.5KB over a
+ * strict 10 * 1024 * 1024 cap — was the case that prompted this). The label
+ * stays "10 MB" since that's the intended limit; this is tolerance, not a
+ * policy change. `bodySizeLimit` in `next.config.ts` is set above this for
+ * multipart overhead; Strapi/S3 accept far more still.
  */
-export const MAX_DOCUMENT_BYTES = 25 * 1024 * 1024;
-export const MAX_DOCUMENT_LABEL = "25 MB";
+export const MAX_DOCUMENT_BYTES = 10.5 * 1024 * 1024;
+export const MAX_DOCUMENT_LABEL = "10 MB";
 
 /**
  * Shared upload-size guard for both the Media Library add flow and the
@@ -83,17 +88,16 @@ export function usePageImageUpload(
       return;
     }
     startUpload(async () => {
-      const form = new FormData();
-      form.append("files", file);
       try {
-        const result = await uploadPageImageAction(form);
+        const [uploaded] = await uploadFilesDirect([file]);
+        const result = await uploadPageImageAction(uploaded);
         if (result.error || !result.image) {
           fail(result.error ?? "Nu am putut încărca imaginea.");
           return;
         }
         latestOnUploaded.current(result.image);
-      } catch {
-        fail("Nu am putut încărca imaginea.");
+      } catch (err) {
+        fail(err instanceof Error ? err.message : "Nu am putut încărca imaginea.");
       }
     });
   };

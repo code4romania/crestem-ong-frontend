@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronDown, Search } from "lucide-react";
 import { MEMBER_STATUS_LABELS } from "@/components/features/evaluari/evaluation-status";
 import { MultiSelectFilter } from "@/components/ui/MultiSelectFilter";
+import { useDebouncedCallback } from "@/lib/hooks/useDebouncedCallback";
 
 const SEARCH_DEBOUNCE_MS = 400;
 
@@ -44,16 +45,9 @@ export function EvaluariFilters({
   const [ongs, setOngs] = useState(initialOngs);
   const [programs, setPrograms] = useState(initialPrograms);
   const [status, setStatus] = useState(initialStatus);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // The rounds tab lists rounds, the users tab the responses inside them, so the
   // filters offer whichever of those two actually has rows.
   const scope = tab === "organizatii" ? "reports" : "evaluations";
-
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, []);
 
   // Any filter change navigates back to page 1 — otherwise a match found by a new
   // search/filter could land on a page number that no longer exists for the new results.
@@ -67,8 +61,13 @@ export function EvaluariFilters({
     router.replace(`${pathname}?${params.toString()}`);
   }
 
+  const { debounced: debouncedNavigate, cancel: cancelNavigate } = useDebouncedCallback(
+    navigate,
+    SEARCH_DEBOUNCE_MS,
+  );
+
   function change(patch: Partial<FilterState>) {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    cancelNavigate();
     if (patch.ongs !== undefined) setOngs(patch.ongs);
     if (patch.programs !== undefined) setPrograms(patch.programs);
     if (patch.status !== undefined) setStatus(patch.status);
@@ -77,11 +76,7 @@ export function EvaluariFilters({
 
   function handleSearchChange(value: string) {
     setSearch(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(
-      () => navigate({ search: value, ongs, programs, status }),
-      SEARCH_DEBOUNCE_MS,
-    );
+    debouncedNavigate({ search: value, ongs, programs, status });
   }
 
   return (

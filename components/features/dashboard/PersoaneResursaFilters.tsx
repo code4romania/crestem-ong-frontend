@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronDown, Search } from "lucide-react";
+import { useDebouncedCallback } from "@/lib/hooks/useDebouncedCallback";
 
 interface ProgramOption {
   documentId: string;
@@ -24,13 +25,6 @@ export function PersoaneResursaFilters({
   const pathname = usePathname();
   const [search, setSearch] = useState(initialSearch);
   const [program, setProgram] = useState(initialProgram);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, []);
 
   // Any filter change navigates back to page 1 — otherwise a match found by a new
   // search/filter could land on a page number that no longer exists for the new results.
@@ -42,14 +36,18 @@ export function PersoaneResursaFilters({
     router.replace(qs ? `${pathname}?${qs}` : pathname);
   }
 
+  const { debounced: debouncedNavigate, cancel: cancelNavigate } = useDebouncedCallback(
+    navigate,
+    SEARCH_DEBOUNCE_MS,
+  );
+
   function handleSearchChange(value: string) {
     setSearch(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => navigate({ search: value, program }), SEARCH_DEBOUNCE_MS);
+    debouncedNavigate({ search: value, program });
   }
 
   function handleProgramChange(value: string) {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    cancelNavigate();
     setProgram(value);
     navigate({ search, program: value });
   }

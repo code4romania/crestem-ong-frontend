@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { ArrowDown, ArrowUp, FilePlus, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { uploadPageDocumentAction } from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { MAX_DOCUMENT_BYTES, MAX_DOCUMENT_LABEL } from "../../upload";
 import { badgeTone, extLabel, formatSize } from "./helpers";
@@ -80,10 +81,9 @@ export function DocumentList({
       const added: DocumentFile[] = [];
       const failures: string[] = [];
       for (const file of withinLimit) {
-        const form = new FormData();
-        form.append("files", file);
         try {
-          const result = await uploadPageDocumentAction(form);
+          const [uploaded] = await uploadFilesDirect([file]);
+          const result = await uploadPageDocumentAction(uploaded);
           if (result.error || !result.document) {
             failures.push(
               `${file.name}: ${result.error ?? "răspuns invalid de la server"}`,

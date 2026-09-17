@@ -11,7 +11,7 @@ export function FaqCollection({ data }: { data: FaqCollectionData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-7xl px-6 py-20">
+      <div className="mx-auto max-w-7xl px-6 py-10">
         {titlu ? (
           <h2
             className="mx-auto mb-12 max-w-2xl text-center font-heading wrap-break-word"

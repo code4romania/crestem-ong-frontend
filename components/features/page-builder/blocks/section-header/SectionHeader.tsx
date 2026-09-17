@@ -20,7 +20,7 @@ export function SectionHeader({ data }: { data: SectionHeaderData }) {
 
   return (
     <section>
-      <div className={`mx-auto max-w-3xl px-6 py-16 ${ALIGN_CLASS[aliniere]}`}>
+      <div className={`mx-auto max-w-3xl px-6 py-8 ${ALIGN_CLASS[aliniere]}`}>
         <h2
           className="font-heading wrap-break-word"
           style={{

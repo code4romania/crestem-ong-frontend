@@ -3,10 +3,11 @@ const TOOLS = [
     title: "Biblioteca de resurse",
     description: "Accesează resursele disponibile pentru ONG",
   },
-  {
-    title: "E-Learning",
-    description: "Accesează cursurile online disponibile pentru ONG-ul tău",
-  },
+  // E-learning: module not implemented yet, hidden until it ships.
+  // {
+  //   title: "E-Learning",
+  //   description: "Accesează cursurile online disponibile pentru ONG-ul tău",
+  // },
 ];
 
 /**

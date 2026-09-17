@@ -3,9 +3,22 @@ import type { ArticleDetail, ArticleListResult, ArticleOption } from "./articles
 
 export * from "./articles-types";
 
-export async function listArticles(params: { search?: string; page?: number } = {}) {
+export async function listArticles(
+  params: {
+    search?: string;
+    /** A category slug — matches `LibraryCategory.slug`. */
+    categorie?: string;
+    /** A subcategory slug — matches `LibrarySubcategory.slug`. */
+    subcategorie?: string;
+    vizibilitate?: string;
+    page?: number;
+  } = {},
+) {
   const query = new URLSearchParams();
   if (params.search) query.set("search", params.search);
+  if (params.categorie) query.set("categorie", params.categorie);
+  if (params.subcategorie) query.set("subcategorie", params.subcategorie);
+  if (params.vizibilitate) query.set("vizibilitate", params.vizibilitate);
   if (params.page && params.page > 1) query.set("page", String(params.page));
   const suffix = query.toString() ? `?${query}` : "";
 

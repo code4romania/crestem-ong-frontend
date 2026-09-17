@@ -13,14 +13,14 @@ import {
   Menu,
   Workflow,
   Image as ImageIcon,
-  ListChecks,
-  Plus,
+  // ListChecks, // E-learning: not implemented yet, nav entries commented out below
+  // Plus, // E-learning: not implemented yet, nav entries commented out below
   Building2,
   UserCog,
   Users,
   Settings,
   User,
-  GraduationCap,
+  // GraduationCap, // E-learning: not implemented yet, nav entries commented out below
   Calendar,
   MessageCircle,
   Loader2,
@@ -52,13 +52,14 @@ const FDSC_NAV_SECTIONS: DashboardNavSection[] = [
       { href: "/dashboard/media-library", label: "Media library", icon: ImageIcon },
     ],
   },
-  {
-    label: "E-Learning",
-    items: [
-      { href: "/dashboard/cursuri", label: "Lista cursuri", icon: ListChecks },
-      { href: "/dashboard/cursuri/adauga", label: "Adaugă curs", icon: Plus },
-    ],
-  },
+  // E-learning: module not implemented yet, hidden from nav until it ships.
+  // {
+  //   label: "E-Learning",
+  //   items: [
+  //     { href: "/dashboard/cursuri", label: "Lista cursuri", icon: ListChecks },
+  //     { href: "/dashboard/cursuri/adauga", label: "Adaugă curs", icon: Plus },
+  //   ],
+  // },
   {
     label: "Programe",
     items: [
@@ -85,7 +86,7 @@ const ONG_NAV_SECTIONS: DashboardNavSection[] = [
       { href: "/dashboard/evaluari", label: "Evaluările mele", icon: ClipboardList },
       { href: "/dashboard/programe", label: "Programele mele", icon: Layers },
       { href: "/dashboard/utilizatori", label: "Utilizatori", icon: Users },
-      { href: "/dashboard/e-learning", label: "E-Learning", icon: GraduationCap },
+      // { href: "/dashboard/e-learning", label: "E-Learning", icon: GraduationCap }, // E-learning: not implemented yet
       { href: "/dashboard/persoane-resursa", label: "Persoane resursă", icon: UserCog },
     ],
   },
@@ -96,7 +97,7 @@ const MEMBER_NAV_SECTIONS: DashboardNavSection[] = [
     items: [
       { href: "/dashboard/profil", label: "Profilul meu", icon: User },
       { href: "/dashboard", label: "Evaluările mele", icon: ClipboardList },
-      { href: "/dashboard/e-learning", label: "E-Learning", icon: GraduationCap },
+      // { href: "/dashboard/e-learning", label: "E-Learning", icon: GraduationCap }, // E-learning: not implemented yet
     ],
   },
 ];
@@ -105,7 +106,7 @@ const INDIVIDUAL_NAV_SECTIONS: DashboardNavSection[] = [
   {
     items: [
       { href: "/dashboard", label: "Profilul meu", icon: User },
-      { href: "/dashboard/e-learning", label: "E-Learning", icon: GraduationCap },
+      // { href: "/dashboard/e-learning", label: "E-Learning", icon: GraduationCap }, // E-learning: not implemented yet
     ],
   },
 ];
@@ -184,7 +185,7 @@ export function DashboardSidebar({
   return (
     <aside className="w-60 shrink-0 h-screen sticky top-0 flex flex-col bg-white border-r border-border print:hidden">
       <div className="px-6 py-5 border-b border-border">
-        <Logo variant="dark" height={24} />
+        <Logo variant="dark" height={28} />
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">

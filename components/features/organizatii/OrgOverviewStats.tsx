@@ -154,7 +154,8 @@ export function OrgOverviewStats({
           }
         />
         <DisabledStatCard label="Număr de sesiuni de mentorat" value="—" />
-        <DisabledStatCard label="E-Learning" value="—" />
+        {/* E-learning: module not implemented yet, hidden until it ships. */}
+        {/* <DisabledStatCard label="E-Learning" value="—" /> */}
         <ProgramsCard programs={programs} />
         <StatCard
           label="Data finalizare evaluare"

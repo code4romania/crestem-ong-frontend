@@ -11,10 +11,10 @@ export function NumberedProcess({ data }: { data: NumberedProcessData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-3xl px-6 py-16">
+      <div className="mx-auto max-w-3xl px-6 py-8">
         {titlu ? (
           <h2
-            className="font-heading mb-10 wrap-break-word"
+            className="font-heading mb-10 text-center wrap-break-word"
             style={{
               fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
               fontWeight: 800,

@@ -4,7 +4,7 @@ import { OrgOverviewStats } from "@/components/features/organizatii/OrgOverviewS
 import { OrgDetailsCard } from "@/components/features/organizatii/OrgDetailsCard";
 import { OrgContactCard } from "@/components/features/organizatii/OrgContactCard";
 import { OrgLibraryActivityCard } from "@/components/features/organizatii/OrgLibraryActivityCard";
-import { OrgCoursesCard } from "@/components/features/organizatii/OrgCoursesCard";
+// import { OrgCoursesCard } from "@/components/features/organizatii/OrgCoursesCard"; // E-learning: not implemented yet
 
 export default async function OrganizatieOverviewPage({
   params,
@@ -28,7 +28,7 @@ export default async function OrganizatieOverviewPage({
         <OrgDetailsCard ong={ong} />
         <OrgContactCard ong={ong} />
         <OrgLibraryActivityCard />
-        <OrgCoursesCard />
+        {/* <OrgCoursesCard /> */}
       </div>
     </div>
   );

@@ -1,16 +1,14 @@
 import Link from "next/link";
 import { ArrowLeft, FileText, Tag } from "lucide-react";
 import type { ArticleDetail } from "@/lib/api/articles-types";
-import { formatArticleDate } from "./format";
 import { tipBadgeColors } from "./tip-badge";
 
 /**
  * The article page's header, read straight from the article record — unlike
  * the free-text `article-header` page-builder block, this cannot drift from
- * the real title, type, category, date and tags.
+ * the real title, type, category and tags.
  */
 export function PublicArticleHeader({ article }: { article: ArticleDetail }) {
-  const publicata = formatArticleDate(article.dataPublicarii);
   const tint = article.tip ? tipBadgeColors(article.tip) : null;
   const categoryHref = article.categorie ? `/biblioteca/${article.categorie.slug}` : "/biblioteca";
 
@@ -38,10 +36,6 @@ export function PublicArticleHeader({ article }: { article: ArticleDetail }) {
           ) : null}
           <p className="text-sm" style={{ color: "rgba(255,255,255,0.72)" }}>
             {article.categorie?.nume}
-            {article.categorie && publicata ? " · " : ""}
-            {publicata ? (
-              <time dateTime={article.dataPublicarii ?? undefined}>{publicata}</time>
-            ) : null}
           </p>
         </div>
 
