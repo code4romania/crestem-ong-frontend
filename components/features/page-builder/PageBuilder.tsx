@@ -310,9 +310,9 @@ export function PageBuilder({
     setDraftErrors({});
   };
 
-  const handleSubmitDraft = () => {
+  const handleSubmitDraft = (value: unknown) => {
     if (!draftDefinition || !draftType) return;
-    const result = draftDefinition.parse(draftData);
+    const result = draftDefinition.parse(value);
     if (!result.success) {
       setDraftErrors(result.errors);
       return;

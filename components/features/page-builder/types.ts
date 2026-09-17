@@ -20,10 +20,26 @@ export type BlockCategory =
 /** Field-keyed validation messages, produced from a block schema's zod errors. */
 export type BlockFieldErrors = Record<string, string>;
 
+/**
+ * Imperative escape hatch for an editor that keeps a draft-of-a-draft (e.g.
+ * Feature Cards' per-card sub-form) which only merges into `value` on some
+ * internal "save" action. The drawer uses it to fold that nested draft into
+ * `value` right before the block-level Save runs, and to warn before a
+ * discard that would otherwise drop it silently.
+ */
+export interface BlockEditorHandle {
+  /** Commit any pending nested draft into `value` and return the result (or `value` unchanged if there was nothing pending). */
+  flush: () => unknown;
+  /** Whether a nested draft is open and differs from where it started. */
+  hasUnsavedNestedDraft: () => boolean;
+}
+
 export interface BlockEditorProps {
   value: unknown;
   onChange: (next: unknown) => void;
   errors: BlockFieldErrors;
+  /** See `BlockEditorHandle`. Optional — most block editors have no nested draft and can ignore it. */
+  bindHandle?: (handle: BlockEditorHandle | null) => void;
 }
 
 export interface BlockRendererProps {
@@ -100,6 +116,7 @@ interface DefineBlockConfig<TData> {
     value: TData;
     onChange: (next: TData) => void;
     errors: BlockFieldErrors;
+    bindHandle?: (handle: BlockEditorHandle | null) => void;
   }>;
   Renderer: ComponentType<{ data: TData }>;
 }

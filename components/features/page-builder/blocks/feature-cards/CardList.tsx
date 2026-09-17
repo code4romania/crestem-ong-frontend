@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUp, ChevronLeft, Plus, Trash2 } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import { IconPicker } from "./IconPicker";
@@ -23,10 +23,18 @@ export function CardList({
   value,
   onChange,
   error,
+  bindHandle,
 }: {
   value: FeatureCard[];
   onChange: (next: FeatureCard[]) => void;
   error?: string;
+  /** See `BlockEditorHandle` — lets a parent flush the open card draft (e.g. before the block-level Save runs) or check for one before a discard. */
+  bindHandle?: (
+    handle: {
+      flush: () => FeatureCard[];
+      hasUnsavedNestedDraft: () => boolean;
+    } | null,
+  ) => void;
 }) {
   // `editing === value.length` means a brand-new card is being drafted.
   const [editing, setEditing] = useState<number | null>(null);
@@ -44,16 +52,42 @@ export function CardList({
 
   const closeForm = () => setEditing(null);
 
+  /** Same rule the "Salvează cardul" button enforces: a blank title isn't worth keeping. */
+  const commitDraft = (
+    current: FeatureCard,
+    editingIndex: number,
+    list: FeatureCard[],
+  ): FeatureCard[] | null => {
+    if (!current.titlu.trim()) return null;
+    const clean: FeatureCard = { ...current, titlu: current.titlu.trim() };
+    return editingIndex === list.length
+      ? [...list, clean]
+      : list.map((c, i) => (i === editingIndex ? clean : c));
+  };
+
   const saveDraft = () => {
-    if (!draft.titlu.trim()) return;
-    const clean: FeatureCard = { ...draft, titlu: draft.titlu.trim() };
-    onChange(
-      editing === value.length
-        ? [...value, clean]
-        : value.map((c, i) => (i === editing ? clean : c)),
-    );
+    if (editing === null) return;
+    const next = commitDraft(draft, editing, value);
+    if (!next) return;
+    onChange(next);
     setEditing(null);
   };
+
+  useEffect(() => {
+    if (!bindHandle) return;
+    bindHandle({
+      flush: () => {
+        if (editing === null) return value;
+        return commitDraft(draft, editing, value) ?? value;
+      },
+      hasUnsavedNestedDraft: () => {
+        if (editing === null) return false;
+        const original = editing === value.length ? EMPTY_CARD : value[editing];
+        return JSON.stringify(draft) !== JSON.stringify(original);
+      },
+    });
+    return () => bindHandle(null);
+  }, [bindHandle, editing, draft, value]);
 
   const remove = (index: number) =>
     onChange(value.filter((_, i) => i !== index));

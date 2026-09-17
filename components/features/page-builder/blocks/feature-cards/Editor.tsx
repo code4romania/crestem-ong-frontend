@@ -3,7 +3,7 @@
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { BackgroundPicker } from "./BackgroundPicker";
 import { CardList } from "./CardList";
-import type { BlockFieldErrors } from "../../types";
+import type { BlockEditorHandle, BlockFieldErrors } from "../../types";
 import type { FeatureCardsData } from "./schema";
 
 const labelClass =
@@ -16,10 +16,12 @@ export function FeatureCardsEditor({
   value,
   onChange,
   errors,
+  bindHandle,
 }: {
   value: FeatureCardsData;
   onChange: (next: FeatureCardsData) => void;
   errors: BlockFieldErrors;
+  bindHandle?: (handle: BlockEditorHandle | null) => void;
 }) {
   const set = (patch: Partial<FeatureCardsData>) =>
     onChange({ ...value, ...patch });
@@ -86,6 +88,16 @@ export function FeatureCardsEditor({
         value={value.carduri}
         onChange={(carduri) => set({ carduri })}
         error={errors.carduri}
+        bindHandle={
+          bindHandle &&
+          ((cardListHandle) =>
+            bindHandle(
+              cardListHandle && {
+                flush: () => ({ ...value, carduri: cardListHandle.flush() }),
+                hasUnsavedNestedDraft: cardListHandle.hasUnsavedNestedDraft,
+              },
+            ))
+        }
       />
     </div>
   );

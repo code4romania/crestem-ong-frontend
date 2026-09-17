@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { ModalPortal } from "@/components/ui/ModalPortal";
-import type { BlockDefinition, BlockFieldErrors } from "./types";
+import type { BlockDefinition, BlockEditorHandle, BlockFieldErrors } from "./types";
 
 export function BlockConfigDrawer({
   definition,
@@ -19,24 +20,41 @@ export function BlockConfigDrawer({
   errors: BlockFieldErrors;
   onChange: (next: unknown) => void;
   onCancel: () => void;
-  onSubmit: () => void;
+  onSubmit: (value: unknown) => void;
   submitLabel?: string;
 }) {
   const { Editor } = definition;
   const [entered, setEntered] = useState(false);
+  const [confirmingDiscard, setConfirmingDiscard] = useState(false);
+  // Captured once: the drawer remounts fresh every time a block draft opens.
+  const [initialDraft] = useState(draft);
+  const editorHandleRef = useRef<BlockEditorHandle | null>(null);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setEntered(true));
     return () => cancelAnimationFrame(id);
   }, []);
 
+  const requestCancel = useCallback(() => {
+    const isDirty =
+      (editorHandleRef.current?.hasUnsavedNestedDraft() ?? false) ||
+      JSON.stringify(draft) !== JSON.stringify(initialDraft);
+    if (isDirty) setConfirmingDiscard(true);
+    else onCancel();
+  }, [draft, initialDraft, onCancel]);
+
+  const handleSave = () => {
+    const value = editorHandleRef.current?.flush() ?? draft;
+    onSubmit(value);
+  };
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onCancel();
+      if (e.key === "Escape") requestCancel();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onCancel]);
+  }, [requestCancel]);
 
   return (
     <ModalPortal>
@@ -44,7 +62,7 @@ export function BlockConfigDrawer({
         <button
           type="button"
           aria-label="Închide"
-          onClick={onCancel}
+          onClick={requestCancel}
           className="absolute inset-0 h-full w-full cursor-default bg-black/40"
         />
         <div
@@ -69,7 +87,7 @@ export function BlockConfigDrawer({
             </div>
             <button
               type="button"
-              onClick={onCancel}
+              onClick={requestCancel}
               aria-label="Închide"
               className="shrink-0 text-muted-foreground hover:text-foreground"
             >
@@ -78,20 +96,27 @@ export function BlockConfigDrawer({
           </div>
 
           <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
-            <Editor value={draft} onChange={onChange} errors={errors} />
+            <Editor
+              value={draft}
+              onChange={onChange}
+              errors={errors}
+              bindHandle={(handle) => {
+                editorHandleRef.current = handle;
+              }}
+            />
           </div>
 
           <div className="flex items-center gap-3 border-t border-border px-6 py-4">
             <button
               type="button"
-              onClick={onCancel}
+              onClick={requestCancel}
               className="rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50"
             >
               Anulează
             </button>
             <button
               type="button"
-              onClick={onSubmit}
+              onClick={handleSave}
               className="flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
               style={{ background: "#2dbe8f" }}
             >
@@ -100,6 +125,19 @@ export function BlockConfigDrawer({
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmingDiscard}
+        title="Renunți la modificări?"
+        description="Modificările nesalvate vor fi pierdute."
+        confirmLabel="Renunță la modificări"
+        cancelLabel="Rămâi"
+        onConfirm={() => {
+          setConfirmingDiscard(false);
+          onCancel();
+        }}
+        onCancel={() => setConfirmingDiscard(false)}
+      />
     </ModalPortal>
   );
 }
