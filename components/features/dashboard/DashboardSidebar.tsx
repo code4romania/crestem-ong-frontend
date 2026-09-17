@@ -184,7 +184,7 @@ export function DashboardSidebar({
   return (
     <aside className="w-60 shrink-0 h-screen sticky top-0 flex flex-col bg-white border-r border-border print:hidden">
       <div className="px-6 py-5 border-b border-border">
-        <Logo variant="dark" height={24} />
+        <Logo variant="dark" height={28} />
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
