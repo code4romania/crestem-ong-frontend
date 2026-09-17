@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import {
   ContentEditorShell,
@@ -17,6 +18,7 @@ import {
 import type { ArticleDetail } from "@/lib/api/articles-types";
 import type { LibraryCategory } from "@/lib/api/library-categories-types";
 import type { PageOption } from "@/lib/api/pages-types";
+import { SubcategorySelect } from "./SubcategorySelect";
 import { TagsField } from "./TagsField";
 
 // Mirrors the backend's `rezumatBase` cap in article validation.
@@ -238,23 +240,7 @@ export function ArticleForm({
                 >
                   Subcategorie
                 </label>
-                <select
-                  id="articol-subcategorie"
-                  value={subcategorie}
-                  onChange={(event) => setSubcategorie(event.target.value)}
-                  className={inputClass}
-                >
-                  <option value="">Alege o subcategorie…</option>
-                  {groups.map((category) => (
-                    <optgroup key={category.documentId} label={category.nume}>
-                      {category.copii.map((child) => (
-                        <option key={child.documentId} value={child.documentId}>
-                          {child.nume}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
+                <SubcategorySelect groups={groups} value={subcategorie} onChange={setSubcategorie} />
               </div>
 
               <div>
@@ -302,15 +288,21 @@ export function ArticleForm({
               >
                 Status
               </label>
-              <select
-                id="article-status"
-                value={publicat ? "publicat" : "schita"}
-                onChange={(event) => setPublicat(event.target.value === "publicat")}
-                className={inputClass}
-              >
-                <option value="schita">Schiță</option>
-                <option value="publicat">Publicat</option>
-              </select>
+              <div className="relative">
+                <select
+                  id="article-status"
+                  value={publicat ? "publicat" : "schita"}
+                  onChange={(event) => setPublicat(event.target.value === "publicat")}
+                  className={`${inputClass} appearance-none pr-10`}
+                >
+                  <option value="schita">Schiță</option>
+                  <option value="publicat">Publicat</option>
+                </select>
+                <ChevronDown
+                  size={16}
+                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
+              </div>
               <p className="mt-1.5 text-xs text-muted-foreground">
                 O schiță nu apare pe site. Statusul se aplică la salvare.
               </p>
