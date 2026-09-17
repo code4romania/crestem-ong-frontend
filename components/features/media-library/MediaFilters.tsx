@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Search, X } from "lucide-react";
 import { toast } from "sonner";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { deleteMediaTagAction } from "@/lib/api/media-library-actions";
 import type { MediaTag } from "@/lib/api/media-library-types";
+import { useDebouncedCallback } from "@/lib/hooks/useDebouncedCallback";
 
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -46,7 +47,6 @@ export function MediaFilters({
   onTagDeleted?: () => void;
 }) {
   const [searchDraft, setSearchDraft] = useState(search);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Tracks the last `search` prop value we've reconciled the draft against, so a
   // prop change from outside (back button, filter reset) re-seeds the input
   // without a setState-in-effect — React's "adjust state on prop change"
@@ -55,38 +55,27 @@ export function MediaFilters({
   const [deletingTag, setDeletingTag] = useState<MediaTag | null>(null);
   const [deletePending, startDelete] = useTransition();
 
+  // `tip` and tag changes apply immediately and must flush any pending search so
+  // the debounced keystrokes aren't lost on the navigation this triggers.
+  const { debounced: handleSearchChangeDebounced, cancel: flushSearch, isPending } =
+    useDebouncedCallback(
+      (value: string) => onChange({ search: value, tip: lockedTip ?? tip, tagSlugs }),
+      SEARCH_DEBOUNCE_MS,
+    );
+
   // Only adopt the incoming prop when it genuinely changed from what we last
   // synced AND no debounced push is in flight — otherwise the round-trip echo of
   // a value the user is still typing would clobber the draft mid-keystroke.
   if (search !== syncedTo) {
     setSyncedTo(search);
-    if (debounceRef.current === null) {
+    if (!isPending()) {
       setSearchDraft(search);
     }
   }
 
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, []);
-
   const handleSearchChange = (value: string) => {
     setSearchDraft(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      debounceRef.current = null;
-      onChange({ search: value, tip: lockedTip ?? tip, tagSlugs });
-    }, SEARCH_DEBOUNCE_MS);
-  };
-
-  // `tip` and tag changes apply immediately and must flush any pending search so
-  // the debounced keystrokes aren't lost on the navigation this triggers.
-  const flushSearch = () => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-      debounceRef.current = null;
-    }
+    handleSearchChangeDebounced(value);
   };
 
   const clearSearch = () => {

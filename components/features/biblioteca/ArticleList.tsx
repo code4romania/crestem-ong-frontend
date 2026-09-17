@@ -3,17 +3,28 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Pencil, Plus, Search, Settings, Trash2 } from "lucide-react";
+import { ChevronDown, Eye, EyeOff, Pencil, Plus, Search, Settings, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { deleteArticleAction, setArticlePublishedAction } from "@/lib/api/articles-actions";
 import type { ArticleListResult, ArticleSummary } from "@/lib/api/articles-types";
-import { AUDIENCE_LABEL } from "@/lib/api/pages-types";
+import { AUDIENCE_LABEL, VISIBILITY_AUDIENCES } from "@/lib/api/pages-types";
+import type { LibraryCategory } from "@/lib/api/library-categories-types";
+import { useDebouncedCallback } from "@/lib/hooks/useDebouncedCallback";
 
 type Pagination = ArticleListResult["meta"]["pagination"];
 
+interface Filters {
+  search: string;
+  categorie: string;
+  subcategorie: string;
+  vizibilitate: string;
+}
+
 /** At most this many tag chips before the rest collapse into `+N`. */
 const VISIBLE_TAGS = 2;
+
+const SEARCH_DEBOUNCE_MS = 400;
 
 const formatDate = (value: string | null) =>
   value ? new Date(value).toLocaleDateString("ro-RO") : "—";
@@ -21,11 +32,21 @@ const formatDate = (value: string | null) =>
 export function ArticleList({
   articles,
   search,
+  categorie,
+  subcategorie,
+  vizibilitate,
+  categories,
   pagination,
   canCreate,
 }: {
   articles: ArticleSummary[];
   search: string;
+  /** Active category filter, a slug — matches `LibraryCategory.slug`. */
+  categorie: string;
+  /** Active subcategory filter, a slug — matches `LibrarySubcategory.slug`. */
+  subcategorie: string;
+  vizibilitate: string;
+  categories: LibraryCategory[];
   pagination: Pagination;
   /**
    * False when no subcategory exists anywhere. An article requires one, so the
@@ -39,15 +60,52 @@ export function ArticleList({
   const [deleting, setDeleting] = useState<ArticleSummary | null>(null);
   const [pending, startTransition] = useTransition();
 
-  const submitSearch = (value: string) => {
+  // The subcategory options narrow to the chosen category, so choosing a
+  // category never leaves a stale subcategory from a different branch selected.
+  const activeCategory = categories.find((category) => category.slug === categorie);
+  const subcategoryOptions = activeCategory ? activeCategory.copii : categories.flatMap((c) => c.copii);
+
+  function navigate(next: Filters) {
+    const params = new URLSearchParams();
+    if (next.search) params.set("search", next.search);
+    if (next.categorie) params.set("categorie", next.categorie);
+    if (next.subcategorie) params.set("subcategorie", next.subcategorie);
+    if (next.vizibilitate) params.set("vizibilitate", next.vizibilitate);
+    const qs = params.toString();
+    startTransition(() => router.push(`/dashboard/biblioteca${qs ? `?${qs}` : ""}`));
+  }
+
+  const { debounced: debouncedNavigate, cancel: cancelNavigate } = useDebouncedCallback(
+    navigate,
+    SEARCH_DEBOUNCE_MS,
+  );
+
+  function handleSearchChange(value: string) {
     setTerm(value);
-    const query = value.trim() ? `?search=${encodeURIComponent(value.trim())}` : "";
-    startTransition(() => router.push(`/dashboard/biblioteca${query}`));
-  };
+    debouncedNavigate({ search: value, categorie, subcategorie, vizibilitate });
+  }
+
+  function handleCategorieChange(value: string) {
+    cancelNavigate();
+    navigate({ search: term, categorie: value, subcategorie: "", vizibilitate });
+  }
+
+  function handleSubcategorieChange(value: string) {
+    cancelNavigate();
+    navigate({ search: term, categorie, subcategorie: value, vizibilitate });
+  }
+
+  function handleVizibilitateChange(value: string) {
+    cancelNavigate();
+    navigate({ search: term, categorie, subcategorie, vizibilitate: value });
+  }
 
   function hrefForPage(targetPage: number) {
     const params = new URLSearchParams();
     if (search) params.set("search", search);
+    if (categorie) params.set("categorie", categorie);
+    if (subcategorie) params.set("subcategorie", subcategorie);
+    if (vizibilitate) params.set("vizibilitate", vizibilitate);
     if (targetPage > 1) params.set("page", String(targetPage));
     const qs = params.toString();
     return `/dashboard/biblioteca${qs ? `?${qs}` : ""}`;
@@ -109,17 +167,86 @@ export function ArticleList({
         </div>
       </div>
 
-      <div className="relative mb-5">
-        <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
-        <input
-          value={term}
-          onChange={(event) => setTerm(event.target.value)}
-          onKeyDown={(event) => event.key === "Enter" && submitSearch(term)}
-          onBlur={() => submitSearch(term)}
-          placeholder="Caută articole..."
-          aria-label="Caută articole"
-          className="w-full rounded-xl border border-border py-2.5 pl-10 pr-4 text-sm focus:border-[#2dbe8f] focus:outline-none"
-        />
+      <div className="mb-5 flex flex-col gap-3 sm:flex-row">
+        <div className="relative flex-1">
+          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
+          <input
+            value={term}
+            onChange={(event) => handleSearchChange(event.target.value)}
+            placeholder="Caută articole..."
+            aria-label="Caută articole"
+            className="w-full rounded-xl border border-border py-2.5 pl-10 pr-4 text-sm focus:border-[#2dbe8f] focus:outline-none"
+          />
+        </div>
+
+        <div className="relative">
+          <label htmlFor="biblioteca-categorie" className="sr-only">
+            Filtrează după categorie
+          </label>
+          <select
+            id="biblioteca-categorie"
+            value={categorie}
+            onChange={(event) => handleCategorieChange(event.target.value)}
+            className="w-full appearance-none rounded-xl border border-border bg-white py-2.5 pl-4 pr-9 text-sm sm:w-48"
+          >
+            <option value="">Toate categoriile</option>
+            {categories.map((category) => (
+              <option key={category.documentId} value={category.slug}>
+                {category.nume}
+              </option>
+            ))}
+          </select>
+          <ChevronDown
+            size={14}
+            className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+          />
+        </div>
+
+        <div className="relative">
+          <label htmlFor="biblioteca-subcategorie" className="sr-only">
+            Filtrează după subcategorie
+          </label>
+          <select
+            id="biblioteca-subcategorie"
+            value={subcategorie}
+            onChange={(event) => handleSubcategorieChange(event.target.value)}
+            className="w-full appearance-none rounded-xl border border-border bg-white py-2.5 pl-4 pr-9 text-sm sm:w-48"
+          >
+            <option value="">Toate subcategoriile</option>
+            {subcategoryOptions.map((subcategory) => (
+              <option key={subcategory.documentId} value={subcategory.slug}>
+                {subcategory.nume}
+              </option>
+            ))}
+          </select>
+          <ChevronDown
+            size={14}
+            className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+          />
+        </div>
+
+        <div className="relative">
+          <label htmlFor="biblioteca-vizibilitate" className="sr-only">
+            Filtrează după vizibilitate
+          </label>
+          <select
+            id="biblioteca-vizibilitate"
+            value={vizibilitate}
+            onChange={(event) => handleVizibilitateChange(event.target.value)}
+            className="w-full appearance-none rounded-xl border border-border bg-white py-2.5 pl-4 pr-9 text-sm sm:w-48"
+          >
+            <option value="">Toate audiențele</option>
+            {VISIBILITY_AUDIENCES.map((audience) => (
+              <option key={audience} value={audience}>
+                {AUDIENCE_LABEL[audience]}
+              </option>
+            ))}
+          </select>
+          <ChevronDown
+            size={14}
+            className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+          />
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-white">
@@ -259,7 +386,7 @@ export function ArticleList({
         {articles.length === 0 && (
           <div className="px-5 py-10 text-center">
             <p className="text-sm text-muted-foreground">
-              {search
+              {search || categorie || subcategorie || vizibilitate
                 ? "Niciun articol găsit."
                 : canCreate
                   ? "Nu există încă niciun articol. Adaugă primul cu „Articol nou”."
