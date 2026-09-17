@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, User } from "lucide-react";
 import { LinkPendingIndicator } from "@/components/ui/LinkPendingIndicator";
+import { RefreshableLink } from "@/components/ui/RefreshableLink";
 import type { MenuItem } from "@/lib/api/menus";
 import type { NavUser } from "./types";
 
@@ -61,7 +61,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                   {expanded && (
                     <div className="pl-4 flex flex-col gap-0.5">
                       {item.children.map((child) => (child.url ? (
-                        <Link
+                        <RefreshableLink
                           key={`${child.label}-${child.url}`}
                           href={child.url}
                           onClick={closeIfSamePage(child.url)}
@@ -69,7 +69,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                         >
                           {child.label}
                           <LinkPendingIndicator />
-                        </Link>
+                        </RefreshableLink>
                       ) : null))}
                     </div>
                   )}
@@ -80,7 +80,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
             if (!item.url) return null;
             const isActive = pathname === item.url;
             return (
-              <Link
+              <RefreshableLink
                 key={item.label}
                 href={item.url}
                 onClick={closeIfSamePage(item.url)}
@@ -88,7 +88,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
               >
                 {item.label}
                 <LinkPendingIndicator />
-              </Link>
+              </RefreshableLink>
             );
           })}
 
@@ -102,7 +102,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                   <User size={16} className="shrink-0" />
                   {user.nume}
                 </p>
-                <Link
+                <RefreshableLink
                   href={user.dashboardHref}
                   onClick={closeIfSamePage(user.dashboardHref)}
                   className="flex items-center justify-center gap-2 py-3 text-center rounded-lg text-sm font-semibold text-white"
@@ -110,11 +110,11 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                 >
                   Mergi la dashboard
                   <LinkPendingIndicator />
-                </Link>
+                </RefreshableLink>
               </>
             ) : (
               <>
-                <Link
+                <RefreshableLink
                   href="/autentificare"
                   onClick={closeIfSamePage("/autentificare")}
                   className="flex items-center justify-center gap-2 py-3 text-center rounded-lg text-sm font-medium transition-colors hover:bg-muted"
@@ -122,8 +122,8 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                 >
                   Intră în cont
                   <LinkPendingIndicator />
-                </Link>
-                <Link
+                </RefreshableLink>
+                <RefreshableLink
                   href="/inregistrare"
                   onClick={closeIfSamePage("/inregistrare")}
                   className="flex items-center justify-center gap-2 py-3 text-center rounded-lg text-sm font-semibold text-white"
@@ -131,7 +131,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                 >
                   Înregistrează-te
                   <LinkPendingIndicator />
-                </Link>
+                </RefreshableLink>
               </>
             )}
           </div>

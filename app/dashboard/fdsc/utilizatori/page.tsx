@@ -3,7 +3,7 @@ import { serverApiFetch } from "@/lib/api/server";
 import { getCurrentUser } from "@/lib/api/session-server";
 import { listUsers } from "@/lib/api/users";
 import { listDimensions } from "@/lib/api/dimensions";
-import type { Ong } from "@/lib/api/ongs";
+import type { OngName } from "@/lib/api/ongs";
 import { UtilizatoriFilters } from "@/components/features/dashboard/UtilizatoriFilters";
 import { UtilizatoriTable } from "@/components/features/dashboard/UtilizatoriTable";
 import { UtilizatoriPagination } from "@/components/features/dashboard/UtilizatoriPagination";
@@ -31,7 +31,9 @@ export default async function Page({ searchParams }: PageProps) {
 
   const [{ data: users, meta }, { data: ongs }, dimensions] = await Promise.all([
     listUsers({ search, role, ong, status, page }),
-    serverApiFetch<{ data: Ong[] }>("/api/ongs"),
+    // Names only: this list fills the organization filter, and `/api/ongs`
+    // serves one page of twenty now.
+    serverApiFetch<{ data: OngName[] }>("/api/ongs/names"),
     listDimensions(),
   ]);
 

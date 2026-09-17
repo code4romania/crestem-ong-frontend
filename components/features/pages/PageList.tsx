@@ -13,10 +13,17 @@ type Pagination = PageListResult["meta"]["pagination"];
 
 export function PageList({
   pages,
+  homepage,
   search,
   pagination,
 }: {
   pages: PageSummary[];
+  /**
+   * The landing page, served outside the paginated set. It is rendered first
+   * on every page of the list and under every search term: editing it is a
+   * frequent job, and it must never be something to page or search for.
+   */
+  homepage: PageSummary | null;
   search: string;
   pagination: Pagination;
 }) {
@@ -107,70 +114,27 @@ export function PageList({
             </tr>
           </thead>
           <tbody>
+            {homepage && (
+              <PageRow
+                page={homepage}
+                pending={pending}
+                onTogglePublished={togglePublished}
+                onDelete={setDeleting}
+              />
+            )}
             {pages.map((page) => (
-              <tr key={page.documentId} className="border-b border-border last:border-0 hover:bg-slate-50">
-                <td className="px-4 py-3.5 font-heading font-semibold text-[#162040]">
-                  {page.titlu}
-                </td>
-                <td className="px-4 py-3.5">
-                  <code className="rounded bg-slate-100 px-2 py-0.5 text-xs text-[#475569]">
-                    {page.cale}
-                  </code>
-                </td>
-                <td className="px-4 py-3.5">
-                  <span
-                    className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                      page.publicat
-                        ? "bg-[#f0fdf4] text-[#16a34a]"
-                        : "bg-[#fffbeb] text-[#d97706]"
-                    }`}
-                  >
-                    {page.publicat ? "publicat" : "schiță"}
-                  </span>
-                </td>
-                <td className="px-4 py-3.5 text-[#475569]">
-                  {page.vizibilitate.map((audience) => AUDIENCE_LABEL[audience]).join(", ")}
-                </td>
-                <td className="px-4 py-3.5 text-muted-foreground">
-                  {new Date(page.actualizat).toLocaleDateString("ro-RO")}
-                </td>
-                <td className="px-4 py-3.5">
-                  <div className="flex items-center gap-1.5">
-                    <Link
-                      href={`/dashboard/pagini/${page.documentId}`}
-                      aria-label={`Editează „${page.titlu}"`}
-                      className="rounded-lg p-1.5 text-[#64748b] transition-colors hover:bg-slate-100"
-                    >
-                      <Pencil size={13} />
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => togglePublished(page)}
-                      disabled={pending}
-                      aria-label={
-                        page.publicat ? `Retrage „${page.titlu}"` : `Publică „${page.titlu}"`
-                      }
-                      className="rounded-lg p-1.5 text-[#64748b] transition-colors hover:bg-slate-100 disabled:opacity-50"
-                    >
-                      {page.publicat ? <EyeOff size={13} /> : <Eye size={13} />}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setDeleting(page)}
-                      disabled={pending}
-                      aria-label={`Șterge „${page.titlu}"`}
-                      className="rounded-lg p-1.5 text-[#94a3b8] transition-colors hover:bg-red-50 hover:text-[#dc2626] disabled:opacity-50"
-                    >
-                      <Trash2 size={13} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              <PageRow
+                key={page.documentId}
+                page={page}
+                pending={pending}
+                onTogglePublished={togglePublished}
+                onDelete={setDeleting}
+              />
             ))}
           </tbody>
         </table>
 
-        {pages.length === 0 && (
+        {pages.length === 0 && !homepage && (
           <div className="px-5 py-10 text-center">
             <p className="text-sm text-muted-foreground">Nicio pagină găsită.</p>
           </div>
@@ -203,6 +167,96 @@ export function PageList({
         onCancel={() => setDeleting(null)}
       />
     </div>
+  );
+}
+
+/**
+ * One row of the table. The landing page and the paginated pages share it, so
+ * the two never drift apart; what the landing page does not get is the pair of
+ * controls that could take the site's root down.
+ */
+function PageRow({
+  page,
+  pending,
+  onTogglePublished,
+  onDelete,
+}: {
+  page: PageSummary;
+  pending: boolean;
+  onTogglePublished: (page: PageSummary) => void;
+  onDelete: (page: PageSummary) => void;
+}) {
+  return (
+    <tr className="border-b border-border last:border-0 hover:bg-slate-50">
+      <td className="px-4 py-3.5 font-heading font-semibold text-[#162040]">
+        {page.titlu}
+        {page.esteHomepage && (
+          <span className="ml-2 rounded-full bg-[#eff6ff] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#2563eb]">
+            Pagină de start
+          </span>
+        )}
+      </td>
+      <td className="px-4 py-3.5">
+        <code className="rounded bg-slate-100 px-2 py-0.5 text-xs text-[#475569]">
+          {page.cale}
+        </code>
+      </td>
+      <td className="px-4 py-3.5">
+        <span
+          className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+            page.publicat
+              ? "bg-[#f0fdf4] text-[#16a34a]"
+              : "bg-[#fffbeb] text-[#d97706]"
+          }`}
+        >
+          {page.publicat ? "publicat" : "schiță"}
+        </span>
+      </td>
+      <td className="px-4 py-3.5 text-[#475569]">
+        {page.vizibilitate.map((audience) => AUDIENCE_LABEL[audience]).join(", ")}
+      </td>
+      <td className="px-4 py-3.5 text-muted-foreground">
+        {new Date(page.actualizat).toLocaleDateString("ro-RO")}
+      </td>
+      <td className="px-4 py-3.5">
+        <div className="flex items-center gap-1.5">
+          <Link
+            href={`/dashboard/pagini/${page.documentId}`}
+            aria-label={`Editează „${page.titlu}"`}
+            className="rounded-lg p-1.5 text-[#64748b] transition-colors hover:bg-slate-100"
+          >
+            <Pencil size={13} />
+          </Link>
+          {/* Neither control exists for the landing page: the
+              backend refuses both, and offering a button that always
+              errors is worse than not offering it. */}
+          {!page.esteHomepage && (
+            <>
+              <button
+                type="button"
+                onClick={() => onTogglePublished(page)}
+                disabled={pending}
+                aria-label={
+                  page.publicat ? `Retrage „${page.titlu}"` : `Publică „${page.titlu}"`
+                }
+                className="rounded-lg p-1.5 text-[#64748b] transition-colors hover:bg-slate-100 disabled:opacity-50"
+              >
+                {page.publicat ? <EyeOff size={13} /> : <Eye size={13} />}
+              </button>
+              <button
+                type="button"
+                onClick={() => onDelete(page)}
+                disabled={pending}
+                aria-label={`Șterge „${page.titlu}"`}
+                className="rounded-lg p-1.5 text-[#94a3b8] transition-colors hover:bg-red-50 hover:text-[#dc2626] disabled:opacity-50"
+              >
+                <Trash2 size={13} />
+              </button>
+            </>
+          )}
+        </div>
+      </td>
+    </tr>
   );
 }
 

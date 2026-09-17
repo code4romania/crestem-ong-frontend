@@ -33,6 +33,9 @@ export function ContentEditorShell({
   extraFields,
   extraActions,
   slugHint,
+  lockSlug = false,
+  lockVisibility = false,
+  minBlocks = 0,
   builderTitle,
   builderDescription,
   saveLabel,
@@ -61,6 +64,15 @@ export function ContentEditorShell({
   /** Rendered under the slug input — the article's derived path, say. */
   slugHint?: ReactNode;
   /**
+   * Keeps the slug as stored. The homepage uses it: its address is the site
+   * root whatever the slug says, and the backend refuses a change anyway.
+   */
+  lockSlug?: boolean;
+  /** Same, for the audience list — the landing page is public, always. */
+  lockVisibility?: boolean;
+  /** Forwarded to `PageBuilder`: the floor on the block count. */
+  minBlocks?: number;
+  /**
    * The block canvas heading. Forwarded to `PageBuilder`, which owns that
    * heading — the shell used to print a second one of its own above it, so an
    * article read "Conținut articol" and then the builder's own "Pagini".
@@ -87,6 +99,13 @@ export function ContentEditorShell({
   const [slugTouched, setSlugTouched] = useState(hasExistingRecord);
 
   const changeTitlu = (titlu: string) => {
+    // A locked slug does not follow anything: renaming the homepage must not
+    // rewrite a field the backend will then refuse.
+    if (lockSlug) {
+      onChange({ ...value, titlu });
+      return;
+    }
+
     // The slug follows the title until the editor writes one by hand; after
     // that it is theirs, and a rename must not silently break existing links.
     onChange({ ...value, titlu, slug: slugTouched ? value.slug : slugify(titlu) });
@@ -114,11 +133,15 @@ export function ContentEditorShell({
             <input
               id="page-slug"
               value={value.slug}
+              readOnly={lockSlug}
               onChange={(event) => {
+                if (lockSlug) return;
                 setSlugTouched(true);
                 onChange({ ...value, slug: event.target.value });
               }}
-              className={inputClass}
+              className={
+                lockSlug ? `${inputClass} bg-slate-50 text-muted-foreground` : inputClass
+              }
             />
             {slugHint}
           </div>
@@ -127,6 +150,7 @@ export function ContentEditorShell({
 
         <VisibilityField
           value={value.vizibilitate}
+          disabled={lockVisibility}
           onChange={(vizibilitate) => onChange({ ...value, vizibilitate })}
         />
       </div>
@@ -143,6 +167,7 @@ export function ContentEditorShell({
           currentPageId={currentPageId}
           currentPath={currentPath}
           categories={categories}
+          minBlocks={minBlocks}
         />
       </RenderModeProvider>
 

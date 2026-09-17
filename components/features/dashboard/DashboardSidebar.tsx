@@ -28,6 +28,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { LinkPendingIndicator } from "@/components/ui/LinkPendingIndicator";
+import { RefreshableLink } from "@/components/ui/RefreshableLink";
 import { logoutSession } from "@/lib/api/session";
 
 export interface DashboardNavSection {
@@ -199,7 +200,7 @@ export function DashboardSidebar({
                 const Icon = item.icon;
                 const active = item.href === activeHref;
                 return (
-                  <Link
+                  <RefreshableLink
                     key={item.href}
                     href={item.href}
                     className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
@@ -210,7 +211,7 @@ export function DashboardSidebar({
                     }
                   >
                     <NavItemContent icon={Icon} label={item.label} />
-                  </Link>
+                  </RefreshableLink>
                 );
               })}
             </div>

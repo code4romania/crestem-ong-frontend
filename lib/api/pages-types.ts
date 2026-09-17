@@ -46,6 +46,12 @@ export interface PageSummary {
   publicat: boolean;
   vizibilitate: VisibilityAudience[];
   actualizat: string;
+  /**
+   * The site's landing page. It answers at `/`, and cannot be deleted,
+   * withdrawn, emptied, renamed or filed under another page — the backend
+   * refuses each of those, and the admin hides the controls for them.
+   */
+  esteHomepage: boolean;
 }
 
 export interface PageDetail extends PageSummary {
@@ -54,7 +60,14 @@ export interface PageDetail extends PageSummary {
 
 export interface PageListResult {
   data: PageSummary[];
-  meta: { pagination: { page: number; pageSize: number; total: number; pageCount: number } };
+  meta: {
+    /**
+     * Served outside `data`: the landing page is never paginated away and never
+     * filtered out by a search, so the admin can always offer it for editing.
+     */
+    homepage: PageSummary | null;
+    pagination: { page: number; pageSize: number; total: number; pageCount: number };
+  };
 }
 
 /** A page as the menu editor's picker needs it: enough to choose, and to warn. */
@@ -66,4 +79,6 @@ export interface PageOption {
   cale: string;
   parinte: string | null;
   publicat: boolean;
+  /** A menu item may link to it; the parent picker must not offer it. */
+  esteHomepage: boolean;
 }

@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LinkPendingIndicator } from "@/components/ui/LinkPendingIndicator";
+import { RefreshableLink } from "@/components/ui/RefreshableLink";
 import type { MenuItem } from "@/lib/api/menus";
 import { NavDropdown } from "./NavDropdown";
 
@@ -21,7 +21,7 @@ export function NavLinks({ items }: { items: MenuItem[] }) {
 
         const isActive = pathname === item.url;
         return (
-          <Link
+          <RefreshableLink
             key={item.label}
             href={item.url}
             className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors ${
@@ -32,7 +32,7 @@ export function NavLinks({ items }: { items: MenuItem[] }) {
           >
             {item.label}
             <LinkPendingIndicator />
-          </Link>
+          </RefreshableLink>
         );
       })}
     </>

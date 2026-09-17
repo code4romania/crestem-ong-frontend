@@ -40,6 +40,13 @@ export function PageForm({
   const [publicat, setPublicat] = useState(page?.publicat ?? false);
   const [pending, startTransition] = useTransition();
 
+  /**
+   * The landing page: it answers at `/`, stays public and published, keeps its
+   * slug, takes no parent, and needs at least one block. The backend refuses
+   * each of those changes — the form simply does not offer them.
+   */
+  const esteHomepage = page?.esteHomepage ?? false;
+
   const { titlu, slug, vizibilitate, blocuri } = content;
 
   /**
@@ -49,13 +56,18 @@ export function PageForm({
    * them.
    */
   const parentOptions = useMemo(() => {
+    // The homepage can hold no subpages: it contributes no path segment, so a
+    // child of it would derive a segment that does not exist.
+    const selectable = pages.filter((option) => !option.esteHomepage);
+
     const childrenOf = new Map<string, string[]>();
-    for (const option of pages) {
+    for (const option of selectable) {
       if (!option.parinte) continue;
       childrenOf.set(option.parinte, [...(childrenOf.get(option.parinte) ?? []), option.documentId]);
     }
 
-    if (!page) return pages.filter((option) => option.cale.split("/").length - 1 < MAX_PATH_DEPTH);
+    if (!page)
+      return selectable.filter((option) => option.cale.split("/").length - 1 < MAX_PATH_DEPTH);
 
     const banned = new Set<string>([page.documentId]);
     const queue = [page.documentId];
@@ -74,7 +86,7 @@ export function PageForm({
       queue.push(...next);
     }
 
-    return pages.filter((option) => {
+    return selectable.filter((option) => {
       if (banned.has(option.documentId)) return false;
       const depth = option.cale.split("/").length - 1;
       return depth + 1 + carried <= MAX_PATH_DEPTH;
@@ -83,9 +95,10 @@ export function PageForm({
 
   /** What the page's URL will be once saved. */
   const previewCale = useMemo(() => {
+    if (esteHomepage) return "/";
     const parentCale = pages.find((option) => option.documentId === parinte)?.cale ?? "";
     return `${parentCale}/${slug.trim() || "…"}`;
-  }, [pages, parinte, slug]);
+  }, [esteHomepage, pages, parinte, slug]);
 
   /**
    * `asDraft` is the "Salvează ca draft" shortcut: it saves the content and
@@ -119,7 +132,9 @@ export function PageForm({
 
         // An update never touches the page's status on the backend, so only a
         // change of status needs its own call.
-        if (wantPublished !== page.publicat) {
+        // The landing page is published, always: there is no status control
+        // for it, and the endpoint would refuse a withdrawal anyway.
+        if (!esteHomepage && wantPublished !== page.publicat) {
           const status = await setPagePublishedAction(page.documentId, wantPublished);
           if (status.error) {
             toast.error(status.error);
@@ -129,7 +144,11 @@ export function PageForm({
 
         setPublicat(wantPublished);
         toast.success(
-          wantPublished ? "Pagina a fost publicată." : "Pagina a fost salvată ca schiță.",
+          esteHomepage
+            ? "Pagina de start a fost salvată."
+            : wantPublished
+              ? "Pagina a fost publicată."
+              : "Pagina a fost salvată ca schiță.",
         );
         router.refresh();
         return;
@@ -178,6 +197,17 @@ export function PageForm({
         currentPageId={page?.documentId ?? null}
         currentPath={previewCale}
         categories={categories}
+        lockSlug={esteHomepage}
+        lockVisibility={esteHomepage}
+        minBlocks={esteHomepage ? 1 : 0}
+        slugHint={
+          esteHomepage ? (
+            <p className="mt-1.5 text-xs text-muted-foreground">
+              Pagina de start răspunde mereu la <span className="font-medium">/</span>. Slugul nu
+              se poate schimba.
+            </p>
+          ) : undefined
+        }
         saveLabel={
           pending
             ? "Se salvează…"
@@ -188,6 +218,15 @@ export function PageForm({
                 : "Salvează"
         }
         extraFields={
+          esteHomepage ? (
+            <div className="sm:col-span-2">
+              <p className="rounded-xl bg-slate-50 px-4 py-3 text-xs text-muted-foreground">
+                Pagina de start stă la adresa <span className="font-medium">/</span>, este mereu
+                publică și publicată, și nu poate fi ștearsă sau mutată sub altă pagină. Poți edita
+                titlul și conținutul.
+              </p>
+            </div>
+          ) : (
           <>
             <div>
               <label
@@ -234,6 +273,7 @@ export function PageForm({
               </p>
             </div>
           </>
+          )
         }
         extraActions={
           /* The draft shortcut only makes sense while creating: an existing page

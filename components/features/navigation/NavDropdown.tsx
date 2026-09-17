@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { LinkPendingIndicator } from "@/components/ui/LinkPendingIndicator";
+import { RefreshableLink } from "@/components/ui/RefreshableLink";
 import type { MenuChild } from "@/lib/api/menus";
 
 /**
@@ -48,7 +48,7 @@ export function NavDropdown({ label, items }: { label: string; items: MenuChild[
           {/* An entry without an address is one whose page was deleted; the
               editor flags it, visitors simply do not see it. */}
           {items.map((item) => (item.url ? (
-            <Link
+            <RefreshableLink
               key={`${item.label}-${item.url}`}
               href={item.url}
               onClick={() => {
@@ -58,7 +58,7 @@ export function NavDropdown({ label, items }: { label: string; items: MenuChild[
             >
               {item.label}
               <LinkPendingIndicator />
-            </Link>
+            </RefreshableLink>
           ) : null))}
         </div>
       )}

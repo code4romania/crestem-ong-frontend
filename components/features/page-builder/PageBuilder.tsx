@@ -29,6 +29,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { toast } from "sonner";
 import { ModalPortal } from "@/components/ui/ModalPortal";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { AddBlockModal } from "./AddBlockModal";
@@ -182,6 +183,7 @@ export function PageBuilder({
   pages = [],
   currentPageId = null,
   currentPath = "",
+  minBlocks = 0,
 
   categories = [],
 }: {
@@ -201,6 +203,12 @@ export function PageBuilder({
   currentPageId?: string | null;
   /** That page's path as it will be after saving. */
   currentPath?: string;
+  /**
+   * The number of top-level blocks the page may not go below. The homepage
+   * passes 1: the backend refuses an empty landing page, and withholding the
+   * last delete button is how the editor learns that before hitting the error.
+   */
+  minBlocks?: number;
 
 
   /** The library taxonomy, so `biblioteca-categorii` previews on the canvas. */
@@ -365,7 +373,16 @@ export function PageBuilder({
     });
   };
   const deleteBlock = (id: string) => {
-    setBlocks((current) => current.filter((b) => b.id !== id));
+    setBlocks((current) => {
+      // The floor holds wherever the delete is triggered from — the card's
+      // button is hidden at the minimum, but the confirm dialog can still be
+      // open from a block that was deletable a moment ago.
+      if (current.length <= minBlocks) {
+        toast.error("Pagina de start are nevoie de cel puțin un bloc.");
+        return current;
+      }
+      return current.filter((b) => b.id !== id);
+    });
   };
 
   // --- container child ops (Section: one list; Columns: one list per column) ---
@@ -442,6 +459,7 @@ export function PageBuilder({
                   onDuplicate: () => duplicateBlock(block.id),
                   onMove: (dir) => moveBlock(block.id, dir),
                   onDelete: () => deleteBlock(block.id),
+                  canDelete: blocks.length > minBlocks,
                   canMoveUp: index > 0,
                   canMoveDown: index < blocks.length - 1,
                   onAddChild: () =>
@@ -475,6 +493,7 @@ export function PageBuilder({
                   onDuplicate: () => duplicateBlock(block.id),
                   onMove: (dir) => moveBlock(block.id, dir),
                   onDelete: () => deleteBlock(block.id),
+                  canDelete: blocks.length > minBlocks,
                   canMoveUp: index > 0,
                   canMoveDown: index < blocks.length - 1,
                   onAddChild: (columnIndex) =>
@@ -560,14 +579,16 @@ export function PageBuilder({
             >
               <ChevronDown size={15} />
             </button>
-            <button
-              type="button"
-              onClick={() => deleteBlock(block.id)}
-              aria-label="Șterge blocul"
-              className="rounded-md p-1 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
-            >
-              <Trash2 size={15} />
-            </button>
+            {blocks.length > minBlocks && (
+              <button
+                type="button"
+                onClick={() => deleteBlock(block.id)}
+                aria-label="Șterge blocul"
+                className="rounded-md p-1 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
+              >
+                <Trash2 size={15} />
+              </button>
+            )}
           </span>
         ) : null}
         <div
