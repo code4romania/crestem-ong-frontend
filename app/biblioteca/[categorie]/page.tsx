@@ -4,6 +4,8 @@ import { ArrowLeft } from "lucide-react";
 import { listPublicArticlesBrowse, listPublicCategories } from "@/lib/api/biblioteca-public";
 import { ArticleCard } from "@/components/features/biblioteca-public/ArticleCard";
 import { ArticleFilters } from "@/components/features/biblioteca-public/ArticleFilters";
+import { hasRichText } from "@/components/features/page-builder/rich-text/has-rich-text";
+import { RICH_TEXT_PROSE } from "@/components/features/page-builder/rich-text/prose";
 
 const resultLabel = (count: number) =>
   `${count} ${count === 1 ? "resursă găsită" : "resurse găsite"}`;
@@ -56,10 +58,11 @@ export default async function Page({
       </Link>
 
       <h1 className="font-heading text-3xl font-extrabold text-[#162040]">{category.nume}</h1>
-      {category.descriere ? (
-        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#475569]">
-          {category.descriere}
-        </p>
+      {category.descriere && hasRichText(category.descriere) ? (
+        <div
+          className={`mt-2 max-w-2xl ${RICH_TEXT_PROSE}`}
+          dangerouslySetInnerHTML={{ __html: category.descriere }}
+        />
       ) : null}
 
       <div className="mt-8">

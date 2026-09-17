@@ -7,6 +7,8 @@ import { ArrowLeft, ChevronDown, ChevronUp, Pencil, Trash2 } from "lucide-react"
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { CATEGORY_ICONS } from "@/components/features/page-builder/blocks/category-grid/icons";
+import { RichTextField } from "@/components/features/page-builder/rich-text/RichTextField";
+import { hasRichText, richTextToPlainText } from "@/components/features/page-builder/rich-text/has-rich-text";
 import {
   createCategoryAction,
   deleteCategoryAction,
@@ -23,7 +25,11 @@ import { CategoryIconPicker } from "./CategoryIconPicker";
 const inputClass =
   "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#2dbe8f] focus:outline-none";
 
-// Mirrors the backend's `descriereBase` cap in library-category validation.
+/**
+ * Mirrors the backend's `descriereBase` cap in library-category validation —
+ * applied to the saved HTML string, same as the backend sees it, so markup
+ * counts against the budget along with the visible text.
+ */
 const DESCRIERE_MAX_LENGTH = 2500;
 
 function DescriereField({
@@ -33,24 +39,16 @@ function DescriereField({
   value: string;
   onChange: (value: string) => void;
 }) {
-  const atLimit = value.length >= DESCRIERE_MAX_LENGTH;
+  const overLimit = value.length > DESCRIERE_MAX_LENGTH;
   return (
     <div>
-      <textarea
-        value={value}
-        onChange={(event) => onChange(event.target.value.slice(0, DESCRIERE_MAX_LENGTH))}
-        rows={2}
-        maxLength={DESCRIERE_MAX_LENGTH}
-        placeholder="Scurtă descriere, afișată pe cardul din bibliotecă"
-        aria-label="Descriere"
-        className={inputClass}
-      />
+      <RichTextField value={value} onChange={onChange} invalid={overLimit} />
       <p
-        className={`mt-1 text-right text-xs ${atLimit ? "text-red-600" : "text-muted-foreground"}`}
+        className={`mt-1 text-right text-xs ${overLimit ? "text-red-600" : "text-muted-foreground"}`}
         aria-live="polite"
       >
         {value.length}/{DESCRIERE_MAX_LENGTH}
-        {atLimit ? " — ai atins limita maximă de caractere" : ""}
+        {overLimit ? " — ai depășit limita maximă de caractere (numărate din HTML-ul salvat)" : ""}
       </p>
     </div>
   );
@@ -126,6 +124,10 @@ function AddForm({
   const submit = () => {
     if (!nume.trim() || !slug.trim()) {
       toast.error("Completează numele și slugul.");
+      return;
+    }
+    if (descriere.length > DESCRIERE_MAX_LENGTH) {
+      toast.error("Descrierea este prea lungă.");
       return;
     }
 
@@ -207,6 +209,10 @@ function EditForm({
   const submit = () => {
     if (!nume.trim() || !slug.trim()) {
       toast.error("Completează numele și slugul.");
+      return;
+    }
+    if (isCategory && descriere.length > DESCRIERE_MAX_LENGTH) {
+      toast.error("Descrierea este prea lungă.");
       return;
     }
 
@@ -417,9 +423,9 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                           {category.nume}
                         </h3>
                         <code className="text-xs text-[#94a3b8]">{category.slug}</code>
-                        {category.descriere ? (
+                        {category.descriere && hasRichText(category.descriere) ? (
                           <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-                            {category.descriere}
+                            {richTextToPlainText(category.descriere)}
                           </p>
                         ) : null}
                       </div>

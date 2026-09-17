@@ -6,7 +6,12 @@
  * a client component's module graph has to stay on this side of the line.
  */
 
-/** Strip tags + entities to test whether the HTML carries any real text. */
+/** Strip tags + entities down to plain text, e.g. for a compact list preview. */
+export function richTextToPlainText(html: string): string {
+  return html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+}
+
+/** Whether the HTML carries any real text once tags are stripped. */
 export function hasRichText(html: string): boolean {
-  return html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim().length > 0;
+  return richTextToPlainText(html).length > 0;
 }
