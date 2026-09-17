@@ -141,6 +141,16 @@ export interface OngOverview {
   lastFinalizedDate: string | null;
 }
 
+/** One distinct article read by any of the org's members — see `ong.libraryActivity`. */
+export interface OngLibraryActivityRow {
+  resourceTitle: string;
+  type: string;
+  accessedAt: string;
+  totalAccesses: number;
+  /** Null when the article's taxonomy relation is incomplete and it has no addressable URL. */
+  cale: string | null;
+}
+
 export interface OngFdscReport {
   documentId: string;
   name: string;

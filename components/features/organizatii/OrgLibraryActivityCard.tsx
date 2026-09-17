@@ -1,24 +1,10 @@
 import { BookOpen } from "lucide-react";
+import Link from "next/link";
+import { tipBadgeColors } from "@/components/features/biblioteca-public/tip-badge";
+import { formatShortDate } from "@/lib/utils/date";
+import type { OngLibraryActivityRow } from "@/lib/api/ongs";
 
-type ResourceType = "Ghid" | "Template" | "Studiu de caz" | "Video";
-
-interface LibraryActivityRow {
-  resourceTitle: string;
-  type: ResourceType;
-  accessedAt: string;
-  totalAccesses: number;
-}
-
-const TYPE_STYLES: Record<ResourceType, { background: string; color: string }> = {
-  Ghid: { background: "#eff6ff", color: "#2563eb" },
-  Template: { background: "#f5f3ff", color: "#7c3aed" },
-  "Studiu de caz": { background: "#fff7ed", color: "#c2410c" },
-  Video: { background: "#fef2f2", color: "#dc2626" },
-};
-
-export function OrgLibraryActivityCard() {
-  const rows: LibraryActivityRow[] = [];
-
+export function OrgLibraryActivityCard({ rows }: { rows: OngLibraryActivityRow[] }) {
   return (
     <div className="bg-white rounded-2xl border border-border p-6">
       <div className="flex items-center justify-between mb-5">
@@ -54,25 +40,38 @@ export function OrgLibraryActivityCard() {
                 </td>
               </tr>
             ) : (
-              rows.map((row, index) => (
-                <tr key={index} className="border-t border-border">
-                  <td className="py-3 pr-4" style={{ color: "#334155" }}>
-                    {row.resourceTitle}
-                  </td>
-                  <td className="py-3 pr-4">
-                    <span
-                      className="px-2.5 py-0.5 rounded-full text-xs font-medium"
-                      style={TYPE_STYLES[row.type]}
-                    >
-                      {row.type}
-                    </span>
-                  </td>
-                  <td className="py-3 pr-4 text-muted-foreground">{row.accessedAt}</td>
-                  <td className="py-3 font-semibold" style={{ color: "#162040" }}>
-                    {row.totalAccesses}
-                  </td>
-                </tr>
-              ))
+              rows.map((row, index) => {
+                const badge = tipBadgeColors(row.type);
+                return (
+                  <tr key={index} className="border-t border-border">
+                    <td className="py-3 pr-4" style={{ color: "#334155" }}>
+                      {row.cale ? (
+                        <Link href={row.cale} className="font-medium hover:underline" style={{ color: "#162040" }}>
+                          {row.resourceTitle}
+                        </Link>
+                      ) : (
+                        row.resourceTitle
+                      )}
+                    </td>
+                    <td className="py-3 pr-4">
+                      {row.type ? (
+                        <span
+                          className="px-2.5 py-0.5 rounded-full text-xs font-medium"
+                          style={{ background: badge.bg, color: badge.fg }}
+                        >
+                          {row.type}
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
+                    </td>
+                    <td className="py-3 pr-4 text-muted-foreground">{formatShortDate(row.accessedAt)}</td>
+                    <td className="py-3 font-semibold" style={{ color: "#162040" }}>
+                      {row.totalAccesses}
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

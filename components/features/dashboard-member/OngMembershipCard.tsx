@@ -47,17 +47,17 @@ export function OngMembershipCard({ ong }: { ong: MyOng }) {
       </div>
 
       <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm mb-4">
-        <div>
+        <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>
             Adresă
           </p>
-          <p style={{ color: "#334155" }}>{ong.adresa ?? "—"}</p>
+          <p className="break-words" style={{ color: "#334155" }}>{ong.adresa ?? "—"}</p>
         </div>
-        <div>
+        <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>
             Website
           </p>
-          <p style={{ color: "#334155" }}>{ong.website ?? "—"}</p>
+          <p className="break-words" style={{ color: "#334155" }}>{ong.website ?? "—"}</p>
         </div>
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>

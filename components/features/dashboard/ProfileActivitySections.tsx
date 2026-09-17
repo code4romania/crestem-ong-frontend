@@ -1,7 +1,13 @@
 import { BookOpen } from "lucide-react";
 // import { GraduationCap } from "lucide-react"; // E-learning: not implemented yet, section commented out below
+import Link from "next/link";
+import { getMyArticleReads } from "@/lib/api/article-reads";
+import { tipBadgeColors } from "@/components/features/biblioteca-public/tip-badge";
+import { formatShortDate } from "@/lib/utils/date";
 
-export function ProfileActivitySections() {
+export async function ProfileActivitySections() {
+  const reads = await getMyArticleReads();
+
   return (
     <>
       <div className="bg-white rounded-xl border border-border overflow-hidden mb-6">
@@ -14,7 +20,7 @@ export function ProfileActivitySections() {
             className="ml-auto px-2.5 py-0.5 rounded-full text-xs font-bold"
             style={{ background: "#eff6ff", color: "#2563eb" }}
           >
-            0
+            {reads.length}
           </span>
         </div>
         <table className="w-full text-sm">
@@ -31,11 +37,45 @@ export function ProfileActivitySections() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td colSpan={3} className="px-5 py-8 text-center text-sm text-muted-foreground">
-                Nu ai citit niciun articol din bibliotecă încă.
-              </td>
-            </tr>
+            {reads.length === 0 ? (
+              <tr>
+                <td colSpan={3} className="px-5 py-8 text-center text-sm text-muted-foreground">
+                  Nu ai citit niciun articol din bibliotecă încă.
+                </td>
+              </tr>
+            ) : (
+              reads.map((read) => {
+                const badge = tipBadgeColors(read.tip);
+                return (
+                  <tr key={read.documentId} className="border-t border-border">
+                    <td className="px-5 py-3" style={{ color: "#334155" }}>
+                      {read.cale ? (
+                        <Link href={read.cale} className="font-medium hover:underline" style={{ color: "#162040" }}>
+                          {read.titlu}
+                        </Link>
+                      ) : (
+                        read.titlu
+                      )}
+                    </td>
+                    <td className="px-5 py-3">
+                      {read.tip ? (
+                        <span
+                          className="px-2.5 py-0.5 rounded-full text-xs font-medium"
+                          style={{ background: badge.bg, color: badge.fg }}
+                        >
+                          {read.tip}
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
+                    </td>
+                    <td className="px-5 py-3 text-muted-foreground">
+                      {formatShortDate(read.accessedAt)}
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
