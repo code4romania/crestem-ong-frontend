@@ -38,6 +38,8 @@ export interface ColumnsCanvasActions {
   onDuplicate: () => void;
   onMove: (dir: -1 | 1) => void;
   onDelete: () => void;
+  /** False on a page that may not go below its current block count. */
+  canDelete?: boolean;
   canMoveUp: boolean;
   canMoveDown: boolean;
   onAddChild: (columnIndex: number) => void;
@@ -150,14 +152,16 @@ export function ColumnsCanvas({
             >
               <ChevronDown size={15} />
             </button>
-            <button
-              type="button"
-              onClick={actions.onDelete}
-              aria-label="Șterge blocul"
-              className="rounded-lg p-1.5 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
-            >
-              <Trash2 size={15} />
-            </button>
+            {actions.canDelete !== false && (
+              <button
+                type="button"
+                onClick={actions.onDelete}
+                aria-label="Șterge blocul"
+                className="rounded-lg p-1.5 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
+              >
+                <Trash2 size={15} />
+              </button>
+            )}
           </span>
           <button
             type="button"

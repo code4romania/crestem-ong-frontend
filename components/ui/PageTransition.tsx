@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { onPageRefresh } from "./page-refresh-signal";
 
 /**
  * Route prefixes whose sub-routes are tabs sharing one persistent layout
@@ -23,6 +25,11 @@ function transitionKeyFor(pathname: string) {
  * Fades/slides in the content of each route. Keyed on the pathname so React
  * remounts the subtree on navigation and the enter animation replays; without
  * the key the new page would just pop into place.
+ *
+ * A same-page refresh (pressing the menu entry of the page already open) keeps
+ * the pathname, so the counter below joins the key: it makes that click remount
+ * the page exactly like a navigation to any other page would — client state
+ * reset, animation replayed.
  */
 export function PageTransition({
   children,
@@ -32,9 +39,15 @@ export function PageTransition({
   className?: string;
 }) {
   const pathname = usePathname();
+  const [refreshCount, setRefreshCount] = useState(0);
+
+  useEffect(() => onPageRefresh(() => setRefreshCount((count) => count + 1)), []);
 
   return (
-    <div key={transitionKeyFor(pathname)} className={`animate-page-enter ${className}`}>
+    <div
+      key={`${transitionKeyFor(pathname)}#${refreshCount}`}
+      className={`animate-page-enter ${className}`}
+    >
       {children}
     </div>
   );

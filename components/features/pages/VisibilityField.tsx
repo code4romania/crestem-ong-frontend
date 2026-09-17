@@ -9,9 +9,12 @@ import {
 export function VisibilityField({
   value,
   onChange,
+  disabled = false,
 }: {
   value: VisibilityAudience[];
   onChange: (next: VisibilityAudience[]) => void;
+  /** The landing page is public and stays public, so its boxes are inert. */
+  disabled?: boolean;
 }) {
   const toggle = (audience: VisibilityAudience) => {
     onChange(
@@ -30,6 +33,7 @@ export function VisibilityField({
             <input
               type="checkbox"
               checked={value.includes(audience)}
+              disabled={disabled}
               onChange={() => toggle(audience)}
               className="h-4 w-4 rounded border-border accent-[#2dbe8f]"
             />

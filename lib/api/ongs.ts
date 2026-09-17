@@ -1,7 +1,11 @@
 import { localApiFetch } from "./local";
+import { ongListQuery, type OngListParams } from "./ong-list-query";
 import { apiFetch } from "./client";
 import type { ReportScores } from "./reports";
 import type { EvaluationDimensionBlock, EvaluationProgress } from "./evaluations";
+
+export type { OngListParams } from "./ong-list-query";
+export { ongListQuery } from "./ong-list-query";
 
 export interface ActiveOng {
   documentId: string;
@@ -43,6 +47,39 @@ export interface Ong {
   programs: { documentId: string; name: string }[];
   judet: { documentId: string; nume: string } | null;
   localitate: { documentId: string; nume: string } | null;
+}
+
+export interface OngListMeta {
+  pagination: { page: number; pageSize: number; pageCount: number; total: number };
+  /**
+   * Every county that has organizations, for the filter dropdown. Sent with the
+   * first page only — the pages after it would repeat the same list, and it
+   * must not shrink to the counties the loaded pages happen to cover.
+   */
+  judete?: { documentId: string; nume: string }[];
+}
+
+export interface OngListResult {
+  data: Ong[];
+  meta: OngListMeta;
+}
+
+/** An organization as the filter dropdowns need it: something to label a choice. */
+export interface OngName {
+  documentId: string;
+  name: string;
+}
+
+/**
+ * One page of the FDSC organizations list, fetched from the browser as the
+ * screen scrolls. It goes through the app's own route handler because the
+ * session token is httpOnly and never reaches client code.
+ */
+export async function fetchOngPage(params: OngListParams): Promise<OngListResult> {
+  const query = ongListQuery(params);
+  const res = await fetch(`/api/ongs${query ? `?${query}` : ""}`);
+  if (!res.ok) throw new Error("Nu am putut încărca organizațiile.");
+  return (await res.json()) as OngListResult;
 }
 
 export interface Domain {

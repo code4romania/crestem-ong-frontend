@@ -10,5 +10,12 @@ export default async function Page({ searchParams }: PageProps) {
   const search = params.search ?? "";
   const { data, meta } = await listPages({ search, page: Number(params.page) || 1 });
 
-  return <PageList pages={data} search={search} pagination={meta.pagination} />;
+  return (
+    <PageList
+      pages={data}
+      homepage={meta.homepage}
+      search={search}
+      pagination={meta.pagination}
+    />
+  );
 }
