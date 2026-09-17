@@ -65,7 +65,7 @@ export function CategoryCard({ category }: { category: CategoryCardData }) {
         {category.nume}
       </h2>
       {category.descriere ? (
-        <p className="mt-2 text-sm leading-relaxed text-[#475569] wrap-break-word">
+        <p className="mt-2 text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3">
           {category.descriere}
         </p>
       ) : null}
