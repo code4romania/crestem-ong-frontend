@@ -130,9 +130,14 @@ export async function POST(request: Request) {
   archiveBody.set(archive);
 
   const zipName = safeSegment(body.zipName ?? "", "documente");
+  // Header values must be Latin-1 (ByteString) — the Response constructor
+  // throws on a raw diacritic like "ț"/"ă" (outside Latin-1), which is common
+  // in a Romanian page title. Keep an ASCII fallback for `filename` and carry
+  // the real name via the RFC 6266 `filename*` extended parameter.
+  const asciiName = zipName.replace(/[^\x20-\x7E]/g, "_") || "documente";
   const headers: Record<string, string> = {
     "Content-Type": "application/zip",
-    "Content-Disposition": `attachment; filename="${zipName}.zip"`,
+    "Content-Disposition": `attachment; filename="${asciiName}.zip"; filename*=UTF-8''${encodeURIComponent(zipName)}.zip`,
     "Content-Length": String(archiveBody.byteLength),
   };
   if (failed > 0) headers["X-Zip-Failed"] = String(failed);
