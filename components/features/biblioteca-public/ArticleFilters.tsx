@@ -53,7 +53,7 @@ export function ArticleFilters({
       if (next.tip) query.set("tip", next.tip);
       if (next.subcategorie) query.set("subcategorie", next.subcategorie);
       const suffix = query.toString() ? `?${query}` : "";
-      router.push(`/biblioteca/${categorieSlug}${suffix}`);
+      router.push(`/biblioteca/${categorieSlug}${suffix}`, { scroll: false });
     },
     [router, searchParams, categorieSlug],
   );
