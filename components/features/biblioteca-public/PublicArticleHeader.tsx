@@ -10,18 +10,28 @@ import { tipBadgeColors } from "./tip-badge";
  */
 export function PublicArticleHeader({ article }: { article: ArticleDetail }) {
   const tint = article.tip ? tipBadgeColors(article.tip) : null;
-  const categoryHref = article.categorie ? `/biblioteca/${article.categorie.slug}` : "/biblioteca";
+  const backLabel = article.subcategorie
+    ? article.subcategorie.nume
+    : article.categorie
+      ? article.categorie.nume
+      : null;
+  const backHref =
+    article.categorie && article.subcategorie
+      ? `/biblioteca/${article.categorie.slug}?subcategorie=${encodeURIComponent(article.subcategorie.slug)}`
+      : article.categorie
+        ? `/biblioteca/${article.categorie.slug}`
+        : "/biblioteca";
 
   return (
     <section className="relative overflow-hidden" style={{ background: "#162040" }}>
       <div className="mx-auto w-full max-w-4xl px-6 py-16">
         <Link
-          href={categoryHref}
+          href={backHref}
           className="mb-6 inline-flex w-fit items-center gap-2 text-sm transition-opacity hover:opacity-80"
           style={{ color: "rgba(255,255,255,0.72)" }}
         >
           <ArrowLeft size={16} className="shrink-0" />
-          {article.categorie ? `Înapoi la ${article.categorie.nume}` : "Înapoi la Bibliotecă"}
+          {backLabel ? `Înapoi la ${backLabel}` : "Înapoi la Bibliotecă"}
         </Link>
 
         <div className="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2">
