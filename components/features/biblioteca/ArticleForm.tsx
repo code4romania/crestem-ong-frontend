@@ -329,21 +329,7 @@ export function ArticleForm({
             </div>
           </div>
         }
-        extraActions={
-          /* The draft shortcut only makes sense while creating: an existing
-             article already has a status, and the select above is where it
-             changes. Matches the Pagini wizard. */
-          !article ? (
-            <button
-              type="button"
-              onClick={() => save(true)}
-              disabled={pending}
-              className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
-            >
-              Salvează ca draft
-            </button>
-          ) : null
-        }
+        hideActions
       />
 
       {article ? (
@@ -355,6 +341,41 @@ export function ArticleForm({
           />
         </div>
       ) : null}
+
+      {/* Owned here, not by `ContentEditorShell` (see its `hideActions` prop),
+          so the buttons stay the last thing on the page, after the
+          related-articles box, instead of appearing above it. */}
+      <div className="mt-6 flex justify-end gap-3">
+        <button
+          type="button"
+          onClick={() => router.push("/dashboard/biblioteca")}
+          disabled={pending}
+          className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
+        >
+          Anulează
+        </button>
+        {/* The draft shortcut only makes sense while creating: an existing
+            article already has a status, and the select above is where it
+            changes. Matches the Pagini wizard. */}
+        {!article ? (
+          <button
+            type="button"
+            onClick={() => save(true)}
+            disabled={pending}
+            className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
+          >
+            Salvează ca draft
+          </button>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => save()}
+          disabled={pending}
+          className="rounded-xl bg-[#2dbe8f] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+        >
+          {pending ? "Se salvează…" : article ? "Salvează modificările" : "Creează articolul"}
+        </button>
+      </div>
     </div>
   );
 }

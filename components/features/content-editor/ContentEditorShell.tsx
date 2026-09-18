@@ -47,6 +47,7 @@ export function ContentEditorShell({
   currentPageId = null,
   currentPath = "",
   categories = [],
+  hideActions = false,
 }: {
   value: ContentEditorValue;
   /**
@@ -95,6 +96,13 @@ export function ContentEditorShell({
   currentPath?: string;
   /** Forwarded to `PageBuilder` so `biblioteca-categorii` previews on the canvas. */
   categories?: LibraryCategory[];
+  /**
+   * Skips this shell's own Cancel/Save bar. For a wrapping editor that has
+   * more of its own content after this shell (the article's related-articles
+   * picker, say), which owns rendering that same bar itself so the buttons
+   * stay the last thing on the page instead of appearing above that content.
+   */
+  hideActions?: boolean;
 }) {
   const [slugTouched, setSlugTouched] = useState(hasExistingRecord);
 
@@ -171,25 +179,27 @@ export function ContentEditorShell({
         />
       </RenderModeProvider>
 
-      <div className="mt-6 flex justify-end gap-3">
-        <button
-          type="button"
-          onClick={onCancel}
-          disabled={pending}
-          className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
-        >
-          Anulează
-        </button>
-        {extraActions}
-        <button
-          type="button"
-          onClick={onSave}
-          disabled={pending}
-          className="rounded-xl bg-[#2dbe8f] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-        >
-          {saveLabel}
-        </button>
-      </div>
+      {hideActions ? null : (
+        <div className="mt-6 flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={pending}
+            className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
+          >
+            Anulează
+          </button>
+          {extraActions}
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={pending}
+            className="rounded-xl bg-[#2dbe8f] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+          >
+            {saveLabel}
+          </button>
+        </div>
+      )}
     </>
   );
 }
