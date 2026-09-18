@@ -28,57 +28,62 @@ const COL_CLASS: Record<FeatureCardsData["coloane"], string> = {
 function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
   const Icon = FEATURE_ICONS[card.icon];
   const hasCta = Boolean(card.href && card.ctaLabel);
+  const hasImage = Boolean(card.iconImage);
 
   return (
     <div
-      className={`flex h-full min-w-0 flex-col rounded-2xl border p-6 ${
+      className={`flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border ${
         isDark
           ? "border-white/10 bg-white/[0.03]"
           : "border-border bg-white shadow-sm"
       }`}
     >
       {card.iconImage ? (
-        <span className="mb-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl">
+        <div className="aspect-[16/9] w-full shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={getMediaUrl(card.iconImage.url)}
             alt=""
             className="h-full w-full object-cover"
           />
-        </span>
+        </div>
       ) : (
         <span
-          className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
+          className="mx-6 mt-6 mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
           style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
         >
           <Icon size={22} />
         </span>
       )}
-      <h3
-        className={`mb-2 text-lg font-semibold wrap-break-word ${
-          isDark ? "text-white" : "text-[#162040]"
-        }`}
+      <div
+        className={`flex min-h-0 flex-1 flex-col p-6 ${hasImage ? "" : "pt-0"}`}
       >
-        {card.titlu}
-      </h3>
-      {card.descriere ? (
-        <p
-          className={`text-sm leading-relaxed wrap-break-word line-clamp-5 ${
-            isDark ? "text-white/60" : "text-[#475569]"
+        <h3
+          className={`mb-2 text-lg font-semibold wrap-break-word ${
+            isDark ? "text-white" : "text-[#162040]"
           }`}
         >
-          {card.descriere}
-        </p>
-      ) : null}
-      {hasCta ? (
-        <Link
-          href={card.href}
-          className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold wrap-break-word transition-colors hover:opacity-80"
-          style={{ color: "#2dbe8f" }}
-        >
-          {card.ctaLabel} <ChevronRight size={16} />
-        </Link>
-      ) : null}
+          {card.titlu}
+        </h3>
+        {card.descriere ? (
+          <p
+            className={`text-sm leading-relaxed wrap-break-word line-clamp-5 ${
+              isDark ? "text-white/60" : "text-[#475569]"
+            }`}
+          >
+            {card.descriere}
+          </p>
+        ) : null}
+        {hasCta ? (
+          <Link
+            href={card.href}
+            className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold wrap-break-word transition-colors hover:opacity-80"
+            style={{ color: "#2dbe8f" }}
+          >
+            {card.ctaLabel} <ChevronRight size={16} />
+          </Link>
+        ) : null}
+      </div>
     </div>
   );
 }
