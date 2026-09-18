@@ -55,7 +55,8 @@ export async function POST(request: Request) {
   }
 
   const files = (body.files ?? []).filter(
-    (f): f is ReqFile => Boolean(f) && typeof f.url === "string" && f.url !== "",
+    (f): f is ReqFile =>
+      Boolean(f) && typeof f.url === "string" && f.url !== "",
   );
   if (files.length === 0) {
     return Response.json(
@@ -99,7 +100,10 @@ export async function POST(request: Request) {
         continue;
       }
       const bytes = new Uint8Array(await res.arrayBuffer());
-      if (bytes.byteLength > MAX_FILE_BYTES || total + bytes.byteLength > MAX_TOTAL_BYTES) {
+      if (
+        bytes.byteLength > MAX_FILE_BYTES ||
+        total + bytes.byteLength > MAX_TOTAL_BYTES
+      ) {
         failed += 1;
         continue;
       }
@@ -134,6 +138,7 @@ export async function POST(request: Request) {
   // throws on a raw diacritic like "ț"/"ă" (outside Latin-1), which is common
   // in a Romanian page title. Keep an ASCII fallback for `filename` and carry
   // the real name via the RFC 6266 `filename*` extended parameter.
+
   const asciiName = zipName.replace(/[^\x20-\x7E]/g, "_") || "documente";
   const headers: Record<string, string> = {
     "Content-Type": "application/zip",
