@@ -21,6 +21,7 @@ export interface ArticleInput {
   tip: string;
   vizibilitate: VisibilityAudience[];
   blocuri: PageBlock[];
+  articoleRelationate: string[];
 }
 
 const FORBIDDEN = "Nu ai permisiunea necesară pentru această acțiune.";
