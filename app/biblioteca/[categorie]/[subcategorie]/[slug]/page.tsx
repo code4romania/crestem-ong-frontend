@@ -3,6 +3,7 @@ import { getPublicArticle } from "@/lib/api/biblioteca-public";
 import { markArticleRead } from "@/lib/api/article-reads";
 import { BlockRenderer } from "@/components/features/pages/BlockRenderer";
 import { PublicArticleHeader } from "@/components/features/biblioteca-public/PublicArticleHeader";
+import { RelatedArticles } from "@/components/features/biblioteca-public/RelatedArticles";
 
 export default async function Page({
   params,
@@ -29,6 +30,7 @@ export default async function Page({
             so a null here would otherwise crash a public page. */}
         <BlockRenderer blocks={article.blocuri ?? []} />
       </div>
+      <RelatedArticles articles={article.articoleRelationate} />
     </>
   );
 }
