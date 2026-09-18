@@ -54,7 +54,7 @@ export function ArticleForm({
   const [etichete, setEtichete] = useState<string[]>(article?.etichete ?? []);
   const [subcategorie, setSubcategorie] = useState(article?.subcategorie?.documentId ?? "");
   const [articoleRelationate, setArticoleRelationate] = useState<string[]>(
-    article?.articoleRelationate.map((r) => r.documentId) ?? [],
+    article?.articoleRelationate?.map((r) => r.documentId) ?? [],
   );
   /**
    * The status the select is asking for, which is not necessarily the status
@@ -172,6 +172,18 @@ export function ArticleForm({
       router.push(`/dashboard/biblioteca/${result.documentId}`);
     });
   };
+
+  /**
+   * A saved pick can drop out of the ranked top-10 (e.g. the article's tags
+   * changed) without being unselected — it must stay visible and checkable
+   * even though it's no longer among `relatedCandidates`.
+   */
+  const mergedCandidates = [
+    ...relatedCandidates,
+    ...(article?.articoleRelationate ?? []).filter(
+      (existing) => !relatedCandidates.some((c) => c.documentId === existing.documentId),
+    ),
+  ];
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -337,7 +349,7 @@ export function ArticleForm({
       {article ? (
         <div className="mt-8 rounded-xl border border-border bg-white p-6">
           <RelatedArticlesField
-            candidates={relatedCandidates}
+            candidates={mergedCandidates}
             value={articoleRelationate}
             onChange={setArticoleRelationate}
           />

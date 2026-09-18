@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, ExternalLink, FileText } from "lucide-react";
+import { ChevronRight, FileText } from "lucide-react";
 import type { RelatedArticleRef } from "@/lib/api/articles-types";
 import { tipBadgeColors } from "./tip-badge";
 
@@ -7,9 +7,12 @@ export function RelatedArticles({ articles }: { articles: RelatedArticleRef[] })
   if (articles.length === 0) return null;
 
   return (
-    <div className="border-t border-border bg-slate-50">
+    <section aria-labelledby="articole-relationate-heading" className="border-t border-border bg-slate-50">
       <div className="mx-auto w-full max-w-6xl px-6 py-12">
-        <h2 className="font-heading text-2xl font-extrabold text-[#162040]">
+        <h2
+          id="articole-relationate-heading"
+          className="font-heading text-2xl font-extrabold text-[#162040]"
+        >
           Articole relaționate
         </h2>
 
@@ -63,10 +66,10 @@ export function RelatedArticles({ articles }: { articles: RelatedArticleRef[] })
           href="/biblioteca"
           className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#162040] hover:text-[#2dbe8f]"
         >
-          <ExternalLink size={16} />
+          <ChevronRight size={16} />
           Vezi toate resursele din bibliotecă
         </Link>
       </div>
-    </div>
+    </section>
   );
 }

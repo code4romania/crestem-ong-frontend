@@ -2,6 +2,9 @@
 
 import type { RelatedArticleRef } from "@/lib/api/articles-types";
 
+/** The maximum number of related articles an editor may pick. */
+const MAX_RELATED = 3;
+
 /**
  * Toggles `documentId` in `value`: removes it if already present (even at the
  * cap — unchecking must always work), adds it if under `max`, otherwise
@@ -28,17 +31,17 @@ export function RelatedArticlesField({
   value: string[];
   onChange: (next: string[]) => void;
 }) {
-  const atLimit = value.length >= 3;
+  const atLimit = value.length >= MAX_RELATED;
 
   const toggle = (documentId: string) => {
-    onChange(toggleRelatedSelection(value, documentId, 3));
+    onChange(toggleRelatedSelection(value, documentId, MAX_RELATED));
   };
 
   return (
-    <div>
-      <label className="mb-1.5 block text-xs font-semibold text-[#475569]">
+    <fieldset>
+      <legend className="mb-1.5 text-xs font-semibold text-[#475569]">
         Articole relaționate
-      </label>
+      </legend>
       <p className="mb-2 text-xs text-muted-foreground">
         Alege până la 3 articole dintre cele mai apropiate ca etichete. Vor apărea la
         finalul articolului, pe site.
@@ -79,6 +82,6 @@ export function RelatedArticlesField({
           })}
         </ul>
       )}
-    </div>
+    </fieldset>
   );
 }

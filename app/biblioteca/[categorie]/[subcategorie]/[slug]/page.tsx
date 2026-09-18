@@ -30,7 +30,7 @@ export default async function Page({
             so a null here would otherwise crash a public page. */}
         <BlockRenderer blocks={article.blocuri ?? []} />
       </div>
-      <RelatedArticles articles={article.articoleRelationate} />
+      <RelatedArticles articles={article.articoleRelationate ?? []} />
     </>
   );
 }
