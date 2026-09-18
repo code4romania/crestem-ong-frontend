@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, FileText, Tag } from "lucide-react";
+import { ArrowLeft, ChevronRight, FileText, Tag } from "lucide-react";
 import type { ArticleDetail } from "@/lib/api/articles-types";
 import { tipBadgeColors } from "./tip-badge";
 
@@ -10,29 +10,37 @@ import { tipBadgeColors } from "./tip-badge";
  */
 export function PublicArticleHeader({ article }: { article: ArticleDetail }) {
   const tint = article.tip ? tipBadgeColors(article.tip) : null;
-  const backLabel = article.subcategorie
-    ? article.subcategorie.nume
-    : article.categorie
-      ? article.categorie.nume
-      : null;
-  const backHref =
-    article.categorie && article.subcategorie
-      ? `/biblioteca/${article.categorie.slug}?subcategorie=${encodeURIComponent(article.subcategorie.slug)}`
-      : article.categorie
-        ? `/biblioteca/${article.categorie.slug}`
-        : "/biblioteca";
+  const crumbs = [
+    { label: "Bibliotecă", href: "/biblioteca" },
+    ...(article.categorie ? [{ label: article.categorie.nume, href: `/biblioteca/${article.categorie.slug}` }] : []),
+    ...(article.categorie && article.subcategorie
+      ? [
+          {
+            label: article.subcategorie.nume,
+            href: `/biblioteca/${article.categorie.slug}?subcategorie=${encodeURIComponent(article.subcategorie.slug)}`,
+          },
+        ]
+      : []),
+  ];
 
   return (
     <section className="relative overflow-hidden" style={{ background: "#162040" }}>
       <div className="mx-auto w-full max-w-4xl px-6 py-16">
-        <Link
-          href={backHref}
-          className="mb-6 inline-flex w-fit items-center gap-2 text-sm transition-opacity hover:opacity-80"
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-6 flex w-fit flex-wrap items-center gap-x-2 gap-y-1 text-sm"
           style={{ color: "rgba(255,255,255,0.72)" }}
         >
           <ArrowLeft size={16} className="shrink-0" />
-          {backLabel ? `Înapoi la ${backLabel}` : "Înapoi la Bibliotecă"}
-        </Link>
+          {crumbs.map((crumb, index) => (
+            <span key={crumb.href} className="inline-flex items-center gap-x-2">
+              {index > 0 ? <ChevronRight size={14} className="shrink-0 opacity-60" /> : null}
+              <Link href={crumb.href} className="transition-opacity hover:opacity-80">
+                {crumb.label}
+              </Link>
+            </span>
+          ))}
+        </nav>
 
         <div className="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2">
           {article.tip && tint ? (
