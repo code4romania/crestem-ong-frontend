@@ -15,9 +15,10 @@ import {
   setArticlePublishedAction,
   updateArticleAction,
 } from "@/lib/api/articles-actions";
-import type { ArticleDetail } from "@/lib/api/articles-types";
+import type { ArticleDetail, RelatedArticleRef } from "@/lib/api/articles-types";
 import type { LibraryCategory } from "@/lib/api/library-categories-types";
 import type { PageOption } from "@/lib/api/pages-types";
+import { RelatedArticlesField } from "./RelatedArticlesField";
 import { SubcategorySelect } from "./SubcategorySelect";
 import { TagsField } from "./TagsField";
 
@@ -29,12 +30,15 @@ export function ArticleForm({
   categories,
   tagSuggestions,
   pages = [],
+  relatedCandidates = [],
 }: {
   article: ArticleDetail | null;
   categories: LibraryCategory[];
   tagSuggestions: string[];
   /** The site's pages, so a button inside the article can point at one. */
   pages?: PageOption[];
+  /** The top-10 tag-matched candidates for this article; empty on the create screen. */
+  relatedCandidates?: RelatedArticleRef[];
 }) {
   const router = useRouter();
 
@@ -49,6 +53,9 @@ export function ArticleForm({
   const [tip, setTip] = useState(article?.tip ?? "");
   const [etichete, setEtichete] = useState<string[]>(article?.etichete ?? []);
   const [subcategorie, setSubcategorie] = useState(article?.subcategorie?.documentId ?? "");
+  const [articoleRelationate, setArticoleRelationate] = useState<string[]>(
+    article?.articoleRelationate.map((r) => r.documentId) ?? [],
+  );
   /**
    * The status the select is asking for, which is not necessarily the status
    * the article currently has — it is applied on save, exactly as on the Pagini
@@ -110,6 +117,7 @@ export function ArticleForm({
       tip: tip.trim(),
       vizibilitate: shell.vizibilitate,
       blocuri: shell.blocuri,
+      articoleRelationate,
     };
 
     const wantPublished = asDraft ? false : publicat;
@@ -325,6 +333,16 @@ export function ArticleForm({
           ) : null
         }
       />
+
+      {article ? (
+        <div className="mt-8 rounded-xl border border-border bg-white p-6">
+          <RelatedArticlesField
+            candidates={relatedCandidates}
+            value={articoleRelationate}
+            onChange={setArticoleRelationate}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
