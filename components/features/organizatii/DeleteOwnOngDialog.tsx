@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { deleteMyOngAction } from "@/lib/api/ongs-actions";
 import { buildOngDeletionWarning } from "./ong-deletion-copy";
@@ -42,6 +43,7 @@ export function DeleteOwnOngDialog({
         setError(result.error);
         return;
       }
+      toast.success("Organizația a fost ștearsă.");
       router.replace(result.redirectTo ?? "/dashboard");
       router.refresh();
     });

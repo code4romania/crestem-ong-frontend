@@ -3,7 +3,7 @@ import { Building2, ExternalLink, Globe, MapPin, Users } from "lucide-react";
 import { isRetras, type Ong } from "@/lib/api/ongs";
 import { DeleteOngButton } from "./DeleteOngButton";
 
-export function OngCard({ ong }: { ong: Ong }) {
+export function OngCard({ ong, onDeleted }: { ong: Ong; onDeleted?: () => void }) {
   return (
     <div className="bg-white rounded-xl border border-border p-5 flex flex-col">
       <div className="flex items-start justify-between gap-3">
@@ -46,7 +46,11 @@ export function OngCard({ ong }: { ong: Ong }) {
             rejects a second deletion anyway. "Vezi ONG" stays — it is FDSC's
             only navigation to the evaluations BR-33 preserves. */}
         {!isRetras(ong) && (
-          <DeleteOngButton documentId={ong.documentId} ongName={ong.name} />
+          <DeleteOngButton
+            documentId={ong.documentId}
+            ongName={ong.name}
+            onDeleted={onDeleted}
+          />
         )}
       </div>
 

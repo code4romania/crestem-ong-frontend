@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronDown, Search } from "lucide-react";
 import { fetchOngPage, type Ong, type OngListMeta } from "@/lib/api/ongs";
 import { OngCard } from "./OngCard";
@@ -35,6 +36,7 @@ export function OrganizatiiGrid({
   initialMeta: OngListMeta;
   programs: ProgramOption[];
 }) {
+  const router = useRouter();
   const [ongs, setOngs] = useState(initialOngs);
   const [pagination, setPagination] = useState(initialMeta.pagination);
   // Kept from the first response and never narrowed afterwards: the counties a
@@ -102,6 +104,14 @@ export function OrganizatiiGrid({
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, [pagination, loadingPage, error, search, judetFilter, programFilter, load]);
+
+  // The list lives in local state, so a server refresh alone would not reach
+  // it: reload page one under the current filters, and refresh the route for
+  // everything else the server renders.
+  const handleDeleted = () => {
+    router.refresh();
+    load(1, { search, judet: judetFilter, program: programFilter });
+  };
 
   const reloading = loadingPage === 1;
   const appending = loadingPage !== null && loadingPage > 1;
@@ -176,7 +186,7 @@ export function OrganizatiiGrid({
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {ongs.map((ong) => (
-            <OngCard key={ong.documentId} ong={ong} />
+            <OngCard key={ong.documentId} ong={ong} onDeleted={handleDeleted} />
           ))}
           {appending &&
             Array.from({ length: SKELETON_COUNT }).map((_, index) => (
