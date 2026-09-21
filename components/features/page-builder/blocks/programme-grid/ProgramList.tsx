@@ -11,7 +11,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { CtaTargetField } from "../shared/CtaTargetField";
-import { getMediaUrl } from "@/lib/api/client";
+import { getMediaUrl, errorMessage } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
@@ -113,7 +113,7 @@ export function ProgramList({
           }
           setField({ imagine: result.image });
         } catch (err) {
-          setUploadError(err instanceof Error ? err.message : "Nu am putut încărca imaginea.");
+          setUploadError(errorMessage(err, "Nu am putut încărca imaginea."));
         }
       });
     };

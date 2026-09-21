@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState, useTransition } from "react";
 import { Loader2, X } from "lucide-react";
 import { createFdscUserAction, uploadUserAvatarAction } from "@/lib/api/users-actions";
@@ -64,6 +65,7 @@ export function AddMentorModal({ dimensions, onClose }: { dimensions: Dimension[
           setError(result.error ?? null);
           return;
         }
+        toast.success("Persoana resursă a fost creată.");
         onClose();
       } catch {
         setError("A apărut o eroare neașteptată. Încearcă din nou.");

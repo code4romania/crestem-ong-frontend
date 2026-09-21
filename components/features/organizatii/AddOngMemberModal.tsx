@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState, useTransition } from "react";
 import { Loader2, X } from "lucide-react";
 import { inviteOngMemberAction } from "@/lib/api/ongs-actions";
@@ -28,6 +29,7 @@ export function AddOngMemberModal({ onClose }: { onClose: () => void }) {
       if (result.error || Object.keys(result.fieldErrors ?? {}).length > 0) {
         return;
       }
+      toast.success("Invitația a fost trimisă.");
       onClose();
     });
   };

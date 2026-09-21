@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { toast } from "sonner";
 import { Check, Download, FileUp, Info, Pencil, XCircle } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import { formatMeetingDateTime } from "@/lib/utils/date";
@@ -87,6 +88,7 @@ export function MentorMeetingsTable({
         return;
       }
       setCancelMeetingId(null);
+      toast.success("Întâlnirea a fost anulată.");
     });
   };
 
@@ -100,6 +102,7 @@ export function MentorMeetingsTable({
         return;
       }
       setCompleteMeetingId(null);
+      toast.success("Întâlnirea a fost marcată ca efectuată.");
     });
   };
 

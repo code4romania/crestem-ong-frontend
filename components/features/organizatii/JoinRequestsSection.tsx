@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { toast } from "sonner";
 import { rejectJoinRequestAction } from "@/lib/api/ongs-actions";
 import type { OngJoinRequest } from "@/lib/api/membership";
 import { AcceptJoinRequestModal } from "./AcceptJoinRequestModal";
@@ -24,6 +25,7 @@ export function JoinRequestsSection({ initialRequests }: { initialRequests: OngJ
 
   const handleAccepted = (documentId: string) => {
     setAcceptTarget(null);
+    toast.success("Cererea de afiliere a fost acceptată.");
     setRequests((prev) => prev.filter((r) => r.documentId !== documentId));
   };
 
@@ -37,6 +39,7 @@ export function JoinRequestsSection({ initialRequests }: { initialRequests: OngJ
         setError(result.error);
         return;
       }
+      toast.success("Cererea de afiliere a fost respinsă.");
       setRequests((prev) => prev.filter((r) => r.documentId !== documentId));
     });
   };

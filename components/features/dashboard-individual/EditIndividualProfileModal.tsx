@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useEffect, useState, useTransition } from "react";
 import { ChevronDown, Loader2, X } from "lucide-react";
 import { updateIndividualProfileAction } from "@/lib/api/users-actions";
@@ -75,6 +76,7 @@ export function EditIndividualProfileModal({
           setError(result.error ?? null);
           return;
         }
+        toast.success("Profilul a fost actualizat.");
         onClose();
       } catch {
         setError("A apărut o eroare neașteptată. Încearcă din nou.");

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { removeOngMemberAction } from "@/lib/api/ongs-actions";
 
@@ -27,6 +28,9 @@ export function RemoveOngMemberButton({
         return;
       }
       setOpen(false);
+      toast.success(
+        isInvite ? "Invitația a fost anulată." : "Utilizatorul a fost marcat ca neafiliat.",
+      );
     });
   };
 

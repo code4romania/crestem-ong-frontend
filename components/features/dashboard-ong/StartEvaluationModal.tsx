@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
@@ -41,6 +42,7 @@ export function StartEvaluationModal({
         setError(result.error ?? "Nu am putut porni evaluarea.");
         return;
       }
+      toast.success("Evaluarea a fost pornită.");
       onClose();
       router.push(`/dashboard/evaluari/${result.reportId}`);
     });

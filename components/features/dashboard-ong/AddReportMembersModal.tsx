@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useMemo, useState, useTransition } from "react";
 import { Search, X } from "lucide-react";
 import { addReportMembersAction } from "@/lib/api/reports-actions";
@@ -51,6 +52,7 @@ export function AddReportMembersModal({
         setError(result.error);
         return;
       }
+      toast.success("Utilizatorii au fost adăugați la evaluare.");
       onClose();
     });
   };

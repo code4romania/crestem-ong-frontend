@@ -1,3 +1,4 @@
+import { errorMessage } from "./client";
 import { getUploadAuthAction } from "./upload-auth-actions";
 
 export interface StrapiUploadedFile {
@@ -40,8 +41,10 @@ export async function uploadFilesDirect(
   const data = await res.json().catch(() => null);
   if (!res.ok || !Array.isArray(data)) {
     throw new Error(
-      (data as StrapiErrorBody | null)?.error?.message ??
+      errorMessage(
+        (data as StrapiErrorBody | null)?.error?.message,
         "Încărcarea fișierului a eșuat.",
+      ),
     );
   }
   return data as StrapiUploadedFile[];

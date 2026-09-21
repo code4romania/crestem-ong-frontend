@@ -1,5 +1,6 @@
 "use client";
 
+import { errorMessage } from "@/lib/api/client";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import {
@@ -97,7 +98,7 @@ export function usePageImageUpload(
         }
         latestOnUploaded.current(result.image);
       } catch (err) {
-        fail(err instanceof Error ? err.message : "Nu am putut încărca imaginea.");
+        fail(errorMessage(err, "Nu am putut încărca imaginea."));
       }
     });
   };

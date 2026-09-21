@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useRef, useState, useTransition } from "react";
 import type { ChangeEvent, DragEvent, MouseEvent } from "react";
 import { Loader2, Upload, X } from "lucide-react";
@@ -72,6 +73,7 @@ export function MentorReportUploadModal({
         setError(result.error);
         return;
       }
+      toast.success("Raportul a fost încărcat.");
       onClose();
     });
   };

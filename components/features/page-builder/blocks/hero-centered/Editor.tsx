@@ -6,7 +6,7 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
 import { BackgroundPicker } from "./BackgroundPicker";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
-import { getMediaUrl } from "@/lib/api/client";
+import { getMediaUrl, errorMessage } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { CtaTargetField } from "../shared/CtaTargetField";
@@ -50,7 +50,7 @@ export function HeroCenteredEditor({
         }
         set({ image: result.image });
       } catch (err) {
-        setUploadError(err instanceof Error ? err.message : "Nu am putut încărca imaginea.");
+        setUploadError(errorMessage(err, "Nu am putut încărca imaginea."));
       }
     });
   };

@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState, useTransition } from "react";
 import { X } from "lucide-react";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -27,6 +28,7 @@ export function RemoveReportMemberButton({
         return;
       }
       setOpen(false);
+      toast.success("Utilizatorul a fost eliminat din evaluare.");
     });
   };
 

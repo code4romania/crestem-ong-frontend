@@ -1,5 +1,6 @@
 "use client";
 
+import { errorMessage } from "@/lib/api/client";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { ArrowDown, ArrowUp, FilePlus, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -99,7 +100,7 @@ export function DocumentList({
           });
         } catch (err) {
           failures.push(
-            `${file.name}: ${err instanceof Error ? err.message : String(err)}`,
+            `${file.name}: ${errorMessage(err, "încărcarea a eșuat")}`,
           );
         }
       }

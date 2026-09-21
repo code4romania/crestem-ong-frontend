@@ -1,5 +1,6 @@
 "use client";
 
+import { errorMessage } from "@/lib/api/client";
 import { useRef, useState, useTransition } from "react";
 import { Film, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -66,7 +67,7 @@ export function VideoEditor({
         set({ fisier: result.video });
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Nu am putut încărca fișierul video.";
+          errorMessage(err, "Nu am putut încărca fișierul video.");
         setUploadError(message);
         toast.error(message);
       }

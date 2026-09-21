@@ -22,6 +22,7 @@ import {
   removePhaseEvaluationAction,
 } from "@/lib/api/programs-actions";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { toast } from "sonner";
 import { listOngEvaluations, type OngEvaluation } from "@/lib/api/ongs";
 import type { AssignedMentor, AssignedOng, PhaseEvaluation } from "@/lib/api/programs";
 import { isRetras } from "@/lib/api/ongs";
@@ -148,7 +149,13 @@ export function AssignOngsSection({
         : await assignOngMentorAction(programId, ong.documentId, mentor.documentId);
       if (result.error) {
         setMentorError(result.error);
+        return;
       }
+      toast.success(
+        isAssigned
+          ? "Persoana resursă a fost eliminată din ONG."
+          : "Persoana resursă a fost alocată ONG-ului.",
+      );
     });
   };
 
@@ -219,6 +226,7 @@ export function AssignOngsSection({
         return;
       }
       setAssigningPhase(null);
+      toast.success("Evaluarea a fost alocată.");
     });
   };
 
@@ -236,6 +244,7 @@ export function AssignOngsSection({
         return;
       }
       setPendingRemoveEval(null);
+      toast.success("Evaluarea a fost eliminată.");
     });
   };
 
@@ -274,6 +283,7 @@ export function AssignOngsSection({
       setSelectedPhaseId("");
       setSearch("");
       setAdding(false);
+      toast.success("ONG-ul a fost alocat programului.");
     });
   };
 
@@ -287,6 +297,7 @@ export function AssignOngsSection({
         return;
       }
       setPendingRemove(null);
+      toast.success("ONG-ul a fost eliminat din program.");
     });
   };
 

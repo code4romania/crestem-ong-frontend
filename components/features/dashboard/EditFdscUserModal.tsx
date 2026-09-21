@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState, useTransition } from "react";
 import { Loader2, X } from "lucide-react";
 import { updateFdscUserAction, uploadUserAvatarAction } from "@/lib/api/users-actions";
@@ -62,6 +63,7 @@ export function EditFdscUserModal({
             setError(result.error ?? null);
             return;
           }
+          toast.success("Utilizatorul a fost actualizat.");
           onClose();
           return;
         }
@@ -98,6 +100,7 @@ export function EditFdscUserModal({
           setError(result.error ?? null);
           return;
         }
+        toast.success("Utilizatorul a fost actualizat.");
         onClose();
       } catch {
         setError("A apărut o eroare neașteptată. Încearcă din nou.");

@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { Plus, Search, Trash2, Users, X } from "lucide-react";
+import { toast } from "sonner";
 import { assignMentorAction, removeMentorAction } from "@/lib/api/programs-actions";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { DeletedAccountBadge } from "@/components/ui/DeletedAccountBadge";
@@ -42,7 +43,11 @@ export function AssignMentorsSection({
     setError(null);
     startTransition(async () => {
       const result = await assignMentorAction(programId, documentId);
-      if (result.error) setError(result.error);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      toast.success("Persoana resursă a fost alocată.");
     });
   };
 
@@ -56,6 +61,7 @@ export function AssignMentorsSection({
         return;
       }
       setPendingRemove(null);
+      toast.success("Persoana resursă a fost eliminată din program.");
     });
   };
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { errorMessage } from "@/lib/api/client";
 import { useRef, useTransition } from "react";
 import { toast } from "sonner";
 import {
@@ -106,7 +107,7 @@ export function useMediaUpload(
         // Server Action can throw before our own code runs too — surface either
         // as a toast instead of letting it bubble to the route's error boundary.
         toast.error(
-          err instanceof Error ? err.message : "Nu am putut încărca fișierul. Încearcă din nou.",
+          errorMessage(err, "Nu am putut încărca fișierul. Încearcă din nou."),
         );
       }
     });

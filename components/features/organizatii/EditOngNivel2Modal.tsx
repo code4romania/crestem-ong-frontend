@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import type { ChangeEvent, DragEvent, MouseEvent } from "react";
 import { ChevronDown, Loader2, Upload, X } from "lucide-react";
@@ -116,6 +117,7 @@ export function EditOngNivel2Modal({ ong, onClose }: { ong: MyOng; onClose: () =
         setError(result.error);
         return;
       }
+      toast.success("Profilul organizației a fost actualizat.");
       onClose();
     });
   };

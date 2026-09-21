@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { UserPlus, CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 import { AddReportMembersModal } from "./AddReportMembersModal";
 import { finishReportAction } from "@/lib/api/reports-actions";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -33,6 +34,7 @@ export function ReportDetailActions({
           return;
         }
         setFinishing(false);
+        toast.success("Evaluarea a fost finalizată.");
       } catch {
         setFinishError("Nu am putut finaliza evaluarea. Încearcă din nou.");
       }

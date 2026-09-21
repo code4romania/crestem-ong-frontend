@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Send } from "lucide-react";
@@ -28,6 +29,7 @@ export function ResendInvitationButton({ id, nume }: { id: number; nume: string 
         return;
       }
       setSent(true);
+      toast.success("Invitația a fost retrimisă.");
       router.refresh();
     });
   };

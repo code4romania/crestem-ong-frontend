@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState, useTransition } from "react";
 import { ChevronDown, Loader2, X } from "lucide-react";
 import { createMentorMeetingAction, updateMentorMeetingAction } from "@/lib/api/meetings-actions";
@@ -107,6 +108,7 @@ function MentorMeetingFormModalInner({
         setError(result.error);
         return;
       }
+      toast.success(meeting ? "Întâlnirea a fost actualizată." : "Întâlnirea a fost creată.");
       onClose();
     });
   };

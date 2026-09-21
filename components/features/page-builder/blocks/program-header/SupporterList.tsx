@@ -10,7 +10,7 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
-import { getMediaUrl } from "@/lib/api/client";
+import { getMediaUrl, errorMessage } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
@@ -112,7 +112,7 @@ export function SupporterList({
           }
           setField({ imagine: result.image });
         } catch (err) {
-          setUploadError(err instanceof Error ? err.message : "Nu am putut încărca imaginea.");
+          setUploadError(errorMessage(err, "Nu am putut încărca imaginea."));
         }
       });
     };

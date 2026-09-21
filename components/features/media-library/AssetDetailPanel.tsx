@@ -6,7 +6,7 @@ import { ArrowUpRight, Download, FileText, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { ModalPortal } from "@/components/ui/ModalPortal";
-import { getMediaUrl } from "@/lib/api/client";
+import { getMediaUrl, errorMessage } from "@/lib/api/client";
 import { uploadSizeError } from "@/components/features/page-builder/upload";
 import { useGalleryLightbox } from "@/components/features/page-builder/blocks/gallery/useGalleryLightbox";
 import { postFileDirect } from "@/lib/api/upload-direct";
@@ -187,11 +187,11 @@ export function AssetDetailPanel({
         // 409 = the new file's format differs from the current one. The backend
         // message names the required format; surface it as a plain error.
         if (status === 409) {
-          toast.error(body?.error?.message ?? "Fișierul nou are alt format decât cel curent.");
+          toast.error(errorMessage(body?.error?.message, "Fișierul nou are alt format decât cel curent."));
           return;
         }
         if (!ok || !body?.data) {
-          toast.error(body?.error?.message ?? "Înlocuirea a eșuat.");
+          toast.error(errorMessage(body?.error?.message, "Înlocuirea a eșuat."));
           return;
         }
         const res = await finalizeMediaAssetReplaceAction(
@@ -207,7 +207,7 @@ export function AssetDetailPanel({
         // `postFileDirect` throws on a failed direct upload, and a Server Action
         // can throw before our own code runs too — surface either as a toast
         // instead of letting it bubble to the route's error boundary.
-        toast.error(err instanceof Error ? err.message : "Înlocuirea a eșuat. Încearcă din nou.");
+        toast.error(errorMessage(err, "Înlocuirea a eșuat. Încearcă din nou."));
       }
     });
   };

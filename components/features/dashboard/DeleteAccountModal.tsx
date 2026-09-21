@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteAccountAction } from "@/lib/api/account-actions";
@@ -27,6 +28,7 @@ export function DeleteAccountModal({ onClose }: { onClose: () => void }) {
       setLoading(false);
       return;
     }
+    toast.success("Contul a fost șters.");
     router.replace("/");
     router.refresh();
   }

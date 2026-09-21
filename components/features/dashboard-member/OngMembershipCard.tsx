@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState, useTransition } from "react";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { leaveOngAction } from "@/lib/api/membership-actions";
@@ -26,6 +27,7 @@ export function OngMembershipCard({ ong }: { ong: MyOng }) {
         return;
       }
       setOpen(false);
+      toast.success("Ai părăsit organizația.");
     });
   };
 

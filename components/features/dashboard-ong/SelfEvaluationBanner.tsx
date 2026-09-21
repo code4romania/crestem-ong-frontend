@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { UserPlus } from "lucide-react";
@@ -54,7 +55,9 @@ export function SelfEvaluationBanner({
               const result = await addReportMembersAction(reportId, [currentUserDocumentId]);
               if (result.error) {
                 setError(result.error);
+                return;
               }
+              toast.success("Ai fost adăugat la evaluare.");
             });
           }}
           className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-60"

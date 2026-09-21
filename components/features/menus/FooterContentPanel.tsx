@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { RichTextField } from "@/components/features/page-builder/rich-text/RichTextField";
-import { getMediaUrl } from "@/lib/api/client";
+import { getMediaUrl, errorMessage } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { updateFooterAction } from "@/lib/api/footer-actions";
@@ -60,7 +60,7 @@ export function FooterContentPanel({ footer }: { footer: FooterContent }) {
       }
       return getMediaUrl(result.image.url);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Nu am putut încărca imaginea.");
+      toast.error(errorMessage(err, "Nu am putut încărca imaginea."));
       return null;
     }
   };

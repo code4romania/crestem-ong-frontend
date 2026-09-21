@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { ArrowLeft, Check, Loader2, Search, X } from "lucide-react";
 import { requestJoinOngAction, searchJoinableOngsAction } from "@/lib/api/membership-actions";
@@ -62,6 +63,7 @@ export function AddOngRequestModal({ onClose }: { onClose: () => void }) {
         setSearchError(result.error);
         return;
       }
+      toast.success("Cererea de afiliere a fost trimisă.");
       setSentIds((prev) => new Set(prev).add(ongDocumentId));
       setMessage("");
       setSelected(null);

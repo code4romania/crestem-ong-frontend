@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useEffect, useRef, useState, useTransition } from "react";
 import type { ChangeEvent, DragEvent, MouseEvent } from "react";
 import { ChevronDown, Loader2, Plus, Upload, X } from "lucide-react";
@@ -139,6 +140,7 @@ export function AddFdscReportModal({
         setError(result.error);
         return;
       }
+      toast.success("Raportul a fost adăugat.");
       close();
     });
   };
