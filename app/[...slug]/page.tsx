@@ -1,6 +1,17 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPublicPage } from "@/lib/api/pages";
 import { BlockRenderer } from "@/components/features/pages/BlockRenderer";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const page = await getPublicPage(slug.join("/"));
+  return { title: page ? `${page.titlu} - Crestem ONG` : "Crestem ONG" };
+}
 
 export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params;
