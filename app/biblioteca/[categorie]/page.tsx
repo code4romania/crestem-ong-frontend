@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -9,6 +10,17 @@ import { RICH_TEXT_PROSE } from "@/components/features/page-builder/rich-text/pr
 
 const resultLabel = (count: number) =>
   `${count} ${count === 1 ? "resursă găsită" : "resurse găsite"}`;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ categorie: string }>;
+}): Promise<Metadata> {
+  const { categorie } = await params;
+  const categories = await listPublicCategories();
+  const category = categories.find((entry) => entry.slug === categorie);
+  return { title: category ? `${category.nume} - Crestem ONG` : "Bibliotecă" };
+}
 
 export default async function Page({
   params,

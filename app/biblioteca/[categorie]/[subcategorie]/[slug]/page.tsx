@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPublicArticle } from "@/lib/api/biblioteca-public";
 import { markArticleRead } from "@/lib/api/article-reads";
@@ -5,10 +6,22 @@ import { BlockRenderer } from "@/components/features/pages/BlockRenderer";
 import { PublicArticleHeader } from "@/components/features/biblioteca-public/PublicArticleHeader";
 import { RelatedArticles } from "@/components/features/biblioteca-public/RelatedArticles";
 
+type ArticleParams = { categorie: string; subcategorie: string; slug: string };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<ArticleParams>;
+}): Promise<Metadata> {
+  const { categorie, subcategorie, slug } = await params;
+  const article = await getPublicArticle(`/biblioteca/${categorie}/${subcategorie}/${slug}`);
+  return { title: article ? `${article.titlu} - Crestem ONG` : "Bibliotecă" };
+}
+
 export default async function Page({
   params,
 }: {
-  params: Promise<{ categorie: string; subcategorie: string; slug: string }>;
+  params: Promise<ArticleParams>;
 }) {
   const { categorie, subcategorie, slug } = await params;
 
