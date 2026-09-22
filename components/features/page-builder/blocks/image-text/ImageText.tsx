@@ -114,7 +114,7 @@ export function ImageText({ data }: { data: ImageTextData }) {
   const imageColumn = image ? (
     <div
       className={`overflow-hidden ${rounded} ${
-        stacked ? "" : "min-h-[280px]"
+        stacked ? "" : "lg:min-h-[280px]"
       }`}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -122,7 +122,9 @@ export function ImageText({ data }: { data: ImageTextData }) {
         src={getMediaUrl(image.url)}
         alt={altText}
         className={
-          stacked ? "h-auto w-full" : "h-full w-full object-cover"
+          stacked
+            ? "h-auto w-full"
+            : "h-auto w-full object-cover lg:h-full"
         }
       />
     </div>
