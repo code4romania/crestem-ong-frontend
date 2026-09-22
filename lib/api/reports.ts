@@ -83,6 +83,34 @@ export function getProgramOverviewStats({ phases }: ProgramRound): ProgramOvervi
   };
 }
 
+export interface ActiveEvaluationContext {
+  report: RoundSummary;
+  /** null when the active report is independent (not tied to a program). */
+  programName: string | null;
+  phaseTitle: string | null;
+}
+
+/**
+ * An ONG can have at most one active (unfinished) evaluation at a time (BR-19),
+ * whether it's tied to a program phase or independent. Finds that report, if any,
+ * along with the program/phase it belongs to.
+ */
+export function findActiveEvaluationContext(
+  programRounds: ProgramRound[],
+  standaloneReports: RoundSummary[],
+): ActiveEvaluationContext | null {
+  const standalone = standaloneReports.find((report) => !report.finished);
+  if (standalone) return { report: standalone, programName: null, phaseTitle: null };
+  for (const { program, phases } of programRounds) {
+    for (const phase of phases) {
+      if (phase.report && !phase.report.finished) {
+        return { report: phase.report, programName: program.name, phaseTitle: phase.title };
+      }
+    }
+  }
+  return null;
+}
+
 /**
  * An ONG can have at most one active (unfinished) evaluation at a time (BR-19),
  * whether it's tied to a program phase or independent. Finds that report, if any.
@@ -91,14 +119,7 @@ export function findActiveReport(
   programRounds: ProgramRound[],
   standaloneReports: RoundSummary[],
 ): RoundSummary | null {
-  const standalone = standaloneReports.find((report) => !report.finished);
-  if (standalone) return standalone;
-  for (const { phases } of programRounds) {
-    for (const phase of phases) {
-      if (phase.report && !phase.report.finished) return phase.report;
-    }
-  }
-  return null;
+  return findActiveEvaluationContext(programRounds, standaloneReports)?.report ?? null;
 }
 
 export type EvaluationLock =
