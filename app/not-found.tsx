@@ -9,10 +9,10 @@ export default function NotFound() {
           404
         </p>
         <h1 className="mb-3 font-heading font-bold text-xl text-foreground">
-          Această pagină nu a fost implementată încă
+          Această pagină nu a fost găsită
         </h1>
         <p className="mb-8 text-muted-foreground">
-          Lucrăm la ea. Revino mai târziu sau întoarce-te la pagina principală.
+          Ne pare rău, pagina pe care o cauți nu există. Întoarce-te la pagina principală.
         </p>
         <Link
           href="/"
