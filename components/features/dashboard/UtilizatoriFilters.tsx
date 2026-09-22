@@ -80,7 +80,7 @@ export function UtilizatoriFilters({
   }
 
   return (
-    <div className="flex flex-col sm:flex-row gap-3 mb-6">
+    <div className="flex flex-col lg:flex-row lg:items-start gap-3 mb-6">
       <div className="relative flex-1">
         <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
         <label htmlFor="utilizatori-search" className="sr-only">
@@ -94,7 +94,7 @@ export function UtilizatoriFilters({
           className="w-full pl-10 pr-3.5 py-2.5 rounded-full border border-border text-sm"
         />
       </div>
-      <div className="relative">
+      <div className="relative lg:w-48">
         <label htmlFor="utilizatori-role" className="sr-only">
           Filtrează după rol
         </label>
@@ -102,7 +102,7 @@ export function UtilizatoriFilters({
           id="utilizatori-role"
           value={role}
           onChange={(e) => handleRoleChange(e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
         >
           <option value="">Toate rolurile</option>
           {ROLE_OPTIONS.map((option) => (
@@ -116,7 +116,7 @@ export function UtilizatoriFilters({
           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
         />
       </div>
-      <div className="relative">
+      <div className="relative lg:w-48">
         <label htmlFor="utilizatori-ong" className="sr-only">
           Filtrează după organizație
         </label>
@@ -124,7 +124,7 @@ export function UtilizatoriFilters({
           id="utilizatori-ong"
           value={ong}
           onChange={(e) => handleOngChange(e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
         >
           <option value="">Toate organizațiile</option>
           {ongs.map((option) => (
@@ -138,7 +138,7 @@ export function UtilizatoriFilters({
           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
         />
       </div>
-      <div className="relative">
+      <div className="relative lg:w-48">
         <label htmlFor="utilizatori-status" className="sr-only">
           Filtrează după status
         </label>
@@ -146,7 +146,7 @@ export function UtilizatoriFilters({
           id="utilizatori-status"
           value={status}
           onChange={(e) => handleStatusChange(e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
         >
           <option value="">Toate statusurile</option>
           {STATUS_OPTIONS.map((option) => (
