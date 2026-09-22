@@ -26,7 +26,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 const inputClass =
   "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm";
 
-export function LoginForm() {
+export function LoginForm({ returnTo }: { returnTo?: string | null }) {
   const [apiError, setApiError] = useState<string | null>(null);
   const {
     register,
@@ -41,8 +41,14 @@ export function LoginForm() {
     setApiError(null);
     try {
       const { user, isFirstLogin } = await loginSession(data);
+      // Someone the proxy sent here from a protected page goes back to it — an
+      // evaluation invitation is the common case. It takes precedence over the
+      // role's landing page, and with it over the first-login prompt below: the
+      // page they asked for is what they came to see. Already checked by
+      // `safeReturnTo` on the server, so it is a dashboard path, not a URL.
       const destination =
-        isFdscStaff(user.role?.type)
+        returnTo ??
+        (isFdscStaff(user.role?.type)
           ? "/dashboard/programe"
           : user.role?.type === "ngo-admin"
             ? "/dashboard/evaluari"
@@ -52,7 +58,7 @@ export function LoginForm() {
                 ? "/dashboard"
                 : user.role?.type === "mentor"
                   ? "/dashboard/mesaje"
-                  : "/";
+                  : "/");
       // The first-login flag lives only in the login response — by the time any
       // page renders, firstLoginAt is already stamped — so it travels to the
       // dashboard as a query param that the prompt strips once it is answered.
@@ -63,7 +69,7 @@ export function LoginForm() {
       // dashboard for the rest of the session. The reload also replaces the
       // `router.refresh()` this used to need.
       window.location.assign(
-        isFirstLogin && user.role?.type === "ngo-admin"
+        !returnTo && isFirstLogin && user.role?.type === "ngo-admin"
           ? `${destination}?${FIRST_LOGIN_PARAM}=1`
           : destination,
       );
