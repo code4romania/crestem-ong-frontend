@@ -85,12 +85,12 @@ export function ArticleFilters({
         />
       </div>
 
-      <div className="relative">
+      <div className="relative w-full sm:w-auto">
         <select
           value={active.tip}
           onChange={(event) => go({ tip: event.target.value })}
           aria-label="Filtrează după tip"
-          className={`${controlClass} appearance-none pr-10`}
+          className={`${controlClass} w-full appearance-none pr-10 sm:w-auto`}
         >
           <option value="">Tip: Toate</option>
           {tipuri.map((tip) => (
@@ -105,12 +105,12 @@ export function ArticleFilters({
         />
       </div>
 
-      <div className="relative">
+      <div className="relative w-full sm:w-auto">
         <select
           value={active.subcategorie}
           onChange={(event) => go({ subcategorie: event.target.value })}
           aria-label="Filtrează după subcategorie"
-          className={`${controlClass} appearance-none pr-10`}
+          className={`${controlClass} w-full appearance-none pr-10 sm:w-auto`}
         >
           <option value="">Subcategorie: Toate</option>
           {subcategorii.map((sub) => (
