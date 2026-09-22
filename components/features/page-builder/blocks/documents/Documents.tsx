@@ -26,7 +26,7 @@ export function Documents({ data }: { data: DocumentsData }) {
               </span>
               <div className="min-w-0">
                 {titlu && (
-                  <p className="truncate font-semibold">{titlu}</p>
+                  <p className="font-semibold sm:truncate">{titlu}</p>
                 )}
                 {subtitlu && (
                   <p className="truncate text-sm text-white/60">{subtitlu}</p>
