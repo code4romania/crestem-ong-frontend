@@ -309,7 +309,6 @@ export function MenuBuilder({
     );
   }
 
-  const editingRoot = form?.mode === "edit-root" ? items.find((i) => i.id === form.itemId) : null;
   const editingChild =
     form?.mode === "edit-child"
       ? items
@@ -404,22 +403,6 @@ export function MenuBuilder({
               />
             )}
 
-            {editingRoot && (
-              <MenuItemForm
-                variant="root"
-                title="Editează elementul"
-                pageMode={rootPageMode}
-                pages={pages}
-                initialPagina={editingRoot.pagina ?? ""}
-                initialLabel={editingRoot.label}
-                
-                submitLabel="Salvează"
-                pending={pending}
-                onSubmit={handleFormSubmit}
-                onCancel={() => setForm(null)}
-              />
-            )}
-
             {items.length === 0 ? (
               <div className="px-5 py-10 text-center">
                 <p className="text-sm text-muted-foreground">
@@ -443,23 +426,38 @@ export function MenuBuilder({
                 >
                   {items.map((item) => (
                     <div key={item.id}>
-                      <MenuItemRow
-                        id={item.id}
-                        label={item.label}
-                        url={displayUrl(item)}
-                        childCount={item.children.length}
-                        missingLabel={missingLabelFor(item, activeLocation === "footer")}
-                        disabled={pending}
-                        onAddChild={() => setForm({ mode: "add-child", parentId: item.id })}
-                        onEdit={() => setForm({ mode: "edit-root", itemId: item.id })}
-                        onDelete={() =>
-                          setDeleteTarget({
-                            id: item.id,
-                            label: item.label,
-                            childCount: item.children.length,
-                          })
-                        }
-                      />
+                      {form?.mode === "edit-root" && form.itemId === item.id ? (
+                        <MenuItemForm
+                          variant="root"
+                          title="Editează elementul"
+                          pageMode={rootPageMode}
+                          pages={pages}
+                          initialPagina={item.pagina ?? ""}
+                          initialLabel={item.label}
+                          submitLabel="Salvează"
+                          pending={pending}
+                          onSubmit={handleFormSubmit}
+                          onCancel={() => setForm(null)}
+                        />
+                      ) : (
+                        <MenuItemRow
+                          id={item.id}
+                          label={item.label}
+                          url={displayUrl(item)}
+                          childCount={item.children.length}
+                          missingLabel={missingLabelFor(item, activeLocation === "footer")}
+                          disabled={pending}
+                          onAddChild={() => setForm({ mode: "add-child", parentId: item.id })}
+                          onEdit={() => setForm({ mode: "edit-root", itemId: item.id })}
+                          onDelete={() =>
+                            setDeleteTarget({
+                              id: item.id,
+                              label: item.label,
+                              childCount: item.children.length,
+                            })
+                          }
+                        />
+                      )}
 
                       {form?.mode === "add-child" && form.parentId === item.id && (
                         <MenuItemForm
