@@ -73,7 +73,20 @@ export function StartEvaluationModal({
 
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {activeMembers.length === 0 ? (
-            <p className="px-3 py-6 text-sm text-muted-foreground">Organizația nu are membri activi de invitat.</p>
+            <div className="px-3 py-6 flex flex-col items-center gap-3 text-center">
+              <p className="text-sm text-muted-foreground">Organizația nu are membri activi de invitat.</p>
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  router.push("/dashboard/ong/utilizatori");
+                }}
+                className="px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors"
+                style={{ color: "#162040" }}
+              >
+                Invită utilizatori
+              </button>
+            </div>
           ) : (
             activeMembers.map((member) => {
               const checked = selected.has(member.documentId);

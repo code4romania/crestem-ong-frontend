@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 import { useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { addReportMembersAction } from "@/lib/api/reports-actions";
 import type { OngMember } from "@/lib/api/reports";
@@ -16,6 +17,7 @@ export function AddReportMembersModal({
   candidates: OngMember[];
   onClose: () => void;
 }) {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
@@ -91,9 +93,24 @@ export function AddReportMembersModal({
 
         <div className="flex-1 overflow-y-auto divide-y divide-border">
           {filtered.length === 0 ? (
-            <p className="px-6 py-6 text-sm text-muted-foreground">
-              {candidates.length === 0 ? "Toți membrii activi sunt deja invitați." : "Niciun membru găsit."}
-            </p>
+            candidates.length === 0 ? (
+              <div className="px-6 py-6 flex flex-col items-center gap-3 text-center">
+                <p className="text-sm text-muted-foreground">Toți membrii activi sunt deja invitați.</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    router.push("/dashboard/ong/utilizatori");
+                  }}
+                  className="px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors"
+                  style={{ color: "#162040" }}
+                >
+                  Invită utilizatori
+                </button>
+              </div>
+            ) : (
+              <p className="px-6 py-6 text-sm text-muted-foreground">Niciun membru găsit.</p>
+            )
           ) : (
             filtered.map((member) => {
               const checked = selected.has(member.documentId);
