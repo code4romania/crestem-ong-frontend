@@ -29,14 +29,19 @@ export function Navbar({ user, items }: { user: NavUser | null; items: MenuItem[
                 <User size={16} className="shrink-0" />
                 {user.nume}
               </span>
-              <Link
+              {/* A plain anchor, not `Link`: entering the dashboard has to be a
+                  real page load so Pirsch re-evaluates `data-exclude` and stops
+                  counting — its check runs once, when the script boots, and a
+                  client-side transition would slip past it. Same reason in
+                  `MobileMenu` and after login. `LinkPendingIndicator` is gone
+                  with it: `useLinkStatus` only reports under a `Link`. */}
+              <a
                 href={user.dashboardHref}
                 className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90"
                 style={{ background: "#2dbe8f" }}
               >
                 Mergi la dashboard
-                <LinkPendingIndicator />
-              </Link>
+              </a>
             </>
           ) : (
             <>

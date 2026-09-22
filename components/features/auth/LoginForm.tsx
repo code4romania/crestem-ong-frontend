@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { loginSession } from "@/lib/api/session";
 import { getApiErrorMessage } from "@/lib/api/client";
@@ -28,7 +27,6 @@ const inputClass =
   "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm";
 
 export function LoginForm() {
-  const router = useRouter();
   const [apiError, setApiError] = useState<string | null>(null);
   const {
     register,
@@ -58,12 +56,17 @@ export function LoginForm() {
       // The first-login flag lives only in the login response — by the time any
       // page renders, firstLoginAt is already stamped — so it travels to the
       // dashboard as a query param that the prompt strips once it is answered.
-      router.push(
+      //
+      // A real page load rather than `router.push`: the destination is almost
+      // always the dashboard, and Pirsch only evaluates `data-exclude` when its
+      // script boots, so a client-side transition would have it counting the
+      // dashboard for the rest of the session. The reload also replaces the
+      // `router.refresh()` this used to need.
+      window.location.assign(
         isFirstLogin && user.role?.type === "ngo-admin"
           ? `${destination}?${FIRST_LOGIN_PARAM}=1`
           : destination,
       );
-      router.refresh();
     } catch (err) {
       setApiError(getApiErrorMessage(err, "Nu am putut finaliza autentificarea. Încearcă din nou."));
     }
