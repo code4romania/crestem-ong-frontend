@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { AdminEvaluationsPagination } from "@/lib/api/evaluations";
+import { evaluariHref, type EvaluariQuery } from "./evaluari-query";
 
 const GAP = "gap" as const;
 
@@ -26,32 +27,15 @@ export function pageWindow(page: number, pageCount: number): (number | typeof GA
 
 export function EvaluariPagination({
   pagination,
-  tab,
-  search,
-  ongs,
-  programs,
-  status,
+  query,
 }: {
   pagination: AdminEvaluationsPagination;
-  tab: string;
-  search: string;
-  ongs: string[];
-  programs: string[];
-  status: string;
+  query: EvaluariQuery;
 }) {
   const { page, pageCount } = pagination;
   if (pageCount <= 1) return null;
 
-  function hrefFor(targetPage: number) {
-    const params = new URLSearchParams();
-    params.set("tab", tab);
-    if (search) params.set("search", search);
-    if (ongs.length) params.set("ongs", ongs.join(","));
-    if (programs.length) params.set("programs", programs.join(","));
-    if (status) params.set("status", status);
-    if (targetPage > 1) params.set("page", String(targetPage));
-    return `/dashboard/evaluari?${params.toString()}`;
-  }
+  const hrefFor = (targetPage: number) => evaluariHref({ ...query, page: targetPage });
 
   return (
     <nav aria-label="Paginare evaluări" className="flex items-center justify-center gap-1 mt-6 flex-wrap">

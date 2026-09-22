@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { evaluariHref, type EvaluariQuery } from "./evaluari-query";
 
 export const EVALUARI_TABS = [
   { key: "utilizatori", label: "Evaluări per utilizator" },
@@ -12,19 +13,20 @@ export function isEvaluariTab(value?: string): value is EvaluariTab {
 }
 
 /**
- * Switching tabs drops the filters of the tab being left: the two tabs search
- * different things (a respondent's address against an organization's fiscal
- * code), so carrying a term across would return nothing and look broken.
+ * Switching tabs keeps the filters: an organization, a program and a response
+ * status mean the same thing on both sides, and the search term follows too so
+ * the list the user built does not reset under them. Only the page number is
+ * dropped — the other tab has its own number of rows.
  */
-export function EvaluariTabs({ active }: { active: EvaluariTab }) {
+export function EvaluariTabs({ query }: { query: EvaluariQuery }) {
   return (
     <div className="flex gap-1 mb-6 border-b border-border" role="tablist">
       {EVALUARI_TABS.map((tab) => {
-        const isActive = tab.key === active;
+        const isActive = tab.key === query.tab;
         return (
           <Link
             key={tab.key}
-            href={`/dashboard/evaluari?tab=${tab.key}`}
+            href={evaluariHref({ ...query, tab: tab.key, page: 1 })}
             role="tab"
             aria-selected={isActive}
             className="px-4 py-2.5 text-sm font-semibold -mb-px border-b-2 transition-colors"

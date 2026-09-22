@@ -43,7 +43,7 @@ export default async function Page({ searchParams }: PageProps) {
   const status = params.status ?? "";
   const page = Math.max(1, Number(params.page) || 1);
 
-  const query = { search, ongs, programs, status, page };
+  const query = { tab, search, ongs, programs, status, page };
   // Only the tab on screen is fetched; the other one loads when it is opened.
   const { data, meta } =
     tab === "organizatii"
@@ -61,14 +61,17 @@ export default async function Page({ searchParams }: PageProps) {
         </p>
       </div>
 
-      <EvaluariTabs active={tab} />
+      <EvaluariTabs query={query} />
 
+      {/* Keyed by tab: the filter inputs seed from these props once, so without a
+          remount they would keep showing the values of the tab just left. */}
       <EvaluariFilters
+        key={tab}
         tab={tab}
         searchPlaceholder={
           tab === "organizatii"
-            ? "Caută după email administrator sau CUI..."
-            : "Caută după email utilizator..."
+            ? "Caută după nume organizație, CUI sau email..."
+            : "Caută după nume utilizator, email sau CUI..."
         }
         initialSearch={search}
         initialOngs={ongs}
@@ -86,14 +89,7 @@ export default async function Page({ searchParams }: PageProps) {
         <EvaluariTable evaluations={data as Awaited<ReturnType<typeof listAdminEvaluations>>["data"]} />
       )}
 
-      <EvaluariPagination
-        pagination={meta.pagination}
-        tab={tab}
-        search={search}
-        ongs={ongs}
-        programs={programs}
-        status={status}
-      />
+      <EvaluariPagination pagination={meta.pagination} query={query} />
     </div>
   );
 }
