@@ -31,7 +31,7 @@ function getEmbedSrc(data: VideoData): string | null {
       params.set("loop", "1");
       params.set("playlist", id);
     }
-    return `https://www.youtube.com/embed/${id}?${params.toString()}`;
+    return `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`;
   }
 
   if (data.autoplay) params.set("autoplay", "1");
