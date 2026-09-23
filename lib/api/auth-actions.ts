@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { serverApiFetch } from "./server";
 import { getApiErrorMessage } from "./client";
 import {
@@ -71,7 +72,9 @@ export async function requestEmailChangeAction(
 
 export async function confirmEmailChangeAction(
   token: string,
-): Promise<{ ok: true; email: string } | { error: string }> {
+): Promise<{ error: string }> {
+  let newEmail: string;
+
   try {
     const res = await serverApiFetch<{ email: string }>(
       "/api/auth/change-email/confirm",
@@ -84,10 +87,17 @@ export async function confirmEmailChangeAction(
     cookieStore.delete(SESSION_COOKIE);
     cookieStore.delete(REFRESH_COOKIE);
 
-    return { ok: true, email: res.email };
+    newEmail = res.email;
   } catch (err) {
     return {
       error: getApiErrorMessage(err, "Nu am putut confirma schimbarea adresei. Încearcă din nou."),
     };
   }
+
+  // Confirming spends the token, so the page can no longer re-render its own
+  // route: the cookie writes above make Next refresh it, the preview call then
+  // fails on the spent token and the success state is replaced by "link
+  // invalid". Leaving for a token-free URL is what keeps the result visible.
+  // redirect() throws, so it has to stay outside the try/catch.
+  redirect(`/schimbare-email?confirmat=${encodeURIComponent(newEmail)}`);
 }
