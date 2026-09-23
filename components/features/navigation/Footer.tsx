@@ -63,12 +63,14 @@ export function Footer({ content, items }: { content: FooterContent; items: Menu
           </div>
 
           {columns.length > 0 && (
-            // Flex rather than a fixed 3-column grid: with two columns the grid
-            // left an empty third slot, pushing them off to one side. Here they
-            // stay centred whatever their number, and wrap when there are many.
-            <div className="flex flex-wrap justify-center gap-x-12 gap-y-8">
+            // auto-fit rather than a fixed 3-column grid: unused tracks collapse,
+            // so two columns don't leave an empty third slot pushing them off to
+            // one side. Unlike flex-wrap, grid justify-content centres the whole
+            // block at once, so a column that wraps to its own row still lines up
+            // under the same track instead of floating centred on its own line.
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,max-content))] justify-center gap-x-12 gap-y-8">
               {columns.map((column) => (
-                <div key={column.label} className="min-w-36">
+                <div key={column.label}>
                   <p className="font-heading text-sm font-bold text-white">{column.label}</p>
                   <ul className="mt-4 space-y-3">
                     {/* A link whose page was deleted has no address left; the
