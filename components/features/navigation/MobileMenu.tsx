@@ -102,15 +102,18 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                   <User size={16} className="shrink-0" />
                   {user.nume}
                 </p>
-                <RefreshableLink
+                {/* A plain anchor for the same reason as in `Navbar`: the
+                    dashboard must be entered with a real page load, so Pirsch
+                    re-runs its one-time `data-exclude` check there. The page
+                    load closes this menu on its own, so `closeIfSamePage` goes
+                    with it. */}
+                <a
                   href={user.dashboardHref}
-                  onClick={closeIfSamePage(user.dashboardHref)}
                   className="flex items-center justify-center gap-2 py-3 text-center rounded-lg text-sm font-semibold text-white"
                   style={{ background: "#2dbe8f" }}
                 >
                   Mergi la dashboard
-                  <LinkPendingIndicator />
-                </RefreshableLink>
+                </a>
               </>
             ) : (
               <>

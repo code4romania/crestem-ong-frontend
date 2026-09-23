@@ -11,6 +11,7 @@ import {
   refreshCookieOptions,
   roleCookieOptions,
 } from "@/lib/api/session-cookies";
+import { loginPathFor } from "@/lib/return-to";
 import {
   DASHBOARD_ROOT,
   addDashboardSegment,
@@ -49,7 +50,12 @@ function isDashboardRequest(request: NextRequest) {
 }
 
 function redirectToLogin(request: NextRequest) {
-  const response = NextResponse.redirect(new URL("/autentificare", request.url));
+  // The page they asked for travels along, so signing in returns them to it
+  // rather than to their role's landing page — an evaluation invitation links
+  // straight to the respondent's wizard, and dropping the destination here
+  // would strand them one click short of it.
+  const target = loginPathFor(request.nextUrl.pathname + request.nextUrl.search);
+  const response = NextResponse.redirect(new URL(target, request.url));
   response.cookies.delete(SESSION_COOKIE);
   response.cookies.delete(REFRESH_COOKIE);
   response.cookies.delete(ROLE_COOKIE);
