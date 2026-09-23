@@ -20,16 +20,19 @@ export function DashboardPageSkeleton({
   return (
     <div role="status" aria-busy="true" aria-live="polite">
       {withTabs && (
-        <nav className="mb-6 flex items-center gap-6 border-b border-border" aria-hidden>
+        <nav
+          className="mb-6 flex items-center gap-6 overflow-x-auto border-b border-border"
+          aria-hidden
+        >
           {[64, 56, 104, 76].map((width, index) => (
-            <div key={index} className="pb-3">
+            <div key={index} className="shrink-0 pb-3">
               <Skeleton className="h-4" width={width} />
             </div>
           ))}
         </nav>
       )}
 
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-2">
           <Skeleton className="h-8 w-56 rounded-lg" />
           <Skeleton className="h-4 w-72" />
@@ -40,7 +43,10 @@ export function DashboardPageSkeleton({
       {variant === "cards" && (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className="rounded-xl border border-border bg-white p-6">
+            <div
+              key={index}
+              className="rounded-xl border border-border bg-white p-6"
+            >
               <Skeleton className="h-5 w-2/3" />
               <Skeleton className="mt-3 h-4 w-full" />
               <Skeleton className="mt-2 h-4 w-4/5" />
@@ -74,7 +80,10 @@ export function DashboardPageSkeleton({
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="space-y-6 lg:col-span-2">
             {[0, 1].map((block) => (
-              <div key={block} className="rounded-xl border border-border bg-white p-6">
+              <div
+                key={block}
+                className="rounded-xl border border-border bg-white p-6"
+              >
                 <Skeleton className="h-5 w-1/3" />
                 <div className="mt-4 space-y-3">
                   {Array.from({ length: 4 }).map((_, index) => (

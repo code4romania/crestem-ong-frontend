@@ -8,9 +8,12 @@ export default async function SetariPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+          <h1
+            className="text-2xl font-heading font-extrabold"
+            style={{ color: "#162040" }}
+          >
             Setări
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -26,7 +29,11 @@ export default async function SetariPage() {
         Profilul meu
       </h2>
 
-      <ProfileHeaderCard nume={userDisplayName(user!)} email={user!.email} createdAt={user!.createdAt} />
+      <ProfileHeaderCard
+        nume={userDisplayName(user!)}
+        email={user!.email}
+        createdAt={user!.createdAt}
+      />
     </div>
   );
 }

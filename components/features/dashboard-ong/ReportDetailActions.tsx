@@ -42,7 +42,7 @@ export function ReportDetailActions({
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       {canAddMembers && (
         <button
           type="button"
@@ -58,14 +58,21 @@ export function ReportDetailActions({
           type="button"
           onClick={() => setFinishing(true)}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-          style={{ background: "#2dbe8f", boxShadow: "0 4px 16px rgba(45,190,143,0.3)" }}
+          style={{
+            background: "#2dbe8f",
+            boxShadow: "0 4px 16px rgba(45,190,143,0.3)",
+          }}
         >
           <CheckCircle2 size={14} /> Finalizează evaluare
         </button>
       )}
 
       {adding && (
-        <AddReportMembersModal reportId={reportId} candidates={candidates} onClose={() => setAdding(false)} />
+        <AddReportMembersModal
+          reportId={reportId}
+          candidates={candidates}
+          onClose={() => setAdding(false)}
+        />
       )}
 
       <ConfirmDialog

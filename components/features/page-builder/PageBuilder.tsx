@@ -210,7 +210,6 @@ export function PageBuilder({
    */
   minBlocks?: number;
 
-
   /** The library taxonomy, so `biblioteca-categorii` previews on the canvas. */
   categories?: LibraryCategory[];
 } = {}) {
@@ -599,7 +598,11 @@ export function PageBuilder({
           }
         >
           <Renderer
-            data={resolveBlockCategories(resolveBlockLinks(block.data, pages), categories, block.type)}
+            data={resolveBlockCategories(
+              resolveBlockLinks(block.data, pages),
+              categories,
+              block.type,
+            )}
           />
         </div>
       </div>
@@ -607,18 +610,18 @@ export function PageBuilder({
   };
 
   return (
-    <PageOptionsProvider value={{ pages, currentPageId, currentPath, categories }}>
+    <PageOptionsProvider
+      value={{ pages, currentPageId, currentPath, categories }}
+    >
       <div className="mx-auto max-w-6xl">
-        <div className="mb-6 flex items-center justify-between gap-4">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
               {title}
             </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {description}
-            </p>
+            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
           </div>
-          <div className="flex shrink-0 items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3 sm:shrink-0">
             <button
               type="button"
               onClick={() => setPreview(true)}

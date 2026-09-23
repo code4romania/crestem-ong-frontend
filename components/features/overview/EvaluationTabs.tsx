@@ -30,21 +30,28 @@ export function EvaluationTabs({
 }) {
   const tabClass = (isActive: boolean) =>
     isActive
-      ? "pb-3 text-sm font-semibold border-b-2 border-accent text-accent"
-      : "pb-3 text-sm font-medium text-muted-foreground hover:text-slate-700 transition-colors";
+      ? "shrink-0 whitespace-nowrap pb-3 text-sm font-semibold border-b-2 border-accent text-accent"
+      : "shrink-0 whitespace-nowrap pb-3 text-sm font-medium text-muted-foreground hover:text-slate-700 transition-colors";
 
-  const soonClass = "pb-3 text-sm font-medium cursor-not-allowed opacity-40";
+  const soonClass =
+    "shrink-0 whitespace-nowrap pb-3 text-sm font-medium cursor-not-allowed opacity-40";
 
   return (
-    <nav className="mb-6 flex items-center gap-6 border-b border-border">
-      <Link href={`${basePath}/overview`} className={tabClass(active === "overview")}>
+    <nav className="mb-6 flex items-center gap-6 overflow-x-auto border-b border-border">
+      <Link
+        href={`${basePath}/overview`}
+        className={tabClass(active === "overview")}
+      >
         Overview
       </Link>
       <Link href={basePath} className={tabClass(active === "evaluations")}>
         Istoric evaluări
       </Link>
       {currentEvaluationHref ? (
-        <Link href={currentEvaluationHref} className={tabClass(active === "current")}>
+        <Link
+          href={currentEvaluationHref}
+          className={tabClass(active === "current")}
+        >
           Evaluare curentă
         </Link>
       ) : (
@@ -53,7 +60,10 @@ export function EvaluationTabs({
         </span>
       )}
       {comparisonHref ? (
-        <Link href={comparisonHref} className={tabClass(active === "comparison")}>
+        <Link
+          href={comparisonHref}
+          className={tabClass(active === "comparison")}
+        >
           Comparație
         </Link>
       ) : (

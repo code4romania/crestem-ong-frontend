@@ -7,11 +7,16 @@ import { ResendInvitationButton } from "@/components/features/organizatii/Resend
 import { JoinRequestsSection } from "@/components/features/organizatii/JoinRequestsSection";
 
 function statusBadge(status: OngMember["accountStatus"]) {
-  if (status === "active") return { bg: "#f0fdf4", color: "#16a34a", label: "Activ" };
+  if (status === "active")
+    return { bg: "#f0fdf4", color: "#16a34a", label: "Activ" };
   return { bg: "#fffbeb", color: "#d97706", label: "În așteptare" };
 }
 
-const dateFormatter = new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "short", year: "numeric" });
+const dateFormatter = new Intl.DateTimeFormat("ro-RO", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
 
 function formatDate(iso: string) {
   return dateFormatter.format(new Date(iso));
@@ -25,9 +30,12 @@ export default async function UtilizatoriPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:justify-between">
         <div>
-          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+          <h1
+            className="text-2xl font-heading font-extrabold"
+            style={{ color: "#162040" }}
+          >
             Utilizatori
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -39,7 +47,10 @@ export default async function UtilizatoriPage() {
 
       <JoinRequestsSection initialRequests={joinRequests} />
 
-      <h2 className="font-heading font-bold text-base mb-3 flex items-center gap-2" style={{ color: "#162040" }}>
+      <h2
+        className="font-heading font-bold text-base mb-3 flex items-center gap-2"
+        style={{ color: "#162040" }}
+      >
         Membri afiliați ONG-ului
         <span
           className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-full text-xs font-semibold"
@@ -51,28 +62,31 @@ export default async function UtilizatoriPage() {
 
       {members.length === 0 ? (
         <div className="bg-white rounded-xl border border-border p-8 text-center">
-          <p className="text-sm text-muted-foreground">Niciun utilizator afiliat încă.</p>
+          <p className="text-sm text-muted-foreground">
+            Niciun utilizator afiliat încă.
+          </p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-border overflow-hidden">
+        <div className="bg-white rounded-xl border border-border overflow-hidden overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
-                {[
-                  "Utilizator",
-                  "Rol",
-                  "Status",
-                  "Afiliat din",
-                  "Acțiuni",
-                ].map((h) => (
-                  <th
-                    key={h}
-                    className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                    style={{ color: "#94a3b8" }}
-                  >
-                    {h}
-                  </th>
-                ))}
+              <tr
+                style={{
+                  background: "#f8fafc",
+                  borderBottom: "1px solid #e2e8f0",
+                }}
+              >
+                {["Utilizator", "Rol", "Status", "Afiliat din", "Acțiuni"].map(
+                  (h) => (
+                    <th
+                      key={h}
+                      className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                      style={{ color: "#94a3b8" }}
+                    >
+                      {h}
+                    </th>
+                  ),
+                )}
               </tr>
             </thead>
             <tbody>
@@ -80,7 +94,10 @@ export default async function UtilizatoriPage() {
                 const status = statusBadge(member.accountStatus);
                 const initials = member.nume.trim().slice(0, 2).toUpperCase();
                 return (
-                  <tr key={member.documentId} className="border-b border-border last:border-0 hover:bg-slate-50 transition-colors">
+                  <tr
+                    key={member.documentId}
+                    className="border-b border-border last:border-0 hover:bg-slate-50 transition-colors"
+                  >
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-3">
                         <div
@@ -90,13 +107,22 @@ export default async function UtilizatoriPage() {
                           {initials}
                         </div>
                         <div>
-                          <p className="font-semibold" style={{ color: "#162040" }}>{member.nume}</p>
-                          <p className="text-xs text-muted-foreground">{member.email}</p>
+                          <p
+                            className="font-semibold"
+                            style={{ color: "#162040" }}
+                          >
+                            {member.nume}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {member.email}
+                          </p>
                         </div>
                       </div>
                     </td>
                     <td className="px-4 py-3.5" style={{ color: "#475569" }}>
-                      {member.rol ?? <span style={{ color: "#94a3b8" }}>—</span>}
+                      {member.rol ?? (
+                        <span style={{ color: "#94a3b8" }}>—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3.5">
                       <span
@@ -106,11 +132,16 @@ export default async function UtilizatoriPage() {
                         {status.label}
                       </span>
                     </td>
-                    <td className="px-4 py-3.5" style={{ color: "#475569" }}>{formatDate(member.createdAt)}</td>
+                    <td className="px-4 py-3.5" style={{ color: "#475569" }}>
+                      {formatDate(member.createdAt)}
+                    </td>
                     <td className="px-4 py-3.5">
                       <div className="flex items-start gap-2">
                         {member.accountStatus === "pending" && (
-                          <ResendInvitationButton id={member.id} nume={member.nume} />
+                          <ResendInvitationButton
+                            id={member.id}
+                            nume={member.nume}
+                          />
                         )}
                         <RemoveOngMemberButton
                           documentId={member.documentId}

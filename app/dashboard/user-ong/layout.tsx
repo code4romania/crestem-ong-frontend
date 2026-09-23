@@ -26,7 +26,10 @@ export default async function MemberDashboardLayout({
   return (
     <div className="flex min-h-screen">
       <DashboardSidebar userName={userDisplayName(user)} userEmail={user.email} variant="member" />
-      <main className="flex-1 overflow-y-auto p-8" style={{ background: "#f8fafc" }}>
+      <main
+        className="flex-1 overflow-y-auto p-4 pt-20 lg:p-8"
+        style={{ background: "#f8fafc" }}
+      >
         <PageTransition>{children}</PageTransition>
       </main>
     </div>

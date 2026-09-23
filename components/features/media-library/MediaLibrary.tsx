@@ -34,7 +34,9 @@ export function MediaLibrary({
 }) {
   const router = useRouter();
   const [panelAsset, setPanelAsset] = useState<MediaAssetDetail | null>(null);
-  const [batchAssets, setBatchAssets] = useState<MediaAssetDetail[] | null>(null);
+  const [batchAssets, setBatchAssets] = useState<MediaAssetDetail[] | null>(
+    null,
+  );
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
   const [confirmingBulkDelete, setConfirmingBulkDelete] = useState(false);
@@ -107,7 +109,10 @@ export function MediaLibrary({
     },
   );
 
-  const buildQuery = (next: { search: string; tip: string; tagSlugs: string[] }, page = 1) => {
+  const buildQuery = (
+    next: { search: string; tip: string; tagSlugs: string[] },
+    page = 1,
+  ) => {
     const params = new URLSearchParams();
     if (next.search) params.set("search", next.search);
     if (next.tip) params.set("tip", next.tip);
@@ -117,7 +122,11 @@ export function MediaLibrary({
     return `${LIBRARY_PATH}${qs ? `?${qs}` : ""}`;
   };
 
-  const applyFilters = (next: { search: string; tip: string; tagSlugs: string[] }) => {
+  const applyFilters = (next: {
+    search: string;
+    tip: string;
+    tagSlugs: string[];
+  }) => {
     // Filter changes always reset to page 1.
     startNav(() => router.push(buildQuery(next)));
   };
@@ -132,7 +141,7 @@ export function MediaLibrary({
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
             Bibliotecă media
@@ -148,11 +157,13 @@ export function MediaLibrary({
           className="hidden"
           onChange={onFileInputChange}
         />
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
           {initial.data.length > 0 && (
             <button
               type="button"
-              onClick={() => (selectMode ? exitSelectMode() : setSelectMode(true))}
+              onClick={() =>
+                selectMode ? exitSelectMode() : setSelectMode(true)
+              }
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50"
             >
               {selectMode ? <X size={15} /> : <CheckSquare size={15} />}
@@ -225,14 +236,18 @@ export function MediaLibrary({
 
       <div
         aria-busy={navPending || detailPending}
-        className={navPending ? "opacity-60 transition-opacity" : "transition-opacity"}
+        className={
+          navPending ? "opacity-60 transition-opacity" : "transition-opacity"
+        }
       >
         <AssetGrid
           assets={initial.data}
           selectable={selectMode}
           selectedIds={selectMode ? selected : undefined}
           onSelect={(card) =>
-            selectMode ? toggleSelect(card.documentId) : openDetail(card.documentId)
+            selectMode
+              ? toggleSelect(card.documentId)
+              : openDetail(card.documentId)
           }
           emptyLabel="Niciun fișier găsit. Încarcă primul fișier sau ajustează filtrele."
         />
@@ -250,7 +265,9 @@ export function MediaLibrary({
             Anterior
           </PagerLink>
           <PagerLink
-            href={hrefForPage(Math.min(pagination.pageCount, pagination.page + 1))}
+            href={hrefForPage(
+              Math.min(pagination.pageCount, pagination.page + 1),
+            )}
             disabled={pagination.page === pagination.pageCount}
           >
             Următor

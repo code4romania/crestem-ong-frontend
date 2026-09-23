@@ -54,7 +54,10 @@ export function OrganizatiiGrid({
   const requestIdRef = useRef(0);
 
   const load = useCallback(
-    async (page: number, filters: { search: string; judet: string; program: string }) => {
+    async (
+      page: number,
+      filters: { search: string; judet: string; program: string },
+    ) => {
       const requestId = ++requestIdRef.current;
       setLoadingPage(page);
       setError(null);
@@ -103,7 +106,15 @@ export function OrganizatiiGrid({
     });
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [pagination, loadingPage, error, search, judetFilter, programFilter, load]);
+  }, [
+    pagination,
+    loadingPage,
+    error,
+    search,
+    judetFilter,
+    programFilter,
+    load,
+  ]);
 
   // The list lives in local state, so a server refresh alone would not reach
   // it: reload page one under the current filters, and refresh the route for
@@ -119,17 +130,24 @@ export function OrganizatiiGrid({
 
   return (
     <div>
-      <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+      <h1
+        className="text-2xl font-heading font-extrabold"
+        style={{ color: "#162040" }}
+      >
         Organizații NGO
       </h1>
       <p className="mt-1 mb-6 text-sm text-muted-foreground">
         Gestionează organizațiile înregistrate —{" "}
-        <span className="font-semibold">{pagination.total} conturi</span> în total
+        <span className="font-semibold">{pagination.total} conturi</span> în
+        total
       </p>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search
+            size={16}
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+          />
           <input
             placeholder="Caută organizații..."
             value={search}
@@ -137,11 +155,11 @@ export function OrganizatiiGrid({
             className="w-full pl-10 pr-3.5 py-2.5 rounded-full border border-border text-sm"
           />
         </div>
-        <div className="relative">
+        <div className="relative w-full sm:w-auto">
           <select
             value={programFilter}
             onChange={(e) => setProgramFilter(e.target.value)}
-            className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+            className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
           >
             <option value="">Toate programele</option>
             {programs.map((program) => (
@@ -150,13 +168,16 @@ export function OrganizatiiGrid({
               </option>
             ))}
           </select>
-          <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+          <ChevronDown
+            size={14}
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+          />
         </div>
-        <div className="relative">
+        <div className="relative w-full sm:w-auto">
           <select
             value={judetFilter}
             onChange={(e) => setJudetFilter(e.target.value)}
-            className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+            className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
           >
             <option value="">Toate județele</option>
             {judete.map((judet) => (
@@ -165,7 +186,10 @@ export function OrganizatiiGrid({
               </option>
             ))}
           </select>
-          <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+          <ChevronDown
+            size={14}
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+          />
         </div>
       </div>
 
@@ -182,7 +206,9 @@ export function OrganizatiiGrid({
           ))}
         </div>
       ) : ongs.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Nicio organizație găsită.</p>
+        <p className="text-sm text-muted-foreground">
+          Nicio organizație găsită.
+        </p>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {ongs.map((ong) => (
@@ -218,7 +244,9 @@ export function OrganizatiiGrid({
 
       {/* Watched by the observer above; the pages stop arriving once the last
           one has. */}
-      {hasMore && !error && <div ref={sentinelRef} className="h-px" aria-hidden />}
+      {hasMore && !error && (
+        <div ref={sentinelRef} className="h-px" aria-hidden />
+      )}
     </div>
   );
 }

@@ -2,7 +2,12 @@ import { serverApiFetch } from "@/lib/api/server";
 import { getCurrentUser } from "@/lib/api/session-server";
 import { EvaluationTabs } from "@/components/features/overview/EvaluationTabs";
 import { findActiveReport } from "@/lib/api/reports";
-import type { ReportDetail, ReportMembers, OngMember, ReportsCurrent } from "@/lib/api/reports";
+import type {
+  ReportDetail,
+  ReportMembers,
+  OngMember,
+  ReportsCurrent,
+} from "@/lib/api/reports";
 import type { Dimension } from "@/lib/api/dimensions";
 import { DimensionsBreakdown } from "@/components/features/evaluari/DimensionsBreakdown";
 import { ReportDetailActions } from "@/components/features/dashboard-ong/ReportDetailActions";
@@ -24,9 +29,18 @@ export default async function OngEvaluareDetailPage({
 }) {
   const { documentId } = await params;
 
-  const [reportRes, membersRes, ongMembersRes, dimensionsRes, currentRes, currentUser] = await Promise.all([
+  const [
+    reportRes,
+    membersRes,
+    ongMembersRes,
+    dimensionsRes,
+    currentRes,
+    currentUser,
+  ] = await Promise.all([
     serverApiFetch<{ data: ReportDetail }>(`/api/reports/${documentId}`),
-    serverApiFetch<{ data: ReportMembers }>(`/api/reports/${documentId}/members`),
+    serverApiFetch<{ data: ReportMembers }>(
+      `/api/reports/${documentId}/members`,
+    ),
     serverApiFetch<{ data: OngMember[] }>("/api/ongs/members"),
     serverApiFetch<Dimension[]>("/api/dimensions"),
     serverApiFetch<{ data: ReportsCurrent }>("/api/reports/current"),
@@ -34,10 +48,18 @@ export default async function OngEvaluareDetailPage({
   ]);
 
   const report = reportRes.data;
-  const activeReport = findActiveReport(currentRes.data.programRounds, currentRes.data.standaloneReports);
-  const invitedIds = new Set(membersRes.data.invited.map((entry) => entry.user?.documentId).filter(Boolean));
+  const activeReport = findActiveReport(
+    currentRes.data.programRounds,
+    currentRes.data.standaloneReports,
+  );
+  const invitedIds = new Set(
+    membersRes.data.invited
+      .map((entry) => entry.user?.documentId)
+      .filter(Boolean),
+  );
   const candidates = ongMembersRes.data.filter(
-    (member) => member.accountStatus === "active" && !invitedIds.has(member.documentId),
+    (member) =>
+      member.accountStatus === "active" && !invitedIds.has(member.documentId),
   );
   const phase = report.phases[0] ?? null;
   const programName = phase?.program?.name ?? "Evaluare independentă";
@@ -46,7 +68,9 @@ export default async function OngEvaluareDetailPage({
   const periodDays =
     phase != null
       ? Math.round(
-          (new Date(phase.endDate).getTime() - new Date(phase.startDate).getTime()) / 86_400_000,
+          (new Date(phase.endDate).getTime() -
+            new Date(phase.startDate).getTime()) /
+            86_400_000,
         ) + 1
       : null;
 
@@ -55,10 +79,15 @@ export default async function OngEvaluareDetailPage({
       ? `${formatDate(report.createdAt)} - ${report.finished && report.finishedAt ? formatDate(report.finishedAt) : "prezent"}`
       : null;
 
-  const completion = report.invitedCount > 0 ? Math.round((report.completedCount / report.invitedCount) * 100) : 0;
+  const completion =
+    report.invitedCount > 0
+      ? Math.round((report.completedCount / report.invitedCount) * 100)
+      : 0;
 
   const myEntry = currentUser
-    ? (membersRes.data.invited.find((entry) => entry.user?.documentId === currentUser.documentId) ?? null)
+    ? (membersRes.data.invited.find(
+        (entry) => entry.user?.documentId === currentUser.documentId,
+      ) ?? null)
     : null;
 
   return (
@@ -67,7 +96,9 @@ export default async function OngEvaluareDetailPage({
         active={report.finished ? "evaluations" : "current"}
         basePath={BASE_PATH}
         currentEvaluationHref={
-          activeReport ? `${BASE_PATH}/${activeReport.documentId}` : `${BASE_PATH}/curenta`
+          activeReport
+            ? `${BASE_PATH}/${activeReport.documentId}`
+            : `${BASE_PATH}/curenta`
         }
         comparisonHref={`${BASE_PATH}/comparatie`}
       />
@@ -81,9 +112,12 @@ export default async function OngEvaluareDetailPage({
         />
       )}
 
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+          <h1
+            className="text-2xl font-heading font-extrabold"
+            style={{ color: "#162040" }}
+          >
             {report.name}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -100,28 +134,49 @@ export default async function OngEvaluareDetailPage({
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div className="bg-white rounded-xl border border-border p-5">
-          <p className="text-xs mb-2 text-muted-foreground">Perioadă de completare</p>
-          <p className="text-3xl font-extrabold font-heading" style={{ color: "#162040" }}>
-            {periodDays != null ? `${periodDays} ${periodDays === 1 ? "zi" : "zile"}` : independentPeriod}
+          <p className="text-xs mb-2 text-muted-foreground">
+            Perioadă de completare
+          </p>
+          <p
+            className="text-3xl font-extrabold font-heading"
+            style={{ color: "#162040" }}
+          >
+            {periodDays != null
+              ? `${periodDays} ${periodDays === 1 ? "zi" : "zile"}`
+              : independentPeriod}
           </p>
           <p className="text-xs mt-1 text-muted-foreground">
-            {phase != null ? `${formatDate(phase.startDate)} – ${formatDate(phase.endDate)}` : "Evaluare independentă"}
+            {phase != null
+              ? `${formatDate(phase.startDate)} – ${formatDate(phase.endDate)}`
+              : "Evaluare independentă"}
           </p>
         </div>
         <div className="bg-white rounded-xl border border-border p-5">
           <p className="text-xs mb-2 text-muted-foreground">Total completări</p>
-          <p className="text-3xl font-extrabold font-heading" style={{ color: "#162040" }}>
+          <p
+            className="text-3xl font-extrabold font-heading"
+            style={{ color: "#162040" }}
+          >
             {report.completedCount}
           </p>
-          <p className="text-xs mt-1 text-muted-foreground">din {report.invitedCount} invitați</p>
+          <p className="text-xs mt-1 text-muted-foreground">
+            din {report.invitedCount} invitați
+          </p>
         </div>
         <div className="bg-white rounded-xl border border-border p-5">
           <p className="text-xs mb-2 text-muted-foreground">Scor total</p>
-          <p className="text-3xl font-extrabold font-heading" style={{ color: "#162040" }}>
-            {report.finished && report.scores.overall != null ? `${report.scores.overall}%` : "—"}
+          <p
+            className="text-3xl font-extrabold font-heading"
+            style={{ color: "#162040" }}
+          >
+            {report.finished && report.scores.overall != null
+              ? `${report.scores.overall}%`
+              : "—"}
           </p>
           <p className="text-xs mt-1 text-muted-foreground">
-            {report.finished && report.scores.overall != null ? "" : "disponibil la finalizare"}
+            {report.finished && report.scores.overall != null
+              ? ""
+              : "disponibil la finalizare"}
           </p>
         </div>
       </div>
@@ -131,18 +186,31 @@ export default async function OngEvaluareDetailPage({
           <h2 className="font-bold text-base" style={{ color: "#162040" }}>
             Progres completare matrice
           </h2>
-          <span className="text-2xl font-extrabold font-heading" style={{ color: "#2dbe8f" }}>
+          <span
+            className="text-2xl font-extrabold font-heading"
+            style={{ color: "#2dbe8f" }}
+          >
             {completion}%
           </span>
         </div>
-        <div className="h-3 rounded-full overflow-hidden mb-2" style={{ background: "#e2e8f0" }}>
+        <div
+          className="h-3 rounded-full overflow-hidden mb-2"
+          style={{ background: "#e2e8f0" }}
+        >
           <div
             className="h-full rounded-full transition-all"
-            style={{ width: `${completion}%`, background: "linear-gradient(90deg, #2dbe8f, #1a9e77)" }}
+            style={{
+              width: `${completion}%`,
+              background: "linear-gradient(90deg, #2dbe8f, #1a9e77)",
+            }}
           />
         </div>
         <p className="text-xs text-muted-foreground">
-          {report.completedCount} din {report.invitedCount} {report.invitedCount === 1 ? "membru a finalizat" : "membri au finalizat"} evaluarea
+          {report.completedCount} din {report.invitedCount}{" "}
+          {report.invitedCount === 1
+            ? "membru a finalizat"
+            : "membri au finalizat"}{" "}
+          evaluarea
         </p>
       </div>
 
@@ -160,7 +228,8 @@ export default async function OngEvaluareDetailPage({
             Dimensiuni evaluate
           </h2>
           <p className="text-sm text-muted-foreground">
-            Scorurile și argumentele completate de membri vor fi disponibile după finalizarea evaluării.
+            Scorurile și argumentele completate de membri vor fi disponibile
+            după finalizarea evaluării.
           </p>
         </div>
       )}

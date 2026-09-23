@@ -2,7 +2,11 @@ import Link from "next/link";
 import { Layers } from "lucide-react";
 import { serverApiFetch } from "@/lib/api/server";
 import { findActiveReport, getIndependentStartLock } from "@/lib/api/reports";
-import type { ReportListItem, ReportsCurrent, OngMember } from "@/lib/api/reports";
+import type {
+  ReportListItem,
+  ReportsCurrent,
+  OngMember,
+} from "@/lib/api/reports";
 import { StartIndependentEvaluationButton } from "@/components/features/dashboard-ong/StartIndependentEvaluationButton";
 import { EvaluationTabs } from "@/components/features/overview/EvaluationTabs";
 
@@ -13,7 +17,8 @@ function formatDate(iso: string) {
 }
 
 function reportStatus(report: ReportListItem) {
-  if (report.finished) return { bg: "#f0fdf4", color: "#16a34a", label: "Finalizat" };
+  if (report.finished)
+    return { bg: "#f0fdf4", color: "#16a34a", label: "Finalizat" };
   return { bg: "#eff6ff", color: "#2563eb", label: "În desfășurare" };
 }
 
@@ -23,8 +28,14 @@ export default async function OngEvaluariPage() {
     serverApiFetch<{ data: ReportsCurrent }>("/api/reports/current"),
     serverApiFetch<{ data: OngMember[] }>("/api/ongs/members"),
   ]);
-  const independentLock = getIndependentStartLock(currentRes.data.programRounds, currentRes.data.standaloneReports);
-  const activeReport = findActiveReport(currentRes.data.programRounds, currentRes.data.standaloneReports);
+  const independentLock = getIndependentStartLock(
+    currentRes.data.programRounds,
+    currentRes.data.standaloneReports,
+  );
+  const activeReport = findActiveReport(
+    currentRes.data.programRounds,
+    currentRes.data.standaloneReports,
+  );
 
   return (
     <div>
@@ -39,8 +50,11 @@ export default async function OngEvaluariPage() {
         comparisonHref="/dashboard/evaluari/comparatie"
       />
 
-      <div className="mb-6 flex items-start justify-between gap-4">
-        <StartIndependentEvaluationButton ongMembers={membersRes.data} lock={independentLock} />
+      <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:justify-between">
+        <StartIndependentEvaluationButton
+          ongMembers={membersRes.data}
+          lock={independentLock}
+        />
 
         <Link
           href="/dashboard/evaluari/model"
@@ -54,14 +68,28 @@ export default async function OngEvaluariPage() {
       <div>
         {listRes.data.length === 0 ? (
           <div className="bg-white rounded-xl border border-border p-8 text-center">
-            <p className="text-sm text-muted-foreground">Nu există nicio evaluare pornită încă.</p>
+            <p className="text-sm text-muted-foreground">
+              Nu există nicio evaluare pornită încă.
+            </p>
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-border overflow-hidden">
+          <div className="bg-white rounded-xl border border-border overflow-hidden overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
-                  {["Evaluare", "Program", "Invitați", "Completate", "Status", ""].map((h) => (
+                <tr
+                  style={{
+                    background: "#f8fafc",
+                    borderBottom: "1px solid #e2e8f0",
+                  }}
+                >
+                  {[
+                    "Evaluare",
+                    "Program",
+                    "Invitați",
+                    "Completate",
+                    "Status",
+                    "",
+                  ].map((h) => (
                     <th
                       key={h}
                       className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider"
@@ -75,18 +103,31 @@ export default async function OngEvaluariPage() {
               <tbody>
                 {listRes.data.map((report) => {
                   const status = reportStatus(report);
-                  const programName = report.phases[0]?.program?.name ?? "Independentă";
+                  const programName =
+                    report.phases[0]?.program?.name ?? "Independentă";
                   return (
-                    <tr key={report.documentId} className="border-b border-border last:border-0 hover:bg-slate-50 transition-colors">
-                      <td className="px-4 py-3.5 font-semibold" style={{ color: "#162040" }}>
+                    <tr
+                      key={report.documentId}
+                      className="border-b border-border last:border-0 hover:bg-slate-50 transition-colors"
+                    >
+                      <td
+                        className="px-4 py-3.5 font-semibold"
+                        style={{ color: "#162040" }}
+                      >
                         {report.name}
                         <p className="text-xs font-normal text-muted-foreground mt-0.5">
                           {formatDate(report.createdAt.slice(0, 10))}
                         </p>
                       </td>
-                      <td className="px-4 py-3.5" style={{ color: "#475569" }}>{programName}</td>
-                      <td className="px-4 py-3.5" style={{ color: "#475569" }}>{report.invitedCount}</td>
-                      <td className="px-4 py-3.5" style={{ color: "#475569" }}>{report.completedCount}</td>
+                      <td className="px-4 py-3.5" style={{ color: "#475569" }}>
+                        {programName}
+                      </td>
+                      <td className="px-4 py-3.5" style={{ color: "#475569" }}>
+                        {report.invitedCount}
+                      </td>
+                      <td className="px-4 py-3.5" style={{ color: "#475569" }}>
+                        {report.completedCount}
+                      </td>
                       <td className="px-4 py-3.5">
                         <span
                           className="px-2.5 py-1 rounded-full text-xs font-semibold"

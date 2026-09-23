@@ -7,7 +7,16 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ArrowLeft, AlertCircle, Loader2, Plus, Edit2, Trash2, Check, X } from "lucide-react";
+import {
+  ArrowLeft,
+  AlertCircle,
+  Loader2,
+  Plus,
+  Edit2,
+  Trash2,
+  Check,
+  X,
+} from "lucide-react";
 import { createProgram, updateProgram } from "@/lib/api/programs";
 import type { ProgramDetail, PhaseInput } from "@/lib/api/programs";
 import { getApiErrorMessage } from "@/lib/api/client";
@@ -45,7 +54,13 @@ const draftInputClass =
   "w-full px-3 py-2 rounded-lg border border-border text-sm focus:outline-none bg-white transition-colors";
 
 function emptyDraft(): PhaseRow {
-  return { key: `new-${Date.now()}`, title: "", startDate: "", endDate: "", hasEvaluation: false };
+  return {
+    key: `new-${Date.now()}`,
+    title: "",
+    startDate: "",
+    endDate: "",
+    hasEvaluation: false,
+  };
 }
 
 export function ProgramForm({
@@ -122,7 +137,9 @@ export function ProgramForm({
       return;
     }
     if (editingKey) {
-      setSavedPhases((prev) => prev.map((phase) => (phase.key === editingKey ? draftPhase : phase)));
+      setSavedPhases((prev) =>
+        prev.map((phase) => (phase.key === editingKey ? draftPhase : phase)),
+      );
     } else {
       setSavedPhases((prev) => [...prev, draftPhase]);
     }
@@ -144,7 +161,9 @@ export function ProgramForm({
     setPendingDeleteKey(null);
   };
 
-  const phasePendingDelete = savedPhases.find((phase) => phase.key === pendingDeleteKey);
+  const phasePendingDelete = savedPhases.find(
+    (phase) => phase.key === pendingDeleteKey,
+  );
 
   const onSubmit = async (data: FormValues) => {
     if (savedPhases.length === 0) {
@@ -160,26 +179,31 @@ export function ProgramForm({
           name: data.name,
           startDate: data.startDate,
           endDate: data.endDate,
-          phases: savedPhases.map(({ title, startDate, endDate, hasEvaluation }) => ({
-            title,
-            startDate,
-            endDate,
-            hasEvaluation,
-          })),
+          phases: savedPhases.map(
+            ({ title, startDate, endDate, hasEvaluation }) => ({
+              title,
+              startDate,
+              endDate,
+              hasEvaluation,
+            }),
+          ),
         });
       } else if (program) {
         await updateProgram(program.documentId, {
           name: data.name,
           startDate: data.startDate,
           endDate: data.endDate,
-          phases: savedPhases.map(({ documentId, title, startDate, endDate, hasEvaluation }) => ({
-            documentId,
-            title,
-            startDate,
-            endDate,
-            hasEvaluation,
-          })),
-          removePhases: removedPhaseIds.length > 0 ? removedPhaseIds : undefined,
+          phases: savedPhases.map(
+            ({ documentId, title, startDate, endDate, hasEvaluation }) => ({
+              documentId,
+              title,
+              startDate,
+              endDate,
+              hasEvaluation,
+            }),
+          ),
+          removePhases:
+            removedPhaseIds.length > 0 ? removedPhaseIds : undefined,
         });
       }
       router.push("/dashboard/programe");
@@ -201,7 +225,10 @@ export function ProgramForm({
         <ArrowLeft size={16} /> Înapoi la programe
       </Link>
 
-      <h1 className="mb-8 font-heading font-extrabold text-2xl" style={{ color: "#162040" }}>
+      <h1
+        className="mb-8 font-heading font-extrabold text-2xl"
+        style={{ color: "#162040" }}
+      >
         {mode === "create" ? "Adaugă program nou" : "Editează program"}
       </h1>
 
@@ -210,7 +237,11 @@ export function ProgramForm({
           <div
             role="alert"
             className="flex items-start gap-2.5 rounded-xl p-4 text-sm"
-            style={{ background: "#fff5f5", border: "1.5px solid #fca5a5", color: "#ef4444" }}
+            style={{
+              background: "#fff5f5",
+              border: "1.5px solid #fca5a5",
+              color: "#ef4444",
+            }}
           >
             <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
             {apiError}
@@ -222,7 +253,10 @@ export function ProgramForm({
             Detalii program
           </h2>
           <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: "#334155" }}>
+            <label
+              className="block text-sm font-medium mb-2"
+              style={{ color: "#334155" }}
+            >
               Numele programului <span style={{ color: "#dc2626" }}>*</span>
             </label>
             <input
@@ -232,26 +266,48 @@ export function ProgramForm({
               {...register("name")}
             />
             {errors.name && (
-              <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>{errors.name.message}</p>
+              <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+                {errors.name.message}
+              </p>
             )}
           </div>
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: "#334155" }}>
+              <label
+                className="block text-sm font-medium mb-2"
+                style={{ color: "#334155" }}
+              >
                 Data de început <span style={{ color: "#dc2626" }}>*</span>
               </label>
-              <input type="date" className={inputClass} style={{ color: "#162040" }} {...register("startDate")} />
+              <input
+                type="date"
+                className={inputClass}
+                style={{ color: "#162040" }}
+                {...register("startDate")}
+              />
               {errors.startDate && (
-                <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>{errors.startDate.message}</p>
+                <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+                  {errors.startDate.message}
+                </p>
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: "#334155" }}>
+              <label
+                className="block text-sm font-medium mb-2"
+                style={{ color: "#334155" }}
+              >
                 Data de final <span style={{ color: "#dc2626" }}>*</span>
               </label>
-              <input type="date" className={inputClass} style={{ color: "#162040" }} {...register("endDate")} />
+              <input
+                type="date"
+                className={inputClass}
+                style={{ color: "#162040" }}
+                {...register("endDate")}
+              />
               {errors.endDate && (
-                <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>{errors.endDate.message}</p>
+                <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+                  {errors.endDate.message}
+                </p>
               )}
             </div>
           </div>
@@ -276,59 +332,90 @@ export function ProgramForm({
 
           {draftPhase && (
             <div className="rounded-xl border border-violet-200 bg-violet-50 p-5 mb-5">
-              <p className="text-xs font-semibold uppercase tracking-wide mb-4" style={{ color: "#7c3aed" }}>
+              <p
+                className="text-xs font-semibold uppercase tracking-wide mb-4"
+                style={{ color: "#7c3aed" }}
+              >
                 {editingKey ? "Editează faza" : "Fază nouă"}
               </p>
-              <div className="grid grid-cols-3 gap-4 mb-4">
+              <div className="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-3">
                 <div>
-                  <label className="block text-xs font-medium mb-1.5" style={{ color: "#475569" }}>
+                  <label
+                    className="block text-xs font-medium mb-1.5"
+                    style={{ color: "#475569" }}
+                  >
                     Titlu fază *
                   </label>
                   <input
                     value={draftPhase.title}
-                    onChange={(e) => setDraftPhase((d) => (d ? { ...d, title: e.target.value } : d))}
+                    onChange={(e) =>
+                      setDraftPhase((d) =>
+                        d ? { ...d, title: e.target.value } : d,
+                      )
+                    }
                     placeholder="ex. Recrutare aplicanți"
                     className={draftInputClass}
                     style={{ color: "#162040" }}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium mb-1.5" style={{ color: "#475569" }}>
+                  <label
+                    className="block text-xs font-medium mb-1.5"
+                    style={{ color: "#475569" }}
+                  >
                     Dată început *
                   </label>
                   <input
                     type="date"
                     value={draftPhase.startDate}
-                    onChange={(e) => setDraftPhase((d) => (d ? { ...d, startDate: e.target.value } : d))}
+                    onChange={(e) =>
+                      setDraftPhase((d) =>
+                        d ? { ...d, startDate: e.target.value } : d,
+                      )
+                    }
                     className={draftInputClass}
                     style={{ color: "#162040" }}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium mb-1.5" style={{ color: "#475569" }}>
+                  <label
+                    className="block text-xs font-medium mb-1.5"
+                    style={{ color: "#475569" }}
+                  >
                     Dată final *
                   </label>
                   <input
                     type="date"
                     value={draftPhase.endDate}
-                    onChange={(e) => setDraftPhase((d) => (d ? { ...d, endDate: e.target.value } : d))}
+                    onChange={(e) =>
+                      setDraftPhase((d) =>
+                        d ? { ...d, endDate: e.target.value } : d,
+                      )
+                    }
                     className={draftInputClass}
                     style={{ color: "#162040" }}
                   />
                 </div>
               </div>
-              <label className="flex items-center gap-2 text-sm mb-4" style={{ color: "#334155" }}>
+              <label
+                className="flex items-center gap-2 text-sm mb-4"
+                style={{ color: "#334155" }}
+              >
                 <input
                   type="checkbox"
                   checked={draftPhase.hasEvaluation}
                   onChange={(e) =>
-                    setDraftPhase((d) => (d ? { ...d, hasEvaluation: e.target.checked } : d))
+                    setDraftPhase((d) =>
+                      d ? { ...d, hasEvaluation: e.target.checked } : d,
+                    )
                   }
                 />
                 Faza necesită evaluare
               </label>
               {phaseError && (
-                <p className="text-xs mb-3" style={{ color: "#dc2626" }}>{phaseError}</p>
+                <p className="text-xs mb-3" style={{ color: "#dc2626" }}>
+                  {phaseError}
+                </p>
               )}
               <div className="flex items-center gap-2">
                 <button
@@ -352,11 +439,23 @@ export function ProgramForm({
           )}
 
           {savedPhases.length > 0 ? (
-            <div className="rounded-xl border border-border overflow-hidden">
+            <div className="rounded-xl border border-border overflow-hidden overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
-                    {["#", "Titlu fază", "Dată început", "Dată final", "Evaluare", "Acțiuni"].map((h) => (
+                  <tr
+                    style={{
+                      background: "#f8fafc",
+                      borderBottom: "1px solid #e2e8f0",
+                    }}
+                  >
+                    {[
+                      "#",
+                      "Titlu fază",
+                      "Dată început",
+                      "Dată final",
+                      "Evaluare",
+                      "Acțiuni",
+                    ].map((h) => (
                       <th
                         key={h}
                         className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider"
@@ -369,18 +468,34 @@ export function ProgramForm({
                 </thead>
                 <tbody>
                   {savedPhases.map((phase, idx) => (
-                    <tr key={phase.key} className="border-b border-border last:border-0 hover:bg-slate-50 transition-colors">
+                    <tr
+                      key={phase.key}
+                      className="border-b border-border last:border-0 hover:bg-slate-50 transition-colors"
+                    >
                       <td className="px-4 py-3.5">
                         <span
                           className="w-6 h-6 rounded flex items-center justify-center text-xs font-bold text-white"
-                          style={{ background: PHASE_COLORS[idx % PHASE_COLORS.length].bar, display: "inline-flex" }}
+                          style={{
+                            background:
+                              PHASE_COLORS[idx % PHASE_COLORS.length].bar,
+                            display: "inline-flex",
+                          }}
                         >
                           {idx + 1}
                         </span>
                       </td>
-                      <td className="px-4 py-3.5 font-semibold" style={{ color: "#162040" }}>{phase.title}</td>
-                      <td className="px-4 py-3.5" style={{ color: "#475569" }}>{formatDate(phase.startDate)}</td>
-                      <td className="px-4 py-3.5" style={{ color: "#475569" }}>{formatDate(phase.endDate)}</td>
+                      <td
+                        className="px-4 py-3.5 font-semibold"
+                        style={{ color: "#162040" }}
+                      >
+                        {phase.title}
+                      </td>
+                      <td className="px-4 py-3.5" style={{ color: "#475569" }}>
+                        {formatDate(phase.startDate)}
+                      </td>
+                      <td className="px-4 py-3.5" style={{ color: "#475569" }}>
+                        {formatDate(phase.endDate)}
+                      </td>
                       <td className="px-4 py-3.5">
                         <span
                           className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold"
@@ -390,7 +505,11 @@ export function ProgramForm({
                               : { background: "#f1f5f9", color: "#64748b" }
                           }
                         >
-                          {phase.hasEvaluation ? <Check size={12} /> : <X size={12} />}
+                          {phase.hasEvaluation ? (
+                            <Check size={12} />
+                          ) : (
+                            <X size={12} />
+                          )}
                           {phase.hasEvaluation ? "Da" : "Nu"}
                         </span>
                       </td>
@@ -435,7 +554,9 @@ export function ProgramForm({
           ) : null}
 
           {phasesListError && (
-            <p className="mt-3 text-xs" style={{ color: "#ef4444" }}>{phasesListError}</p>
+            <p className="mt-3 text-xs" style={{ color: "#ef4444" }}>
+              {phasesListError}
+            </p>
           )}
         </div>
 

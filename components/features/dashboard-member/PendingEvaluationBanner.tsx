@@ -21,7 +21,7 @@ export function PendingEvaluationBanner({
 
   return (
     <div
-      className="rounded-2xl p-6 mb-6 flex items-center justify-between gap-4"
+      className="rounded-2xl p-6 mb-6 flex flex-wrap items-center justify-between gap-4"
       style={{ background: "#162040" }}
     >
       <div>

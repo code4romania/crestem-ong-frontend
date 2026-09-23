@@ -36,10 +36,8 @@ export function PersoaneResursaFilters({
     router.replace(qs ? `${pathname}?${qs}` : pathname);
   }
 
-  const { debounced: debouncedNavigate, cancel: cancelNavigate } = useDebouncedCallback(
-    navigate,
-    SEARCH_DEBOUNCE_MS,
-  );
+  const { debounced: debouncedNavigate, cancel: cancelNavigate } =
+    useDebouncedCallback(navigate, SEARCH_DEBOUNCE_MS);
 
   function handleSearchChange(value: string) {
     setSearch(value);
@@ -55,7 +53,10 @@ export function PersoaneResursaFilters({
   return (
     <div className="flex flex-col sm:flex-row gap-3 mb-6">
       <div className="relative flex-1">
-        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+        <Search
+          size={16}
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+        />
         <label htmlFor="persoane-resursa-search" className="sr-only">
           Caută persoană resursă
         </label>
@@ -67,7 +68,7 @@ export function PersoaneResursaFilters({
           className="w-full pl-10 pr-3.5 py-2.5 rounded-full border border-border text-sm"
         />
       </div>
-      <div className="relative">
+      <div className="relative w-full sm:w-auto">
         <label htmlFor="persoane-resursa-program" className="sr-only">
           Filtrează după program
         </label>
@@ -75,7 +76,7 @@ export function PersoaneResursaFilters({
           id="persoane-resursa-program"
           value={program}
           onChange={(e) => handleProgramChange(e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
         >
           <option value="">Toate programele</option>
           {programs.map((option) => (
