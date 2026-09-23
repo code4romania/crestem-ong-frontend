@@ -1,49 +1,22 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { Loader2, MailCheck } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { confirmEmailChangeAction } from "@/lib/api/auth-actions";
 
 export function ConfirmEmailChange({ token, email }: { token: string; email: string }) {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState(false);
 
   const handleConfirm = () => {
     setError(null);
     startTransition(async () => {
+      // On success the action redirects to ?confirmat=... — it only returns
+      // here when the confirmation failed.
       const result = await confirmEmailChangeAction(token);
-      if ("error" in result) {
-        setError(result.error);
-        return;
-      }
-      setDone(true);
+      setError(result.error);
     });
   };
-
-  if (done) {
-    return (
-      <>
-        <div className="flex items-start gap-3 mt-4">
-          <MailCheck size={20} className="shrink-0 mt-0.5" style={{ color: "#2dbe8f" }} />
-          <p className="text-sm" style={{ color: "#162040" }}>
-            Adresa contului este acum <span className="font-semibold">{email}</span>.
-            Autentifică-te din nou folosind noua adresă.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => router.push("/autentificare")}
-          className="mt-6 w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-          style={{ background: "#2dbe8f" }}
-        >
-          Mergi la autentificare
-        </button>
-      </>
-    );
-  }
 
   return (
     <>

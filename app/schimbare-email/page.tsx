@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MailX } from "lucide-react";
+import { MailCheck, MailX } from "lucide-react";
 import { serverApiFetch } from "@/lib/api/server";
 import { getApiErrorMessage } from "@/lib/api/client";
 import { redirectAuthenticatedToDashboard } from "@/lib/api/session-server";
@@ -8,12 +8,41 @@ import { ConfirmEmailChange } from "@/components/features/auth/ConfirmEmailChang
 export default async function SchimbareEmailPage({
   searchParams,
 }: {
-  searchParams: Promise<{ token?: string }>;
+  searchParams: Promise<{ token?: string; confirmat?: string }>;
 }) {
-  const { token } = await searchParams;
+  const { token, confirmat } = await searchParams;
 
   let pendingEmail: string | null = null;
   let error: string | null = null;
+
+  // The confirm action lands here after spending the token, so this branch must
+  // stay free of any token lookup — there is nothing left to verify.
+  if (confirmat) {
+    return (
+      <main className="min-h-dvh flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl border border-border p-8 w-full max-w-md">
+          <h1 className="font-heading font-extrabold text-xl mb-2" style={{ color: "#162040" }}>
+            Confirmă adresa de email
+          </h1>
+          <div className="flex items-start gap-3 mt-4">
+            <MailCheck size={20} className="shrink-0 mt-0.5" style={{ color: "#2dbe8f" }} />
+            <p className="text-sm" style={{ color: "#162040" }}>
+              Adresa contului este acum{" "}
+              <span className="font-semibold">{confirmat}</span>. Autentifică-te
+              din nou folosind noua adresă.
+            </p>
+          </div>
+          <Link
+            href="/autentificare"
+            className="mt-6 inline-flex w-full items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+            style={{ background: "#2dbe8f" }}
+          >
+            Mergi la autentificare
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   if (!token) {
     // The confirmation link is normally opened while signed in, so the token
