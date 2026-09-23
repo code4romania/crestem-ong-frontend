@@ -1,5 +1,7 @@
 import { getMediaUrl } from "@/lib/api/client";
-import { parseVideoId, type VideoData } from "./schema";
+import { getEmbedSrc } from "./embed-src";
+import { VideoFacade } from "./VideoFacade";
+import { type VideoData } from "./schema";
 
 const WIDTH_CLASS: Record<VideoData["latime"], string> = {
   compacta: "max-w-2xl",
@@ -13,45 +15,19 @@ const ASPECT_CLASS: Record<"16:9" | "4:3", string> = {
   "4:3": "aspect-[4/3]",
 };
 
-/** YouTube/Vimeo embed URL with the player options folded into the query. */
-function getEmbedSrc(data: VideoData): string | null {
-  if (data.sursaTip === "fisier") return null;
-  const id = parseVideoId(data.sursaTip, data.sursaUrl);
-  if (!id) return null;
-
-  const muted = data.mut || data.autoplay;
-  const params = new URLSearchParams();
-
-  if (data.sursaTip === "youtube") {
-    params.set("rel", "0");
-    if (data.autoplay) params.set("autoplay", "1");
-    if (muted) params.set("mute", "1");
-    if (!data.controale) params.set("controls", "0");
-    if (data.loop) {
-      params.set("loop", "1");
-      params.set("playlist", id);
-    }
-    return `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`;
-  }
-
-  if (data.autoplay) params.set("autoplay", "1");
-  if (muted) params.set("muted", "1");
-  if (!data.controale) params.set("controls", "0");
-  if (data.loop) params.set("loop", "1");
-  return `https://player.vimeo.com/video/${id}?${params.toString()}`;
-}
-
 /**
  * "Material video" — a YouTube/Vimeo embed or an uploaded/linked video file,
  * with optional heading, description and caption. Pure (no hooks, no
  * `"use client"`) so it renders on the public page unchanged once a backend
- * feeds it the same shape.
+ * feeds it the same shape; the click-to-play gate around third-party embeds
+ * is the one client part, and it lives in `VideoFacade`.
  */
 export function Video({ data }: { data: VideoData }) {
   const {
     sursaTip,
     sursaUrl,
     fisier,
+    poster,
     altText,
     titlu,
     descriere,
@@ -91,13 +67,11 @@ export function Video({ data }: { data: VideoData }) {
                 aspectClass ?? "aspect-video"
               }`}
             >
-              <iframe
+              <VideoFacade
                 src={embedSrc}
+                provider={sursaTip === "vimeo" ? "vimeo" : "youtube"}
+                posterUrl={poster ? getMediaUrl(poster.url) : null}
                 title={iframeTitle}
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full border-0"
               />
             </div>
           ) : fileSrc ? (

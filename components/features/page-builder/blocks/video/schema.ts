@@ -5,6 +5,11 @@ const YOUTUBE_HOSTS = new Set([
   "www.youtube.com",
   "m.youtube.com",
   "youtu.be",
+  // The renderer hands back nocookie embed links, so an admin who copies one
+  // out of a page and pastes it into another block gets a working video
+  // rather than a validation error.
+  "youtube-nocookie.com",
+  "www.youtube-nocookie.com",
 ]);
 const VIMEO_HOSTS = new Set(["vimeo.com", "www.vimeo.com", "player.vimeo.com"]);
 
@@ -13,7 +18,7 @@ const VIMEO_HOSTS = new Set(["vimeo.com", "www.vimeo.com", "player.vimeo.com"]);
  * checks the hostname against an allow-list first, so look-alike hosts
  * (`notyoutube.com/watch?v=...`) are rejected. Returns `null` when the string
  * isn't a recognisable URL for that provider, which is what the blank-draft
- * gate checks. `getEmbedSrc` in `Video.tsx` re-parses the same way.
+ * gate checks. `getEmbedSrc` in `embed-src.ts` re-parses the same way.
  */
 export function parseVideoId(
   provider: "youtube" | "vimeo",
@@ -53,6 +58,12 @@ const uploadedVideoSchema = z.object({
   name: z.string().default(""),
 });
 
+const uploadedImageSchema = z.object({
+  id: z.number(),
+  url: z.string(),
+  name: z.string().default(""),
+});
+
 export const videoSchema = z
   .object({
     sursaTip: z.enum(["youtube", "vimeo", "fisier"]).default("youtube"),
@@ -61,6 +72,10 @@ export const videoSchema = z
     // but that admin page is still a stub — the paste field covers it for now.
     sursaUrl: z.string().trim().default(""),
     fisier: uploadedVideoSchema.nullable().default(null),
+    // Shown in place of the YouTube/Vimeo player until the visitor clicks
+    // play. Optional — without it the facade draws a neutral placeholder,
+    // which still beats pulling a thumbnail off a Google domain on load.
+    poster: uploadedImageSchema.nullable().default(null),
     altText: z.string().trim().default(""),
     titlu: z.string().trim().default(""),
     descriere: z.string().trim().default(""),
@@ -118,6 +133,7 @@ export const VIDEO_DEFAULTS: VideoData = {
   sursaTip: "youtube",
   sursaUrl: "",
   fisier: null,
+  poster: null,
   altText: "",
   titlu: "",
   descriere: "",
