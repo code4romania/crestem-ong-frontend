@@ -1,3 +1,6 @@
+import { MEMBER_STATUS_LABELS } from "@/components/features/evaluari/evaluation-status";
+import { ROUND_STATUS } from "./EvaluariOrganizatiiTable";
+
 export const EVALUARI_BASE_PATH = "/dashboard/evaluari";
 
 /** The whole state of the Evaluări list that lives in the URL. */
@@ -39,4 +42,16 @@ export function hasActiveEvaluariFilters({
   status,
 }: Omit<EvaluariQuery, "tab" | "page">) {
   return Boolean(search || ongs?.length || programs?.length || status);
+}
+
+const MEMBER_STATUS_ORDER = ["neinceput", "in_lucru", "completat", "nefinalizat"];
+
+/**
+ * Each tab filters on the status its grid shows: a respondent's status on the
+ * users tab, the round's own status on the organizations tab.
+ */
+export function statusOptionsForTab(tab: string): { value: string; label: string }[] {
+  return tab === "organizatii"
+    ? Object.entries(ROUND_STATUS).map(([value, { label }]) => ({ value, label }))
+    : MEMBER_STATUS_ORDER.map((value) => ({ value, label: MEMBER_STATUS_LABELS[value] }));
 }
