@@ -6,8 +6,15 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { deletePageAction, setPagePublishedAction } from "@/lib/api/pages-actions";
-import { AUDIENCE_LABEL, type PageListResult, type PageSummary } from "@/lib/api/pages-types";
+import {
+  deletePageAction,
+  setPagePublishedAction,
+} from "@/lib/api/pages-actions";
+import {
+  AUDIENCE_LABEL,
+  type PageListResult,
+  type PageSummary,
+} from "@/lib/api/pages-types";
 
 type Pagination = PageListResult["meta"]["pagination"];
 
@@ -34,7 +41,9 @@ export function PageList({
 
   const submitSearch = (value: string) => {
     setTerm(value);
-    const query = value.trim() ? `?search=${encodeURIComponent(value.trim())}` : "";
+    const query = value.trim()
+      ? `?search=${encodeURIComponent(value.trim())}`
+      : "";
     startTransition(() => router.push(`/dashboard/pagini${query}`));
   };
 
@@ -48,7 +57,10 @@ export function PageList({
 
   const togglePublished = (page: PageSummary) => {
     startTransition(async () => {
-      const result = await setPagePublishedAction(page.documentId, !page.publicat);
+      const result = await setPagePublishedAction(
+        page.documentId,
+        !page.publicat,
+      );
       if (result.error) toast.error(result.error);
       else router.refresh();
     });
@@ -67,9 +79,11 @@ export function PageList({
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-extrabold text-[#162040]">Pagini</h1>
+          <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+            Pagini
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Gestionează paginile site-ului public
           </p>
@@ -100,49 +114,63 @@ export function PageList({
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-white">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border bg-slate-50">
-              {["Titlu", "Slug", "Status", "Vizibilitate", "Actualizat", "Acțiuni"].map((head) => (
-                <th
-                  key={head}
-                  className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#94a3b8]"
-                >
-                  {head}
-                </th>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border bg-slate-50">
+                {[
+                  "Titlu",
+                  "Slug",
+                  "Status",
+                  "Vizibilitate",
+                  "Actualizat",
+                  "Acțiuni",
+                ].map((head) => (
+                  <th
+                    key={head}
+                    className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#94a3b8]"
+                  >
+                    {head}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {homepage && (
+                <PageRow
+                  page={homepage}
+                  pending={pending}
+                  onTogglePublished={togglePublished}
+                  onDelete={setDeleting}
+                />
+              )}
+              {pages.map((page) => (
+                <PageRow
+                  key={page.documentId}
+                  page={page}
+                  pending={pending}
+                  onTogglePublished={togglePublished}
+                  onDelete={setDeleting}
+                />
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {homepage && (
-              <PageRow
-                page={homepage}
-                pending={pending}
-                onTogglePublished={togglePublished}
-                onDelete={setDeleting}
-              />
-            )}
-            {pages.map((page) => (
-              <PageRow
-                key={page.documentId}
-                page={page}
-                pending={pending}
-                onTogglePublished={togglePublished}
-                onDelete={setDeleting}
-              />
-            ))}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
 
         {pages.length === 0 && !homepage && (
           <div className="px-5 py-10 text-center">
-            <p className="text-sm text-muted-foreground">Nicio pagină găsită.</p>
+            <p className="text-sm text-muted-foreground">
+              Nicio pagină găsită.
+            </p>
           </div>
         )}
       </div>
 
       {pagination.pageCount > 1 && (
-        <nav aria-label="Paginare pagini" className="mt-6 flex items-center justify-center gap-1">
+        <nav
+          aria-label="Paginare pagini"
+          className="mt-6 flex items-center justify-center gap-1"
+        >
           <PagerLink
             href={hrefForPage(Math.max(1, pagination.page - 1))}
             disabled={pagination.page === 1}
@@ -150,7 +178,9 @@ export function PageList({
             Anterior
           </PagerLink>
           <PagerLink
-            href={hrefForPage(Math.min(pagination.pageCount, pagination.page + 1))}
+            href={hrefForPage(
+              Math.min(pagination.pageCount, pagination.page + 1),
+            )}
             disabled={pagination.page === pagination.pageCount}
           >
             Următor
@@ -213,7 +243,9 @@ function PageRow({
         </span>
       </td>
       <td className="px-4 py-3.5 text-[#475569]">
-        {page.vizibilitate.map((audience) => AUDIENCE_LABEL[audience]).join(", ")}
+        {page.vizibilitate
+          .map((audience) => AUDIENCE_LABEL[audience])
+          .join(", ")}
       </td>
       <td className="px-4 py-3.5 text-muted-foreground">
         {new Date(page.actualizat).toLocaleDateString("ro-RO")}
@@ -237,7 +269,9 @@ function PageRow({
                 onClick={() => onTogglePublished(page)}
                 disabled={pending}
                 aria-label={
-                  page.publicat ? `Retrage „${page.titlu}"` : `Publică „${page.titlu}"`
+                  page.publicat
+                    ? `Retrage „${page.titlu}"`
+                    : `Publică „${page.titlu}"`
                 }
                 className="rounded-lg p-1.5 text-[#64748b] transition-colors hover:bg-slate-100 disabled:opacity-50"
               >

@@ -13,16 +13,20 @@ export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
   if (mentors.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-border p-8 text-center">
-        <p className="text-sm text-muted-foreground">Nicio persoană resursă găsită.</p>
+        <p className="text-sm text-muted-foreground">
+          Nicio persoană resursă găsită.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl border border-border overflow-hidden">
+    <div className="bg-white rounded-xl border border-border overflow-hidden overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+          <tr
+            style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}
+          >
             {[
               "Persoană resursă",
               "Data adăugării",
@@ -62,27 +66,40 @@ export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
                     ) : (
                       <div
                         className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0"
-                        style={{ background: avatarColorFor(mentor.documentId) }}
+                        style={{
+                          background: avatarColorFor(mentor.documentId),
+                        }}
                       >
                         {initials}
                       </div>
                     )}
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="font-semibold whitespace-normal wrap-break-word" style={{ color: "#162040" }}>
+                        <p
+                          className="font-semibold whitespace-normal wrap-break-word"
+                          style={{ color: "#162040" }}
+                        >
                           {displayName}
                         </p>
-                        {mentor.accountStatus === "deleted" && <DeletedAccountBadge />}
+                        {mentor.accountStatus === "deleted" && (
+                          <DeletedAccountBadge />
+                        )}
                       </div>
                       {mentor.accountStatus !== "deleted" && (
-                        <p className="text-xs truncate" style={{ color: "#64748b" }}>
+                        <p
+                          className="text-xs truncate"
+                          style={{ color: "#64748b" }}
+                        >
                           {mentor.email}
                         </p>
                       )}
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-3.5 whitespace-nowrap" style={{ color: "#475569" }}>
+                <td
+                  className="px-4 py-3.5 whitespace-nowrap"
+                  style={{ color: "#475569" }}
+                >
                   {formatShortDate(mentor.createdAt)}
                 </td>
                 <td className="px-4 py-3.5">

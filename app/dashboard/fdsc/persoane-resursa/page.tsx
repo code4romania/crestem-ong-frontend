@@ -18,12 +18,19 @@ export default async function Page({ searchParams }: PageProps) {
   const program = params.program ?? "";
   const page = Math.max(1, Number(params.page) || 1);
 
-  const [{ data: mentors, meta }, { data: programs }, dimensions, user] = await Promise.all([
-    listUsers({ role: "mentor", search, program, page, sort: "createdAt:desc" }),
-    serverApiFetch<{ data: Program[] }>("/api/programs"),
-    listDimensions(),
-    getCurrentUser(),
-  ]);
+  const [{ data: mentors, meta }, { data: programs }, dimensions, user] =
+    await Promise.all([
+      listUsers({
+        role: "mentor",
+        search,
+        program,
+        page,
+        sort: "createdAt:desc",
+      }),
+      serverApiFetch<{ data: Program[] }>("/api/programs"),
+      listDimensions(),
+      getCurrentUser(),
+    ]);
 
   // `editor-fdsc` reads this screen but does not administer it: no adding, no
   // editing, no removing. Only the administrator gets the write actions.
@@ -31,9 +38,12 @@ export default async function Page({ searchParams }: PageProps) {
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:justify-between">
         <div>
-          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+          <h1
+            className="text-2xl font-heading font-extrabold"
+            style={{ color: "#162040" }}
+          >
             Persoane resursă
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -43,11 +53,19 @@ export default async function Page({ searchParams }: PageProps) {
         {canManage && <PersoaneResursaHeaderActions dimensions={dimensions} />}
       </div>
 
-      <PersoaneResursaFilters programs={programs} initialSearch={search} initialProgram={program} />
+      <PersoaneResursaFilters
+        programs={programs}
+        initialSearch={search}
+        initialProgram={program}
+      />
 
       <PersoaneResursaTable mentors={mentors} />
 
-      <PersoaneResursaPagination pagination={meta.pagination} search={search} program={program} />
+      <PersoaneResursaPagination
+        pagination={meta.pagination}
+        search={search}
+        program={program}
+      />
     </div>
   );
 }

@@ -31,7 +31,14 @@ export function ColumnsBlock({ data }: { data: ColumnsData }) {
   return (
     <section>
       <div className="mx-auto max-w-5xl px-6 py-8">
-        <div className={`grid gap-8 ${gridClass}`}>
+        {/* Column gap only: each child block already carries its own py-8
+            top/bottom padding as vertical rhythm (see BlockRenderer, which
+            stacks top-level blocks with no extra gap). Adding a row gap here
+            would double up with that padding once columns collapse to one on
+            mobile. Below md, a later column's own top py-8 still meets the
+            previous column's bottom py-8, so pull it up by one py-8's worth
+            (-mt-8) to leave a single, tighter gap instead of two stacked. */}
+        <div className={`grid gap-x-8 ${gridClass} [&>*+*]:-mt-8 md:[&>*+*]:mt-0`}>
           {columns.map((column, index) => (
             <div key={index} className={`flex flex-col gap-8 ${spanFor(index)}`}>
               {column.blocuri.map((child) => {

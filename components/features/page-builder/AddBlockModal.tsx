@@ -107,23 +107,27 @@ export function AddBlockModal({
           </button>
         </div>
 
-        <div className="flex min-h-0 flex-1">
-          <nav className="w-44 shrink-0 overflow-y-auto border-r border-border p-3">
+        {/* Side-by-side categories + cards on desktop; below `sm` the
+            categories become a horizontally scrollable chip row above the
+            (full-width) card list instead, so neither column gets squeezed
+            into an unusably narrow strip on a phone. */}
+        <div className="flex min-h-0 flex-1 flex-col sm:flex-row">
+          <nav className="shrink-0 overflow-x-auto border-b border-border p-3 sm:w-44 sm:overflow-x-visible sm:overflow-y-auto sm:border-b-0 sm:border-r">
             <p className="px-2 pb-2 text-[11px] font-semibold uppercase tracking-wide text-[#94a3b8]">
               Categorii
             </p>
-            <ul className="space-y-0.5">
+            <ul className="flex gap-1.5 sm:block sm:space-y-0.5">
               {CATEGORY_ORDER.map((category) => {
                 const active = category === activeCategory && !trimmedQuery;
                 return (
-                  <li key={category}>
+                  <li key={category} className="shrink-0 sm:shrink">
                     <button
                       type="button"
                       onClick={() => {
                         setActiveCategory(category);
                         setQuery("");
                       }}
-                      className={`flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-medium transition-colors ${
+                      className={`flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors sm:w-full ${
                         active
                           ? "bg-[#eff6ff] text-[#2563eb]"
                           : "text-[#475569] hover:bg-slate-50"
@@ -141,7 +145,7 @@ export function AddBlockModal({
             </ul>
           </nav>
 
-          <div className="flex min-w-0 flex-1 flex-col overflow-y-auto p-5">
+          <div className="flex min-w-0 flex-1 flex-col overflow-y-auto p-4 sm:p-5">
             <div className="relative mb-4">
               <Search
                 size={16}

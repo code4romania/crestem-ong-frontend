@@ -32,13 +32,20 @@ export function SelfEvaluationBanner({
   if (!myEntry) {
     if (!canSelfInvite) return null;
     return (
-      <div className="rounded-2xl p-6 mb-6 flex items-center justify-between gap-4" style={{ background: "#162040" }}>
+      <div
+        className="rounded-2xl p-6 mb-6 flex flex-wrap items-center justify-between gap-4"
+        style={{ background: "#162040" }}
+      >
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#2dbe8f" }}>
+          <p
+            className="text-xs font-semibold uppercase tracking-wider mb-2"
+            style={{ color: "#2dbe8f" }}
+          >
             Matricea ta
           </p>
           <p className="text-sm text-white/80 max-w-xl">
-            Poți completa și tu matricea de evaluare pentru organizație, direct din acest cont.
+            Poți completa și tu matricea de evaluare pentru organizație, direct
+            din acest cont.
           </p>
           {error && (
             <p className="text-sm mt-2" style={{ color: "#f87171" }}>
@@ -52,7 +59,9 @@ export function SelfEvaluationBanner({
           onClick={() => {
             setError(null);
             startTransition(async () => {
-              const result = await addReportMembersAction(reportId, [currentUserDocumentId]);
+              const result = await addReportMembersAction(reportId, [
+                currentUserDocumentId,
+              ]);
               if (result.error) {
                 setError(result.error);
                 return;
@@ -61,21 +70,32 @@ export function SelfEvaluationBanner({
             });
           }}
           className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-60"
-          style={{ background: "#2dbe8f", boxShadow: "0 4px 16px rgba(45,190,143,0.3)" }}
+          style={{
+            background: "#2dbe8f",
+            boxShadow: "0 4px 16px rgba(45,190,143,0.3)",
+          }}
         >
-          <UserPlus size={14} /> {isPending ? "Se adaugă..." : "Completează și tu matricea"}
+          <UserPlus size={14} />{" "}
+          {isPending ? "Se adaugă..." : "Completează și tu matricea"}
         </button>
       </div>
     );
   }
 
-  const done = myEntry.status === "completat" || myEntry.status === "nefinalizat";
+  const done =
+    myEntry.status === "completat" || myEntry.status === "nefinalizat";
   const started = myEntry.status !== "neinceput";
 
   return (
-    <div className="rounded-2xl p-6 mb-6 flex items-center justify-between gap-4" style={{ background: "#162040" }}>
+    <div
+      className="rounded-2xl p-6 mb-6 flex flex-wrap items-center justify-between gap-4"
+      style={{ background: "#162040" }}
+    >
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#2dbe8f" }}>
+        <p
+          className="text-xs font-semibold uppercase tracking-wider mb-2"
+          style={{ color: "#2dbe8f" }}
+        >
           Matricea ta
         </p>
         <p className="text-sm text-white/80 max-w-xl">
@@ -89,9 +109,16 @@ export function SelfEvaluationBanner({
       <Link
         href={`/dashboard/evaluari/mea/${myEntry.documentId}`}
         className="shrink-0 inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-        style={{ background: "#2dbe8f", boxShadow: "0 4px 16px rgba(45,190,143,0.3)" }}
+        style={{
+          background: "#2dbe8f",
+          boxShadow: "0 4px 16px rgba(45,190,143,0.3)",
+        }}
       >
-        {done ? "Vezi rezultatele tale" : started ? "Continuă evaluarea" : "Pornește evaluarea"}
+        {done
+          ? "Vezi rezultatele tale"
+          : started
+            ? "Continuă evaluarea"
+            : "Pornește evaluarea"}
       </Link>
     </div>
   );

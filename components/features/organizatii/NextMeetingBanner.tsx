@@ -20,7 +20,7 @@ export function NextMeetingBanner({
 }) {
   return (
     <div
-      className="rounded-2xl p-6 mb-6 flex items-center justify-between gap-4"
+      className="rounded-2xl p-6 mb-6 flex flex-wrap items-center justify-between gap-4"
       style={{ background: "#162040" }}
     >
       <div className="flex items-center gap-4">
@@ -31,7 +31,10 @@ export function NextMeetingBanner({
           <Calendar size={20} className="text-white" />
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#2dbe8f" }}>
+          <p
+            className="text-xs font-semibold uppercase tracking-wider mb-1"
+            style={{ color: "#2dbe8f" }}
+          >
             Următoarea întâlnire
           </p>
           <p className="font-heading font-bold text-white">{primaryLabel}</p>
@@ -41,7 +44,9 @@ export function NextMeetingBanner({
         </div>
       </div>
       <div className="text-right shrink-0">
-        <p className="text-white font-semibold whitespace-nowrap">{formatMeetingDateTime(meeting.dataOra)}</p>
+        <p className="text-white font-semibold whitespace-nowrap">
+          {formatMeetingDateTime(meeting.dataOra)}
+        </p>
         <span
           className="inline-block mt-2 px-2.5 py-1 rounded-full text-xs font-medium"
           style={{ background: "rgba(255,255,255,0.1)", color: "#fff" }}

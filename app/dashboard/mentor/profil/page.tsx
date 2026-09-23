@@ -4,13 +4,19 @@ import { ProfileActionsMenu } from "@/components/features/dashboard/ProfileActio
 import { MentorProfileDetailsCard } from "@/components/features/dashboard/MentorProfileDetailsCard";
 
 export default async function MentorProfilePage() {
-  const [profileRes, dimensions] = await Promise.all([getMentorProfile(), listDimensions()]);
+  const [profileRes, dimensions] = await Promise.all([
+    getMentorProfile(),
+    listDimensions(),
+  ]);
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+          <h1
+            className="text-2xl font-heading font-extrabold"
+            style={{ color: "#162040" }}
+          >
             Profilul meu
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -20,7 +26,10 @@ export default async function MentorProfilePage() {
         <ProfileActionsMenu showAddOng={false} />
       </div>
 
-      <MentorProfileDetailsCard profile={profileRes.data} dimensions={dimensions} />
+      <MentorProfileDetailsCard
+        profile={profileRes.data}
+        dimensions={dimensions}
+      />
     </div>
   );
 }

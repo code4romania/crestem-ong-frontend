@@ -86,7 +86,7 @@ export function OrgDetailChrome({
 
       <OrgHeaderCard ong={ong} />
 
-      <div className="mb-6 flex items-center gap-6 border-b border-border print:hidden">
+      <div className="mb-6 flex items-center gap-6 overflow-x-auto border-b border-border print:hidden">
         {tabs.map((tab) => {
           const isActive = tab.key === activeTab.key;
           return (
@@ -95,8 +95,8 @@ export function OrgDetailChrome({
               href={tab.href}
               className={
                 isActive
-                  ? "pb-3 text-sm font-semibold border-b-2"
-                  : "pb-3 text-sm font-medium hover:text-slate-700 transition-colors"
+                  ? "shrink-0 whitespace-nowrap pb-3 text-sm font-semibold border-b-2"
+                  : "shrink-0 whitespace-nowrap pb-3 text-sm font-medium hover:text-slate-700 transition-colors"
               }
               style={
                 isActive

@@ -156,7 +156,7 @@ export function ArticleList({
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
             Bibliotecă
@@ -165,7 +165,7 @@ export function ArticleList({
             Gestionează conținutul bibliotecii
           </p>
         </div>
-        <div className="flex shrink-0 items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 sm:shrink-0">
           <Link
             href="/dashboard/biblioteca/categorii"
             className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50"

@@ -1,6 +1,12 @@
 import { History } from "lucide-react";
 
-const COLUMNS = ["Data", "Modificat de", "Câmp", "Valoare veche", "Valoare nouă"];
+const COLUMNS = [
+  "Data",
+  "Modificat de",
+  "Câmp",
+  "Valoare veche",
+  "Valoare nouă",
+];
 
 export function ProfileChangeLogSection() {
   return (
@@ -17,30 +23,37 @@ export function ProfileChangeLogSection() {
           0
         </span>
       </div>
-      <table className="w-full text-sm">
-        <thead>
-          <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
-            {COLUMNS.map((h) => (
-              <th
-                key={h}
-                className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-              >
-                {h}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td
-              colSpan={COLUMNS.length}
-              className="px-5 py-8 text-center text-sm text-muted-foreground"
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr
+              style={{
+                background: "#f8fafc",
+                borderBottom: "1px solid #e2e8f0",
+              }}
             >
-              Nu există modificări înregistrate pentru organizația ta.
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              {COLUMNS.map((h) => (
+                <th
+                  key={h}
+                  className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                >
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td
+                colSpan={COLUMNS.length}
+                className="px-5 py-8 text-center text-sm text-muted-foreground"
+              >
+                Nu există modificări înregistrate pentru organizația ta.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
