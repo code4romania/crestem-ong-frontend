@@ -20,6 +20,7 @@ import {
   Users,
   Settings,
   User,
+  Mail,
   // GraduationCap, // E-learning: not implemented yet, nav entries commented out below
   Calendar,
   MessageCircle,
@@ -73,6 +74,7 @@ const FDSC_NAV_SECTIONS: DashboardNavSection[] = [
     label: "Admin",
     items: [
       { href: USER_MANAGEMENT_HREF, label: "Utilizatori", icon: Users },
+      { href: "/dashboard/mesaje-contact", label: "Mesaje contact", icon: Mail },
       { href: "/dashboard/setari", label: "Setări", icon: Settings },
     ],
   },

@@ -3,16 +3,22 @@ import type { UsersPagination } from "@/lib/api/users";
 
 export function UtilizatoriPagination({
   pagination,
-  search,
-  role,
-  ong,
-  status,
+  search = "",
+  role = "",
+  ong = "",
+  status = "",
+  basePath = "/dashboard/utilizatori",
+  label = "Paginare utilizatori",
 }: {
   pagination: UsersPagination;
-  search: string;
-  role: string;
-  ong: string;
-  status: string;
+  search?: string;
+  role?: string;
+  ong?: string;
+  status?: string;
+  /** Ruta paginii care randează componenta — implicit ecranul de utilizatori. */
+  basePath?: string;
+  /** `aria-label`-ul navigației — implicit cel al ecranului de utilizatori. */
+  label?: string;
 }) {
   const { page, pageCount } = pagination;
   if (pageCount <= 1) return null;
@@ -25,13 +31,13 @@ export function UtilizatoriPagination({
     if (status) params.set("status", status);
     if (targetPage > 1) params.set("page", String(targetPage));
     const qs = params.toString();
-    return `/dashboard/utilizatori${qs ? `?${qs}` : ""}`;
+    return `${basePath}${qs ? `?${qs}` : ""}`;
   }
 
   const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
 
   return (
-    <nav aria-label="Paginare utilizatori" className="flex items-center justify-center gap-1 mt-6">
+    <nav aria-label={label} className="flex items-center justify-center gap-1 mt-6">
       <PageLink href={hrefFor(Math.max(1, page - 1))} disabled={page === 1}>
         Anterior
       </PageLink>

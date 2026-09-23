@@ -15,6 +15,7 @@ export type BlockCategory =
   | "media"
   | "cards"
   | "dynamic"
+  | "forms"
   | "structure";
 
 /** Field-keyed validation messages, produced from a block schema's zod errors. */
