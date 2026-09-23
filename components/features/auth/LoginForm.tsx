@@ -50,15 +50,13 @@ export function LoginForm({ returnTo }: { returnTo?: string | null }) {
         returnTo ??
         (isFdscStaff(user.role?.type)
           ? "/dashboard/programe"
-          : user.role?.type === "ngo-admin"
-            ? "/dashboard/evaluari"
-            : user.role?.type === "ngo-member"
-              ? "/dashboard"
-              : user.role?.type === "individual"
-                ? "/dashboard"
-                : user.role?.type === "mentor"
-                  ? "/dashboard/mesaje"
-                  : "/");
+          : user.role?.type === "ngo-admin" ||
+              user.role?.type === "ngo-member" ||
+              user.role?.type === "individual"
+            ? "/dashboard"
+            : user.role?.type === "mentor"
+              ? "/dashboard/mesaje"
+              : "/");
       // The first-login flag lives only in the login response — by the time any
       // page renders, firstLoginAt is already stamped — so it travels to the
       // dashboard as a query param that the prompt strips once it is answered.
