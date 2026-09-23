@@ -26,6 +26,7 @@ import {
   Calendar,
   MessageCircle,
   Loader2,
+  Globe,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
@@ -352,7 +353,10 @@ export function DashboardSidebar({
             className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted"
             style={{ color: "#334155" }}
           >
-            Înapoi la site
+            <span className="flex items-center gap-2">
+              <Globe size={16} />
+              Înapoi la site
+            </span>
             <LinkPendingIndicator />
           </Link>
           <button
