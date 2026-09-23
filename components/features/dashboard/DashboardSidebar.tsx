@@ -35,7 +35,13 @@ import { logoutSession } from "@/lib/api/session";
 
 export interface DashboardNavSection {
   label?: string;
-  items: { href: string; label: string; icon: LucideIcon }[];
+  items: {
+    href: string;
+    label: string;
+    icon: LucideIcon;
+    /** Section the item stays highlighted across, when `href` opens a page inside it rather than its root. */
+    activePath?: string;
+  }[];
 }
 
 export const USER_MANAGEMENT_HREF = "/dashboard/utilizatori";
@@ -103,9 +109,10 @@ const ONG_NAV_SECTIONS: DashboardNavSection[] = [
       { href: "/dashboard", label: "Panou principal", icon: LayoutGrid },
       { href: "/dashboard/profil", label: "Profilul meu", icon: User },
       {
-        href: "/dashboard/evaluari",
+        href: "/dashboard/evaluari/overview",
         label: "Evaluările mele",
         icon: ClipboardList,
+        activePath: "/dashboard/evaluari",
       },
       { href: "/dashboard/programe", label: "Programele mele", icon: Layers },
       { href: "/dashboard/utilizatori", label: "Utilizatori", icon: Users },
@@ -190,10 +197,10 @@ export function DashboardSidebar({
 
   // Longest-prefix match: a root item like "Panou principal" (href "/dashboard")
   // would otherwise stay highlighted on every nested page, since its href prefixes them all.
-  const activeHref = sections
+  const activePath = sections
     .flatMap((section) => section.items)
-    .map((item) => item.href)
-    .filter((href) => pathname === href || pathname.startsWith(`${href}/`))
+    .map((item) => item.activePath ?? item.href)
+    .filter((path) => pathname === path || pathname.startsWith(`${path}/`))
     .sort((a, b) => b.length - a.length)[0];
 
   const [loggingOut, setLoggingOut] = useState(false);
@@ -297,7 +304,7 @@ export function DashboardSidebar({
               <div className="space-y-1">
                 {section.items.map((item) => {
                   const Icon = item.icon;
-                  const active = item.href === activeHref;
+                  const active = (item.activePath ?? item.href) === activePath;
                   return (
                     <RefreshableLink
                       key={item.href}
