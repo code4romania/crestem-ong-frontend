@@ -13,10 +13,11 @@ export function isEvaluariTab(value?: string): value is EvaluariTab {
 }
 
 /**
- * Switching tabs keeps the filters: an organization, a program and a response
- * status mean the same thing on both sides, and the search term follows too so
- * the list the user built does not reset under them. Only the page number is
- * dropped — the other tab has its own number of rows.
+ * Switching tabs keeps the filters: an organization and a program mean the same
+ * thing on both sides, and the search term follows too so the list the user
+ * built does not reset under them. The status is dropped — the users tab
+ * filters on a respondent's status, the organizations tab on the round's — and
+ * so is the page number, since the other tab has its own number of rows.
  */
 export function EvaluariTabs({ query }: { query: EvaluariQuery }) {
   return (
@@ -26,7 +27,7 @@ export function EvaluariTabs({ query }: { query: EvaluariQuery }) {
         return (
           <Link
             key={tab.key}
-            href={evaluariHref({ ...query, tab: tab.key, page: 1 })}
+            href={evaluariHref({ ...query, tab: tab.key, status: "", page: 1 })}
             role="tab"
             aria-selected={isActive}
             className="px-4 py-2.5 text-sm font-semibold -mb-px border-b-2 transition-colors"

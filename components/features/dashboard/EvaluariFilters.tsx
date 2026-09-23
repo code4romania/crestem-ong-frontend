@@ -3,14 +3,11 @@
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronDown, Search, X } from "lucide-react";
-import { MEMBER_STATUS_LABELS } from "@/components/features/evaluari/evaluation-status";
 import { MultiSelectFilter } from "@/components/ui/MultiSelectFilter";
 import { useDebouncedCallback } from "@/lib/hooks/useDebouncedCallback";
-import { evaluariHref, hasActiveEvaluariFilters } from "./evaluari-query";
+import { evaluariHref, hasActiveEvaluariFilters, statusOptionsForTab } from "./evaluari-query";
 
 const SEARCH_DEBOUNCE_MS = 400;
-
-const STATUS_ORDER = ["neinceput", "in_lucru", "completat", "nefinalizat"];
 
 /** Rounds outside every program are picked from the program filter itself. */
 const INDEPENDENT_OPTION = {
@@ -142,9 +139,9 @@ export function EvaluariFilters({
           className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
         >
           <option value="">Toate statusurile</option>
-          {STATUS_ORDER.map((key) => (
-            <option key={key} value={key}>
-              {MEMBER_STATUS_LABELS[key]}
+          {statusOptionsForTab(tab).map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
             </option>
           ))}
         </select>

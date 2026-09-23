@@ -13,7 +13,8 @@ const COLUMNS = [
   "Acțiuni",
 ];
 
-const ROUND_STATUS = {
+/** Keyed by the backend `roundStatus`; the status filter of this tab offers the same labels. */
+export const ROUND_STATUS = {
   in_desfasurare: {
     label: "În desfășurare",
     icon: Clock,

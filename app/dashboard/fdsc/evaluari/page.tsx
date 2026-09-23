@@ -4,6 +4,7 @@ import {
   type AdminEvaluationsPagination,
 } from "@/lib/api/evaluations";
 import { EvaluariFilters } from "@/components/features/dashboard/EvaluariFilters";
+import { statusOptionsForTab } from "@/components/features/dashboard/evaluari-query";
 import { EvaluariTable } from "@/components/features/dashboard/EvaluariTable";
 import { EvaluariOrganizatiiTable } from "@/components/features/dashboard/EvaluariOrganizatiiTable";
 import { EvaluariPagination } from "@/components/features/dashboard/EvaluariPagination";
@@ -40,7 +41,10 @@ export default async function Page({ searchParams }: PageProps) {
   const search = params.search ?? "";
   const ongs = csv(params.ongs);
   const programs = csv(params.programs);
-  const status = params.status ?? "";
+  // A status from the other tab (an old link) would filter on nothing the grid shows.
+  const status = statusOptionsForTab(tab).some((option) => option.value === params.status)
+    ? params.status!
+    : "";
   const page = Math.max(1, Number(params.page) || 1);
 
   const query = { tab, search, ongs, programs, status, page };
