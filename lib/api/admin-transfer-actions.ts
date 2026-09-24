@@ -145,6 +145,7 @@ export interface AcceptNewAccountInput {
   token: string;
   password: string;
   confirmedPassword: string;
+  acordTermeniSiConditii: boolean;
 }
 
 /** US-3 step 8: the new admin leaves this call signed in. */

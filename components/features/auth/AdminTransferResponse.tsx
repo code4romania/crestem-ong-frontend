@@ -9,6 +9,7 @@ import { z } from "zod";
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { PasswordInput } from "./PasswordInput";
+import { TermsCheckbox } from "./TermsCheckbox";
 import type { TransferPreview } from "@/lib/api/admin-transfer";
 import { formatTransferDate, transferProposerLabel } from "@/lib/admin-transfer-format";
 import { loginPathFor, TRANSFER_ADMIN_PATH } from "@/lib/return-to";
@@ -42,7 +43,14 @@ const INVALID_REASONS: Record<"invalid" | "expired" | "resolved", string> = {
 };
 
 const newAccountSchema = z
-  .object({ password: passwordSchema, confirmedPassword: confirmedPasswordSchema })
+  .object({
+    password: passwordSchema,
+    confirmedPassword: confirmedPasswordSchema,
+    // Accepting activates the account, and the backend's activation schema requires consent.
+    acordTermeniSiConditii: z
+      .boolean()
+      .refine((v) => v === true, { message: "Este necesar acordul tău pentru a continua" }),
+  })
   .refine(passwordsMatch, PASSWORDS_MATCH_ERROR);
 
 type NewAccountValues = z.infer<typeof newAccountSchema>;
@@ -317,22 +325,34 @@ function NewAccountAnswer({ token, onDeclined }: { token: string; onDeclined: ()
     register,
     handleSubmit,
     setError,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<NewAccountValues>({
     resolver: zodResolver(newAccountSchema),
-    defaultValues: { password: "", confirmedPassword: "" },
+    defaultValues: { password: "", confirmedPassword: "", acordTermeniSiConditii: false },
   });
+
+  const acordTermeniSiConditii = watch("acordTermeniSiConditii");
 
   const onSubmit = async (data: NewAccountValues) => {
     setApiError(null);
     const result = await acceptNewAccountTransferAction({ token, ...data });
     if (result.error || Object.keys(result.fieldErrors ?? {}).length > 0) {
+      // Errors on a field this form doesn't show still go in the box, so a
+      // refusal is never silent.
+      const unshown: string[] = [];
       for (const [field, message] of Object.entries(result.fieldErrors ?? {})) {
-        if (field === "password" || field === "confirmedPassword") {
+        if (
+          field === "password" ||
+          field === "confirmedPassword" ||
+          field === "acordTermeniSiConditii"
+        ) {
           setError(field, { message });
+        } else {
+          unshown.push(message);
         }
       }
-      setApiError(result.error ?? result.fieldErrors?.token ?? null);
+      setApiError(result.error ?? (unshown.length > 0 ? unshown.join(" ") : null));
       return;
     }
     router.push(result.redirectTo ?? "/dashboard");
@@ -381,6 +401,11 @@ function NewAccountAnswer({ token, onDeclined }: { token: string; onDeclined: ()
           </p>
         )}
       </div>
+      <TermsCheckbox
+        registration={register("acordTermeniSiConditii")}
+        checked={acordTermeniSiConditii}
+        error={errors.acordTermeniSiConditii?.message}
+      />
       <div className="space-y-3">
         <button type="submit" disabled={isSubmitting} className={primaryButton} style={{ background: "#2dbe8f" }}>
           {isSubmitting && <Loader2 size={16} className="animate-spin" />}
