@@ -30,11 +30,11 @@ function ProgramCard({ program }: { program: Program }) {
         <div className="flex items-center gap-3">
           <span
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-            style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
+            style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
           >
             <Icon size={18} />
           </span>
-          <h3 className="min-w-0 text-lg font-semibold text-[#162040] wrap-break-word">
+          <h3 className="min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word">
             {program.titlu}
           </h3>
         </div>
@@ -54,7 +54,7 @@ function ProgramCard({ program }: { program: Program }) {
         {program.perioada || hasCta ? (
           <div className="mt-auto flex flex-col gap-4 pt-4">
             {program.perioada ? (
-              <p className="flex items-center gap-1.5 text-xs text-[#64748b] wrap-break-word">
+              <p className="flex items-center gap-1.5 text-xs text-[#5b6779] wrap-break-word">
                 <Calendar size={14} className="shrink-0" />
                 Perioadă: {program.perioada}
               </p>
@@ -64,7 +64,7 @@ function ProgramCard({ program }: { program: Program }) {
               <Link
                 href={program.href}
                 className="flex w-full items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 wrap-break-word"
-                style={{ background: "#162040" }}
+                style={{ background: "#1c1c81" }}
               >
                 {program.ctaLabel} <ChevronRight size={16} className="shrink-0" />
               </Link>
@@ -95,7 +95,7 @@ export function ProgrammeGrid({ data }: { data: ProgrammeGridData }) {
                 fontSize: "clamp(2rem, 4vw, 2.75rem)",
                 fontWeight: 800,
                 lineHeight: 1.15,
-                color: "#162040",
+                color: "#1c1c81",
               }}
             >
               {data.titlu}

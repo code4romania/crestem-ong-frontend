@@ -61,7 +61,7 @@ const EMPTY: RegisterNgoFormValues = {
 };
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm disabled:opacity-60 disabled:cursor-not-allowed";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm disabled:opacity-60 disabled:cursor-not-allowed";
 
 const selectClass = `${inputClass} appearance-none pr-10`;
 
@@ -82,7 +82,7 @@ function Field({
         className="block text-sm font-semibold mb-1.5"
         style={{ color: "#334155" }}
       >
-        {label} {required && <span style={{ color: "#2dbe8f" }}>*</span>}
+        {label} {required && <span style={{ color: "#007d58" }}>*</span>}
         {!required && (
           <span className="font-normal text-muted-foreground ml-1">
             (opțional)
@@ -91,7 +91,7 @@ function Field({
       </label>
       {children}
       {error && (
-        <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+        <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
           {error}
         </p>
       )}
@@ -204,13 +204,13 @@ export function RegisterNgoForm() {
       <div className="bg-white rounded-2xl border border-border shadow-sm p-12 text-center">
         <div
           className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-          style={{ background: "rgba(45,190,143,0.12)" }}
+          style={{ background: "rgba(0,212,149,0.12)" }}
         >
-          <CheckCircle size={38} style={{ color: "#2dbe8f" }} />
+          <CheckCircle size={38} style={{ color: "#007d58" }} />
         </div>
         <h2
           className="mb-3 font-heading font-extrabold text-2xl"
-          style={{ color: "#162040" }}
+          style={{ color: "#1c1c81" }}
         >
           Contul a fost creat cu succes!
         </h2>
@@ -219,9 +219,9 @@ export function RegisterNgoForm() {
           style={{ maxWidth: 420, margin: "0 auto 0.5rem" }}
         >
           Am creat contul pentru{" "}
-          <strong style={{ color: "#162040" }}>{submittedNumeOng}</strong>. Te poți
+          <strong style={{ color: "#1c1c81" }}>{submittedNumeOng}</strong>. Te poți
           autentifica imediat folosind adresa{" "}
-          <strong style={{ color: "#162040" }}>{submittedEmail}</strong>.
+          <strong style={{ color: "#1c1c81" }}>{submittedEmail}</strong>.
         </p>
         <p
           className="text-muted-foreground mb-8"
@@ -235,7 +235,7 @@ export function RegisterNgoForm() {
           <Link
             href="/autentificare"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all hover:opacity-90"
-            style={{ background: "#162040" }}
+            style={{ background: "#1c1c81" }}
           >
             Autentifică-te
           </Link>
@@ -257,7 +257,7 @@ export function RegisterNgoForm() {
           style={{
             background: "#fff5f5",
             border: "1.5px solid #fca5a5",
-            color: "#ef4444",
+            color: "#b91c1c",
           }}
         >
           <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
@@ -316,18 +316,18 @@ export function RegisterNgoForm() {
                 <Loader2
                   size={16}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 animate-spin pointer-events-none"
-                  style={{ color: "#94a3b8" }}
+                  style={{ color: "#5b6779" }}
                 />
               ) : (
                 <ChevronDown
                   size={16}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
-                  style={{ color: "#94a3b8" }}
+                  style={{ color: "#5b6779" }}
                 />
               )}
             </div>
             {countiesError && (
-              <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+              <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
                 Nu am putut încărca lista de județe. Reîncarcă pagina.
               </p>
             )}
@@ -356,18 +356,18 @@ export function RegisterNgoForm() {
                 <Loader2
                   size={16}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 animate-spin pointer-events-none"
-                  style={{ color: "#94a3b8" }}
+                  style={{ color: "#5b6779" }}
                 />
               ) : (
                 <ChevronDown
                   size={16}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
-                  style={{ color: "#94a3b8" }}
+                  style={{ color: "#5b6779" }}
                 />
               )}
             </div>
             {citiesError && (
-              <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+              <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
                 Nu am putut încărca lista de localități.
               </p>
             )}
@@ -381,7 +381,7 @@ export function RegisterNgoForm() {
       >
         <p
           className="font-semibold text-sm uppercase tracking-wider"
-          style={{ color: "#162040" }}
+          style={{ color: "#1c1c81" }}
         >
           Persoana de contact
         </p>
@@ -447,10 +447,10 @@ export function RegisterNgoForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full sm:w-auto flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white transition-all hover:opacity-90 disabled:opacity-60"
+          className="w-full sm:w-auto flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white transition-all hover:brightness-90 disabled:opacity-60"
           style={{
-            background: "#2dbe8f",
-            boxShadow: "0 4px 16px rgba(45,190,143,0.3)",
+            background: "#00d495",
+            boxShadow: "0 4px 16px rgba(0,212,149,0.3)",
           }}
         >
           {isSubmitting ? (

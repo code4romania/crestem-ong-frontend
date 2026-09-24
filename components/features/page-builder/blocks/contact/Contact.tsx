@@ -24,7 +24,7 @@ export function Contact({ data }: { data: ContactData }) {
         {hasLeftColumn && (
           <div>
             {data.infoTitle && (
-              <h2 className="font-heading text-2xl font-extrabold text-[#162040]">
+              <h2 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
                 {data.infoTitle}
               </h2>
             )}
@@ -35,7 +35,7 @@ export function Contact({ data }: { data: ContactData }) {
                   const Icon = CONTACT_ICONS[item.icon];
                   return (
                     <li key={index} className="flex items-start gap-4">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#eafaf4] text-[#2dbe8f]">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#eafaf4] text-[#007d58]">
                         <Icon size={18} />
                       </span>
                       <span>
@@ -44,7 +44,7 @@ export function Contact({ data }: { data: ContactData }) {
                             {item.label}
                           </span>
                         )}
-                        <span className="block text-sm font-semibold text-[#162040]">
+                        <span className="block text-sm font-semibold text-[#1c1c81]">
                           {item.value}
                         </span>
                       </span>
@@ -68,7 +68,7 @@ export function Contact({ data }: { data: ContactData }) {
                         href={social.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-[#162040] hover:border-slate-300"
+                        className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-[#1c1c81] hover:border-slate-300"
                       >
                         <SocialIcon platform={social.platform} />
                         {/* `socialName` cade pe eticheta implicită doar pentru
@@ -102,7 +102,7 @@ export function Contact({ data }: { data: ContactData }) {
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="absolute left-3 top-3 flex items-center gap-1.5 rounded-lg bg-white/95 px-2.5 py-1.5 text-xs font-semibold text-[#162040] shadow-sm"
+                    className="absolute left-3 top-3 flex items-center gap-1.5 rounded-lg bg-white/95 px-2.5 py-1.5 text-xs font-semibold text-[#1c1c81] shadow-sm"
                   >
                     Deschide în Maps
                     <ExternalLink size={12} />

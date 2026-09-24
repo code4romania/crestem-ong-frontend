@@ -34,7 +34,7 @@ export function Image({ data }: { data: ImageData }) {
     return (
       <section>
         <div className="mx-auto max-w-3xl px-6 py-8">
-          <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#94a3b8]">
+          <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#5b6779]">
             Adaugă o imagine.
           </div>
         </div>

@@ -13,9 +13,9 @@ import type { PeopleCollectionData } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const groupLabelClass =
-  "block text-xs font-semibold uppercase tracking-wide text-[#94a3b8]";
+  "block text-xs font-semibold uppercase tracking-wide text-[#5b6779]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
 
 export function PeopleCollectionEditor({
   value,
@@ -73,7 +73,7 @@ export function PeopleCollectionEditor({
         />
       </div>
 
-      <div className="flex items-start gap-2 rounded-xl bg-[#eff6ff] p-3 text-sm text-[#2563eb]">
+      <div className="flex items-start gap-2 rounded-xl bg-[#dcfafb] p-3 text-sm text-[#5656e5]">
         <CircleCheck size={18} className="mt-0.5 shrink-0" />
         <p>
           Această colecție se actualizează automat atunci când persoane care
@@ -157,7 +157,7 @@ export function PeopleCollectionEditor({
         <div className="flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3">
           <label
             htmlFor="pc-foto"
-            className="text-sm font-semibold text-[#162040]"
+            className="text-sm font-semibold text-[#1c1c81]"
           >
             Afișează fotografia
           </label>
@@ -172,7 +172,7 @@ export function PeopleCollectionEditor({
         <div className="flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3">
           <label
             htmlFor="pc-tip"
-            className="text-sm font-semibold text-[#162040]"
+            className="text-sm font-semibold text-[#1c1c81]"
           >
             Afișează tipul
           </label>

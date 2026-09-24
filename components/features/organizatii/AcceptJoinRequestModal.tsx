@@ -50,7 +50,7 @@ export function AcceptJoinRequestModal({
             <h2
               id="accept-join-request-title"
               className="font-heading font-extrabold text-lg"
-              style={{ color: "#162040" }}
+              style={{ color: "#1c1c81" }}
             >
               Confirmă cererea de afiliere
             </h2>
@@ -72,7 +72,7 @@ export function AcceptJoinRequestModal({
           {error && (
             <p
               role="alert"
-              className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#ef4444]"
+              className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#b91c1c]"
             >
               {error}
             </p>
@@ -81,12 +81,12 @@ export function AcceptJoinRequestModal({
           <div className="flex items-center gap-3 border border-border rounded-xl px-4 py-3">
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0"
-              style={{ background: "#162040" }}
+              style={{ background: "#1c1c81" }}
             >
               {request.user.nume.trim().slice(0, 2).toUpperCase()}
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-semibold truncate" style={{ color: "#162040" }}>
+              <p className="text-sm font-semibold truncate" style={{ color: "#1c1c81" }}>
                 {request.user.nume}
               </p>
               <p className="text-xs text-muted-foreground truncate">{request.user.email}</p>
@@ -94,7 +94,7 @@ export function AcceptJoinRequestModal({
           </div>
 
           <div>
-            <p className="block text-sm font-semibold mb-1.5" style={{ color: "#162040" }}>
+            <p className="block text-sm font-semibold mb-1.5" style={{ color: "#1c1c81" }}>
               Mesaj
             </p>
             {request.message ? (
@@ -112,7 +112,7 @@ export function AcceptJoinRequestModal({
             <label
               htmlFor="accept-join-request-rol"
               className="block text-sm font-semibold mb-1.5"
-              style={{ color: "#162040" }}
+              style={{ color: "#1c1c81" }}
             >
               Rol în organizație
             </label>
@@ -125,7 +125,7 @@ export function AcceptJoinRequestModal({
               disabled={isPending}
               placeholder="ex. Voluntar"
               autoFocus
-              className="w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm disabled:opacity-60"
+              className="w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm disabled:opacity-60"
             />
             <p className="mt-1 text-xs text-right text-muted-foreground" aria-live="polite">
               {rol.length}/{ROLE_MAX_LENGTH}
@@ -146,8 +146,8 @@ export function AcceptJoinRequestModal({
             type="button"
             onClick={handleSubmit}
             disabled={isPending || !canSubmit}
-            className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-60"
-            style={{ background: "#2dbe8f" }}
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity disabled:opacity-60"
+            style={{ background: "#00d495" }}
           >
             {isPending ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
             {isPending ? "Se confirmă..." : "Confirmă"}

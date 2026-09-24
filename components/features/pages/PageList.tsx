@@ -81,7 +81,7 @@ export function PageList({
     <div>
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+          <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
             Pagini
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -90,7 +90,7 @@ export function PageList({
         </div>
         <Link
           href="/dashboard/pagini/creeaza"
-          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#2563eb] px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#5656e5] px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
         >
           <Plus size={15} />
           Creează pagină
@@ -100,7 +100,7 @@ export function PageList({
       <div className="relative mb-5">
         <Search
           size={14}
-          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5b6779]"
         />
         <input
           value={term}
@@ -109,7 +109,7 @@ export function PageList({
           onBlur={() => submitSearch(term)}
           placeholder="Caută pagini..."
           aria-label="Caută pagini"
-          className="w-full rounded-xl border border-border py-2.5 pl-10 pr-4 text-sm focus:border-[#2dbe8f] focus:outline-none"
+          className="w-full rounded-xl border border-border py-2.5 pl-10 pr-4 text-sm focus:border-[#007d58] focus:outline-none"
         />
       </div>
 
@@ -128,7 +128,7 @@ export function PageList({
                 ].map((head) => (
                   <th
                     key={head}
-                    className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#94a3b8]"
+                    className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#5b6779]"
                   >
                     {head}
                   </th>
@@ -218,10 +218,10 @@ function PageRow({
 }) {
   return (
     <tr className="border-b border-border last:border-0 hover:bg-slate-50">
-      <td className="px-4 py-3.5 font-heading font-semibold text-[#162040]">
+      <td className="px-4 py-3.5 font-heading font-semibold text-[#1c1c81]">
         {page.titlu}
         {page.esteHomepage && (
-          <span className="ml-2 rounded-full bg-[#eff6ff] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#2563eb]">
+          <span className="ml-2 rounded-full bg-[#dcfafb] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#5656e5]">
             Pagină de start
           </span>
         )}
@@ -235,8 +235,8 @@ function PageRow({
         <span
           className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
             page.publicat
-              ? "bg-[#f0fdf4] text-[#16a34a]"
-              : "bg-[#fffbeb] text-[#d97706]"
+              ? "bg-[#f0fdf4] text-[#15803d]"
+              : "bg-[#fffbeb] text-[#b45309]"
           }`}
         >
           {page.publicat ? "publicat" : "schiță"}
@@ -255,7 +255,7 @@ function PageRow({
           <Link
             href={`/dashboard/pagini/${page.documentId}`}
             aria-label={`Editează „${page.titlu}"`}
-            className="rounded-lg p-1.5 text-[#64748b] transition-colors hover:bg-slate-100"
+            className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-slate-100"
           >
             <Pencil size={13} />
           </Link>
@@ -273,7 +273,7 @@ function PageRow({
                     ? `Retrage „${page.titlu}"`
                     : `Publică „${page.titlu}"`
                 }
-                className="rounded-lg p-1.5 text-[#64748b] transition-colors hover:bg-slate-100 disabled:opacity-50"
+                className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-slate-100 disabled:opacity-50"
               >
                 {page.publicat ? <EyeOff size={13} /> : <Eye size={13} />}
               </button>
@@ -282,7 +282,7 @@ function PageRow({
                 onClick={() => onDelete(page)}
                 disabled={pending}
                 aria-label={`Șterge „${page.titlu}"`}
-                className="rounded-lg p-1.5 text-[#94a3b8] transition-colors hover:bg-red-50 hover:text-[#dc2626] disabled:opacity-50"
+                className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-red-50 hover:text-[#b91c1c] disabled:opacity-50"
               >
                 <Trash2 size={13} />
               </button>
@@ -308,7 +308,7 @@ function PagerLink({
       <span
         aria-disabled="true"
         className="rounded-lg border border-border px-3 py-2 text-sm opacity-40"
-        style={{ color: "#94a3b8" }}
+        style={{ color: "#5b6779" }}
       >
         {children}
       </span>

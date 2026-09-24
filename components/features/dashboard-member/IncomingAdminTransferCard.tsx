@@ -16,9 +16,9 @@ export function IncomingAdminTransferCard({ transfer }: { transfer: IncomingAdmi
       style={{ background: "#fffbeb", borderColor: "#fde68a" }}
     >
       <div className="flex items-start gap-3">
-        <UserCog size={18} className="mt-0.5 shrink-0" style={{ color: "#d97706" }} aria-hidden />
+        <UserCog size={18} className="mt-0.5 shrink-0" style={{ color: "#b45309" }} aria-hidden />
         <div className="text-sm">
-          <p className="font-semibold" style={{ color: "#162040" }}>
+          <p className="font-semibold" style={{ color: "#1c1c81" }}>
             Propunere de administrare
           </p>
           <p className="text-muted-foreground">
@@ -29,8 +29,8 @@ export function IncomingAdminTransferCard({ transfer }: { transfer: IncomingAdmi
       </div>
       <Link
         href={transfer.path}
-        className="shrink-0 inline-flex items-center justify-center px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#2dbe8f]"
-        style={{ background: "#2dbe8f" }}
+        className="shrink-0 inline-flex items-center justify-center px-4 py-2 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#007d58]"
+        style={{ background: "#00d495" }}
       >
         Vezi propunerea
       </Link>

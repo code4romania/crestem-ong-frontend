@@ -37,7 +37,7 @@ export function OverviewStatCard({
       {link && (
         <Link
           href={link.href}
-          className="mt-auto pt-4 text-sm font-semibold text-accent hover:underline"
+          className="mt-auto pt-4 text-sm font-semibold text-accent-strong hover:underline"
         >
           {link.label} →
         </Link>

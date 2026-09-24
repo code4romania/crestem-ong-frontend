@@ -49,7 +49,7 @@ export function UtilizatoriPagination({
           className="px-3 py-2 rounded-lg text-sm border font-medium min-w-[2.5rem] text-center"
           style={
             p === page
-              ? { background: "#162040", color: "white", borderColor: "#162040" }
+              ? { background: "#1c1c81", color: "white", borderColor: "#1c1c81" }
               : { borderColor: "#e2e8f0", color: "#475569" }
           }
         >
@@ -66,7 +66,7 @@ export function UtilizatoriPagination({
 function PageLink({ href, disabled, children }: { href: string; disabled: boolean; children: React.ReactNode }) {
   if (disabled) {
     return (
-      <span aria-disabled="true" className="px-3 py-2 rounded-lg text-sm border border-border opacity-40" style={{ color: "#94a3b8" }}>
+      <span aria-disabled="true" className="px-3 py-2 rounded-lg text-sm border border-border opacity-40" style={{ color: "#5b6779" }}>
         {children}
       </span>
     );

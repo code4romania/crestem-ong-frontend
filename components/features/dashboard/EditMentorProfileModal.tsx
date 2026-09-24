@@ -11,7 +11,7 @@ import { MentorProfileFields, type MentorProfileFieldsValue } from "./MentorProf
 import { ModalOverlay } from "@/components/ui/ModalOverlay";
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2563eb]/30 focus:border-[#2563eb] transition-colors bg-white text-sm";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#5656e5]/30 focus:border-[#5656e5] transition-colors bg-white text-sm";
 
 const disabledInputClass =
   "w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-400 text-sm cursor-not-allowed";
@@ -89,7 +89,7 @@ export function EditMentorProfileModal({
           <h2
             id="edit-mentor-profile-title"
             className="font-heading font-extrabold text-lg"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             Editează profilul
           </h2>
@@ -105,14 +105,14 @@ export function EditMentorProfileModal({
 
         <div className="px-6 py-5 space-y-4 overflow-y-auto">
           {error && (
-            <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#ef4444]">
+            <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#b91c1c]">
               {error}
             </p>
           )}
 
           <div>
             <label htmlFor="edit-mentor-profile-nume" className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
-              Nume complet <span style={{ color: "#2563eb" }}>*</span>
+              Nume complet <span style={{ color: "#5656e5" }}>*</span>
             </label>
             <input
               id="edit-mentor-profile-nume"
@@ -123,7 +123,7 @@ export function EditMentorProfileModal({
               placeholder="ex. Ion Popescu"
             />
             {fieldErrors.nume && (
-              <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>{fieldErrors.nume}</p>
+              <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>{fieldErrors.nume}</p>
             )}
           </div>
 
@@ -158,7 +158,7 @@ export function EditMentorProfileModal({
             onClick={handleSubmit}
             disabled={isPending || !nume.trim()}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-70"
-            style={{ background: "#2563eb" }}
+            style={{ background: "#5656e5" }}
           >
             {isPending && <Loader2 size={14} className="animate-spin" />}
             {isPending ? "Se salvează..." : "Salvează"}

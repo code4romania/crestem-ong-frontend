@@ -2,7 +2,7 @@ import { getMediaUrl } from "@/lib/api/client";
 import { PROGRAM_HEADER_ICONS } from "./icons";
 import type { ProgramHeaderData, ProgramSupporter } from "./schema";
 
-const NAVY_BG = "#162040";
+const NAVY_BG = "#1c1c81";
 /** The supporter band sits on a tint, a touch bluer than `#f8fafc`. */
 const SUPPORTER_BG = "#f8faff";
 const BORDER = "#e2e8f0";
@@ -12,7 +12,7 @@ function SupporterLogo({ supporter }: { supporter: ProgramSupporter }) {
   const useImage = supporter.sursaIcon === "imagine" && supporter.imagine;
 
   return (
-    <span className="flex h-16 shrink-0 items-center justify-center text-[#2563eb]">
+    <span className="flex h-16 shrink-0 items-center justify-center text-[#5656e5]">
       {useImage && supporter.imagine ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
@@ -67,7 +67,7 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
             <div
               className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-white"
               style={{
-                boxShadow: "0 4px 24px rgba(22,32,64,0.10)",
+                boxShadow: "0 4px 24px rgba(28,28,129,0.10)",
                 border: `1.5px solid ${BORDER}`,
               }}
             >
@@ -80,7 +80,7 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">
-                  <Icon size={72} style={{ color: "#2dbe8f" }} aria-hidden />
+                  <Icon size={72} style={{ color: "#007d58" }} aria-hidden />
                 </div>
               )}
             </div>
@@ -88,7 +88,7 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
 
           <div className="flex w-full flex-col items-center md:w-1/2 md:items-start">
             <h1
-              className="mb-3 font-heading text-[#162040] wrap-break-word"
+              className="mb-3 font-heading text-[#1c1c81] wrap-break-word"
               style={{
                 fontSize: "clamp(2rem, 5vw, 3rem)",
                 fontWeight: 800,
@@ -101,7 +101,7 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
 
             {subtitlu ? (
               <p
-                className="text-[#64748b] wrap-break-word"
+                className="text-[#5b6779] wrap-break-word"
                 style={{
                   fontSize: "1.0625rem",
                   lineHeight: 1.7,
@@ -119,7 +119,7 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
         <div style={{ background: SUPPORTER_BG, borderTop: `1px solid ${BORDER}` }}>
           <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-8 px-6 py-6">
             {sustinutDeTitlu ? (
-              <span className="text-xs font-semibold uppercase tracking-widest text-[#94a3b8]">
+              <span className="text-xs font-semibold uppercase tracking-widest text-[#5b6779]">
                 {sustinutDeTitlu}
               </span>
             ) : null}

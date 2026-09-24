@@ -60,7 +60,7 @@ export function ProfileActionsMenu({
         type="button"
         onClick={() => setOpen((v) => !v)}
         className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors"
-        style={{ color: "#162040" }}
+        style={{ color: "#1c1c81" }}
         aria-haspopup="menu"
         aria-expanded={open}
       >
@@ -82,9 +82,9 @@ export function ProfileActionsMenu({
                 setAdding(true);
               }}
               className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-semibold hover:bg-slate-50 transition-colors"
-              style={{ color: "#162040" }}
+              style={{ color: "#1c1c81" }}
             >
-              <Plus size={16} style={{ color: "#2dbe8f" }} />
+              <Plus size={16} style={{ color: "#007d58" }} />
               Adaugă ONG
             </button>
           )}
@@ -97,9 +97,9 @@ export function ProfileActionsMenu({
               setChangingPassword(true);
             }}
             className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-semibold hover:bg-slate-50 transition-colors"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
-            <KeyRound size={16} style={{ color: "#2dbe8f" }} />
+            <KeyRound size={16} style={{ color: "#007d58" }} />
             Schimbă parola
           </button>
           {showChangeEmail && (
@@ -111,9 +111,9 @@ export function ProfileActionsMenu({
                 setChangingEmail(true);
               }}
               className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-semibold hover:bg-slate-50 transition-colors"
-              style={{ color: "#162040" }}
+              style={{ color: "#1c1c81" }}
             >
-              <Mail size={16} style={{ color: "#2dbe8f" }} />
+              <Mail size={16} style={{ color: "#007d58" }} />
               Schimbă adresa de mail
             </button>
           )}
@@ -137,9 +137,9 @@ export function ProfileActionsMenu({
                   setTransferring(true);
                 }}
                 className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-semibold hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-                style={{ color: "#162040" }}
+                style={{ color: "#1c1c81" }}
               >
-                <ArrowRightLeft size={16} style={{ color: "#2dbe8f" }} />
+                <ArrowRightLeft size={16} style={{ color: "#007d58" }} />
                 Transferă organizația
               </button>
               <div className="my-1.5 border-t border-border" />

@@ -86,7 +86,7 @@ export function AddOngRequestModal({ onClose }: { onClose: () => void }) {
                 Înapoi
               </button>
             )}
-            <h2 id="add-ong-request-title" className="font-heading font-extrabold text-lg" style={{ color: "#162040" }}>
+            <h2 id="add-ong-request-title" className="font-heading font-extrabold text-lg" style={{ color: "#1c1c81" }}>
               Adaugă ONG
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -108,7 +108,7 @@ export function AddOngRequestModal({ onClose }: { onClose: () => void }) {
         {selected ? (
           <div className="px-6 py-5 space-y-4 overflow-y-auto">
             {searchError && (
-              <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#ef4444]">
+              <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#b91c1c]">
                 {searchError}
               </p>
             )}
@@ -116,12 +116,12 @@ export function AddOngRequestModal({ onClose }: { onClose: () => void }) {
             <div className="flex items-center gap-3 border border-border rounded-xl px-4 py-3">
               <div
                 className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0"
-                style={{ background: "#162040" }}
+                style={{ background: "#1c1c81" }}
               >
                 {selected.name.trim().charAt(0).toUpperCase() || "?"}
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-semibold truncate" style={{ color: "#162040" }}>
+                <p className="text-sm font-semibold truncate" style={{ color: "#1c1c81" }}>
                   {selected.name}
                 </p>
                 <p className="text-xs text-muted-foreground truncate">
@@ -136,7 +136,7 @@ export function AddOngRequestModal({ onClose }: { onClose: () => void }) {
               <label
                 htmlFor="join-request-message"
                 className="block text-sm font-semibold mb-1.5"
-                style={{ color: "#162040" }}
+                style={{ color: "#1c1c81" }}
               >
                 Mesaj <span className="font-normal text-muted-foreground">(opțional)</span>
               </label>
@@ -148,7 +148,7 @@ export function AddOngRequestModal({ onClose }: { onClose: () => void }) {
                 rows={5}
                 disabled={isSendPending}
                 placeholder="Spune-le de ce vrei să te alături organizației..."
-                className="w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm resize-y disabled:opacity-60"
+                className="w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm resize-y disabled:opacity-60"
               />
               <p className="mt-1 text-xs text-right text-muted-foreground" aria-live="polite">
                 {message.length}/{MESSAGE_MAX_LENGTH}
@@ -164,13 +164,13 @@ export function AddOngRequestModal({ onClose }: { onClose: () => void }) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Caută după nume sau CUI/CIF..."
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm"
                 autoFocus
               />
             </div>
 
             {searchError && (
-              <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#ef4444]">
+              <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#b91c1c]">
                 {searchError}
               </p>
             )}
@@ -194,12 +194,12 @@ export function AddOngRequestModal({ onClose }: { onClose: () => void }) {
                     <div className="flex items-center gap-3 min-w-0">
                       <div
                         className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0"
-                        style={{ background: "#162040" }}
+                        style={{ background: "#1c1c81" }}
                       >
                         {ong.name.trim().charAt(0).toUpperCase() || "?"}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold truncate" style={{ color: "#162040" }}>
+                        <p className="text-sm font-semibold truncate" style={{ color: "#1c1c81" }}>
                           {ong.name}
                         </p>
                         <p className="text-xs text-muted-foreground truncate">
@@ -218,8 +218,8 @@ export function AddOngRequestModal({ onClose }: { onClose: () => void }) {
                       type="button"
                       onClick={() => handleSelect(ong)}
                       disabled={sent}
-                      className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-70"
-                      style={{ background: sent ? "#94a3b8" : "#2dbe8f" }}
+                      className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity disabled:opacity-70"
+                      style={{ background: sent ? "#94a3b8" : "#00d495" }}
                     >
                       {sent && <Check size={14} />}
                       {sent ? "Cerere trimisă" : "Continuă"}
@@ -246,8 +246,8 @@ export function AddOngRequestModal({ onClose }: { onClose: () => void }) {
                 type="button"
                 onClick={handleSendRequest}
                 disabled={isSendPending}
-                className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-70"
-                style={{ background: "#2dbe8f" }}
+                className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity disabled:opacity-70"
+                style={{ background: "#00d495" }}
               >
                 {isSendPending && <Loader2 size={14} className="animate-spin" />}
                 {isSendPending ? "Se trimite..." : "Trimite cerere"}

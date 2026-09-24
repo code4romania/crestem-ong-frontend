@@ -8,8 +8,8 @@ import { JoinRequestsSection } from "@/components/features/organizatii/JoinReque
 
 function statusBadge(status: OngMember["accountStatus"]) {
   if (status === "active")
-    return { bg: "#f0fdf4", color: "#16a34a", label: "Activ" };
-  return { bg: "#fffbeb", color: "#d97706", label: "În așteptare" };
+    return { bg: "#f0fdf4", color: "#15803d", label: "Activ" };
+  return { bg: "#fffbeb", color: "#b45309", label: "În așteptare" };
 }
 
 const dateFormatter = new Intl.DateTimeFormat("ro-RO", {
@@ -34,7 +34,7 @@ export default async function UtilizatoriPage() {
         <div>
           <h1
             className="text-2xl font-heading font-extrabold"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             Utilizatori
           </h1>
@@ -49,7 +49,7 @@ export default async function UtilizatoriPage() {
 
       <h2
         className="font-heading font-bold text-base mb-3 flex items-center gap-2"
-        style={{ color: "#162040" }}
+        style={{ color: "#1c1c81" }}
       >
         Membri afiliați ONG-ului
         <span
@@ -81,7 +81,7 @@ export default async function UtilizatoriPage() {
                     <th
                       key={h}
                       className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                      style={{ color: "#94a3b8" }}
+                      style={{ color: "#5b6779" }}
                     >
                       {h}
                     </th>
@@ -102,14 +102,14 @@ export default async function UtilizatoriPage() {
                       <div className="flex items-center gap-3">
                         <div
                           className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0"
-                          style={{ background: "#162040" }}
+                          style={{ background: "#1c1c81" }}
                         >
                           {initials}
                         </div>
                         <div>
                           <p
                             className="font-semibold"
-                            style={{ color: "#162040" }}
+                            style={{ color: "#1c1c81" }}
                           >
                             {member.nume}
                           </p>
@@ -121,7 +121,7 @@ export default async function UtilizatoriPage() {
                     </td>
                     <td className="px-4 py-3.5" style={{ color: "#475569" }}>
                       {member.rol ?? (
-                        <span style={{ color: "#94a3b8" }}>—</span>
+                        <span style={{ color: "#5b6779" }}>—</span>
                       )}
                     </td>
                     <td className="px-4 py-3.5">

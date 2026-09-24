@@ -52,7 +52,7 @@ export function VideoFacade({
       type="button"
       onClick={() => setActivated(true)}
       aria-label={`Redă videoclipul: ${title}`}
-      className="group relative h-full w-full cursor-pointer bg-[#162040] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#2dbe8f]/60"
+      className="group relative h-full w-full cursor-pointer bg-[#1c1c81] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#007d58]"
     >
       {posterUrl && (
         /* Decorative: the button's aria-label already names the video. */
@@ -65,7 +65,7 @@ export function VideoFacade({
         />
       )}
       <span className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black/50 px-6 text-center transition-colors group-hover:bg-black/60">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/95 text-[#162040] shadow-lg transition-transform group-hover:scale-105">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/95 text-[#1c1c81] shadow-lg transition-transform group-hover:scale-105">
           <Play size={28} fill="currentColor" className="ml-1" />
         </span>
         <span className="max-w-md text-xs leading-relaxed text-white">

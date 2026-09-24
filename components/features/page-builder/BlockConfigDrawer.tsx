@@ -77,7 +77,7 @@ export function BlockConfigDrawer({
             <div className="min-w-0">
               <h2
                 id="block-config-title"
-                className="font-heading text-lg font-extrabold text-[#162040]"
+                className="font-heading text-lg font-extrabold text-[#1c1c81]"
               >
                 {definition.name}
               </h2>
@@ -117,8 +117,8 @@ export function BlockConfigDrawer({
             <button
               type="button"
               onClick={handleSave}
-              className="flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-              style={{ background: "#2dbe8f" }}
+              className="flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:brightness-90"
+              style={{ background: "#00d495" }}
             >
               {submitLabel}
             </button>

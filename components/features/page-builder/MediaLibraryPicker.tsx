@@ -182,7 +182,7 @@ export function MediaLibraryPicker({
           <div>
             <h2
               id="media-picker-title"
-              className="font-heading text-lg font-extrabold text-[#162040]"
+              className="font-heading text-lg font-extrabold text-[#1c1c81]"
             >
               Alege din bibliotecă
             </h2>
@@ -258,7 +258,7 @@ export function MediaLibraryPicker({
               type="button"
               onClick={() => finish([...selectedCards.values()])}
               disabled={selectedIds.size < 1}
-              className="rounded-xl bg-[#2dbe8f] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-xl bg-[#00d495] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:brightness-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
               Selectează{selectedIds.size > 0 ? ` (${selectedIds.size})` : ""}
             </button>

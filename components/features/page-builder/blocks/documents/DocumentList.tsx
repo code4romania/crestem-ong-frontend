@@ -14,7 +14,7 @@ import type { DocumentFile } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-3 py-2 rounded-lg border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
+  "w-full px-3 py-2 rounded-lg border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
 
 const ACCEPT = ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.ods";
 
@@ -124,7 +124,7 @@ export function DocumentList({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2563eb] hover:opacity-80 disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#5656e5] hover:opacity-80 disabled:opacity-60"
           >
             {isUploading ? (
               <Loader2 size={15} className="animate-spin" />
@@ -141,7 +141,7 @@ export function DocumentList({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={isUploading}
-          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-10 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040] disabled:opacity-60"
+          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-10 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81] disabled:opacity-60"
         >
           {isUploading ? (
             <Loader2 size={20} className="animate-spin" />
@@ -185,7 +185,7 @@ export function DocumentList({
                       placeholder="ex. Regulament intern — versiunea PDF"
                     />
                   </div>
-                  <p className="truncate text-xs text-[#94a3b8]">
+                  <p className="truncate text-xs text-[#5b6779]">
                     {[label, size].filter(Boolean).join(" · ") || doc.url}
                   </p>
                 </div>
@@ -212,7 +212,7 @@ export function DocumentList({
                     type="button"
                     onClick={() => remove(index)}
                     aria-label="Elimină documentul"
-                    className="rounded-lg p-1.5 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
+                    className="rounded-lg p-1.5 text-[#b91c1c] transition-colors hover:bg-[#fef2f2]"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -223,12 +223,12 @@ export function DocumentList({
         </ul>
       )}
 
-      {error && <p className="mt-1 text-xs text-[#ef4444]">{error}</p>}
+      {error && <p className="mt-1 text-xs text-[#b91c1c]">{error}</p>}
 
       <button
         type="button"
         onClick={() => setPickerOpen(true)}
-        className="mt-3 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+        className="mt-3 text-xs font-semibold text-[#5656e5] hover:opacity-80"
       >
         Alege din bibliotecă
       </button>

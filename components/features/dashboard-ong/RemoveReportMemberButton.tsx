@@ -41,7 +41,7 @@ export function RemoveReportMemberButton({
           setOpen(true);
         }}
         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-border hover:bg-red-50 hover:border-[#fca5a5] transition-colors"
-        style={{ color: "#ef4444" }}
+        style={{ color: "#b91c1c" }}
       >
         <X size={11} /> Elimină
       </button>

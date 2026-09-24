@@ -58,14 +58,14 @@ export function IconPicker({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className="text-sm font-semibold text-[#2563eb] hover:opacity-80 disabled:opacity-60"
+              className="text-sm font-semibold text-[#5656e5] hover:opacity-80 disabled:opacity-60"
             >
               {isUploading ? "Se încarcă..." : "Schimbă"}
             </button>
             <button
               type="button"
               onClick={() => onIconImageChange(null)}
-              className="text-sm font-semibold text-[#ef4444] hover:opacity-80"
+              className="text-sm font-semibold text-[#b91c1c] hover:opacity-80"
             >
               Elimină
             </button>
@@ -91,7 +91,7 @@ export function IconPicker({
                   onClick={() => onChange(key)}
                   className={`flex aspect-square items-center justify-center rounded-xl border-2 transition-colors ${
                     selected
-                      ? "border-[#2563eb] bg-[#eef1fd] text-[#2563eb]"
+                      ? "border-[#5656e5] bg-[#eef1fd] text-[#5656e5]"
                       : "border-slate-200 bg-white text-[#475569] hover:border-slate-300"
                   }`}
                 >
@@ -105,7 +105,7 @@ export function IconPicker({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040] disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81] disabled:opacity-60"
           >
             {isUploading ? (
               <Loader2 size={16} className="animate-spin" />
@@ -118,7 +118,7 @@ export function IconPicker({
           <button
             type="button"
             onClick={() => setPickerOpen(true)}
-            className="text-xs font-semibold text-[#2563eb] hover:opacity-80"
+            className="text-xs font-semibold text-[#5656e5] hover:opacity-80"
           >
             Alege din bibliotecă
           </button>
@@ -142,7 +142,7 @@ export function IconPicker({
           setPickerOpen(false);
         }}
       />
-      {uploadError && <p className="text-xs text-[#ef4444]">{uploadError}</p>}
+      {uploadError && <p className="text-xs text-[#b91c1c]">{uploadError}</p>}
     </div>
   );
 }

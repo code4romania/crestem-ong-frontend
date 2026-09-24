@@ -5,11 +5,11 @@ function StageBody({ etapa }: { etapa: TimelineStage }) {
   return (
     <div>
       {etapa.numar ? (
-        <p className="text-xs font-semibold uppercase tracking-wide text-[#2dbe8f] wrap-break-word">
+        <p className="text-xs font-semibold uppercase tracking-wide text-[#007d58] wrap-break-word">
           {etapa.numar}
         </p>
       ) : null}
-      <p className="mt-1 font-semibold text-[#162040] wrap-break-word">
+      <p className="mt-1 font-semibold text-[#1c1c81] wrap-break-word">
         {etapa.titlu}
       </p>
       {etapa.text ? (
@@ -36,7 +36,7 @@ function VerticalTimeline({ etape }: { etape: TimelineStage[] }) {
           <span
             aria-hidden="true"
             className="relative z-10 mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full"
-            style={{ background: "#162040" }}
+            style={{ background: "#1c1c81" }}
           />
           <StageBody etapa={etapa} />
         </li>
@@ -60,7 +60,7 @@ function HorizontalTimeline({ etape }: { etape: TimelineStage[] }) {
           <span
             aria-hidden="true"
             className="absolute left-0 top-0 z-10 h-2.5 w-2.5 rounded-full"
-            style={{ background: "#162040" }}
+            style={{ background: "#1c1c81" }}
           />
           <StageBody etapa={etapa} />
         </li>
@@ -97,7 +97,7 @@ export function Timeline({ data }: { data: TimelineData }) {
               fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
               fontWeight: 800,
               lineHeight: 1.2,
-              color: "#162040",
+              color: "#1c1c81",
             }}
           >
             {titlu}

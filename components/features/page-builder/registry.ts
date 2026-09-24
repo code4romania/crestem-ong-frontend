@@ -114,13 +114,13 @@ export const CATEGORY_DOT: Record<BlockCategory, string> = {
 
 /** Icon-chip fill/foreground per category, matching the sidebar dot hue. */
 export const CATEGORY_ICON: Record<BlockCategory, { bg: string; fg: string }> = {
-  hero: { bg: "#eff6ff", fg: "#2563eb" },
-  text: { bg: "#f0fdf4", fg: "#16a34a" },
+  hero: { bg: "#dcfafb", fg: "#5656e5" },
+  text: { bg: "#f0fdf4", fg: "#15803d" },
   images: { bg: "#faf5ff", fg: "#9333ea" },
-  media: { bg: "#fff7ed", fg: "#ea580c" },
-  cards: { bg: "#fefce8", fg: "#ca8a04" },
+  media: { bg: "#fff7ed", fg: "#c2410c" },
+  cards: { bg: "#fefce8", fg: "#a16207" },
   dynamic: { bg: "#fdf2f8", fg: "#db2777" },
-  forms: { bg: "#f0fdfa", fg: "#0d9488" },
+  forms: { bg: "#f0fdfa", fg: "#0f766e" },
   structure: { bg: "#f8fafc", fg: "#64748b" },
 };
 

@@ -305,7 +305,7 @@ export function AssignOngsSection({
     <div className="bg-white rounded-xl border border-border overflow-hidden mb-6">
       <div className="px-6 py-5 border-b border-border flex items-center justify-between gap-4">
         <div>
-          <h2 className="font-bold font-heading" style={{ fontSize: "1.0625rem", color: "#162040" }}>
+          <h2 className="font-bold font-heading" style={{ fontSize: "1.0625rem", color: "#1c1c81" }}>
             Alocă ONG-uri în acest program
           </h2>
           <p className="text-sm mt-0.5 text-muted-foreground">
@@ -321,7 +321,7 @@ export function AssignOngsSection({
               setPendingOng(null);
             }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 shrink-0"
-            style={{ background: adding ? "#475569" : "#2563eb" }}
+            style={{ background: adding ? "#475569" : "#5656e5" }}
           >
             {adding ? <X size={14} /> : <Plus size={14} />} {adding ? "Închide" : "Adaugă ONG"}
           </button>
@@ -329,7 +329,7 @@ export function AssignOngsSection({
       </div>
 
       {error && (
-        <p className="px-6 py-3 text-xs border-b border-border" style={{ color: "#ef4444" }}>
+        <p className="px-6 py-3 text-xs border-b border-border" style={{ color: "#b91c1c" }}>
           {error}
         </p>
       )}
@@ -338,14 +338,14 @@ export function AssignOngsSection({
         <div style={{ borderBottom: "1px solid #e2e8f0" }}>
           <div className="px-6 py-3 border-b border-border">
             <div className="relative">
-              <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#94a3b8" }} />
+              <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#5b6779" }} />
               <input
                 autoFocus
                 type="text"
                 placeholder="Caută ONG-uri..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:border-accent transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:border-accent-strong transition-colors"
               />
             </div>
           </div>
@@ -363,10 +363,10 @@ export function AssignOngsSection({
                   className="w-full flex items-center gap-3 px-6 py-3 text-left hover:bg-blue-50 transition-colors"
                 >
                   <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#e2e8f0" }}>
-                    <Building2 size={13} style={{ color: "#94a3b8" }} />
+                    <Building2 size={13} style={{ color: "#5b6779" }} />
                   </div>
                   <span className="text-sm text-slate-600">{ong.name}</span>
-                  <Plus size={13} className="ml-auto flex-shrink-0" style={{ color: "#2563eb" }} />
+                  <Plus size={13} className="ml-auto flex-shrink-0" style={{ color: "#5656e5" }} />
                 </button>
               ))
             )}
@@ -381,12 +381,12 @@ export function AssignOngsSection({
               type="button"
               onClick={() => setPendingOng(null)}
               className="p-1.5 rounded-lg hover:bg-slate-200 transition-colors"
-              style={{ color: "#64748b" }}
+              style={{ color: "#5b6779" }}
             >
               <ArrowLeft size={14} />
             </button>
             <div>
-              <p className="text-sm font-semibold" style={{ color: "#162040" }}>{pendingOng.name}</p>
+              <p className="text-sm font-semibold" style={{ color: "#1c1c81" }}>{pendingOng.name}</p>
               <p className="text-xs text-muted-foreground">
                 {evaluationPhases.length === 0
                   ? "Programul nu are nicio fază care necesită evaluare"
@@ -399,13 +399,13 @@ export function AssignOngsSection({
             <>
               <div className="px-6 py-3 border-b border-border">
                 <div className="relative">
-                  <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#94a3b8" }} />
+                  <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#5b6779" }} />
                   <input
                     type="text"
                     placeholder="Caută evaluări..."
                     value={evalSearch}
                     onChange={(e) => setEvalSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:border-accent transition-colors bg-white"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:border-accent-strong transition-colors bg-white"
                   />
                 </div>
               </div>
@@ -414,7 +414,7 @@ export function AssignOngsSection({
                 {loadingEvaluations ? (
                   <p className="px-6 py-4 text-sm text-muted-foreground">Se încarcă evaluările...</p>
                 ) : evalError ? (
-                  <p className="px-6 py-4 text-sm" style={{ color: "#ef4444" }}>{evalError}</p>
+                  <p className="px-6 py-4 text-sm" style={{ color: "#b91c1c" }}>{evalError}</p>
                 ) : filteredEvaluations.length === 0 ? (
                   <p className="px-6 py-4 text-sm text-muted-foreground">
                     {evaluations.length === 0 ? "Nicio evaluare disponibilă pentru acest ONG." : "Nicio evaluare găsită."}
@@ -423,7 +423,7 @@ export function AssignOngsSection({
                   filteredEvaluations.map((evaluation) => {
                     const isSelected = selectedEvalId === evaluation.documentId;
                     return (
-                      <div key={evaluation.documentId} style={{ background: isSelected ? "#eff6ff" : "transparent" }}>
+                      <div key={evaluation.documentId} style={{ background: isSelected ? "#dcfafb" : "transparent" }}>
                         <button
                           type="button"
                           onClick={() => handleSelectEvaluation(evaluation.documentId)}
@@ -432,20 +432,20 @@ export function AssignOngsSection({
                           <div
                             className="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors"
                             style={{
-                              borderColor: isSelected ? "#2563eb" : "#cbd5e1",
-                              background: isSelected ? "#2563eb" : "transparent",
+                              borderColor: isSelected ? "#5656e5" : "#5b6779",
+                              background: isSelected ? "#5656e5" : "transparent",
                             }}
                           >
                             {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium" style={{ color: "#162040" }}>{evaluation.name}</p>
+                            <p className="text-sm font-medium" style={{ color: "#1c1c81" }}>{evaluation.name}</p>
                             <p className="text-xs text-muted-foreground">{formatEvalPeriod(evaluation)}</p>
                           </div>
                           {!evaluation.finished && (
                             <span
                               className="px-2 py-0.5 rounded-full text-xs font-semibold"
-                              style={{ background: "#fef3c7", color: "#d97706" }}
+                              style={{ background: "#fef3c7", color: "#b45309" }}
                             >
                               În curs
                             </span>
@@ -453,14 +453,14 @@ export function AssignOngsSection({
                         </button>
                         {isSelected && (
                           <div className="pl-12 pr-6 pb-3 flex items-center gap-2">
-                            <label className="text-xs font-semibold uppercase tracking-wide shrink-0" style={{ color: "#64748b" }}>
+                            <label className="text-xs font-semibold uppercase tracking-wide shrink-0" style={{ color: "#5b6779" }}>
                               Fază
                             </label>
                             <div className="relative w-auto max-w-[70%]">
                               <select
                                 value={selectedPhaseId}
                                 onChange={(e) => setSelectedPhaseId(e.target.value)}
-                                className="w-full appearance-none pl-3 pr-9 py-2 rounded-lg border border-border text-sm focus:outline-none focus:border-accent transition-colors bg-white truncate"
+                                className="w-full appearance-none pl-3 pr-9 py-2 rounded-lg border border-border text-sm focus:outline-none focus:border-accent-strong transition-colors bg-white truncate"
                               >
                                 {evaluationPhases.map((phase) => (
                                   <option key={phase.documentId} value={phase.documentId}>
@@ -471,7 +471,7 @@ export function AssignOngsSection({
                               <ChevronDown
                                 size={14}
                                 className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"
-                                style={{ color: "#64748b" }}
+                                style={{ color: "#5b6779" }}
                               />
                             </div>
                           </div>
@@ -490,7 +490,7 @@ export function AssignOngsSection({
               disabled={isPending || (Boolean(selectedEvalId) && !selectedPhaseId)}
               onClick={() => handleConfirmAdd(true)}
               className="px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-60 inline-flex items-center gap-2"
-              style={{ background: "#2563eb" }}
+              style={{ background: "#5656e5" }}
             >
               {isPending && (
                 <span className="h-3.5 w-3.5 rounded-full border-2 border-white/40 border-t-white animate-spin" aria-hidden="true" />
@@ -527,12 +527,12 @@ export function AssignOngsSection({
               <div key={ong.documentId}>
                 <div className="flex items-center justify-between px-6 py-3.5 hover:bg-slate-50 transition-colors gap-3">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#eff6ff" }}>
-                      <Building2 size={14} style={{ color: "#2563eb" }} />
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#dcfafb" }}>
+                      <Building2 size={14} style={{ color: "#5656e5" }} />
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="text-sm font-medium truncate min-w-0 flex-1" style={{ color: "#162040" }}>
+                        <span className="text-sm font-medium truncate min-w-0 flex-1" style={{ color: "#1c1c81" }}>
                           {ong.name}
                         </span>
                         {isRetras(ong) && (
@@ -547,7 +547,7 @@ export function AssignOngsSection({
                       {ong.evaluation && (
                         <span
                           className="inline-block mt-0.5 text-xs px-2 py-0.5 rounded-full truncate max-w-full"
-                          style={{ background: "#eff6ff", color: "#2563eb" }}
+                          style={{ background: "#dcfafb", color: "#5656e5" }}
                         >
                           Eval: {ong.evaluation.name}
                         </span>
@@ -595,7 +595,7 @@ export function AssignOngsSection({
                         }}
                         aria-label={`Elimină ${ong.name}`}
                         className="p-1.5 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-60 shrink-0"
-                        style={{ color: "#94a3b8" }}
+                        style={{ color: "#5b6779" }}
                       >
                         <Trash2 size={14} />
                       </button>
@@ -605,21 +605,21 @@ export function AssignOngsSection({
 
                 {isExpanded && (
                   <div id={`ong-mentors-panel-${ong.documentId}`} className="px-6 pb-5" style={{ background: "#f8fafc" }}>
-                    <p className="text-xs font-semibold uppercase tracking-wide pt-4 pb-3" style={{ color: "#64748b" }}>
+                    <p className="text-xs font-semibold uppercase tracking-wide pt-4 pb-3" style={{ color: "#5b6779" }}>
                       Persoane resursă alocate pentru {ong.name}
                     </p>
                     <div className="relative mb-3">
-                      <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#94a3b8" }} />
+                      <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#5b6779" }} />
                       <input
                         type="text"
                         placeholder="Caută persoană resursă..."
                         value={mentorSearch}
                         onChange={(e) => setMentorSearch(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:border-accent transition-colors bg-white"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:border-accent-strong transition-colors bg-white"
                       />
                     </div>
                     {mentorError && (
-                      <p className="text-xs pb-2" style={{ color: "#ef4444" }}>
+                      <p className="text-xs pb-2" style={{ color: "#b91c1c" }}>
                         {mentorError}
                       </p>
                     )}
@@ -654,7 +654,7 @@ export function AssignOngsSection({
                               />
                               <div className="min-w-0">
                                 <div className="flex items-center gap-2">
-                                  <p className="text-sm font-medium truncate" style={{ color: "#162040" }}>{mentor.nume}</p>
+                                  <p className="text-sm font-medium truncate" style={{ color: "#1c1c81" }}>{mentor.nume}</p>
                                   {mentor.isDeleted && <DeletedAccountBadge />}
                                 </div>
                                 {mentor.email && (
@@ -675,11 +675,11 @@ export function AssignOngsSection({
 
                 {isEvalExpanded && (
                   <div id={`ong-evals-panel-${ong.documentId}`} className="px-6 pb-5" style={{ background: "#f8fafc" }}>
-                    <p className="text-xs font-semibold uppercase tracking-wide pt-4 pb-3" style={{ color: "#64748b" }}>
+                    <p className="text-xs font-semibold uppercase tracking-wide pt-4 pb-3" style={{ color: "#5b6779" }}>
                       Evaluări per fază pentru {ong.name}
                     </p>
                     {assignPhaseError && (
-                      <p className="text-xs pb-2" style={{ color: "#ef4444" }}>
+                      <p className="text-xs pb-2" style={{ color: "#b91c1c" }}>
                         {assignPhaseError}
                       </p>
                     )}
@@ -692,7 +692,7 @@ export function AssignOngsSection({
                           <div key={phaseEvaluation.phaseDocumentId} className="px-4 py-3">
                             <div className="flex items-center justify-between gap-3">
                               <div className="min-w-0">
-                                <p className="text-sm font-medium truncate" style={{ color: "#162040" }}>
+                                <p className="text-sm font-medium truncate" style={{ color: "#1c1c81" }}>
                                   {phaseEvaluation.phaseTitle}
                                 </p>
                                 <p className="text-xs text-muted-foreground truncate">
@@ -715,7 +715,7 @@ export function AssignOngsSection({
                                     }}
                                     aria-label={`Elimină evaluarea din faza ${phaseEvaluation.phaseTitle}`}
                                     className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-xs font-semibold hover:bg-red-50 transition-colors disabled:opacity-60"
-                                    style={{ color: "#ef4444" }}
+                                    style={{ color: "#b91c1c" }}
                                   >
                                     <Trash2 size={12} /> Elimină din fază
                                   </button>
@@ -728,7 +728,7 @@ export function AssignOngsSection({
                                         : handleOpenAssignPhase(ong, phaseEvaluation)
                                     }
                                     className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-xs font-semibold hover:bg-slate-50 transition-colors"
-                                    style={{ color: "#2563eb" }}
+                                    style={{ color: "#5656e5" }}
                                   >
                                     {isAssigningThis ? <X size={12} /> : <Plus size={12} />}
                                     {isAssigningThis ? "Închide" : "Alocă evaluare"}
@@ -739,20 +739,20 @@ export function AssignOngsSection({
                             {isAssigningThis && (
                               <div className="mt-3">
                                 <div className="relative mb-2">
-                                  <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#94a3b8" }} />
+                                  <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#5b6779" }} />
                                   <input
                                     type="text"
                                     placeholder="Caută evaluări..."
                                     value={phaseEvalSearch}
                                     onChange={(e) => setPhaseEvalSearch(e.target.value)}
-                                    className="w-full pl-9 pr-3 py-2 rounded-lg border border-border text-sm focus:outline-none focus:border-accent transition-colors bg-white"
+                                    className="w-full pl-9 pr-3 py-2 rounded-lg border border-border text-sm focus:outline-none focus:border-accent-strong transition-colors bg-white"
                                   />
                                 </div>
                                 <div className="divide-y divide-border max-h-40 overflow-y-auto rounded-lg border border-border bg-white mb-2">
                                   {loadingPhaseEvalOptions ? (
                                     <p className="px-3 py-3 text-sm text-muted-foreground">Se încarcă evaluările...</p>
                                   ) : phaseEvalOptionsError ? (
-                                    <p className="px-3 py-3 text-sm" style={{ color: "#ef4444" }}>{phaseEvalOptionsError}</p>
+                                    <p className="px-3 py-3 text-sm" style={{ color: "#b91c1c" }}>{phaseEvalOptionsError}</p>
                                   ) : filteredPhaseEvalOptions.length === 0 ? (
                                     <p className="px-3 py-3 text-sm text-muted-foreground">
                                       {phaseEvalOptions.length === 0 ? "Nicio evaluare disponibilă." : "Nicio evaluare găsită."}
@@ -768,18 +768,18 @@ export function AssignOngsSection({
                                             setSelectedPhaseEvalOptionId(isOptionSelected ? "" : evaluation.documentId)
                                           }
                                           className="w-full flex items-center gap-2 px-3 py-2 text-left transition-colors"
-                                          style={{ background: isOptionSelected ? "#eff6ff" : "transparent" }}
+                                          style={{ background: isOptionSelected ? "#dcfafb" : "transparent" }}
                                         >
                                           <div
                                             className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
                                             style={{
-                                              borderColor: isOptionSelected ? "#2563eb" : "#cbd5e1",
-                                              background: isOptionSelected ? "#2563eb" : "transparent",
+                                              borderColor: isOptionSelected ? "#5656e5" : "#5b6779",
+                                              background: isOptionSelected ? "#5656e5" : "transparent",
                                             }}
                                           >
                                             {isOptionSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                                           </div>
-                                          <span className="text-sm truncate" style={{ color: "#162040" }}>
+                                          <span className="text-sm truncate" style={{ color: "#1c1c81" }}>
                                             {evaluation.name}
                                           </span>
                                         </button>
@@ -792,7 +792,7 @@ export function AssignOngsSection({
                                   disabled={!selectedPhaseEvalOptionId || phaseEvalPending}
                                   onClick={handleConfirmAssignPhase}
                                   className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-60"
-                                  style={{ background: "#2563eb" }}
+                                  style={{ background: "#5656e5" }}
                                 >
                                   {phaseEvalPending ? "Se alocă..." : "Confirmă"}
                                 </button>

@@ -14,7 +14,7 @@ export function OngProfileHeaderActions({ ong }: { ong: MyOng }) {
         type="button"
         onClick={() => setEditing(true)}
         className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors"
-        style={{ color: "#162040" }}
+        style={{ color: "#1c1c81" }}
       >
         <Pencil size={14} />
         Editează

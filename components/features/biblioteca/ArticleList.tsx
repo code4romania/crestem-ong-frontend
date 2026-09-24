@@ -158,7 +158,7 @@ export function ArticleList({
     <div>
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+          <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
             Bibliotecă
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -176,7 +176,7 @@ export function ArticleList({
           {canCreate ? (
             <Link
               href="/dashboard/biblioteca/creeaza"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#2563eb] px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#5656e5] px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
             >
               <Plus size={15} />
               Articol nou
@@ -184,7 +184,7 @@ export function ArticleList({
           ) : (
             <span
               title="Adaugă mai întâi o subcategorie"
-              className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-[#2563eb] px-4 py-2.5 text-sm font-semibold text-white opacity-50"
+              className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-[#5656e5] px-4 py-2.5 text-sm font-semibold text-white opacity-50"
             >
               <Plus size={15} />
               Articol nou
@@ -197,14 +197,14 @@ export function ArticleList({
         <div className="relative flex-1">
           <Search
             size={14}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5b6779]"
           />
           <input
             value={term}
             onChange={(event) => handleSearchChange(event.target.value)}
             placeholder="Caută articole..."
             aria-label="Caută articole"
-            className="w-full rounded-xl border border-border py-2.5 pl-10 pr-4 text-sm focus:border-[#2dbe8f] focus:outline-none"
+            className="w-full rounded-xl border border-border py-2.5 pl-10 pr-4 text-sm focus:border-[#007d58] focus:outline-none"
           />
         </div>
 
@@ -227,7 +227,7 @@ export function ArticleList({
           </select>
           <ChevronDown
             size={14}
-            className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+            className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#5b6779]"
           />
         </div>
 
@@ -250,7 +250,7 @@ export function ArticleList({
           </select>
           <ChevronDown
             size={14}
-            className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+            className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#5b6779]"
           />
         </div>
 
@@ -273,7 +273,7 @@ export function ArticleList({
           </select>
           <ChevronDown
             size={14}
-            className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+            className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#5b6779]"
           />
         </div>
       </div>
@@ -294,7 +294,7 @@ export function ArticleList({
                 ].map((head) => (
                   <th
                     key={head}
-                    className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#94a3b8]"
+                    className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#5b6779]"
                   >
                     {head}
                   </th>
@@ -308,7 +308,7 @@ export function ArticleList({
                   className="border-b border-border last:border-0 hover:bg-slate-50"
                 >
                   <td className="max-w-xs px-4 py-3.5">
-                    <p className="font-heading font-semibold text-[#162040]">
+                    <p className="font-heading font-semibold text-[#1c1c81]">
                       {article.titlu}
                     </p>
                     {article.rezumat ? (
@@ -324,7 +324,7 @@ export function ArticleList({
                         {article.categorie.nume}
                       </span>
                     ) : (
-                      <span className="text-[#94a3b8]">—</span>
+                      <span className="text-[#5b6779]">—</span>
                     )}
                   </td>
 
@@ -334,7 +334,7 @@ export function ArticleList({
                         {article.subcategorie.nume}
                       </span>
                     ) : (
-                      <span className="text-[#94a3b8]">—</span>
+                      <span className="text-[#5b6779]">—</span>
                     )}
                   </td>
 
@@ -346,8 +346,8 @@ export function ArticleList({
                     <span
                       className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
                         article.publicat
-                          ? "bg-[#f0fdf4] text-[#16a34a]"
-                          : "bg-[#fffbeb] text-[#d97706]"
+                          ? "bg-[#f0fdf4] text-[#15803d]"
+                          : "bg-[#fffbeb] text-[#b45309]"
                       }`}
                     >
                       {article.publicat ? "publicat" : "schiță"}
@@ -363,7 +363,7 @@ export function ArticleList({
                       <Link
                         href={`/dashboard/biblioteca/${article.documentId}`}
                         aria-label={`Editează „${article.titlu}"`}
-                        className="rounded-lg p-1.5 text-[#64748b] transition-colors hover:bg-slate-100"
+                        className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-slate-100"
                       >
                         <Pencil size={13} />
                       </Link>
@@ -376,7 +376,7 @@ export function ArticleList({
                             ? `Retrage „${article.titlu}"`
                             : `Publică „${article.titlu}"`
                         }
-                        className="rounded-lg p-1.5 text-[#64748b] transition-colors hover:bg-slate-100 disabled:opacity-50"
+                        className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-slate-100 disabled:opacity-50"
                       >
                         {article.publicat ? (
                           <EyeOff size={13} />
@@ -389,7 +389,7 @@ export function ArticleList({
                         onClick={() => setDeleting(article)}
                         disabled={pending}
                         aria-label={`Șterge „${article.titlu}"`}
-                        className="rounded-lg p-1.5 text-[#94a3b8] transition-colors hover:bg-red-50 hover:text-[#dc2626] disabled:opacity-50"
+                        className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-red-50 hover:text-[#b91c1c] disabled:opacity-50"
                       >
                         <Trash2 size={13} />
                       </button>
@@ -462,7 +462,7 @@ function PagerLink({
       <span
         aria-disabled="true"
         className="rounded-lg border border-border px-3 py-2 text-sm opacity-40"
-        style={{ color: "#94a3b8" }}
+        style={{ color: "#5b6779" }}
       >
         {children}
       </span>

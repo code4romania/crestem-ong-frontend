@@ -35,7 +35,7 @@ export interface EditableSocial {
 }
 
 const fieldBase =
-  "rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-[#2dbe8f] focus:outline-none";
+  "rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-[#007d58] focus:outline-none";
 
 const newId = () => Math.random().toString(36).slice(2, 11);
 
@@ -127,7 +127,7 @@ export function SocialLinksField({
                           {...attributes}
                           {...listeners}
                           aria-label={`Mută ${name}`}
-                          className="shrink-0 cursor-grab text-[#cbd5e1] transition-colors hover:text-[#94a3b8]"
+                          className="shrink-0 cursor-grab text-[#cbd5e1] transition-colors hover:text-[#5b6779]"
                         >
                           <GripVertical size={14} />
                         </button>
@@ -169,7 +169,7 @@ export function SocialLinksField({
                             onChange(value.filter((item) => item.id !== social.id))
                           }
                           aria-label={`Elimină ${name}`}
-                          className="shrink-0 rounded-lg p-2 text-[#94a3b8] transition-colors hover:bg-red-50 hover:text-[#dc2626]"
+                          className="shrink-0 rounded-lg p-2 text-[#5b6779] transition-colors hover:bg-red-50 hover:text-[#b91c1c]"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -199,7 +199,7 @@ export function SocialLinksField({
               <div>
                 <h2
                   id="social-picker-title"
-                  className="font-heading text-lg font-extrabold text-[#162040]"
+                  className="font-heading text-lg font-extrabold text-[#1c1c81]"
                 >
                   Adaugă rețea socială
                 </h2>
@@ -211,7 +211,7 @@ export function SocialLinksField({
                 type="button"
                 onClick={() => setPickerOpen(false)}
                 aria-label="Închide"
-                className="shrink-0 rounded-lg p-1.5 text-[#94a3b8] transition-colors hover:bg-slate-100"
+                className="shrink-0 rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-slate-100"
               >
                 <X size={18} />
               </button>
@@ -226,12 +226,12 @@ export function SocialLinksField({
                     key={platform}
                     type="button"
                     onClick={() => add(platform)}
-                    className="flex flex-col items-center gap-2 rounded-xl border border-border px-3 py-4 text-center transition-colors hover:border-[#2dbe8f] hover:bg-[#f0faf6]"
+                    className="flex flex-col items-center gap-2 rounded-xl border border-border px-3 py-4 text-center transition-colors hover:border-[#00d495] hover:bg-[#e5f9e5]"
                   >
                     <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-[#475569]">
                       <SocialIcon platform={platform} size={18} />
                     </span>
-                    <span className="text-sm font-semibold text-[#162040]">
+                    <span className="text-sm font-semibold text-[#1c1c81]">
                       {SOCIAL_LABEL[platform]}
                     </span>
                   </button>

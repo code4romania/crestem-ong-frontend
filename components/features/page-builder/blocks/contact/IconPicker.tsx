@@ -25,7 +25,7 @@ export function IconPicker({
             onClick={() => onChange(key)}
             className={`flex aspect-square items-center justify-center rounded-xl border-2 transition-colors ${
               selected
-                ? "border-[#2563eb] bg-[#eef1fd] text-[#2563eb]"
+                ? "border-[#5656e5] bg-[#eef1fd] text-[#5656e5]"
                 : "border-slate-200 bg-white text-[#475569] hover:border-slate-300"
             }`}
           >

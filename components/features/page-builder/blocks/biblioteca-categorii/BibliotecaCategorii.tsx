@@ -42,7 +42,7 @@ export function BibliotecaCategorii({ data }: { data: BibliotecaCategoriiData })
                 fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
                 fontWeight: 800,
                 lineHeight: 1.15,
-                color: "#162040",
+                color: "#1c1c81",
               }}
             >
               {data.titlu}

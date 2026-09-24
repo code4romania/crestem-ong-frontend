@@ -4,8 +4,8 @@
 import { ModalOverlay } from "@/components/ui/ModalOverlay";
 
 const CONFIRM_VARIANT_CLASSES: Record<"danger" | "accent", string> = {
-  danger: "bg-[#dc2626]",
-  accent: "bg-[#2dbe8f]",
+  danger: "bg-[#dc2626] text-white",
+  accent: "bg-[#00d495] text-white",
 };
 
 export function ConfirmDialog({
@@ -38,14 +38,14 @@ export function ConfirmDialog({
   return (
     <ModalOverlay labelledBy="confirm-dialog-title">
       <div className="bg-white rounded-2xl w-full max-w-sm p-6">
-        <h2 id="confirm-dialog-title" className="font-heading font-extrabold text-lg mb-2 text-[#162040]">
+        <h2 id="confirm-dialog-title" className="font-heading font-extrabold text-lg mb-2 text-[#1c1c81]">
           {title}
         </h2>
         <p className={`text-sm text-muted-foreground ${error ? "mb-4" : "mb-6"}`}>{description}</p>
         {error && (
           <p
             role="alert"
-            className="mb-4 rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#ef4444]"
+            className="mb-4 rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#b91c1c]"
           >
             {error}
           </p>
@@ -63,7 +63,7 @@ export function ConfirmDialog({
             type="button"
             onClick={onConfirm}
             disabled={loading}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-70 disabled:cursor-not-allowed ${CONFIRM_VARIANT_CLASSES[confirmVariant]}`}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-70 disabled:cursor-not-allowed ${CONFIRM_VARIANT_CLASSES[confirmVariant]}`}
           >
             {loading && (
               <span

@@ -44,7 +44,7 @@ export function EvaluariPagination({
       </PageLink>
       {pageWindow(page, pageCount).map((entry, index) =>
         entry === GAP ? (
-          <span key={`gap-${index}`} aria-hidden="true" className="px-2 text-sm" style={{ color: "#94a3b8" }}>
+          <span key={`gap-${index}`} aria-hidden="true" className="px-2 text-sm" style={{ color: "#5b6779" }}>
             …
           </span>
         ) : (
@@ -55,7 +55,7 @@ export function EvaluariPagination({
             className="px-3 py-2 rounded-lg text-sm border font-medium min-w-[2.5rem] text-center"
             style={
               entry === page
-                ? { background: "#162040", color: "white", borderColor: "#162040" }
+                ? { background: "#1c1c81", color: "white", borderColor: "#1c1c81" }
                 : { borderColor: "#e2e8f0", color: "#475569" }
             }
           >
@@ -73,7 +73,7 @@ export function EvaluariPagination({
 function PageLink({ href, disabled, children }: { href: string; disabled: boolean; children: React.ReactNode }) {
   if (disabled) {
     return (
-      <span aria-disabled="true" className="px-3 py-2 rounded-lg text-sm border border-border opacity-40" style={{ color: "#94a3b8" }}>
+      <span aria-disabled="true" className="px-3 py-2 rounded-lg text-sm border border-border opacity-40" style={{ color: "#5b6779" }}>
         {children}
       </span>
     );

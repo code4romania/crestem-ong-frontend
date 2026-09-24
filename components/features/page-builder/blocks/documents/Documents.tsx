@@ -19,9 +19,9 @@ export function Documents({ data }: { data: DocumentsData }) {
     <section>
       <div className="mx-auto max-w-3xl px-6 py-8">
         <div className="overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-[#162040] px-5 py-4 text-white">
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-[#1c1c81] px-5 py-4 text-white">
             <div className="flex min-w-0 items-center gap-3">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#2dbe8f]/25">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#00d495]/25">
                 <Download size={18} aria-hidden />
               </span>
               <div className="min-w-0">
@@ -36,7 +36,7 @@ export function Documents({ data }: { data: DocumentsData }) {
             <DownloadAllButton
               files={documente.map((d) => ({ url: d.url, name: d.name }))}
               zipName={titlu}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[#2dbe8f] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#24a67d]"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[#00d495] px-3 py-2 text-sm font-semibold text-white transition-opacity hover:brightness-90"
             />
           </div>
 
@@ -62,18 +62,18 @@ export function Documents({ data }: { data: DocumentsData }) {
                       {label || "FILE"}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-medium text-[#162040]">
+                      <span className="block truncate text-sm font-medium text-[#1c1c81]">
                         {doc.name || "Document"}
                       </span>
                       {meta && (
-                        <span className="block text-xs text-[#94a3b8]">
+                        <span className="block text-xs text-[#5b6779]">
                           {meta}
                         </span>
                       )}
                     </span>
                     <Download
                       size={16}
-                      className="shrink-0 text-[#94a3b8]"
+                      className="shrink-0 text-[#5b6779]"
                       aria-hidden
                     />
                   </a>

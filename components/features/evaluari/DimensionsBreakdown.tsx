@@ -50,7 +50,7 @@ function SelectedAnswer({
   if (!entry || entry.answer == null) {
     return (
       <div className="mt-1.5 px-3 py-2 rounded-xl" style={{ background: "#f8fafc" }}>
-        <span className="text-xs font-medium" style={{ color: "#94a3b8" }}>
+        <span className="text-xs font-medium" style={{ color: "#5b6779" }}>
           Fără răspuns
         </span>
       </div>
@@ -59,10 +59,10 @@ function SelectedAnswer({
   return (
     <div
       className="mt-1.5 flex items-start gap-2 px-3 py-2 rounded-xl"
-      style={{ background: "#f0faf6" }}
+      style={{ background: "#e5f9e5" }}
     >
-      <CheckCircle2 size={14} className="mt-0.5 shrink-0" style={{ color: "#2dbe8f" }} />
-      <span className="text-xs" style={{ color: "#162040" }}>
+      <CheckCircle2 size={14} className="mt-0.5 shrink-0" style={{ color: "#007d58" }} />
+      <span className="text-xs" style={{ color: "#1c1c81" }}>
         <span className="font-bold">
           {entry.answer}/{optionRange(question).max}
         </span>
@@ -136,11 +136,11 @@ function DimensionCard({
     <div className="py-4 border-b border-border last:border-0">
       <div className="flex items-center gap-3">
         {score != null ? (
-          <CheckCircle2 size={16} className="flex-shrink-0" style={{ color: "#2dbe8f" }} />
+          <CheckCircle2 size={16} className="flex-shrink-0" style={{ color: "#007d58" }} />
         ) : (
           <Circle size={16} className="flex-shrink-0" style={{ color: "#cbd5e1" }} />
         )}
-        <span className="flex-1 text-sm font-semibold" style={{ color: "#162040" }}>
+        <span className="flex-1 text-sm font-semibold" style={{ color: "#1c1c81" }}>
           {dimension.name}
         </span>
         <div className="flex items-center gap-2 flex-shrink-0">
@@ -159,7 +159,7 @@ function DimensionCard({
       </div>
 
       {dimension.description && (
-        <p className="ml-7 mt-1 text-xs" style={{ color: "#94a3b8" }}>
+        <p className="ml-7 mt-1 text-xs" style={{ color: "#5b6779" }}>
           {dimension.description}
         </p>
       )}
@@ -172,9 +172,9 @@ function DimensionCard({
 
       <div className="ml-7 mt-2 space-y-1">
         {(dimension.quiz ?? []).map((question) => (
-          <p key={question.id} className="text-xs" style={{ color: "#64748b" }}>
+          <p key={question.id} className="text-xs" style={{ color: "#5b6779" }}>
             {question.tag && (
-              <span className="font-semibold" style={{ color: "#94a3b8" }}>
+              <span className="font-semibold" style={{ color: "#5b6779" }}>
                 {question.tag}
                 {" · "}
               </span>
@@ -190,7 +190,7 @@ function DimensionCard({
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
           className="ml-7 mt-3 inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
-          style={{ color: "#64748b" }}
+          style={{ color: "#5b6779" }}
         >
           <MessageSquare size={13} />
           Detalii{comments.length > 0 ? ` (${comments.length} ${comments.length === 1 ? "comentariu" : "comentarii"})` : ""}
@@ -209,11 +209,11 @@ function DimensionCard({
               {(dimension.quiz ?? []).map((question) => (
                 <div key={question.id}>
                   {question.tag && (
-                    <p className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#94a3b8" }}>
+                    <p className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#5b6779" }}>
                       {question.tag}
                     </p>
                   )}
-                  <p className="text-xs" style={{ color: "#64748b" }}>
+                  <p className="text-xs" style={{ color: "#5b6779" }}>
                     {question.question}
                   </p>
                   <SelectedAnswer question={question} entry={answers[question.id]} />
@@ -231,7 +231,7 @@ function DimensionCard({
                   style={{ background: "#f8fafc", border: "1px solid #e2e8f0", color: "#334155" }}
                 >
                   {comment.author && (
-                    <p className="font-semibold mb-1" style={{ color: "#162040" }}>
+                    <p className="font-semibold mb-1" style={{ color: "#1c1c81" }}>
                       {comment.author}
                     </p>
                   )}
@@ -275,7 +275,7 @@ export function DimensionsBreakdown({
 }) {
   return (
     <div className="bg-white rounded-xl border border-border p-6 mb-8">
-      <h2 className="font-bold text-base mb-5" style={{ color: "#162040" }}>
+      <h2 className="font-bold text-base mb-5" style={{ color: "#1c1c81" }}>
         Dimensiuni evaluate
       </h2>
       <div className="space-y-0">

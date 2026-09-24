@@ -36,7 +36,7 @@ export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
               <th
                 key={h}
                 className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                style={{ color: "#94a3b8" }}
+                style={{ color: "#5b6779" }}
               >
                 {h}
               </th>
@@ -77,7 +77,7 @@ export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
                       <div className="flex items-center gap-2">
                         <p
                           className="font-semibold whitespace-normal wrap-break-word"
-                          style={{ color: "#162040" }}
+                          style={{ color: "#1c1c81" }}
                         >
                           {displayName}
                         </p>
@@ -88,7 +88,7 @@ export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
                       {mentor.accountStatus !== "deleted" && (
                         <p
                           className="text-xs truncate"
-                          style={{ color: "#64748b" }}
+                          style={{ color: "#5b6779" }}
                         >
                           {mentor.email}
                         </p>
@@ -116,7 +116,7 @@ export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
                       ))}
                     </div>
                   ) : (
-                    <span style={{ color: "#94a3b8" }}>—</span>
+                    <span style={{ color: "#5b6779" }}>—</span>
                   )}
                 </td>
                 <td className="px-4 py-3.5">

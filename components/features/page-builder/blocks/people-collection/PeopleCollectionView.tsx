@@ -49,7 +49,7 @@ function PersonCell({
           <span
             aria-hidden
             className="flex h-20 w-20 items-center justify-center rounded-2xl text-lg font-semibold"
-            style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
+            style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
           >
             {personInitials(person.nume)}
           </span>
@@ -57,7 +57,7 @@ function PersonCell({
       ) : null}
 
       <h3
-        className={`text-base font-semibold text-[#162040] wrap-break-word ${
+        className={`text-[#5b6779]ase font-semibold text-[#1c1c81] wrap-break-word ${
           showPhoto ? "mt-4" : ""
         }`}
       >
@@ -65,7 +65,7 @@ function PersonCell({
       </h3>
 
       {person.functie ? (
-        <p className="mt-0.5 text-sm text-[#64748b] wrap-break-word">
+        <p className="mt-0.5 text-sm text-[#5b6779] wrap-break-word">
           {person.functie}
         </p>
       ) : null}
@@ -73,7 +73,7 @@ function PersonCell({
       {showType ? (
         <p
           className="mt-1 text-xs font-semibold uppercase tracking-wide wrap-break-word"
-          style={{ color: "#2dbe8f" }}
+          style={{ color: "#007d58" }}
         >
           {PERSON_TYPE_LABEL[person.tip]}
         </p>
@@ -103,7 +103,7 @@ export function PeopleCollectionView({
             {data.supratitlu ? (
               <p
                 className="mb-3 text-sm font-bold uppercase tracking-[0.12em] wrap-break-word"
-                style={{ color: "#2dbe8f" }}
+                style={{ color: "#007d58" }}
               >
                 {data.supratitlu}
               </p>
@@ -115,7 +115,7 @@ export function PeopleCollectionView({
                   fontSize: "clamp(2rem, 4vw, 2.75rem)",
                   fontWeight: 800,
                   lineHeight: 1.15,
-                  color: "#162040",
+                  color: "#1c1c81",
                 }}
               >
                 {data.titlu}

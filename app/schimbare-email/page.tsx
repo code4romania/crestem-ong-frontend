@@ -21,12 +21,12 @@ export default async function SchimbareEmailPage({
     return (
       <main className="min-h-dvh flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl border border-border p-8 w-full max-w-md">
-          <h1 className="font-heading font-extrabold text-xl mb-2" style={{ color: "#162040" }}>
+          <h1 className="font-heading font-extrabold text-xl mb-2" style={{ color: "#1c1c81" }}>
             Confirmă adresa de email
           </h1>
           <div className="flex items-start gap-3 mt-4">
-            <MailCheck size={20} className="shrink-0 mt-0.5" style={{ color: "#2dbe8f" }} />
-            <p className="text-sm" style={{ color: "#162040" }}>
+            <MailCheck size={20} className="shrink-0 mt-0.5" style={{ color: "#007d58" }} />
+            <p className="text-sm" style={{ color: "#1c1c81" }}>
               Adresa contului este acum{" "}
               <span className="font-semibold">{confirmat}</span>. Autentifică-te
               din nou folosind noua adresă.
@@ -34,8 +34,8 @@ export default async function SchimbareEmailPage({
           </div>
           <Link
             href="/autentificare"
-            className="mt-6 inline-flex w-full items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-            style={{ background: "#2dbe8f" }}
+            className="mt-6 inline-flex w-full items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity"
+            style={{ background: "#00d495" }}
           >
             Mergi la autentificare
           </Link>
@@ -63,14 +63,14 @@ export default async function SchimbareEmailPage({
   return (
     <main className="min-h-dvh flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl border border-border p-8 w-full max-w-md">
-        <h1 className="font-heading font-extrabold text-xl mb-2" style={{ color: "#162040" }}>
+        <h1 className="font-heading font-extrabold text-xl mb-2" style={{ color: "#1c1c81" }}>
           Confirmă adresa de email
         </h1>
 
         {error || !token || !pendingEmail ? (
           <>
             <div className="flex items-start gap-3 mt-4">
-              <MailX size={20} className="shrink-0 mt-0.5" style={{ color: "#ef4444" }} />
+              <MailX size={20} className="shrink-0 mt-0.5" style={{ color: "#b91c1c" }} />
               <p className="text-sm text-muted-foreground">{error}</p>
             </div>
             <Link

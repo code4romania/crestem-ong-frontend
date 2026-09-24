@@ -36,12 +36,12 @@ export function OngMembershipCard({ ong }: { ong: MyOng }) {
       <div className="flex items-center gap-3 mb-4">
         <div
           className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-semibold text-white shrink-0"
-          style={{ background: "#162040" }}
+          style={{ background: "#1c1c81" }}
         >
           {initial}
         </div>
         <div className="min-w-0">
-          <p className="text-sm font-semibold truncate" style={{ color: "#162040" }}>
+          <p className="text-sm font-semibold truncate" style={{ color: "#1c1c81" }}>
             {ong.name}
           </p>
           <p className="text-xs text-muted-foreground">CUI: {ong.cui}</p>
@@ -50,31 +50,31 @@ export function OngMembershipCard({ ong }: { ong: MyOng }) {
 
       <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm mb-4">
         <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5b6779" }}>
             Adresă
           </p>
           <p className="break-words" style={{ color: "#334155" }}>{ong.adresa ?? "—"}</p>
         </div>
         <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5b6779" }}>
             Website
           </p>
           <p className="break-words" style={{ color: "#334155" }}>{ong.website ?? "—"}</p>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5b6779" }}>
             An înființare
           </p>
           <p style={{ color: "#334155" }}>{formatYear(ong.dataInfiintare) ?? "—"}</p>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5b6779" }}>
             Domeniu
           </p>
           <p style={{ color: "#334155" }}>{ong.domeniuActivitate ?? "—"}</p>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5b6779" }}>
             Rolul tău
           </p>
           <p style={{ color: "#334155" }}>{ong.rol ?? "—"}</p>
@@ -89,7 +89,7 @@ export function OngMembershipCard({ ong }: { ong: MyOng }) {
             setOpen(true);
           }}
           className="text-sm font-semibold hover:underline"
-          style={{ color: "#ef4444" }}
+          style={{ color: "#b91c1c" }}
         >
           Părăsește ONG-ul →
         </button>

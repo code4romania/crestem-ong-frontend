@@ -18,7 +18,7 @@ export function ArticleCard({ article }: { article: ArticleSummary }) {
             {article.tip}
           </span>
         ) : null}
-        <h3 className="mt-4 font-heading text-lg font-bold text-[#162040] wrap-break-word">
+        <h3 className="mt-4 font-heading text-lg font-bold text-[#1c1c81] wrap-break-word">
           {article.titlu}
         </h3>
         {article.rezumat ? (
@@ -40,7 +40,7 @@ export function ArticleCard({ article }: { article: ArticleSummary }) {
         ) : null}
       </div>
       <div className="flex items-center justify-end border-t border-border px-6 py-3.5">
-        <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#2dbe8f]">
+        <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#007d58]">
           Citește <ChevronRight size={15} />
         </span>
       </div>

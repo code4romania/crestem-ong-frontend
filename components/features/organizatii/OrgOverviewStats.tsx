@@ -25,7 +25,7 @@ function StatCard({
       <p className="text-sm text-muted-foreground">{label}</p>
       <p
         className="mt-2 text-2xl font-heading font-extrabold"
-        style={{ color: "#162040" }}
+        style={{ color: "#1c1c81" }}
       >
         {value}
       </p>
@@ -34,7 +34,7 @@ function StatCard({
         <Link
           href={link.href}
           className="self-start mt-auto pt-2 text-sm font-semibold"
-          style={{ color: "#2dbe8f" }}
+          style={{ color: "#007d58" }}
         >
           {link.text} →
         </Link>
@@ -62,7 +62,7 @@ function ProgramsCard({
             <span
               key={program.documentId}
               className="px-2.5 py-1 rounded-full text-xs font-medium"
-              style={{ background: "#f0faf6", color: "#162040" }}
+              style={{ background: "#e5f9e5", color: "#1c1c81" }}
             >
               {program.name}
             </span>
@@ -70,7 +70,7 @@ function ProgramsCard({
         ) : (
           <p
             className="text-2xl font-heading font-extrabold"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             —
           </p>
@@ -80,7 +80,7 @@ function ProgramsCard({
         <Link
           href="/dashboard/programe"
           className="self-start mt-auto pt-2 text-sm font-semibold"
-          style={{ color: "#2dbe8f" }}
+          style={{ color: "#007d58" }}
         >
           Vezi toate programele →
         </Link>
@@ -98,7 +98,7 @@ function DisabledStatCard({ label, value }: { label: string; value: string }) {
       <p className="text-sm text-muted-foreground">{label}</p>
       <p
         className="mt-2 text-2xl font-heading font-extrabold"
-        style={{ color: "#162040" }}
+        style={{ color: "#1c1c81" }}
       >
         {value}
       </p>
@@ -121,7 +121,7 @@ export function OrgOverviewStats({
     <div>
       <h2
         className="text-2xl font-heading font-extrabold mb-4"
-        style={{ color: "#162040" }}
+        style={{ color: "#1c1c81" }}
       >
         Informații Organizație
       </h2>

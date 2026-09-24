@@ -9,7 +9,7 @@ export function PersoaneResursaTabs({
 }) {
   const tabClass = (isActive: boolean) =>
     isActive
-      ? "shrink-0 whitespace-nowrap pb-3 text-sm font-semibold border-b-2 border-accent text-accent"
+      ? "shrink-0 whitespace-nowrap pb-3 text-sm font-semibold border-b-2 border-accent-strong text-accent-strong"
       : "shrink-0 whitespace-nowrap pb-3 text-sm font-medium text-muted-foreground hover:text-slate-700 transition-colors";
 
   return (

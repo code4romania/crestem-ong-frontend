@@ -40,7 +40,7 @@ export function CustomHtmlPreview({
         sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
         className="h-[80vh] w-full rounded-xl border border-border bg-white"
       />
-      <p className="mt-2 text-xs text-[#94a3b8]">
+      <p className="mt-2 text-xs text-[#5b6779]">
         Randat izolat, într-un iframe: stilurile și scripturile lipite nu ating
         editorul. Linkurile se deschid în filă nouă.
       </p>

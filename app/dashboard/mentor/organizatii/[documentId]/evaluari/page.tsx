@@ -19,7 +19,7 @@ export default async function MentorOrganizatieEvaluariPage({
   return (
     <div>
       <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
-        <h2 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+        <h2 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
           Evaluare organizațională
         </h2>
         <MatrixModelButton dimensions={dimensionsRes} />

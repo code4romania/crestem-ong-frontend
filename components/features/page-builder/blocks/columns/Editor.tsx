@@ -11,8 +11,8 @@ const labelClass =
 function InfoCard({ title, children }: { title: string; children: string }) {
   return (
     <div className="rounded-xl border border-border px-4 py-3">
-      <p className="text-sm font-semibold text-[#162040]">{title}</p>
-      <p className="mt-0.5 text-xs text-[#94a3b8]">{children}</p>
+      <p className="text-sm font-semibold text-[#1c1c81]">{title}</p>
+      <p className="mt-0.5 text-xs text-[#5b6779]">{children}</p>
     </div>
   );
 }

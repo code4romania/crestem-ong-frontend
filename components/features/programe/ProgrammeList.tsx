@@ -27,7 +27,7 @@ export function ProgrammeList({ programs }: { programs: Program[] }) {
     <div>
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
             Management programe
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -50,12 +50,12 @@ export function ProgrammeList({ programs }: { programs: Program[] }) {
           return (
             <div key={group.key}>
               <div className="flex items-center gap-3 mb-4">
-                <h2 className="text-lg font-heading font-bold" style={{ color: "#162040" }}>
+                <h2 className="text-lg font-heading font-bold" style={{ color: "#1c1c81" }}>
                   {group.label}
                 </h2>
                 <span
                   className="px-2.5 py-0.5 rounded-full text-xs font-bold"
-                  style={{ background: "#f1f5f9", color: "#64748b" }}
+                  style={{ background: "#f1f5f9", color: "#5b6779" }}
                 >
                   {items.length}
                 </span>

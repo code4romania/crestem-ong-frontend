@@ -14,9 +14,9 @@ import { MentorMeetingFormModal } from "./MentorMeetingFormModal";
 import { MentorReportUploadModal } from "./MentorReportUploadModal";
 
 const STATUS_BADGES: Record<OngMeeting["status"], { label: string; bg: string; color: string }> = {
-  programata: { label: "Programată", bg: "#eff6ff", color: "#2563eb" },
-  efectuata: { label: "Efectuată", bg: "#f0fdf4", color: "#16a34a" },
-  anulata: { label: "Anulată", bg: "#fef2f2", color: "#dc2626" },
+  programata: { label: "Programată", bg: "#dcfafb", color: "#5656e5" },
+  efectuata: { label: "Efectuată", bg: "#f0fdf4", color: "#15803d" },
+  anulata: { label: "Anulată", bg: "#fef2f2", color: "#b91c1c" },
 };
 
 const FORMAT_LABELS: Record<OngMeeting["format"], string> = {
@@ -49,7 +49,7 @@ function IconButton({
       <span
         role="tooltip"
         className="pointer-events-none absolute bottom-full left-1/2 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded-md px-2 py-1 text-[11px] font-semibold text-white opacity-0 scale-95 transition-[opacity,transform] duration-150 ease-out group-hover/action:opacity-100 group-hover/action:scale-100 group-focus-within/action:opacity-100 group-focus-within/action:scale-100 z-10"
-        style={{ background: "#162040" }}
+        style={{ background: "#1c1c81" }}
       >
         {label}
       </span>
@@ -125,7 +125,7 @@ export function MentorMeetingsTable({
               <th
                 key={h}
                 className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider whitespace-nowrap"
-                style={{ color: "#94a3b8" }}
+                style={{ color: "#5b6779" }}
               >
                 {h}
               </th>
@@ -138,10 +138,10 @@ export function MentorMeetingsTable({
             const fileUrl = meeting.report ? getMediaUrl(meeting.report.url) : null;
             return (
               <tr key={meeting.documentId} className="border-b border-border last:border-0">
-                <td className="px-5 py-3.5 font-semibold whitespace-nowrap" style={{ color: "#162040" }}>
+                <td className="px-5 py-3.5 font-semibold whitespace-nowrap" style={{ color: "#1c1c81" }}>
                   {meeting.ong?.name ?? "—"}
                 </td>
-                <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "#64748b" }}>
+                <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "#5b6779" }}>
                   {formatMeetingDateTime(meeting.dataOra)}
                 </td>
                 <td className="px-5 py-3.5 whitespace-nowrap">
@@ -169,20 +169,20 @@ export function MentorMeetingsTable({
                         }}
                         title="Marchează efectuată"
                         aria-label="Marchează efectuată"
-                        className="inline-flex items-center justify-center h-6 w-6 rounded-full border hover:bg-[#16a34a]/10 transition-colors shrink-0"
+                        className="inline-flex items-center justify-center h-6 w-6 rounded-full border hover:bg-[#15803d]/10 transition-colors shrink-0"
                         style={{ borderColor: "#16a34a" }}
                       >
-                        <Check size={12} style={{ color: "#16a34a" }} strokeWidth={2} />
+                        <Check size={12} style={{ color: "#15803d" }} strokeWidth={2} />
                       </button>
                     )}
                   </div>
                 </td>
-                <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "#64748b" }}>
+                <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "#5b6779" }}>
                   {meeting.program?.name ?? "—"}
                 </td>
                 <td className="px-5 py-3.5 whitespace-nowrap">
                   {meeting.status !== "efectuata" ? (
-                    <span style={{ color: "#94a3b8" }}>—</span>
+                    <span style={{ color: "#5b6779" }}>—</span>
                   ) : (
                     <div className="flex items-center gap-2">
                       {fileUrl && (

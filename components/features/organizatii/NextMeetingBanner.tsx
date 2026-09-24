@@ -21,19 +21,19 @@ export function NextMeetingBanner({
   return (
     <div
       className="rounded-2xl p-6 mb-6 flex flex-wrap items-center justify-between gap-4"
-      style={{ background: "#162040" }}
+      style={{ background: "#1c1c81" }}
     >
       <div className="flex items-center gap-4">
         <div
           className="flex items-center justify-center h-11 w-11 rounded-xl shrink-0"
-          style={{ background: "#2dbe8f" }}
+          style={{ background: "#00d495" }}
         >
           <Calendar size={20} className="text-white" />
         </div>
         <div>
           <p
             className="text-xs font-semibold uppercase tracking-wider mb-1"
-            style={{ color: "#2dbe8f" }}
+            style={{ color: "#00d495" }}
           >
             Următoarea întâlnire
           </p>

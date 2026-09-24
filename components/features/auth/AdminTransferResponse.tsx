@@ -28,10 +28,10 @@ import {
 } from "@/lib/validation/password";
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm";
 
 const primaryButton =
-  "w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all hover:opacity-90 disabled:opacity-70";
+  "w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all hover:brightness-90 disabled:opacity-70";
 const secondaryButton =
   "w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold border border-border hover:bg-slate-50 transition-colors disabled:opacity-60";
 
@@ -55,8 +55,8 @@ function Notice({ title, children }: { title: string; children: React.ReactNode 
   return (
     <Card>
       <div className="text-center">
-        <AlertCircle size={32} className="mx-auto mb-3" style={{ color: "#ef4444" }} />
-        <h2 className="font-heading font-bold text-lg mb-2" style={{ color: "#162040" }}>
+        <AlertCircle size={32} className="mx-auto mb-3" style={{ color: "#b91c1c" }} />
+        <h2 className="font-heading font-bold text-lg mb-2" style={{ color: "#1c1c81" }}>
           {title}
         </h2>
         <div className="text-sm text-muted-foreground">{children}</div>
@@ -70,7 +70,7 @@ function ErrorBox({ message }: { message: string }) {
     <div
       role="alert"
       className="flex items-start gap-2.5 rounded-xl p-4 text-sm"
-      style={{ background: "#fff5f5", border: "1.5px solid #fca5a5", color: "#ef4444" }}
+      style={{ background: "#fff5f5", border: "1.5px solid #fca5a5", color: "#b91c1c" }}
     >
       <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
       {message}
@@ -106,8 +106,8 @@ export function AdminTransferResponse({
     return (
       <Card>
         <div className="text-center">
-          <CheckCircle size={32} className="mx-auto mb-3" style={{ color: "#2dbe8f" }} />
-          <h2 className="font-heading font-bold text-lg mb-2" style={{ color: "#162040" }}>
+          <CheckCircle size={32} className="mx-auto mb-3" style={{ color: "#007d58" }} />
+          <h2 className="font-heading font-bold text-lg mb-2" style={{ color: "#1c1c81" }}>
             Ai refuzat propunerea
           </h2>
           <p className="text-sm text-muted-foreground">
@@ -123,11 +123,11 @@ export function AdminTransferResponse({
   const summary = (
     <div className="space-y-4 text-sm" style={{ color: "#334155" }}>
       <p>
-        <strong style={{ color: "#162040" }}>{proposer}</strong> te propune administrator al
-        organizației <strong style={{ color: "#162040" }}>{preview.ongName}</strong>.
+        <strong style={{ color: "#1c1c81" }}>{proposer}</strong> te propune administrator al
+        organizației <strong style={{ color: "#1c1c81" }}>{preview.ongName}</strong>.
       </p>
       <div className="rounded-xl border border-border bg-slate-50 px-4 py-3">
-        <p className="font-semibold mb-1.5" style={{ color: "#162040" }}>
+        <p className="font-semibold mb-1.5" style={{ color: "#1c1c81" }}>
           Dacă accepți
         </p>
         <ul className="list-disc pl-5 space-y-1">
@@ -164,7 +164,7 @@ export function AdminTransferResponse({
           <p className="text-sm text-muted-foreground">
             Autentifică-te cu contul pe care ai primit emailul pentru a răspunde.
           </p>
-          <Link href={loginPathFor(returnHere)} className={primaryButton} style={{ background: "#2dbe8f" }}>
+          <Link href={loginPathFor(returnHere)} className={primaryButton} style={{ background: "#00d495" }}>
             Autentifică-te pentru a răspunde
           </Link>
         </div>
@@ -206,7 +206,7 @@ function SwitchAccountButton({ returnHere }: { returnHere: string }) {
         })
       }
       className={secondaryButton}
-      style={{ color: "#162040" }}
+      style={{ color: "#1c1c81" }}
     >
       {isPending && <Loader2 size={16} className="animate-spin" />}
       Deconectează-te și intră cu contul corect
@@ -279,7 +279,7 @@ function ExistingAccountAnswer({ token, onDeclined }: { token: string; onDecline
         type="button"
         onClick={() => setConfirming(true)}
         className={primaryButton}
-        style={{ background: "#2dbe8f" }}
+        style={{ background: "#00d495" }}
       >
         Acceptă
       </button>
@@ -358,7 +358,7 @@ function NewAccountAnswer({ token, onDeclined }: { token: string; onDeclined: ()
           {...register("password")}
         />
         {errors.password && (
-          <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+          <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
             {errors.password.message}
           </p>
         )}
@@ -376,13 +376,13 @@ function NewAccountAnswer({ token, onDeclined }: { token: string; onDeclined: ()
           {...register("confirmedPassword")}
         />
         {errors.confirmedPassword && (
-          <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+          <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
             {errors.confirmedPassword.message}
           </p>
         )}
       </div>
       <div className="space-y-3">
-        <button type="submit" disabled={isSubmitting} className={primaryButton} style={{ background: "#2dbe8f" }}>
+        <button type="submit" disabled={isSubmitting} className={primaryButton} style={{ background: "#00d495" }}>
           {isSubmitting && <Loader2 size={16} className="animate-spin" />}
           {isSubmitting ? "Se activează..." : "Setează parola și acceptă"}
         </button>

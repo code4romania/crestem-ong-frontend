@@ -143,7 +143,7 @@ export function MediaLibrary({
     <div>
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+          <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
             Bibliotecă media
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -174,7 +174,7 @@ export function MediaLibrary({
             type="button"
             onClick={open}
             disabled={isUploading}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#2dbe8f] px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#00d495] px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:brightness-90 disabled:opacity-60"
           >
             <Plus size={15} />
             {isUploading ? "Se încarcă…" : "Încarcă fișier"}
@@ -184,10 +184,10 @@ export function MediaLibrary({
 
       {selectMode && (
         <div className="mb-4 flex flex-wrap items-center gap-3 rounded-xl border border-border bg-slate-50 px-4 py-3">
-          <label className="flex items-center gap-2 text-sm font-semibold text-[#162040]">
+          <label className="flex items-center gap-2 text-sm font-semibold text-[#1c1c81]">
             <input
               type="checkbox"
-              className="h-4 w-4 rounded border-border accent-[#2dbe8f]"
+              className="h-4 w-4 rounded border-border accent-[#007d58]"
               checked={
                 initial.data.length > 0 && selected.size === initial.data.length
               }
@@ -207,8 +207,8 @@ export function MediaLibrary({
             />
             Selectează tot
           </label>
-          <span className="text-sm text-[#94a3b8]">·</span>
-          <span className="text-sm font-semibold text-[#162040]">
+          <span className="text-sm text-[#5b6779]">·</span>
+          <span className="text-sm font-semibold text-[#1c1c81]">
             {selected.size} selectate
           </span>
           <button
@@ -336,7 +336,7 @@ function PagerLink({
       <span
         aria-disabled="true"
         className="rounded-lg border border-border px-3 py-2 text-sm opacity-40"
-        style={{ color: "#94a3b8" }}
+        style={{ color: "#5b6779" }}
       >
         {children}
       </span>

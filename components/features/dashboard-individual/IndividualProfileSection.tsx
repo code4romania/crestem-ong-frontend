@@ -14,7 +14,7 @@ export function IndividualProfileSection({
         <div>
           <h1
             className="text-2xl font-heading font-extrabold"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             Profilul meu
           </h1>

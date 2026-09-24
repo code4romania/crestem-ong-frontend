@@ -73,7 +73,7 @@ export function usePersonDialog(people: Person[]) {
             type="button"
             onClick={close}
             aria-label="Închide"
-            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#162040] shadow-sm ring-1 ring-border transition-colors hover:bg-slate-100"
+            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#1c1c81] shadow-sm ring-1 ring-border transition-colors hover:bg-slate-100"
           >
             <X size={20} />
           </button>
@@ -90,19 +90,19 @@ export function usePersonDialog(people: Person[]) {
           <div className="p-6 sm:p-8">
             <h3
               id="person-dialog-title"
-              className="font-heading text-2xl font-extrabold text-[#162040] wrap-break-word"
+              className="font-heading text-2xl font-extrabold text-[#1c1c81] wrap-break-word"
             >
               {current.nume}
             </h3>
 
             {current.rol ? (
-              <p className="mt-1 text-sm font-semibold text-[#2dbe8f] wrap-break-word">
+              <p className="mt-1 text-sm font-semibold text-[#007d58] wrap-break-word">
                 {current.rol}
               </p>
             ) : null}
 
             {current.organizatie ? (
-              <p className="mt-0.5 text-sm text-[#64748b] wrap-break-word">
+              <p className="mt-0.5 text-sm text-[#5b6779] wrap-break-word">
                 {current.organizatie}
               </p>
             ) : null}
@@ -113,7 +113,7 @@ export function usePersonDialog(people: Person[]) {
                   <span
                     key={index}
                     className="rounded-full px-2.5 py-1 text-xs font-medium wrap-break-word"
-                    style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
+                    style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
                   >
                     {tag}
                   </span>

@@ -28,7 +28,7 @@ export function MentoredOngsCard({
                   aria-hidden="true"
                   className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 bg-secondary"
                 >
-                  <Building2 size={16} className="text-accent" />
+                  <Building2 size={16} className="text-accent-strong" />
                 </span>
                 <p className="text-sm font-semibold text-primary truncate">
                   {ong.name}

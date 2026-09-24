@@ -40,13 +40,13 @@ export function ReportMembersTable({
     <div className="bg-white rounded-xl border border-border overflow-hidden">
       <div className="px-6 py-4 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <h2 className="font-bold text-base" style={{ color: "#162040" }}>
+          <h2 className="font-bold text-base" style={{ color: "#1c1c81" }}>
             Utilizatori invitați
           </h2>
           {invited.length > 0 && (
             <span
               className="text-xs px-2.5 py-1 rounded-full font-semibold"
-              style={{ background: "#f0faf6", color: "#2dbe8f" }}
+              style={{ background: "#e5f9e5", color: "#007d58" }}
             >
               {completedCount} / {invited.length} completat
             </span>
@@ -57,7 +57,7 @@ export function ReportMembersTable({
             type="button"
             onClick={() => setAdding(true)}
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-white transition-opacity hover:opacity-90"
-            style={{ background: "#162040" }}
+            style={{ background: "#1c1c81" }}
           >
             <Plus size={13} /> Adaugă utilizatori
           </button>
@@ -82,7 +82,7 @@ export function ReportMembersTable({
                   <th
                     key={label}
                     className={`px-5 py-3 text-xs font-semibold uppercase tracking-wider ${align}`}
-                    style={{ color: "#94a3b8" }}
+                    style={{ color: "#5b6779" }}
                   >
                     {label}
                   </th>
@@ -102,7 +102,7 @@ export function ReportMembersTable({
                     className="border-b border-border last:border-0 hover:bg-slate-50 transition-colors"
                   >
                     <td className="px-5 py-3.5">
-                      <p className="font-semibold" style={{ color: "#162040" }}>
+                      <p className="font-semibold" style={{ color: "#1c1c81" }}>
                         {entry.user?.nume ?? "—"}
                       </p>
                       <p className="text-xs text-muted-foreground">
@@ -123,7 +123,7 @@ export function ReportMembersTable({
                     </td>
                     <td
                       className="px-5 py-3.5 text-center"
-                      style={{ color: "#64748b" }}
+                      style={{ color: "#5b6779" }}
                     >
                       {entry.completedAt
                         ? formatDate(entry.completedAt.slice(0, 10))

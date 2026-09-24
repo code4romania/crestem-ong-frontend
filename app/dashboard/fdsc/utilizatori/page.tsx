@@ -51,7 +51,7 @@ export default async function Page({ searchParams }: PageProps) {
         <div>
           <h1
             className="text-2xl font-heading font-extrabold"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             Managementul utilizatorilor
           </h1>

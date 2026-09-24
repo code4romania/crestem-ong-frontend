@@ -52,7 +52,7 @@ export function EvaluationDetailContent({
   return (
     <>
       <div className="mb-6">
-        <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+        <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
           {evaluation.name}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -63,7 +63,7 @@ export function EvaluationDetailContent({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div className="bg-white rounded-xl border border-border p-5">
           <p className="text-xs mb-2 text-muted-foreground">Perioadă de completare</p>
-          <p className="text-3xl font-extrabold font-heading" style={{ color: "#162040" }}>
+          <p className="text-3xl font-extrabold font-heading" style={{ color: "#1c1c81" }}>
             {periodDays != null ? `${periodDays} ${periodDays === 1 ? "zi" : "zile"}` : independentPeriod}
           </p>
           <p className="text-xs mt-1 text-muted-foreground">
@@ -72,14 +72,14 @@ export function EvaluationDetailContent({
         </div>
         <div className="bg-white rounded-xl border border-border p-5">
           <p className="text-xs mb-2 text-muted-foreground">Total completări</p>
-          <p className="text-3xl font-extrabold font-heading" style={{ color: "#162040" }}>
+          <p className="text-3xl font-extrabold font-heading" style={{ color: "#1c1c81" }}>
             {evaluation.completedCount}
           </p>
           <p className="text-xs mt-1 text-muted-foreground">din {evaluation.invitedCount} invitați</p>
         </div>
         <div className="bg-white rounded-xl border border-border p-5">
           <p className="text-xs mb-2 text-muted-foreground">Scor total</p>
-          <p className="text-3xl font-extrabold font-heading" style={{ color: "#162040" }}>
+          <p className="text-3xl font-extrabold font-heading" style={{ color: "#1c1c81" }}>
             {evaluation.scores.overall != null ? `${evaluation.scores.overall}%` : "—"}
           </p>
           <p className="text-xs mt-1 text-muted-foreground">
@@ -90,17 +90,17 @@ export function EvaluationDetailContent({
 
       <div className="bg-white rounded-xl border border-border p-6 mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold text-base" style={{ color: "#162040" }}>
+          <h2 className="font-bold text-base" style={{ color: "#1c1c81" }}>
             Progres completare matrice
           </h2>
-          <span className="text-2xl font-extrabold font-heading" style={{ color: "#2dbe8f" }}>
+          <span className="text-2xl font-extrabold font-heading" style={{ color: "#007d58" }}>
             {completion}%
           </span>
         </div>
         <div className="h-3 rounded-full overflow-hidden mb-2" style={{ background: "#e2e8f0" }}>
           <div
             className="h-full rounded-full transition-all"
-            style={{ width: `${completion}%`, background: "linear-gradient(90deg, #2dbe8f, #1a9e77)" }}
+            style={{ width: `${completion}%`, background: "linear-gradient(90deg, #00d495, #1a9e77)" }}
           />
         </div>
         <p className="text-xs text-muted-foreground">

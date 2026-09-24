@@ -16,10 +16,10 @@ import type { BlockFieldErrors } from "../../types";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
 const sectionClass = "rounded-xl border border-border p-4 space-y-4";
-const sectionTitleClass = "text-sm font-bold text-[#162040]";
-const errorClass = "text-xs text-[#ef4444]";
+const sectionTitleClass = "text-sm font-bold text-[#1c1c81]";
+const errorClass = "text-xs text-[#b91c1c]";
 const iconButtonClass =
   "rounded-lg border border-border p-1.5 text-[#475569] hover:border-slate-300 disabled:opacity-40";
 
@@ -80,7 +80,7 @@ export function ContactEditor({
 
         <div>
           <span className={labelClass}>
-            Subiecte <span className="text-[#ef4444]">*</span>
+            Subiecte <span className="text-[#b91c1c]">*</span>
           </span>
           <div className="space-y-2">
             {value.subjects.map((subject, index) => (
@@ -127,7 +127,7 @@ export function ContactEditor({
           <button
             type="button"
             onClick={() => set({ subjects: [...value.subjects, ""] })}
-            className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-[#2563eb] hover:underline"
+            className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-[#5656e5] hover:underline"
           >
             <Plus size={16} /> Adaugă subiect
           </button>
@@ -232,7 +232,7 @@ export function ContactEditor({
 
               <div>
                 <label htmlFor={`ct-info-value-${index}`} className={labelClass}>
-                  Valoare <span className="text-[#ef4444]">*</span>
+                  Valoare <span className="text-[#b91c1c]">*</span>
                 </label>
                 <input
                   id={`ct-info-value-${index}`}
@@ -249,7 +249,7 @@ export function ContactEditor({
         <button
           type="button"
           onClick={() => set({ infoItems: [...value.infoItems, { ...EMPTY_INFO_ITEM }] })}
-          className="inline-flex items-center gap-1 text-sm font-semibold text-[#2563eb] hover:underline"
+          className="inline-flex items-center gap-1 text-sm font-semibold text-[#5656e5] hover:underline"
         >
           <Plus size={16} /> Adaugă rând
         </button>
@@ -351,7 +351,7 @@ export function ContactEditor({
 
               <div>
                 <label htmlFor={`ct-social-url-${index}`} className={labelClass}>
-                  Link <span className="text-[#ef4444]">*</span>
+                  Link <span className="text-[#b91c1c]">*</span>
                 </label>
                 <input
                   id={`ct-social-url-${index}`}
@@ -368,7 +368,7 @@ export function ContactEditor({
         <button
           type="button"
           onClick={() => set({ socials: [...value.socials, { ...EMPTY_SOCIAL }] })}
-          className="inline-flex items-center gap-1 text-sm font-semibold text-[#2563eb] hover:underline"
+          className="inline-flex items-center gap-1 text-sm font-semibold text-[#5656e5] hover:underline"
         >
           <Plus size={16} /> Adaugă rețea
         </button>
@@ -380,7 +380,7 @@ export function ContactEditor({
         <p className={sectionTitleClass}>Hartă</p>
 
         <div className="flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3">
-          <span className="block text-sm font-semibold text-[#162040]">
+          <span className="block text-sm font-semibold text-[#1c1c81]">
             Afișează harta
           </span>
           <Toggle
@@ -407,7 +407,7 @@ export function ContactEditor({
 
             <div>
               <label htmlFor="ct-map-address" className={labelClass}>
-                Adresă <span className="text-[#ef4444]">*</span>
+                Adresă <span className="text-[#b91c1c]">*</span>
               </label>
               <input
                 id="ct-map-address"

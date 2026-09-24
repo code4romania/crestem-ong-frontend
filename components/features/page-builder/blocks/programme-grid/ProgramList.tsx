@@ -22,8 +22,8 @@ import { EMPTY_PROGRAM, type Program } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 /**
  * The "Programe" repeater for Programme Grid. Master-detail flow cloned from
@@ -123,12 +123,12 @@ export function ProgramList({
         <button
           type="button"
           onClick={closeForm}
-          className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-[#2563eb] hover:underline"
+          className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-[#5656e5] hover:underline"
         >
           <ChevronLeft size={16} /> Înapoi la lista de programe
         </button>
 
-        <p className="mb-4 text-sm font-bold text-[#162040]">
+        <p className="mb-4 text-sm font-bold text-[#1c1c81]">
           {editing === value.length ? "Program nou" : "Editează programul"}
         </p>
 
@@ -160,14 +160,14 @@ export function ProgramList({
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isUploading}
-                      className="text-sm font-semibold text-[#2563eb] hover:opacity-80 disabled:opacity-60"
+                      className="text-sm font-semibold text-[#5656e5] hover:opacity-80 disabled:opacity-60"
                     >
                       {isUploading ? "Se încarcă..." : "Schimbă imaginea"}
                     </button>
                     <button
                       type="button"
                       onClick={() => setField({ imagine: null })}
-                      className="text-sm font-semibold text-[#ef4444] hover:opacity-80"
+                      className="text-sm font-semibold text-[#b91c1c] hover:opacity-80"
                     >
                       Elimină imaginea
                     </button>
@@ -179,7 +179,7 @@ export function ProgramList({
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
-                className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040] disabled:opacity-60"
+                className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81] disabled:opacity-60"
               >
                 {isUploading ? (
                   <Loader2 size={20} className="animate-spin" />
@@ -199,7 +199,7 @@ export function ProgramList({
             <button
               type="button"
               onClick={() => setPickerOpen(true)}
-              className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+              className="mt-2 text-xs font-semibold text-[#5656e5] hover:opacity-80"
             >
               Alege din bibliotecă
             </button>
@@ -224,7 +224,7 @@ export function ProgramList({
           {draft.imagine ? (
             <div>
               <label htmlFor="pg-prog-alt" className={labelClass}>
-                Text alternativ imagine <span className="text-[#ef4444]">*</span>
+                Text alternativ imagine <span className="text-[#b91c1c]">*</span>
               </label>
               <input
                 id="pg-prog-alt"
@@ -244,7 +244,7 @@ export function ProgramList({
 
           <div>
             <label htmlFor="pg-prog-titlu" className={labelClass}>
-              Titlu <span className="text-[#ef4444]">*</span>
+              Titlu <span className="text-[#b91c1c]">*</span>
             </label>
             <input
               id="pg-prog-titlu"
@@ -322,7 +322,7 @@ export function ProgramList({
             type="button"
             onClick={saveDraft}
             disabled={!canSave}
-            className="rounded-xl bg-[#2563eb] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-xl bg-[#5656e5] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-40"
           >
             Salvează programul
           </button>
@@ -337,11 +337,11 @@ export function ProgramList({
         <span className="text-xs font-semibold uppercase tracking-wide text-[#475569]">
           Programe
         </span>
-        <span className="text-xs text-[#94a3b8]">{value.length} adăugate</span>
+        <span className="text-xs text-[#5b6779]">{value.length} adăugate</span>
       </div>
 
       {value.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-[#94a3b8]">
+        <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-[#5b6779]">
           Niciun program adăugat încă.
         </p>
       ) : (
@@ -358,10 +358,10 @@ export function ProgramList({
                   onClick={() => openExisting(index)}
                   className="flex min-w-0 flex-1 items-center gap-3 text-left"
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#eff6ff] text-[#2563eb]">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#dcfafb] text-[#5656e5]">
                     <Icon size={16} />
                   </span>
-                  <span className="truncate text-sm font-semibold text-[#162040]">
+                  <span className="truncate text-sm font-semibold text-[#1c1c81]">
                     {program.titlu || "fără titlu"}
                   </span>
                 </button>
@@ -388,7 +388,7 @@ export function ProgramList({
                     type="button"
                     onClick={() => remove(index)}
                     aria-label="Elimină programul"
-                    className="rounded-lg p-1.5 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
+                    className="rounded-lg p-1.5 text-[#b91c1c] transition-colors hover:bg-[#fef2f2]"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -399,12 +399,12 @@ export function ProgramList({
         </ul>
       )}
 
-      {error && <p className="mt-1 text-xs text-[#ef4444]">{error}</p>}
+      {error && <p className="mt-1 text-xs text-[#b91c1c]">{error}</p>}
 
       <button
         type="button"
         onClick={openNew}
-        className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040]"
+        className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81]"
       >
         <Plus size={16} /> Adaugă program
       </button>

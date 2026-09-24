@@ -10,7 +10,7 @@ import { EMPTY_PARTNER, type Partner } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
 
 /**
  * The "Parteneri" repeater. Master-detail flow cloned from Feature Cards'
@@ -73,12 +73,12 @@ export function PartnerList({
         <button
           type="button"
           onClick={closeForm}
-          className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-[#2563eb] hover:underline"
+          className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-[#5656e5] hover:underline"
         >
           <ChevronLeft size={16} /> Înapoi la lista de parteneri
         </button>
 
-        <p className="mb-4 text-sm font-bold text-[#162040]">
+        <p className="mb-4 text-sm font-bold text-[#1c1c81]">
           {editing === value.length ? "Partener nou" : "Editează partenerul"}
         </p>
 
@@ -95,7 +95,7 @@ export function PartnerList({
 
           <div>
             <label htmlFor="partner-nume" className={labelClass}>
-              Nume <span className="text-[#ef4444]">*</span>
+              Nume <span className="text-[#b91c1c]">*</span>
             </label>
             <input
               id="partner-nume"
@@ -123,7 +123,7 @@ export function PartnerList({
             type="button"
             onClick={saveDraft}
             disabled={!draft.nume.trim()}
-            className="rounded-xl bg-[#2563eb] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-xl bg-[#5656e5] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-40"
           >
             Salvează partenerul
           </button>
@@ -138,11 +138,11 @@ export function PartnerList({
         <span className="text-xs font-semibold uppercase tracking-wide text-[#475569]">
           Parteneri
         </span>
-        <span className="text-xs text-[#94a3b8]">{value.length} adăugați</span>
+        <span className="text-xs text-[#5b6779]">{value.length} adăugați</span>
       </div>
 
       {value.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-[#94a3b8]">
+        <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-[#5b6779]">
           Niciun partener adăugat încă.
         </p>
       ) : (
@@ -169,11 +169,11 @@ export function PartnerList({
                       />
                     </span>
                   ) : (
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#eff6ff] text-[#2563eb]">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#dcfafb] text-[#5656e5]">
                       <Icon size={16} />
                     </span>
                   )}
-                  <span className="truncate text-sm font-semibold text-[#162040]">
+                  <span className="truncate text-sm font-semibold text-[#1c1c81]">
                     {partner.nume || "fără nume"}
                   </span>
                 </button>
@@ -200,7 +200,7 @@ export function PartnerList({
                     type="button"
                     onClick={() => remove(index)}
                     aria-label="Elimină partenerul"
-                    className="rounded-lg p-1.5 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
+                    className="rounded-lg p-1.5 text-[#b91c1c] transition-colors hover:bg-[#fef2f2]"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -211,12 +211,12 @@ export function PartnerList({
         </ul>
       )}
 
-      {error && <p className="mt-1 text-xs text-[#ef4444]">{error}</p>}
+      {error && <p className="mt-1 text-xs text-[#b91c1c]">{error}</p>}
 
       <button
         type="button"
         onClick={openNew}
-        className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040]"
+        className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81]"
       >
         <Plus size={16} /> Adaugă partener
       </button>

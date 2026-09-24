@@ -34,7 +34,7 @@ export default async function OngProfilPage() {
         <div>
           <h1
             className="text-2xl font-heading font-extrabold"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             Profilul meu
           </h1>
@@ -82,7 +82,7 @@ export default async function OngProfilPage() {
             ) : (
               <div
                 className="w-16 h-16 rounded-xl flex items-center justify-center font-heading font-extrabold text-white text-xl"
-                style={{ background: "#162040" }}
+                style={{ background: "#1c1c81" }}
               >
                 {ong.name.slice(0, 2).toUpperCase()}
               </div>
@@ -90,7 +90,7 @@ export default async function OngProfilPage() {
             <div>
               <h2
                 className="font-heading font-extrabold text-xl"
-                style={{ color: "#162040" }}
+                style={{ color: "#1c1c81" }}
               >
                 {ong.name}
               </h2>
@@ -105,7 +105,7 @@ export default async function OngProfilPage() {
             <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
               Județ / Localitate
             </dt>
-            <dd className="font-semibold" style={{ color: "#162040" }}>
+            <dd className="font-semibold" style={{ color: "#1c1c81" }}>
               {ong.judet?.nume ?? "—"}
               {ong.localitate ? `, ${ong.localitate.nume}` : ""}
             </dd>
@@ -114,7 +114,7 @@ export default async function OngProfilPage() {
             <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
               Website
             </dt>
-            <dd className="font-semibold" style={{ color: "#162040" }}>
+            <dd className="font-semibold" style={{ color: "#1c1c81" }}>
               {ong.website ?? "—"}
             </dd>
           </div>
@@ -122,7 +122,7 @@ export default async function OngProfilPage() {
             <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
               Social media
             </dt>
-            <dd className="font-semibold" style={{ color: "#162040" }}>
+            <dd className="font-semibold" style={{ color: "#1c1c81" }}>
               {ong.socialMedia ?? "—"}
             </dd>
           </div>
@@ -130,7 +130,7 @@ export default async function OngProfilPage() {
             <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
               Domeniu principal
             </dt>
-            <dd className="font-semibold" style={{ color: "#162040" }}>
+            <dd className="font-semibold" style={{ color: "#1c1c81" }}>
               {ong.domeniuPrincipal?.name ?? "—"}
             </dd>
           </div>
@@ -138,7 +138,7 @@ export default async function OngProfilPage() {
             <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
               Domeniu secundar
             </dt>
-            <dd className="font-semibold" style={{ color: "#162040" }}>
+            <dd className="font-semibold" style={{ color: "#1c1c81" }}>
               {ong.domeniuSecundar?.name ?? "—"}
             </dd>
           </div>
@@ -146,7 +146,7 @@ export default async function OngProfilPage() {
             <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
               Cuvinte cheie
             </dt>
-            <dd className="font-semibold" style={{ color: "#162040" }}>
+            <dd className="font-semibold" style={{ color: "#1c1c81" }}>
               {ong.cuvinteCheie ?? "—"}
             </dd>
           </div>
@@ -157,7 +157,7 @@ export default async function OngProfilPage() {
             <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
               Descriere
             </dt>
-            <dd className="text-sm font-semibold" style={{ color: "#162040" }}>
+            <dd className="text-sm font-semibold" style={{ color: "#1c1c81" }}>
               {ong.descriere}
             </dd>
           </dl>
@@ -173,7 +173,7 @@ export default async function OngProfilPage() {
             <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
               Nume complet
             </dt>
-            <dd className="font-semibold" style={{ color: "#162040" }}>
+            <dd className="font-semibold" style={{ color: "#1c1c81" }}>
               {ong.contact.nume}
             </dd>
           </div>
@@ -181,7 +181,7 @@ export default async function OngProfilPage() {
             <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
               Email
             </dt>
-            <dd className="font-semibold" style={{ color: "#162040" }}>
+            <dd className="font-semibold" style={{ color: "#1c1c81" }}>
               {ong.contact.email}
             </dd>
           </div>
@@ -189,7 +189,7 @@ export default async function OngProfilPage() {
             <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
               Telefon
             </dt>
-            <dd className="font-semibold" style={{ color: "#162040" }}>
+            <dd className="font-semibold" style={{ color: "#1c1c81" }}>
               {ong.contact.telefon}
             </dd>
           </div>
@@ -197,7 +197,7 @@ export default async function OngProfilPage() {
             <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
               Membru din
             </dt>
-            <dd className="font-semibold" style={{ color: "#162040" }}>
+            <dd className="font-semibold" style={{ color: "#1c1c81" }}>
               {user ? formatJoinDate(user.createdAt) : "—"}
             </dd>
           </div>

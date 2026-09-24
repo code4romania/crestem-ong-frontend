@@ -79,11 +79,11 @@ export function ContactForm({
         {/* Decorativ: mesajul de dedesubt spune deja ce s-a întâmplat. */}
         <span
           aria-hidden
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-[#eafaf4] text-[#2dbe8f]"
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-[#eafaf4] text-[#007d58]"
         >
           <CheckCircle2 size={28} />
         </span>
-        <h2 className="mt-4 font-heading text-2xl font-extrabold text-[#162040]">Mulțumim!</h2>
+        <h2 className="mt-4 font-heading text-2xl font-extrabold text-[#1c1c81]">Mulțumim!</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Mesajul tău a fost trimis. Revenim cu un răspuns cât de curând.
         </p>
@@ -92,8 +92,8 @@ export function ContactForm({
   }
 
   const field =
-    "w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#2dbe8f] focus:ring-2 focus:ring-[#2dbe8f]/20";
-  const label = "mb-1.5 block text-sm font-semibold text-[#162040]";
+    "w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#007d58] focus:ring-2 focus:ring-[#00d495]/20";
+  const label = "mb-1.5 block text-sm font-semibold text-[#1c1c81]";
 
   return (
     <form
@@ -101,7 +101,7 @@ export function ContactForm({
       onSubmit={onSubmit}
       className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8"
     >
-      <h2 className="font-heading text-2xl font-extrabold text-[#162040]">{title}</h2>
+      <h2 className="font-heading text-2xl font-extrabold text-[#1c1c81]">{title}</h2>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <div>
@@ -246,7 +246,7 @@ export function ContactForm({
         <label htmlFor={`${ids}-consent`} className="text-sm text-muted-foreground">
           Sunt de acord cu{" "}
           {privacyUrl ? (
-            <a href={privacyUrl} className="text-[#2dbe8f] underline">
+            <a href={privacyUrl} className="text-[#007d58] underline">
               politica de confidențialitate
             </a>
           ) : (
@@ -264,7 +264,7 @@ export function ContactForm({
       <button
         type="submit"
         disabled={sending || isPreview || subjects.length === 0}
-        className="mt-5 w-full rounded-xl bg-[#162040] py-3.5 font-heading font-bold text-white disabled:opacity-60"
+        className="mt-5 w-full rounded-xl bg-[#1c1c81] py-3.5 font-heading font-bold text-white disabled:opacity-60"
       >
         {sending ? "Se trimite..." : "Trimite mesajul"}
       </button>

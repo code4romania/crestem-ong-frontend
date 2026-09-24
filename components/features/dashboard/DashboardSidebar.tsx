@@ -313,7 +313,7 @@ export function DashboardSidebar({
                       className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                       style={
                         active
-                          ? { background: "#162040", color: "white" }
+                          ? { background: "#1c1c81", color: "white" }
                           : { color: "#334155" }
                       }
                     >
@@ -331,7 +331,7 @@ export function DashboardSidebar({
             <div
               className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold text-white shrink-0"
               style={{
-                background: variant === "individual" ? "#2563eb" : "#2dbe8f",
+                background: variant === "individual" ? "#5656e5" : "#00d495",
               }}
             >
               {initial}
@@ -339,7 +339,7 @@ export function DashboardSidebar({
             <div className="min-w-0">
               <p
                 className="text-sm font-semibold truncate"
-                style={{ color: "#162040" }}
+                style={{ color: "#1c1c81" }}
               >
                 {userName}
               </p>
@@ -364,13 +364,13 @@ export function DashboardSidebar({
             onClick={handleLogout}
             disabled={loggingOut}
             className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted disabled:opacity-60"
-            style={{ color: "#ef4444" }}
+            style={{ color: "#b91c1c" }}
           >
             <LogOut size={16} />
             Deconectare
           </button>
           {logoutError && (
-            <p className="px-3 text-xs" style={{ color: "#ef4444" }}>
+            <p className="px-3 text-xs" style={{ color: "#b91c1c" }}>
               {logoutError}
             </p>
           )}

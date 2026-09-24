@@ -28,7 +28,7 @@ export function Embed({ data }: { data: EmbedData }) {
     <section>
       <div className="mx-auto max-w-3xl px-6 py-8">
         {titlu && (
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#94a3b8]">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#5b6779]">
             {titlu}
           </p>
         )}
@@ -48,7 +48,7 @@ export function Embed({ data }: { data: EmbedData }) {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2563eb] hover:opacity-80"
+          className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#5656e5] hover:opacity-80"
         >
           <ExternalLink size={14} aria-hidden />
           {host ? `Deschide ${host}` : "Deschide într-o filă nouă"}

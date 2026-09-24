@@ -10,7 +10,7 @@ import { VisibilityField } from "@/components/features/pages/VisibilityField";
 import { slugify } from "./slugify";
 
 export const inputClass =
-  "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#2dbe8f] focus:outline-none";
+  "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#007d58] focus:outline-none";
 
 export interface ContentEditorValue {
   titlu: string;
@@ -194,7 +194,7 @@ export function ContentEditorShell({
             type="button"
             onClick={onSave}
             disabled={pending}
-            className="rounded-xl bg-[#2dbe8f] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+            className="rounded-xl bg-[#00d495] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:brightness-90 disabled:opacity-60"
           >
             {saveLabel}
           </button>

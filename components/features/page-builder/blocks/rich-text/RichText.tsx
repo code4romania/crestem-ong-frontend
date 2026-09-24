@@ -30,7 +30,7 @@ export function RichText({ data }: { data: RichTextData }) {
               fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
               fontWeight: 800,
               lineHeight: 1.2,
-              color: "#162040",
+              color: "#1c1c81",
             }}
           >
             {titlu}

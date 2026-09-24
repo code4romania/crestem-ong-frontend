@@ -19,12 +19,12 @@ function CategoryCard({ category }: { category: Category }) {
     <div className="flex min-w-0 flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-border">
       <span
         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
-        style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
+        style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
       >
         <Icon size={20} />
       </span>
 
-      <h3 className="mt-4 min-w-0 text-lg font-semibold text-[#162040] wrap-break-word">
+      <h3 className="mt-4 min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word">
         {category.titlu}
       </h3>
 
@@ -39,7 +39,7 @@ function CategoryCard({ category }: { category: Category }) {
           {hasCount ? (
             <span
               className="rounded-lg px-2.5 py-1 text-xs font-medium"
-              style={{ background: "#f1f5f9", color: "#64748b" }}
+              style={{ background: "#f1f5f9", color: "#5b6779" }}
             >
               {category.numarResurse}{" "}
               {category.numarResurse === 1 ? "resursă" : "resurse"}
@@ -50,7 +50,7 @@ function CategoryCard({ category }: { category: Category }) {
             <Link
               href={category.href}
               className="ml-auto flex items-center gap-1 text-sm font-semibold wrap-break-word"
-              style={{ color: "#2dbe8f" }}
+              style={{ color: "#007d58" }}
             >
               Vezi resurse <ChevronRight size={15} className="shrink-0" />
             </Link>
@@ -79,7 +79,7 @@ export function CategoryGrid({ data }: { data: CategoryGridData }) {
                 fontSize: "clamp(2rem, 4vw, 2.75rem)",
                 fontWeight: 800,
                 lineHeight: 1.15,
-                color: "#162040",
+                color: "#1c1c81",
               }}
             >
               {data.titlu}

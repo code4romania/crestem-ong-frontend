@@ -11,7 +11,7 @@ interface LinkTarget {
 }
 
 const controlClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
 
 /**
  * Routes the app owns rather than the CMS. They have no page to point at, so
@@ -124,7 +124,7 @@ export function CtaTargetField<T extends LinkTarget>({
       )}
 
       {externalIncomplete && (
-        <p className="text-xs text-[#ef4444]">
+        <p className="text-xs text-[#b91c1c]">
           Scrie linkul complet, cu <span className="font-medium">https://</span> la început.
         </p>
       )}

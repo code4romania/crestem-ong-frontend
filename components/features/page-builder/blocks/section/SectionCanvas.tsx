@@ -39,8 +39,8 @@ const FUNDAL_LABEL: Record<SectionData["fundal"], string> = {
 
 const FUNDAL_DOT: Record<SectionData["fundal"], string> = {
   default: "#94a3b8",
-  light: "#2dbe8f",
-  accent: "#162040",
+  light: "#00d495",
+  accent: "#1c1c81",
   imagine: "#4f46e5",
 };
 
@@ -115,21 +115,21 @@ export function SectionCanvas({
           {...dragHandle?.attributes}
           {...(dragHandle?.listeners ?? {})}
           aria-label="Trage pentru reordonare"
-          className="shrink-0 cursor-grab touch-none text-[#94a3b8] transition-colors hover:text-[#64748b]"
+          className="shrink-0 cursor-grab touch-none text-[#5b6779] transition-colors hover:text-[#5b6779]"
         >
           <GripVertical size={16} aria-hidden="true" />
         </button>
-        <Layers size={16} className="shrink-0 text-[#64748b]" aria-hidden="true" />
+        <Layers size={16} className="shrink-0 text-[#5b6779]" aria-hidden="true" />
         <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-[#475569]">
           Section
         </span>
-        <span className="truncate text-sm text-[#94a3b8]">
+        <span className="truncate text-sm text-[#5b6779]">
           — {data.numeIntern || "nume intern"}
         </span>
         <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-[#475569] ring-1 ring-border">
           {countLabel(children.length)}
         </span>
-        <span className="flex shrink-0 items-center gap-1.5 text-xs text-[#94a3b8]">
+        <span className="flex shrink-0 items-center gap-1.5 text-xs text-[#5b6779]">
           <span
             className="h-2 w-2 rounded-full"
             style={{ background: FUNDAL_DOT[data.fundal] }}
@@ -142,7 +142,7 @@ export function SectionCanvas({
             <button
               type="button"
               onClick={actions.onEdit}
-              className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold text-[#2563eb] transition-colors hover:bg-[#eff6ff]"
+              className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold text-[#5656e5] transition-colors hover:bg-[#dcfafb]"
             >
               <Pencil size={14} /> Editează
             </button>
@@ -177,7 +177,7 @@ export function SectionCanvas({
                 type="button"
                 onClick={actions.onDelete}
                 aria-label="Șterge secțiunea"
-                className="rounded-lg p-1.5 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
+                className="rounded-lg p-1.5 text-[#b91c1c] transition-colors hover:bg-[#fef2f2]"
               >
                 <Trash2 size={15} />
               </button>
@@ -238,14 +238,14 @@ export function SectionCanvas({
             <button
               type="button"
               onClick={actions.onAddChild}
-              className="relative flex items-center gap-1.5 rounded-full border border-[#2563eb] bg-white px-3.5 py-1.5 text-sm font-semibold text-[#2563eb] transition-colors hover:bg-[#eff6ff]"
+              className="relative flex items-center gap-1.5 rounded-full border border-[#5656e5] bg-white px-3.5 py-1.5 text-sm font-semibold text-[#5656e5] transition-colors hover:bg-[#dcfafb]"
             >
               <Plus size={15} /> Adaugă bloc
             </button>
           </div>
 
           {children.length === 0 ? (
-            <p className="text-center text-sm text-[#94a3b8]">
+            <p className="text-center text-sm text-[#5b6779]">
               Această secțiune nu conține încă blocuri.
             </p>
           ) : null}

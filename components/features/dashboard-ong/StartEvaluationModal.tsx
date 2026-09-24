@@ -53,7 +53,7 @@ export function StartEvaluationModal({
       <div className="bg-white rounded-2xl w-full max-w-md max-h-[85vh] flex flex-col">
         <div className="px-6 py-5 border-b border-border flex items-start justify-between gap-4">
           <div>
-            <h2 id="start-evaluation-title" className="font-heading font-extrabold text-lg" style={{ color: "#162040" }}>
+            <h2 id="start-evaluation-title" className="font-heading font-extrabold text-lg" style={{ color: "#1c1c81" }}>
               Adaugă utilizatori la evaluare
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
@@ -64,7 +64,7 @@ export function StartEvaluationModal({
             type="button"
             onClick={onClose}
             className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors shrink-0"
-            style={{ color: "#94a3b8" }}
+            style={{ color: "#5b6779" }}
             aria-label="Închide"
           >
             <X size={16} />
@@ -82,7 +82,7 @@ export function StartEvaluationModal({
                   router.push("/dashboard/ong/utilizatori");
                 }}
                 className="px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors"
-                style={{ color: "#162040" }}
+                style={{ color: "#1c1c81" }}
               >
                 Invită utilizatori
               </button>
@@ -97,12 +97,12 @@ export function StartEvaluationModal({
                 >
                   <div
                     className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                    style={{ background: "#162040" }}
+                    style={{ background: "#1c1c81" }}
                   >
                     {member.nume.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium truncate" style={{ color: "#162040" }}>{member.nume}</p>
+                    <p className="text-sm font-medium truncate" style={{ color: "#1c1c81" }}>{member.nume}</p>
                     <p className="text-xs text-muted-foreground truncate">{member.email}</p>
                   </div>
                   <input
@@ -118,7 +118,7 @@ export function StartEvaluationModal({
         </div>
 
         {error && (
-          <p className="px-6 py-2 text-xs" style={{ color: "#ef4444" }}>
+          <p className="px-6 py-2 text-xs" style={{ color: "#b91c1c" }}>
             {error}
           </p>
         )}
@@ -137,8 +137,8 @@ export function StartEvaluationModal({
             type="button"
             onClick={handleSubmit}
             disabled={isPending || selected.size === 0}
-            className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:opacity-90"
-            style={{ background: "#2dbe8f" }}
+            className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:brightness-90"
+            style={{ background: "#00d495" }}
           >
             {isPending ? "Se pornește..." : "Începe evaluarea"}
           </button>

@@ -16,10 +16,10 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
-  neinceput: { bg: "#f8fafc", color: "#94a3b8" },
-  in_lucru: { bg: "#fefce8", color: "#ca8a04" },
-  completat: { bg: "#f0fdf4", color: "#16a34a" },
-  nefinalizat: { bg: "#fff5f5", color: "#dc2626" },
+  neinceput: { bg: "#f8fafc", color: "#5b6779" },
+  in_lucru: { bg: "#fefce8", color: "#a16207" },
+  completat: { bg: "#f0fdf4", color: "#15803d" },
+  nefinalizat: { bg: "#fff5f5", color: "#b91c1c" },
 };
 
 const STATUS_ICONS: Record<string, typeof CheckCircle2> = {
@@ -64,7 +64,7 @@ export function OrgEvaluationsTable({
               <th
                 key={h}
                 className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                style={{ color: "#94a3b8" }}
+                style={{ color: "#5b6779" }}
               >
                 {h}
               </th>
@@ -88,7 +88,7 @@ export function OrgEvaluationsTable({
               >
                 <td
                   className="px-5 py-3.5 font-semibold"
-                  style={{ color: "#162040" }}
+                  style={{ color: "#1c1c81" }}
                 >
                   {evaluation.name ?? "Evaluare"}
                 </td>
@@ -96,12 +96,12 @@ export function OrgEvaluationsTable({
                   {evaluation.report?.phases[0]?.program?.name ??
                     "Independentă"}
                 </td>
-                <td className="px-5 py-3.5" style={{ color: "#64748b" }}>
+                <td className="px-5 py-3.5" style={{ color: "#5b6779" }}>
                   {formatDate(evaluation.completedAt)}
                 </td>
                 <td
                   className="px-5 py-3.5 font-semibold"
-                  style={{ color: "#162040" }}
+                  style={{ color: "#1c1c81" }}
                 >
                   {evaluation.scores.overall != null
                     ? `${evaluation.scores.overall}%`
@@ -124,7 +124,7 @@ export function OrgEvaluationsTable({
                   <Link
                     href={`/dashboard/${ongDocumentId}/evaluari/${evaluation.documentId}`}
                     className="text-xs font-semibold hover:underline"
-                    style={{ color: "#2dbe8f" }}
+                    style={{ color: "#007d58" }}
                   >
                     {isDone ? "Vezi evaluarea →" : "Continuă evaluarea →"}
                   </Link>

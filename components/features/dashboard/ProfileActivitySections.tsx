@@ -12,13 +12,13 @@ export async function ProfileActivitySections() {
     <>
       <div className="bg-white rounded-xl border border-border overflow-hidden mb-6">
         <div className="px-5 py-4 border-b border-border flex items-center gap-2">
-          <BookOpen size={16} style={{ color: "#162040" }} />
-          <h3 className="font-heading font-bold" style={{ color: "#162040" }}>
+          <BookOpen size={16} style={{ color: "#1c1c81" }} />
+          <h3 className="font-heading font-bold" style={{ color: "#1c1c81" }}>
             Articole citite din Bibliotecă
           </h3>
           <span
             className="ml-auto px-2.5 py-0.5 rounded-full text-xs font-bold"
-            style={{ background: "#eff6ff", color: "#2563eb" }}
+            style={{ background: "#dcfafb", color: "#5656e5" }}
           >
             {reads.length}
           </span>
@@ -65,7 +65,7 @@ export async function ProfileActivitySections() {
                           <Link
                             href={read.cale}
                             className="font-medium hover:underline"
-                            style={{ color: "#162040" }}
+                            style={{ color: "#1c1c81" }}
                           >
                             {read.titlu}
                           </Link>
@@ -100,13 +100,13 @@ export async function ProfileActivitySections() {
       {/* E-learning: module not implemented yet, hidden until it ships.
       <div className="bg-white rounded-xl border border-border overflow-hidden mb-6">
         <div className="px-5 py-4 border-b border-border flex items-center gap-2">
-          <GraduationCap size={16} style={{ color: "#162040" }} />
-          <h3 className="font-heading font-bold" style={{ color: "#162040" }}>
+          <GraduationCap size={16} style={{ color: "#1c1c81" }} />
+          <h3 className="font-heading font-bold" style={{ color: "#1c1c81" }}>
             Cursuri parcurse
           </h3>
           <span
             className="ml-auto px-2.5 py-0.5 rounded-full text-xs font-bold"
-            style={{ background: "#f0faf6", color: "#2dbe8f" }}
+            style={{ background: "#e5f9e5", color: "#007d58" }}
           >
             0
           </span>

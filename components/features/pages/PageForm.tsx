@@ -179,7 +179,7 @@ export function PageForm({
 
   return (
     <div className="mx-auto max-w-6xl">
-      <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+      <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
         {page ? "Editează pagina" : "Creează pagină nouă"}
       </h1>
       <p className="mb-6 mt-1 text-sm text-muted-foreground">

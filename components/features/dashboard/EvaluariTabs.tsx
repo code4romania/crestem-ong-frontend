@@ -33,8 +33,8 @@ export function EvaluariTabs({ query }: { query: EvaluariQuery }) {
             className="px-4 py-2.5 text-sm font-semibold -mb-px border-b-2 transition-colors"
             style={
               isActive
-                ? { borderColor: "#2dbe8f", color: "#162040" }
-                : { borderColor: "transparent", color: "#94a3b8" }
+                ? { borderColor: "#007d58", color: "#1c1c81" }
+                : { borderColor: "transparent", color: "#5b6779" }
             }
           >
             {tab.label}

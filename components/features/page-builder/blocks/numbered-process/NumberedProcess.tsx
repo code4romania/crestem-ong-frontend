@@ -19,7 +19,7 @@ export function NumberedProcess({ data }: { data: NumberedProcessData }) {
               fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
               fontWeight: 800,
               lineHeight: 1.2,
-              color: "#162040",
+              color: "#1c1c81",
             }}
           >
             {titlu}
@@ -39,12 +39,12 @@ export function NumberedProcess({ data }: { data: NumberedProcessData }) {
                 <span
                   aria-hidden="true"
                   className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
-                  style={{ background: "#162040" }}
+                  style={{ background: "#1c1c81" }}
                 >
                   {index + 1}
                 </span>
                 <div className="pt-0.5">
-                  <p className="font-semibold text-[#162040] wrap-break-word">
+                  <p className="font-semibold text-[#1c1c81] wrap-break-word">
                     <span className="sr-only">Pasul {index + 1}: </span>
                     {pas.titlu}
                   </p>

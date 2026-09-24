@@ -30,9 +30,9 @@ export function ChangeOngAdminButton({
         disabled={disabledReason !== null}
         title={disabledReason ?? undefined}
         className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-        style={{ color: "#162040" }}
+        style={{ color: "#1c1c81" }}
       >
-        <UserCog size={16} style={{ color: "#2dbe8f" }} />
+        <UserCog size={16} style={{ color: "#007d58" }} />
         Schimbă administratorul
       </button>
       {open && (

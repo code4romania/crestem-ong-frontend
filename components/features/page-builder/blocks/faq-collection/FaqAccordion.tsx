@@ -49,7 +49,7 @@ export function FaqAccordion({
                 onClick={() => toggle(index)}
                 className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
               >
-                <span className="text-base font-semibold text-[#162040] wrap-break-word">
+                <span className="text-base font-semibold text-[#1c1c81] wrap-break-word">
                   {item.intrebare}
                 </span>
                 <ChevronDown

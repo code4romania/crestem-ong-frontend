@@ -14,7 +14,7 @@ function DateField({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className="text-sm font-bold" style={{ color: "#162040" }}>
+      <p className="text-sm font-bold" style={{ color: "#1c1c81" }}>
         {value}
       </p>
     </div>
@@ -36,7 +36,7 @@ export function MentorProgramCard({ program }: { program: MentorProgram }) {
           </span>
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-heading font-extrabold truncate" style={{ color: "#162040" }}>
+              <h3 className="font-heading font-extrabold truncate" style={{ color: "#1c1c81" }}>
                 {program.name}
               </h3>
               <span
@@ -69,7 +69,7 @@ export function MentorProgramCard({ program }: { program: MentorProgram }) {
                   <th
                     key={h}
                     className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider whitespace-nowrap"
-                    style={{ color: "#94a3b8" }}
+                    style={{ color: "#5b6779" }}
                   >
                     {h}
                   </th>
@@ -85,9 +85,9 @@ export function MentorProgramCard({ program }: { program: MentorProgram }) {
                         aria-hidden="true"
                         className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-secondary"
                       >
-                        <Users size={14} className="text-accent" />
+                        <Users size={14} className="text-[#5b6779]ccent-strong" />
                       </span>
-                      <span className="font-semibold truncate" style={{ color: "#162040" }}>
+                      <span className="font-semibold truncate" style={{ color: "#1c1c81" }}>
                         {ong.name}
                       </span>
                     </div>
@@ -101,7 +101,7 @@ export function MentorProgramCard({ program }: { program: MentorProgram }) {
                   <td className="px-6 py-3.5">
                     {ong.admin ? (
                       <div className="min-w-0">
-                        <p className="font-semibold truncate" style={{ color: "#162040" }}>
+                        <p className="font-semibold truncate" style={{ color: "#1c1c81" }}>
                           {ong.admin.nume}
                         </p>
                         <p className="text-xs text-muted-foreground truncate">{ong.admin.email}</p>

@@ -318,7 +318,7 @@ export function MenuBuilder({
 
   return (
     <div>
-      <h1 className="font-heading text-2xl font-extrabold text-[#162040]">Menu Builder</h1>
+      <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">Menu Builder</h1>
       <p className="mb-6 mt-1 text-sm text-muted-foreground">
         Creează și gestionează meniurile de navigare ale site-ului public
       </p>
@@ -327,7 +327,7 @@ export function MenuBuilder({
         <div className="w-full shrink-0 lg:w-64">
           <div className="overflow-hidden rounded-xl border border-border bg-white">
             <div className="border-b border-border px-4 py-3">
-              <p className="font-heading text-sm font-bold text-[#162040]">Meniuri</p>
+              <p className="font-heading text-sm font-bold text-[#1c1c81]">Meniuri</p>
             </div>
             <div className="divide-y divide-border">
               {state.map((menu) => {
@@ -342,12 +342,12 @@ export function MenuBuilder({
                     }}
                     aria-current={selected}
                     className={`w-full px-4 py-3.5 text-left transition-colors ${
-                      selected ? "bg-[#eff6ff]" : "hover:bg-slate-50"
+                      selected ? "bg-[#dcfafb]" : "hover:bg-slate-50"
                     }`}
                   >
                     <p
                       className={`font-heading text-sm font-semibold ${
-                        selected ? "text-[#2563eb]" : "text-[#162040]"
+                        selected ? "text-[#5656e5]" : "text-[#1c1c81]"
                       }`}
                     >
                       {menu.name}
@@ -372,7 +372,7 @@ export function MenuBuilder({
           <div className="overflow-hidden rounded-xl border border-border bg-white">
             <div className="flex items-center justify-between gap-4 border-b border-border px-5 py-4">
               <div className="min-w-0">
-                <h2 className="font-heading text-[1.0625rem] font-bold text-[#162040]">
+                <h2 className="font-heading text-[1.0625rem] font-bold text-[#1c1c81]">
                   {activeMenu.name}
                 </h2>
                 <p className="mt-0.5 text-xs text-muted-foreground">
@@ -383,7 +383,7 @@ export function MenuBuilder({
                 type="button"
                 onClick={() => setForm({ mode: "add-root" })}
                 disabled={pending}
-                className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#2563eb] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#5656e5] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
               >
                 <Plus size={14} />
                 Adaugă element

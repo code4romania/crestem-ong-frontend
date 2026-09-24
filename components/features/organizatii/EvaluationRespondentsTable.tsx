@@ -48,7 +48,7 @@ export function EvaluationRespondentsTable({
   return (
     <div className="bg-white rounded-xl border border-border overflow-hidden mt-6">
       <div className="px-6 py-4 border-b border-border flex items-center gap-3">
-        <h2 className="font-bold text-base" style={{ color: "#162040" }}>
+        <h2 className="font-bold text-base" style={{ color: "#1c1c81" }}>
           {anonymous
             ? ANONYMOUS_RESPONDENTS_TABLE_TITLE
             : RESPONDENTS_TABLE_TITLE}
@@ -56,7 +56,7 @@ export function EvaluationRespondentsTable({
         {respondents.length > 0 && (
           <span
             className="text-xs px-2.5 py-1 rounded-full font-semibold"
-            style={{ background: "#f0faf6", color: "#2dbe8f" }}
+            style={{ background: "#e5f9e5", color: "#007d58" }}
           >
             {completedCount} / {respondents.length} completat
           </span>
@@ -81,7 +81,7 @@ export function EvaluationRespondentsTable({
                   <th
                     key={label}
                     className={`px-5 py-3 text-xs font-semibold uppercase tracking-wider ${align}`}
-                    style={{ color: "#94a3b8" }}
+                    style={{ color: "#5b6779" }}
                   >
                     {label}
                   </th>
@@ -101,7 +101,7 @@ export function EvaluationRespondentsTable({
                     className="border-b border-border last:border-0 hover:bg-slate-50 transition-colors"
                   >
                     <td className="px-5 py-3.5">
-                      <p className="font-semibold" style={{ color: "#162040" }}>
+                      <p className="font-semibold" style={{ color: "#1c1c81" }}>
                         {respondentLabel(respondent, index, anonymous)}
                       </p>
                       {!anonymous && (
@@ -124,7 +124,7 @@ export function EvaluationRespondentsTable({
                     </td>
                     <td
                       className="px-5 py-3.5 text-center"
-                      style={{ color: "#64748b" }}
+                      style={{ color: "#5b6779" }}
                     >
                       {respondent.completedAt
                         ? formatDate(respondent.completedAt)
@@ -135,7 +135,7 @@ export function EvaluationRespondentsTable({
                         <Link
                           href={`${pathname}/membru/${respondent.documentId}`}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-border transition-colors hover:bg-slate-50"
-                          style={{ color: "#162040" }}
+                          style={{ color: "#1c1c81" }}
                         >
                           <Eye size={11} /> Vezi evaluarea
                         </Link>

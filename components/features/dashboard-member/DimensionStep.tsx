@@ -115,18 +115,18 @@ export function DimensionStep({
         >
           <div
             className="h-full rounded-full transition-[width] duration-300"
-            style={{ width: `${progressPercent}%`, background: "#2dbe8f" }}
+            style={{ width: `${progressPercent}%`, background: "#00d495" }}
           />
         </div>
-        <span className="text-xs shrink-0" style={{ color: "#94a3b8" }}>
+        <span className="text-xs shrink-0" style={{ color: "#5b6779" }}>
           {stepNumber}/{totalDimensions} dimensiuni
         </span>
       </div>
 
-      <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: "#2dbe8f" }}>
+      <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: "#007d58" }}>
         Dimensiunea {letter}
       </p>
-      <h1 className="text-2xl font-heading font-extrabold mb-4" style={{ color: "#162040" }}>
+      <h1 className="text-2xl font-heading font-extrabold mb-4" style={{ color: "#1c1c81" }}>
         {letter}) {dimension.name}
       </h1>
 
@@ -152,7 +152,7 @@ export function DimensionStep({
             </div>
           )}
           {dimension.action && (
-            <div className="rounded-2xl border p-4" style={{ background: "#eff6ff", borderColor: "#bfdbfe" }}>
+            <div className="rounded-2xl border p-4" style={{ background: "#dcfafb", borderColor: "#bfdbfe" }}>
               <p
                 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider mb-2"
                 style={{ color: "#1d4ed8" }}
@@ -173,11 +173,11 @@ export function DimensionStep({
           return (
             <div key={question.id} className="bg-white rounded-2xl border border-border p-5">
               {question.tag && (
-                <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: "#2dbe8f" }}>
+                <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: "#007d58" }}>
                   {question.tag}
                 </p>
               )}
-              <p className="text-sm font-semibold mb-4" style={{ color: "#162040" }}>
+              <p className="text-sm font-semibold mb-4" style={{ color: "#1c1c81" }}>
                 Q{index + 1}. {question.question}
               </p>
               <div className="space-y-1">
@@ -187,7 +187,7 @@ export function DimensionStep({
                     <label
                       key={option.value}
                       className="flex items-start gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-colors"
-                      style={{ background: isSelected ? "#f0faf6" : "transparent" }}
+                      style={{ background: isSelected ? "#e5f9e5" : "transparent" }}
                     >
                       <input
                         type="radio"
@@ -199,15 +199,15 @@ export function DimensionStep({
                       <span
                         className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold shrink-0"
                         style={{
-                          background: isSelected ? "#2dbe8f" : "#f1f5f9",
-                          color: isSelected ? "white" : "#64748b",
+                          background: isSelected ? "#00d495" : "#f1f5f9",
+                          color: isSelected ? "#ffffff" : "#5b6779",
                         }}
                       >
                         {option.value}
                       </span>
                       <span
                         className="text-sm"
-                        style={{ color: isSelected ? "#162040" : "#475569", fontWeight: isSelected ? 600 : 400 }}
+                        style={{ color: isSelected ? "#1c1c81" : "#475569", fontWeight: isSelected ? 600 : 400 }}
                       >
                         {option.label}
                       </span>
@@ -221,9 +221,9 @@ export function DimensionStep({
       </div>
 
       <div className="bg-white rounded-2xl border border-border p-5 mb-20">
-        <label htmlFor="dimension-comment" className="block text-sm font-semibold mb-3" style={{ color: "#162040" }}>
+        <label htmlFor="dimension-comment" className="block text-sm font-semibold mb-3" style={{ color: "#1c1c81" }}>
           Te rugăm să argumentezi selecția făcută pentru indicatorul „{dimension.name}”
-          <span style={{ color: "#ef4444" }}> *</span>
+          <span style={{ color: "#b91c1c" }}> *</span>
         </label>
         <textarea
           id="dimension-comment"
@@ -232,11 +232,11 @@ export function DimensionStep({
           rows={4}
           required
           aria-required="true"
-          className="w-full px-4 py-3 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f]"
+          className="w-full px-4 py-3 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58]"
           placeholder="Descrie pe scurt raționamentul din spatele răspunsurilor tale..."
         />
         {(validationError || error) && (
-          <p className="mt-3 text-sm" style={{ color: "#ef4444" }}>
+          <p className="mt-3 text-sm" style={{ color: "#b91c1c" }}>
             {validationError ?? error}
           </p>
         )}
@@ -247,12 +247,12 @@ export function DimensionStep({
           type="button"
           onClick={() => setShowBackConfirm(true)}
           className="inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
-          style={{ color: "#94a3b8" }}
+          style={{ color: "#5b6779" }}
         >
           <ArrowLeft size={14} /> {backLabel}
         </button>
         <div className="flex items-center gap-4">
-          <span className="text-xs" style={{ color: "#94a3b8" }}>
+          <span className="text-xs" style={{ color: "#5b6779" }}>
             {answeredCount}/{dimension.quiz.length} răspunsuri
           </span>
           <button
@@ -269,7 +269,7 @@ export function DimensionStep({
             disabled={!canSubmit || saving || savingDraft}
             onClick={handleSubmit}
             className="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ background: "#162040" }}
+            style={{ background: "#1c1c81" }}
           >
             {saving ? savingLabel : submitLabel} {showSubmitIcon && <ChevronRight size={14} />}
           </button>
@@ -279,7 +279,7 @@ export function DimensionStep({
       {showBackConfirm && (
         <ModalOverlay labelledBy="back-confirm-title">
           <div className="bg-white rounded-2xl w-full max-w-sm p-6">
-            <h2 id="back-confirm-title" className="font-heading font-extrabold text-lg mb-2" style={{ color: "#162040" }}>
+            <h2 id="back-confirm-title" className="font-heading font-extrabold text-lg mb-2" style={{ color: "#1c1c81" }}>
               {onSaveDraftAndBack ? "Salvezi progresul înainte de a pleca?" : "Renunți la modificări?"}
             </h2>
             <p className="text-sm text-muted-foreground mb-6">
@@ -293,8 +293,8 @@ export function DimensionStep({
                   type="button"
                   disabled={savingDraft}
                   onClick={handleSaveDraftAndBack}
-                  className="px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:opacity-90"
-                  style={{ background: "#2dbe8f" }}
+                  className="px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:brightness-90"
+                  style={{ background: "#00d495" }}
                 >
                   {savingDraft ? "Se salvează..." : "Salvează ca draft"}
                 </button>
@@ -304,7 +304,7 @@ export function DimensionStep({
                 disabled={savingDraft}
                 onClick={onBack}
                 className="px-4 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:underline"
-                style={{ color: "#94a3b8" }}
+                style={{ color: "#5b6779" }}
               >
                 {onSaveDraftAndBack ? "Renunță la răspunsuri" : "Renunță la modificări"}
               </button>

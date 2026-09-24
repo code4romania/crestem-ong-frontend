@@ -19,9 +19,9 @@ import type { VideoData } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
-const hintClass = "mt-1 text-xs text-[#94a3b8]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
+const hintClass = "mt-1 text-xs text-[#5b6779]";
 
 const URL_PLACEHOLDER: Record<VideoData["sursaTip"], string> = {
   youtube: "https://www.youtube.com/watch?v=...",
@@ -146,14 +146,14 @@ export function VideoEditor({
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isUploading}
-                  className="text-sm font-semibold text-[#2563eb] hover:opacity-80 disabled:opacity-60"
+                  className="text-sm font-semibold text-[#5656e5] hover:opacity-80 disabled:opacity-60"
                 >
                   {isUploading ? "Se încarcă..." : "Schimbă"}
                 </button>
                 <button
                   type="button"
                   onClick={() => set({ fisier: null })}
-                  className="text-sm font-semibold text-[#ef4444] hover:opacity-80"
+                  className="text-sm font-semibold text-[#b91c1c] hover:opacity-80"
                 >
                   Elimină
                 </button>
@@ -164,7 +164,7 @@ export function VideoEditor({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040] disabled:opacity-60"
+              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81] disabled:opacity-60"
             >
               {isUploading ? (
                 <Loader2 size={20} className="animate-spin" />
@@ -186,7 +186,7 @@ export function VideoEditor({
           <button
             type="button"
             onClick={() => setPickerOpen(true)}
-            className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+            className="mt-2 text-xs font-semibold text-[#5656e5] hover:opacity-80"
           >
             Alege din bibliotecă
           </button>
@@ -226,7 +226,7 @@ export function VideoEditor({
         <div>
           <label htmlFor="video-sursa-url" className={labelClass}>
             Link {value.sursaTip === "youtube" ? "YouTube" : "Vimeo"}{" "}
-            <span className="text-[#ef4444]">*</span>
+            <span className="text-[#b91c1c]">*</span>
           </label>
           <input
             id="video-sursa-url"
@@ -257,14 +257,14 @@ export function VideoEditor({
                   type="button"
                   onClick={() => posterInputRef.current?.click()}
                   disabled={isPosterUploading}
-                  className="text-sm font-semibold text-[#2563eb] hover:opacity-80 disabled:opacity-60"
+                  className="text-sm font-semibold text-[#5656e5] hover:opacity-80 disabled:opacity-60"
                 >
                   {isPosterUploading ? "Se încarcă..." : "Schimbă"}
                 </button>
                 <button
                   type="button"
                   onClick={() => set({ poster: null })}
-                  className="text-sm font-semibold text-[#ef4444] hover:opacity-80"
+                  className="text-sm font-semibold text-[#b91c1c] hover:opacity-80"
                 >
                   Elimină
                 </button>
@@ -275,7 +275,7 @@ export function VideoEditor({
               type="button"
               onClick={() => posterInputRef.current?.click()}
               disabled={isPosterUploading}
-              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040] disabled:opacity-60"
+              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81] disabled:opacity-60"
             >
               {isPosterUploading ? (
                 <Loader2 size={20} className="animate-spin" />
@@ -297,7 +297,7 @@ export function VideoEditor({
           <button
             type="button"
             onClick={() => setPosterPickerOpen(true)}
-            className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+            className="mt-2 text-xs font-semibold text-[#5656e5] hover:opacity-80"
           >
             Alege din bibliotecă
           </button>
@@ -442,7 +442,7 @@ export function VideoEditor({
               key={key}
               className="flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3"
             >
-              <span className="text-sm font-semibold text-[#162040]">
+              <span className="text-sm font-semibold text-[#1c1c81]">
                 {label}
               </span>
               <Toggle

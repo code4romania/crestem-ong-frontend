@@ -32,12 +32,12 @@ export function OverviewToolsSection() {
             {tool.href ? (
               <Link
                 href={tool.href}
-                className="mt-4 inline-block text-sm font-semibold text-accent hover:underline"
+                className="mt-4 inline-block text-sm font-semibold text-accent-strong hover:underline"
               >
                 Vezi →
               </Link>
             ) : (
-              <p className="mt-4 text-sm font-semibold text-accent opacity-60 cursor-not-allowed" title="Disponibil în curând">
+              <p className="mt-4 text-sm font-semibold text-accent-strong opacity-60 cursor-not-allowed" title="Disponibil în curând">
                 Vezi →
               </p>
             )}

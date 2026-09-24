@@ -19,7 +19,7 @@ export function CurrentProgramsCard({
         <h2 className="font-heading font-bold text-primary">Programele mele curente</h2>
         <Link
           href="/dashboard/programe"
-          className="text-sm font-semibold text-accent hover:underline"
+          className="text-sm font-semibold text-accent-strong hover:underline"
         >
           Vezi detalii →
         </Link>
@@ -44,7 +44,7 @@ export function CurrentProgramsCard({
                     aria-hidden="true"
                     className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 bg-secondary"
                   >
-                    <Layers size={16} className="text-accent" />
+                    <Layers size={16} className="text-accent-strong" />
                   </span>
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-primary truncate">

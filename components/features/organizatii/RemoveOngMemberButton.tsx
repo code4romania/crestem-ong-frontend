@@ -47,7 +47,7 @@ export function RemoveOngMemberButton({
           setOpen(true);
         }}
         className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-border hover:bg-red-50 hover:border-[#fca5a5] transition-colors"
-        style={{ color: "#ef4444" }}
+        style={{ color: "#b91c1c" }}
       >
         {buttonLabel}
       </button>

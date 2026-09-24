@@ -20,9 +20,9 @@ export default async function InregistrarePage() {
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-6">
           <AccountTypeCards />
-          <p className="text-center mt-10 text-sm" style={{ color: "#94a3b8" }}>
+          <p className="text-center mt-10 text-sm" style={{ color: "#5b6779" }}>
             Ai deja un cont?{" "}
-            <Link href="/autentificare" className="font-semibold hover:underline" style={{ color: "#162040" }}>
+            <Link href="/autentificare" className="font-semibold hover:underline" style={{ color: "#1c1c81" }}>
               Autentifică-te
             </Link>
           </p>

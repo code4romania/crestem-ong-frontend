@@ -79,7 +79,7 @@ export function OrgDetailChrome({
       <Link
         href={backHref}
         className="inline-flex items-center gap-1.5 text-sm font-medium mb-6 print:hidden"
-        style={{ color: "#94a3b8" }}
+        style={{ color: "#5b6779" }}
       >
         <ArrowLeft size={14} /> {backLabel}
       </Link>
@@ -100,8 +100,8 @@ export function OrgDetailChrome({
               }
               style={
                 isActive
-                  ? { color: "#2dbe8f", borderColor: "#2dbe8f" }
-                  : { color: "#64748b" }
+                  ? { color: "#007d58", borderColor: "#007d58" }
+                  : { color: "#5b6779" }
               }
             >
               {tab.label}

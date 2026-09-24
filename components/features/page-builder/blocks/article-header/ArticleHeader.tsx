@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, FileText, Tag } from "lucide-react";
 import type { ArticleHeaderData } from "./schema";
 
-const NAVY_BG = "#162040";
+const NAVY_BG = "#1c1c81";
 
 /** Where the back link always goes. The library listing owns this route. */
 const LIBRARY_PATH = "/biblioteca";
@@ -72,7 +72,7 @@ export function ArticleHeader({ data }: { data: ArticleHeaderData }) {
             fontSize: "clamp(2rem, 4.5vw, 3.25rem)",
             fontWeight: 800,
             lineHeight: 1.12,
-            color: isDark ? "#ffffff" : "#162040",
+            color: isDark ? "#ffffff" : "#1c1c81",
           }}
         >
           {titlu}

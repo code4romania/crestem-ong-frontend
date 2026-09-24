@@ -11,7 +11,7 @@ import {
 import { DeleteProgramButton } from "./DeleteProgramButton";
 
 const PHASE_COLORS = [
-  { bg: "#eff6ff", text: "#1d4ed8" },
+  { bg: "#dcfafb", text: "#1d4ed8" },
   { bg: "#f0fdf4", text: "#15803d" },
   { bg: "#fdf4ff", text: "#7e22ce" },
   { bg: "#fff7ed", text: "#c2410c" },
@@ -27,7 +27,7 @@ export function ProgrammeRow({ program }: { program: Program }) {
       <div className="flex items-center gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-1 flex-wrap">
-            <span className="font-semibold truncate" style={{ color: "#162040" }}>
+            <span className="font-semibold truncate" style={{ color: "#1c1c81" }}>
               {program.name}
             </span>
             <span

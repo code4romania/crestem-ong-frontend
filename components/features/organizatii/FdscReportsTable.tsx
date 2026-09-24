@@ -32,7 +32,7 @@ export function FdscReportsTable({
               <th
                 key={h}
                 className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider whitespace-nowrap"
-                style={{ color: "#94a3b8" }}
+                style={{ color: "#5b6779" }}
               >
                 {h}
               </th>
@@ -47,7 +47,7 @@ export function FdscReportsTable({
             return (
               <tr key={report.documentId} className="border-b border-border last:border-0">
                 <td className="px-5 py-3.5">
-                  <span className="inline-flex items-center gap-2.5 font-semibold" style={{ color: "#162040" }}>
+                  <span className="inline-flex items-center gap-2.5 font-semibold" style={{ color: "#1c1c81" }}>
                     <span
                       className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[9px] font-bold"
                       style={{ background: badge.background, color: badge.color }}
@@ -57,13 +57,13 @@ export function FdscReportsTable({
                     {report.name}
                   </span>
                 </td>
-                <td className="px-5 py-3.5" style={{ color: "#64748b" }}>
+                <td className="px-5 py-3.5" style={{ color: "#5b6779" }}>
                   {report.evaluation?.name ?? "—"}
                 </td>
-                <td className="px-5 py-3.5" style={{ color: "#64748b" }}>
+                <td className="px-5 py-3.5" style={{ color: "#5b6779" }}>
                   {report.evaluation?.program?.name ?? "—"}
                 </td>
-                <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "#64748b" }}>
+                <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "#5b6779" }}>
                   {formatLongDate(report.uploadedAt)}
                 </td>
                 <td className="px-5 py-3.5 whitespace-nowrap">
@@ -93,7 +93,7 @@ export function FdscReportsTable({
                         </a>
                       </>
                     ) : (
-                      <span style={{ color: "#94a3b8" }}>—</span>
+                      <span style={{ color: "#5b6779" }}>—</span>
                     )}
                     {!readOnly && (
                       <DeleteFdscReportButton

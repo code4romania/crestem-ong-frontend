@@ -58,12 +58,12 @@ export function JoinRequestsSection({
     <div className="mb-8">
       <h2
         className="font-heading font-bold text-base mb-3 flex items-center gap-2"
-        style={{ color: "#162040" }}
+        style={{ color: "#1c1c81" }}
       >
         Cereri de afiliere în așteptare
         <span
           className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-full text-xs font-semibold"
-          style={{ background: "#fee2e2", color: "#dc2626" }}
+          style={{ background: "#fee2e2", color: "#b91c1c" }}
         >
           {requests.length}
         </span>
@@ -72,7 +72,7 @@ export function JoinRequestsSection({
       {error && (
         <p
           role="alert"
-          className="mb-3 rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#ef4444]"
+          className="mb-3 rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#b91c1c]"
         >
           {error}
         </p>
@@ -126,7 +126,7 @@ export function JoinRequestsSection({
                       <div>
                         <p
                           className="font-semibold"
-                          style={{ color: "#162040" }}
+                          style={{ color: "#1c1c81" }}
                         >
                           {request.user.nume}
                         </p>
@@ -156,7 +156,7 @@ export function JoinRequestsSection({
                             type="button"
                             onClick={() => setMessageTarget(request)}
                             className="mt-1 text-xs font-semibold underline hover:opacity-80"
-                            style={{ color: "#2dbe8f" }}
+                            style={{ color: "#007d58" }}
                           >
                             Vezi mesajul
                           </button>
@@ -175,8 +175,8 @@ export function JoinRequestsSection({
                           setAcceptTarget(request);
                         }}
                         disabled={rowPending}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-60"
-                        style={{ background: "#2dbe8f" }}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white hover:brightness-90 transition-opacity disabled:opacity-60"
+                        style={{ background: "#00d495" }}
                       >
                         <CheckCircle2 size={14} />
                         Confirmă
@@ -186,7 +186,7 @@ export function JoinRequestsSection({
                         onClick={() => handleReject(request.documentId)}
                         disabled={rowPending}
                         className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold border border-border hover:bg-slate-50 transition-colors disabled:opacity-60"
-                        style={{ color: "#ef4444" }}
+                        style={{ color: "#b91c1c" }}
                       >
                         <XCircle size={14} />
                         Respinge

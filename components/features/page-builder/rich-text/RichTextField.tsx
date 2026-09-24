@@ -19,7 +19,7 @@ import { RICH_TEXT_PROSE } from "./prose";
 
 const btnBase =
   "flex h-8 w-8 items-center justify-center rounded-lg text-[#475569] transition-colors hover:bg-slate-200/70 disabled:opacity-40";
-const btnActive = "bg-[#2dbe8f]/15 text-[#162040]";
+const btnActive = "bg-[#00d495]/15 text-[#1c1c81]";
 
 /**
  * The official image extension renders whatever size the file happens to be,
@@ -132,7 +132,7 @@ export function RichTextField({
       attributes: {
         class: `min-h-[180px] px-4 py-3 focus:outline-none ${RICH_TEXT_PROSE}${
           allowImages
-            ? " [&_img]:my-3 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg [&_img.ProseMirror-selectednode]:outline [&_img.ProseMirror-selectednode]:outline-2 [&_img.ProseMirror-selectednode]:outline-offset-2 [&_img.ProseMirror-selectednode]:outline-[#2dbe8f]"
+            ? " [&_img]:my-3 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg [&_img.ProseMirror-selectednode]:outline [&_img.ProseMirror-selectednode]:outline-2 [&_img.ProseMirror-selectednode]:outline-offset-2 [&_img.ProseMirror-selectednode]:outline-[#007d58]"
             : ""
         }`,
       },
@@ -175,10 +175,10 @@ export function RichTextField({
 
   return (
     <div
-      className={`overflow-hidden rounded-xl border transition-colors focus-within:ring-2 focus-within:ring-[#2dbe8f]/30 ${
+      className={`overflow-hidden rounded-xl border transition-colors focus-within:ring-2 focus-within:ring-[#00d495]/30 ${
         invalid
           ? "border-[#ef4444]"
-          : "border-border focus-within:border-[#2dbe8f]"
+          : "border-border focus-within:border-[#007d58]"
       }`}
     >
       <div className="flex flex-wrap items-center gap-0.5 border-b border-border bg-slate-50/70 p-1.5">
@@ -321,12 +321,12 @@ export function RichTextField({
               if (e.key === "Escape") setLinkOpen(false);
             }}
             placeholder="https://exemplu.ro"
-            className="flex-1 rounded-lg border border-border px-3 py-1.5 text-sm focus:border-[#2dbe8f] focus:outline-none"
+            className="flex-1 rounded-lg border border-border px-3 py-1.5 text-sm focus:border-[#007d58] focus:outline-none"
           />
           <button
             type="button"
             onClick={applyLink}
-            className="rounded-lg bg-[#2563eb] px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[#1d4ed8]"
+            className="rounded-lg bg-[#5656e5] px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[#1d4ed8]"
           >
             Aplică
           </button>

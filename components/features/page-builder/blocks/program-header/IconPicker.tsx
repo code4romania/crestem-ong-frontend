@@ -35,18 +35,18 @@ export function IconPicker({
       <div className="relative mb-2">
         <Search
           size={15}
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#5b6779]"
         />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Caută iconiță..."
-          className="w-full rounded-xl border border-border py-2 pl-9 pr-3 text-sm focus:border-[#2dbe8f] focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30"
+          className="w-full rounded-xl border border-border py-2 pl-9 pr-3 text-sm focus:border-[#007d58] focus:outline-none focus:ring-2 focus:ring-[#00d495]/30"
         />
       </div>
 
       {keys.length === 0 ? (
-        <p className="px-1 py-3 text-center text-xs text-[#94a3b8]">
+        <p className="px-1 py-3 text-center text-xs text-[#5b6779]">
           Nicio iconiță găsită.
         </p>
       ) : (
@@ -64,7 +64,7 @@ export function IconPicker({
                 onClick={() => onChange(key)}
                 className={`flex aspect-square items-center justify-center rounded-xl border-2 transition-colors ${
                   selected
-                    ? "border-[#2563eb] bg-[#eef1fd] text-[#2563eb]"
+                    ? "border-[#5656e5] bg-[#eef1fd] text-[#5656e5]"
                     : "border-slate-200 bg-white text-[#475569] hover:border-slate-300"
                 }`}
               >

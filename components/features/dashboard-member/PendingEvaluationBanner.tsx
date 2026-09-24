@@ -22,12 +22,12 @@ export function PendingEvaluationBanner({
   return (
     <div
       className="rounded-2xl p-6 mb-6 flex flex-wrap items-center justify-between gap-4"
-      style={{ background: "#162040" }}
+      style={{ background: "#1c1c81" }}
     >
       <div>
         <p
           className="text-xs font-semibold uppercase tracking-wider mb-2"
-          style={{ color: "#2dbe8f" }}
+          style={{ color: "#00d495" }}
         >
           Evaluare în așteptare
         </p>
@@ -39,10 +39,10 @@ export function PendingEvaluationBanner({
       </div>
       <Link
         href={`/dashboard/${ongDocumentId}/evaluari/${evaluation.documentId}`}
-        className="shrink-0 inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+        className="shrink-0 inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity"
         style={{
-          background: "#2dbe8f",
-          boxShadow: "0 4px 16px rgba(45,190,143,0.3)",
+          background: "#00d495",
+          boxShadow: "0 4px 16px rgba(0,212,149,0.3)",
         }}
       >
         {started ? "Continuă evaluarea" : "Pornește evaluarea"}
