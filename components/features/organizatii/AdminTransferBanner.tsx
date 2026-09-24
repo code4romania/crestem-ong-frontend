@@ -31,7 +31,6 @@ export function AdminTransferBanner({
 }) {
   const router = useRouter();
   const [confirming, setConfirming] = useState(false);
-  const [cancelError, setCancelError] = useState<string | null>(null);
   const [isCancelling, startCancel] = useTransition();
   const [isResending, startResend] = useTransition();
 
@@ -43,18 +42,26 @@ export function AdminTransferBanner({
       ? `Inițiat de administratorul organizației${transfer.initiatorName ? `, ${transfer.initiatorName}` : ""}`
       : null;
 
+  // A failure usually means the page is stale: the transfer was accepted (the
+  // caller is no longer admin, so the backend answers 403), declined or
+  // expired. Refreshing shows the real state; after an acceptance the dashboard
+  // layout re-routes the former admin.
+  const failed = (message: string) => {
+    toast.error(message);
+    router.refresh();
+  };
+
   const cancel = () => {
-    setCancelError(null);
     startCancel(async () => {
       const result =
         mode === "fdsc"
           ? await fdscCancelAdminTransferAction(ongDocumentId as string)
           : await cancelAdminTransferAction(transfer.documentId);
+      setConfirming(false);
       if (result.error) {
-        setCancelError(result.error);
+        failed(result.error);
         return;
       }
-      setConfirming(false);
       toast.success("Transferul a fost anulat.");
       router.refresh();
     });
@@ -67,7 +74,7 @@ export function AdminTransferBanner({
           ? await fdscResendAdminTransferAction(ongDocumentId as string)
           : await resendAdminTransferAction(transfer.documentId);
       if (result.error) {
-        toast.error(result.error);
+        failed(result.error);
         return;
       }
       toast.success("Emailul a fost retrimis.");
@@ -130,12 +137,8 @@ export function AdminTransferBanner({
         cancelLabel="Înapoi"
         loading={isCancelling}
         loadingLabel="Se anulează..."
-        error={cancelError}
         onConfirm={cancel}
-        onCancel={() => {
-          setConfirming(false);
-          setCancelError(null);
-        }}
+        onCancel={() => setConfirming(false)}
       />
     </div>
   );
