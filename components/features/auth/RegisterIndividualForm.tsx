@@ -10,6 +10,7 @@ import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import { registerIndividual } from "@/lib/api/auth";
 import { ApiError, isZodFlattenError } from "@/lib/api/client";
 import { PasswordInput } from "./PasswordInput";
+import { TermsCheckbox } from "./TermsCheckbox";
 import {
   PASSWORDS_MATCH_ERROR,
   confirmedPasswordSchema,
@@ -228,61 +229,11 @@ export function RegisterIndividualForm() {
           </Field>
         </div>
 
-        <div
-          className="mt-2 rounded-xl p-5"
-          style={{
-            background: errors.acordTermeniSiConditii ? "#fff5f5" : "#f8faff",
-            border: `1.5px solid ${errors.acordTermeniSiConditii ? "#fca5a5" : "#e2e8f0"}`,
-          }}
-        >
-          <label className="flex items-start gap-3 cursor-pointer select-none">
-            <div className="relative flex-shrink-0 mt-0.5">
-              <input
-                type="checkbox"
-                className="sr-only"
-                {...register("acordTermeniSiConditii")}
-              />
-              <div
-                className="w-5 h-5 rounded flex items-center justify-center transition-colors"
-                style={{
-                  background: acordTermeniSiConditii ? "#2dbe8f" : "white",
-                  border: `2px solid ${
-                    acordTermeniSiConditii
-                      ? "#2dbe8f"
-                      : errors.acordTermeniSiConditii
-                        ? "#f87171"
-                        : "#cbd5e1"
-                  }`,
-                }}
-              >
-                {acordTermeniSiConditii && (
-                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 12 12">
-                    <path
-                      d="M2 6l3 3 5-5"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
-              </div>
-            </div>
-            <span className="text-sm leading-relaxed" style={{ color: "#475569" }}>
-              Sunt de acord cu prelucrarea datelor cu caracter personal de către Crestem în
-              scopul creării și administrării contului, conform{" "}
-              <Link href="#" className="underline font-medium" style={{ color: "#2dbe8f" }}>
-                Politicii de confidențialitate
-              </Link>
-              . Datele nu vor fi partajate cu terțe părți și pot fi șterse oricând la cerere.
-            </span>
-          </label>
-          {errors.acordTermeniSiConditii && (
-            <p className="mt-2 text-xs ml-8" style={{ color: "#ef4444" }}>
-              {errors.acordTermeniSiConditii.message}
-            </p>
-          )}
-        </div>
+        <TermsCheckbox
+          registration={register("acordTermeniSiConditii")}
+          checked={acordTermeniSiConditii}
+          error={errors.acordTermeniSiConditii?.message}
+        />
       </div>
 
       <div

@@ -10,6 +10,7 @@ import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import { activateAccount } from "@/lib/api/auth";
 import { parseApiError } from "@/lib/api/client";
 import { PasswordInput } from "./PasswordInput";
+import { TermsCheckbox } from "./TermsCheckbox";
 import {
   PASSWORDS_MATCH_ERROR,
   PASSWORD_RULES_HINT,
@@ -22,6 +23,9 @@ const activateSchema = z
   .object({
     password: passwordSchema,
     confirmedPassword: confirmedPasswordSchema,
+    acordTermeniSiConditii: z
+      .boolean()
+      .refine((v) => v === true, { message: "Este necesar acordul tău pentru a continua" }),
   })
   .refine(passwordsMatch, PASSWORDS_MATCH_ERROR);
 
@@ -40,11 +44,18 @@ export function ActivateAccountForm() {
     register,
     handleSubmit,
     setError,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<ActivateFormValues>({
     resolver: zodResolver(activateSchema),
-    defaultValues: { password: "", confirmedPassword: "" },
+    defaultValues: {
+      password: "",
+      confirmedPassword: "",
+      acordTermeniSiConditii: false,
+    },
   });
+
+  const acordTermeniSiConditii = watch("acordTermeniSiConditii");
 
   if (!token) {
     return (
@@ -92,6 +103,7 @@ export function ActivateAccountForm() {
         token,
         password: data.password,
         confirmedPassword: data.confirmedPassword,
+        acordTermeniSiConditii: data.acordTermeniSiConditii,
       });
       setActivated(true);
     } catch (err) {
@@ -155,6 +167,12 @@ export function ActivateAccountForm() {
           </p>
         )}
       </div>
+
+      <TermsCheckbox
+        registration={register("acordTermeniSiConditii")}
+        checked={acordTermeniSiConditii}
+        error={errors.acordTermeniSiConditii?.message}
+      />
 
       <button
         type="submit"
