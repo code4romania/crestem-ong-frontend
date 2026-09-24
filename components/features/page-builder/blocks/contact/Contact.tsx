@@ -13,7 +13,7 @@ export function Contact({ data }: { data: ContactData }) {
     data.infoItems.length > 0 || data.socials.length > 0 || Boolean(embed);
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-12">
+    <section className="mx-auto w-full max-w-7xl px-6 py-12">
       <div
         className={
           hasLeftColumn
