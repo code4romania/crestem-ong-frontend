@@ -8,13 +8,13 @@ export function OrgLibraryActivityCard({ rows }: { rows: OngLibraryActivityRow[]
   return (
     <div className="bg-white rounded-2xl border border-border p-6">
       <div className="flex items-center justify-between mb-5">
-        <h2 className="flex items-center gap-2 text-base font-heading font-extrabold" style={{ color: "#162040" }}>
+        <h2 className="flex items-center gap-2 text-base font-heading font-extrabold" style={{ color: "#1c1c81" }}>
           <BookOpen size={18} />
           Articole citite din Bibliotecă
         </h2>
         <span
           className="px-2.5 py-0.5 rounded-full text-xs font-semibold"
-          style={{ background: "#eff6ff", color: "#2563eb" }}
+          style={{ background: "#dcfafb", color: "#5656e5" }}
         >
           {rows.length}
         </span>
@@ -24,7 +24,7 @@ export function OrgLibraryActivityCard({ rows }: { rows: OngLibraryActivityRow[]
         <table className="w-full text-sm">
           {rows.length > 0 && (
             <thead>
-              <tr className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#94a3b8" }}>
+              <tr className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#5b6779" }}>
                 <th className="text-left pb-3 pr-4 font-semibold">Titlu resursă</th>
                 <th className="text-left pb-3 pr-4 font-semibold">Tip</th>
                 <th className="text-left pb-3 pr-4 font-semibold">Accesat la</th>
@@ -46,7 +46,7 @@ export function OrgLibraryActivityCard({ rows }: { rows: OngLibraryActivityRow[]
                   <tr key={index} className="border-t border-border">
                     <td className="py-3 pr-4" style={{ color: "#334155" }}>
                       {row.cale ? (
-                        <Link href={row.cale} className="font-medium hover:underline" style={{ color: "#162040" }}>
+                        <Link href={row.cale} className="font-medium hover:underline" style={{ color: "#1c1c81" }}>
                           {row.resourceTitle}
                         </Link>
                       ) : (
@@ -66,7 +66,7 @@ export function OrgLibraryActivityCard({ rows }: { rows: OngLibraryActivityRow[]
                       )}
                     </td>
                     <td className="py-3 pr-4 text-muted-foreground">{formatShortDate(row.accessedAt)}</td>
-                    <td className="py-3 font-semibold" style={{ color: "#162040" }}>
+                    <td className="py-3 font-semibold" style={{ color: "#1c1c81" }}>
                       {row.totalAccesses}
                     </td>
                   </tr>

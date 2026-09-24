@@ -9,7 +9,7 @@ const ALIGN_CLASS: Record<HeroCenteredData["horizontalAlign"], string> = {
   dreapta: "items-end text-right",
 };
 
-const NAVY_BG = "#162040";
+const NAVY_BG = "#1c1c81";
 
 /**
  * "Hero – Centered" — supratitlu pill, headline, copy and up to two CTAs stacked
@@ -66,9 +66,9 @@ export function HeroCentered({ data }: { data: HeroCenteredData }) {
           <div
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6 max-w-full wrap-break-word"
             style={{
-              background: "rgba(45,190,143,0.15)",
-              color: "#2dbe8f",
-              border: "1px solid rgba(45,190,143,0.3)",
+              background: "rgba(0,212,149,0.15)",
+              color: isDark ? "#00d495" : "#007d58",
+              border: "1px solid rgba(0,212,149,0.3)",
             }}
           >
             <Star size={12} className="shrink-0" />
@@ -81,7 +81,7 @@ export function HeroCentered({ data }: { data: HeroCenteredData }) {
             fontSize: "clamp(2.5rem, 5vw, 3.75rem)",
             fontWeight: 800,
             lineHeight: 1.1,
-            color: isDark ? "#ffffff" : "#162040",
+            color: isDark ? "#ffffff" : "#1c1c81",
           }}
         >
           {titlu}
@@ -103,8 +103,8 @@ export function HeroCentered({ data }: { data: HeroCenteredData }) {
             {hasPrimary ? (
               <Link
                 href={primaryCta.href}
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white transition-all hover:opacity-90 hover:-translate-y-0.5"
-                style={{ background: "#2dbe8f", boxShadow: "0 4px 24px rgba(45,190,143,0.35)" }}
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white transition-all hover:brightness-90 hover:-translate-y-0.5"
+                style={{ background: "#00d495", boxShadow: "0 4px 24px rgba(0,212,149,0.35)" }}
               >
                 {primaryCta.label} <ArrowRight size={18} />
               </Link>
@@ -118,7 +118,7 @@ export function HeroCentered({ data }: { data: HeroCenteredData }) {
                 style={
                   isDark
                     ? { color: "rgba(255,255,255,0.85)", border: "1.5px solid rgba(255,255,255,0.2)" }
-                    : { color: "#162040", border: "1.5px solid rgba(22,32,64,0.2)" }
+                    : { color: "#1c1c81", border: "1.5px solid rgba(28,28,129,0.2)" }
                 }
               >
                 {secondaryCta.label} <ChevronRight size={18} />

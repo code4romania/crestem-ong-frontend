@@ -9,8 +9,8 @@ import type { ArticleHeaderData } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 export function ArticleHeaderEditor({
   value,
@@ -39,7 +39,7 @@ export function ArticleHeaderEditor({
     <div className="space-y-5">
       <div>
         <label htmlFor="ah-titlu" className={labelClass}>
-          Titlu <span className="text-[#ef4444]">*</span>
+          Titlu <span className="text-[#b91c1c]">*</span>
         </label>
         <input
           id="ah-titlu"
@@ -63,7 +63,7 @@ export function ArticleHeaderEditor({
           onChange={(e) => set({ eticheta: e.target.value })}
           placeholder="ex. Template"
         />
-        <p className="mt-1 text-xs text-[#94a3b8]">Apare ca badge deasupra titlului.</p>
+        <p className="mt-1 text-xs text-[#5b6779]">Apare ca badge deasupra titlului.</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -109,7 +109,7 @@ export function ArticleHeaderEditor({
                     set({ etichete: value.etichete.filter((entry) => entry !== tag) })
                   }
                   aria-label={`Elimină eticheta ${tag}`}
-                  className="text-[#94a3b8] transition-colors hover:text-[#dc2626]"
+                  className="text-[#5b6779] transition-colors hover:text-[#dc2626]"
                 >
                   <X size={12} />
                 </button>

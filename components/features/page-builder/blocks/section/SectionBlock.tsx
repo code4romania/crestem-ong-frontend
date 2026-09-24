@@ -2,7 +2,7 @@ import { getMediaUrl } from "@/lib/api/client";
 import { BLOCK_REGISTRY } from "../../registry";
 import type { SectionData } from "./schema";
 
-const NAVY_BG = "#162040";
+const NAVY_BG = "#1c1c81";
 
 /** Full literal classes so the Tailwind scanner picks them up. */
 const PT_CLASS: Record<SectionData["spatiereSus"], string> = {

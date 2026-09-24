@@ -11,9 +11,9 @@ import { formatDate } from "@/lib/utils/date";
 import { EditFdscUserModal } from "./EditFdscUserModal";
 
 const STATUS_BADGES: Record<AdminUser["accountStatus"], { label: string; bg: string; color: string }> = {
-  active: { label: "Activ", bg: "#f0fdf4", color: "#16a34a" },
-  pending: { label: "În așteptare", bg: "#fffbeb", color: "#d97706" },
-  deleted: { label: "Șters", bg: "#fef2f2", color: "#dc2626" },
+  active: { label: "Activ", bg: "#f0fdf4", color: "#15803d" },
+  pending: { label: "În așteptare", bg: "#fffbeb", color: "#b45309" },
+  deleted: { label: "Șters", bg: "#fef2f2", color: "#b91c1c" },
 };
 
 // Mentors are not editable from user administration — they maintain their own
@@ -50,7 +50,7 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
                 className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider whitespace-nowrap ${
                   h === "Acțiuni" ? "text-center" : "text-left"
                 }`}
-                style={{ color: "#94a3b8" }}
+                style={{ color: "#5b6779" }}
               >
                 {h}
               </th>
@@ -82,12 +82,12 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
                     ) : (
                       <div
                         className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0"
-                        style={{ background: "#162040" }}
+                        style={{ background: "#1c1c81" }}
                       >
                         {initials}
                       </div>
                     )}
-                    <p className="font-semibold whitespace-normal wrap-break-word min-w-0" style={{ color: "#162040" }}>
+                    <p className="font-semibold whitespace-normal wrap-break-word min-w-0" style={{ color: "#1c1c81" }}>
                       {displayName}
                     </p>
                   </div>
@@ -104,11 +104,11 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
                       {role.label}
                     </span>
                   ) : (
-                    <span style={{ color: "#94a3b8" }}>—</span>
+                    <span style={{ color: "#5b6779" }}>—</span>
                   )}
                 </td>
                 <td className="px-4 py-3.5" style={{ color: "#475569" }}>
-                  {orgNames || <span style={{ color: "#94a3b8" }}>—</span>}
+                  {orgNames || <span style={{ color: "#5b6779" }}>—</span>}
                 </td>
                 <td className="px-4 py-3.5">
                   {statusBadge ? (
@@ -119,7 +119,7 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
                       {statusBadge.label}
                     </span>
                   ) : (
-                    <span style={{ color: "#94a3b8" }}>—</span>
+                    <span style={{ color: "#5b6779" }}>—</span>
                   )}
                 </td>
                 <td className="px-4 py-3.5" style={{ color: "#475569" }}>

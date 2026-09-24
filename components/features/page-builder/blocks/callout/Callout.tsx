@@ -5,7 +5,7 @@ import { hasRichText } from "../../rich-text/has-rich-text";
 import { CALLOUT_ICONS } from "./icons";
 import type { CalloutData } from "./schema";
 
-const NAVY_BG = "#162040";
+const NAVY_BG = "#1c1c81";
 
 const COLUMN_ALIGN: Record<CalloutData["aliniere"], string> = {
   stanga: "items-start text-left",
@@ -47,7 +47,7 @@ export function Callout({ data }: { data: CalloutData }) {
         >
           <div className={`relative flex flex-col ${COLUMN_ALIGN[aliniere]}`}>
             {showIcon ? (
-              <span className="mb-6 inline-flex rounded-2xl bg-white/10 p-3.5 text-[#2dbe8f]">
+              <span className="mb-6 inline-flex rounded-2xl bg-white/10 p-3.5 text-[#00d495]">
                 <Icon size={32} aria-hidden />
               </span>
             ) : null}
@@ -80,10 +80,10 @@ export function Callout({ data }: { data: CalloutData }) {
                 {hasPrimary ? (
                   <Link
                     href={primaryCta.href}
-                    className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:opacity-90"
+                    className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:brightness-90"
                     style={{
-                      background: "#2dbe8f",
-                      boxShadow: "0 4px 24px rgba(45,190,143,0.35)",
+                      background: "#00d495",
+                      boxShadow: "0 4px 24px rgba(0,212,149,0.35)",
                     }}
                   >
                     {primaryCta.label} <ArrowRight size={18} />

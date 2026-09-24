@@ -116,7 +116,7 @@ export default async function OngEvaluareDetailPage({
         <div>
           <h1
             className="text-2xl font-heading font-extrabold"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             {report.name}
           </h1>
@@ -139,7 +139,7 @@ export default async function OngEvaluareDetailPage({
           </p>
           <p
             className="text-3xl font-extrabold font-heading"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             {periodDays != null
               ? `${periodDays} ${periodDays === 1 ? "zi" : "zile"}`
@@ -155,7 +155,7 @@ export default async function OngEvaluareDetailPage({
           <p className="text-xs mb-2 text-muted-foreground">Total completări</p>
           <p
             className="text-3xl font-extrabold font-heading"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             {report.completedCount}
           </p>
@@ -167,7 +167,7 @@ export default async function OngEvaluareDetailPage({
           <p className="text-xs mb-2 text-muted-foreground">Scor total</p>
           <p
             className="text-3xl font-extrabold font-heading"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             {report.finished && report.scores.overall != null
               ? `${report.scores.overall}%`
@@ -183,12 +183,12 @@ export default async function OngEvaluareDetailPage({
 
       <div className="bg-white rounded-xl border border-border p-6 mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold text-base" style={{ color: "#162040" }}>
+          <h2 className="font-bold text-base" style={{ color: "#1c1c81" }}>
             Progres completare matrice
           </h2>
           <span
             className="text-2xl font-extrabold font-heading"
-            style={{ color: "#2dbe8f" }}
+            style={{ color: "#007d58" }}
           >
             {completion}%
           </span>
@@ -201,7 +201,7 @@ export default async function OngEvaluareDetailPage({
             className="h-full rounded-full transition-all"
             style={{
               width: `${completion}%`,
-              background: "linear-gradient(90deg, #2dbe8f, #1a9e77)",
+              background: "linear-gradient(90deg, #00d495, #1a9e77)",
             }}
           />
         </div>
@@ -224,7 +224,7 @@ export default async function OngEvaluareDetailPage({
         />
       ) : (
         <div className="bg-white rounded-xl border border-border p-6 mb-8">
-          <h2 className="font-bold text-base mb-2" style={{ color: "#162040" }}>
+          <h2 className="font-bold text-base mb-2" style={{ color: "#1c1c81" }}>
             Dimensiuni evaluate
           </h2>
           <p className="text-sm text-muted-foreground">

@@ -180,10 +180,10 @@ export function EvaluationWizard({
   if (closedEarly) {
     return (
       <div className="bg-white rounded-xl border border-border p-8 text-center">
-        <p className="text-sm mb-4" style={{ color: "#ef4444" }}>
+        <p className="text-sm mb-4" style={{ color: "#b91c1c" }}>
           Runda de evaluare a fost închisă înainte să o finalizezi.
         </p>
-        <Link href={backHref} className="text-sm font-semibold hover:underline" style={{ color: "#2dbe8f" }}>
+        <Link href={backHref} className="text-sm font-semibold hover:underline" style={{ color: "#007d58" }}>
           Înapoi la evaluările mele
         </Link>
       </div>
@@ -199,11 +199,11 @@ export function EvaluationWizard({
       <div className="bg-white rounded-xl border border-border p-10 text-center">
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
-          style={{ background: "#f0faf6" }}
+          style={{ background: "#e5f9e5" }}
         >
-          <CheckCircle2 size={28} style={{ color: "#2dbe8f" }} />
+          <CheckCircle2 size={28} style={{ color: "#007d58" }} />
         </div>
-        <h2 className="text-xl font-heading font-extrabold mb-2" style={{ color: "#162040" }}>
+        <h2 className="text-xl font-heading font-extrabold mb-2" style={{ color: "#1c1c81" }}>
           Evaluare finalizată!
         </h2>
         <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
@@ -213,7 +213,7 @@ export function EvaluationWizard({
         <Link
           href={backHref}
           className="inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-          style={{ background: "#162040" }}
+          style={{ background: "#1c1c81" }}
         >
           Înapoi la evaluările mele
         </Link>
@@ -224,14 +224,14 @@ export function EvaluationWizard({
   if (!entered) {
     return (
       <div>
-        <h1 className="text-2xl font-heading font-extrabold mb-4" style={{ color: "#162040" }}>
+        <h1 className="text-2xl font-heading font-extrabold mb-4" style={{ color: "#1c1c81" }}>
           Începe evaluarea
         </h1>
         <p className="text-sm mb-8 leading-relaxed" style={{ color: "#475569" }}>
           {INTRO_COPY}
         </p>
 
-        <h2 className="text-lg font-heading font-bold mb-4" style={{ color: "#162040" }}>
+        <h2 className="text-lg font-heading font-bold mb-4" style={{ color: "#1c1c81" }}>
           Ce trebuie să știi înainte să începi analiza?
         </h2>
 
@@ -240,10 +240,10 @@ export function EvaluationWizard({
             <div key={item.title} className="bg-white rounded-2xl border border-border p-5 flex items-start gap-4">
               <div className="w-9 h-9 flex items-center justify-center shrink-0 text-lg leading-none">{item.emoji}</div>
               <div>
-                <p className="text-sm font-semibold mb-1" style={{ color: "#162040" }}>
+                <p className="text-sm font-semibold mb-1" style={{ color: "#1c1c81" }}>
                   {item.title}
                 </p>
-                <p className="text-sm leading-relaxed" style={{ color: "#64748b" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "#5b6779" }}>
                   {item.description}
                 </p>
               </div>
@@ -251,10 +251,10 @@ export function EvaluationWizard({
           ))}
 
           <div className="bg-white rounded-2xl border border-border p-5">
-            <p className="text-sm font-semibold mb-1" style={{ color: "#162040" }}>
+            <p className="text-sm font-semibold mb-1" style={{ color: "#1c1c81" }}>
               Rezultatele analizei
             </p>
-            <p className="text-sm leading-relaxed" style={{ color: "#64748b" }}>
+            <p className="text-sm leading-relaxed" style={{ color: "#5b6779" }}>
               Când toate persoanele din organizație finalizează chestionarul, vei primi disponibil pe platformă un
               raport detaliat cu analiza individuală a răspunsurilor și o recomandare pentru fiecare arie de
               îmbunătățire în parte.
@@ -265,8 +265,8 @@ export function EvaluationWizard({
         <button
           type="button"
           onClick={() => setEntered(true)}
-          className="inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-          style={{ background: "#2dbe8f", boxShadow: "0 4px 16px rgba(45,190,143,0.3)" }}
+          className="inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity"
+          style={{ background: "#00d495", boxShadow: "0 4px 16px rgba(0,212,149,0.3)" }}
         >
           {hasStarted ? "Continuă evaluarea" : "Începe evaluarea"}
         </button>
@@ -276,10 +276,10 @@ export function EvaluationWizard({
 
   const missingDimensionFallback = (
     <div className="bg-white rounded-xl border border-border p-8 text-center">
-      <p className="text-sm mb-4" style={{ color: "#ef4444" }}>
+      <p className="text-sm mb-4" style={{ color: "#b91c1c" }}>
         Nu am putut determina dimensiunea următoare.
       </p>
-      <Link href={backHref} className="text-sm font-semibold hover:underline" style={{ color: "#2dbe8f" }}>
+      <Link href={backHref} className="text-sm font-semibold hover:underline" style={{ color: "#007d58" }}>
         Înapoi la evaluările mele
       </Link>
     </div>

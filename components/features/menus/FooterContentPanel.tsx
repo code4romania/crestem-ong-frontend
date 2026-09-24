@@ -11,7 +11,7 @@ import { SOCIAL_LABEL, type FooterContent, type SocialLink } from "@/lib/api/foo
 import { SocialLinksField, type EditableSocial } from "./SocialLinksField";
 
 const inputClass =
-  "w-full rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-[#2dbe8f] focus:outline-none";
+  "w-full rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-[#007d58] focus:outline-none";
 
 const newId = () => Math.random().toString(36).slice(2, 11);
 
@@ -125,7 +125,7 @@ export function FooterContentPanel({ footer }: { footer: FooterContent }) {
   return (
     <div className="mb-6 overflow-hidden rounded-xl border border-border bg-white">
       <div className="border-b border-border px-5 py-4">
-        <h2 className="font-heading text-[1.0625rem] font-bold text-[#162040]">
+        <h2 className="font-heading text-[1.0625rem] font-bold text-[#1c1c81]">
           Conținutul footerului
         </h2>
         <p className="mt-0.5 text-xs text-muted-foreground">
@@ -170,7 +170,7 @@ export function FooterContentPanel({ footer }: { footer: FooterContent }) {
             type="button"
             onClick={save}
             disabled={pending}
-            className="rounded-xl bg-[#2dbe8f] px-5 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+            className="rounded-xl bg-[#00d495] px-5 py-2.5 text-sm font-semibold text-white transition-opacity hover:brightness-90 disabled:opacity-60"
           >
             {pending ? "Se salvează…" : "Salvează"}
           </button>

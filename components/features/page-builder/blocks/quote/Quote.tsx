@@ -36,7 +36,7 @@ export function Quote({ data }: { data: QuoteData }) {
         >
           <QuoteIcon
             size={evidentiat ? 40 : 34}
-            className="mb-4 shrink-0 text-[#2dbe8f]"
+            className="mb-4 shrink-0 text-[#007d58]"
             fill="currentColor"
             strokeWidth={0}
             aria-hidden
@@ -58,23 +58,23 @@ export function Quote({ data }: { data: QuoteData }) {
           {hasCaption ? (
             <figcaption className="mt-5">
               {autor ? (
-                <span className="block font-semibold text-[#162040]">
+                <span className="block font-semibold text-[#1c1c81]">
                   {autor}
                 </span>
               ) : null}
               {meta ? (
-                <span className="block text-sm text-[#64748b]">{meta}</span>
+                <span className="block text-sm text-[#5b6779]">{meta}</span>
               ) : null}
               {sursa ? (
                 isUrl(sursa) ? (
                   <Link
                     href={sursa}
-                    className="mt-1 inline-block text-xs text-[#94a3b8] underline underline-offset-2 hover:text-[#64748b]"
+                    className="mt-1 inline-block text-xs text-[#5b6779] underline underline-offset-2 hover:text-[#5b6779]"
                   >
                     {sursa}
                   </Link>
                 ) : (
-                  <span className="mt-1 block text-xs text-[#94a3b8]">
+                  <span className="mt-1 block text-xs text-[#5b6779]">
                     {sursa}
                   </span>
                 )

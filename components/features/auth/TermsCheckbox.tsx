@@ -24,9 +24,9 @@ export function TermsCheckbox({ registration, checked, error }: TermsCheckboxPro
           <div
             className="w-5 h-5 rounded flex items-center justify-center transition-colors"
             style={{
-              background: checked ? "#2dbe8f" : "white",
+              background: checked ? "#00d495" : "white",
               border: `2px solid ${
-                checked ? "#2dbe8f" : error ? "#f87171" : "#cbd5e1"
+                checked ? "#00d495" : error ? "#dc2626" : "#5b6779"
               }`,
             }}
           >
@@ -48,7 +48,7 @@ export function TermsCheckbox({ registration, checked, error }: TermsCheckboxPro
           <Link
             href="/termeni-si-conditii"
             className="underline font-medium"
-            style={{ color: "#2dbe8f" }}
+            style={{ color: "#007d58" }}
           >
             Termenii și condițiile
           </Link>{" "}
@@ -56,7 +56,7 @@ export function TermsCheckbox({ registration, checked, error }: TermsCheckboxPro
           <Link
             href="/politica-de-confidentialitate"
             className="underline font-medium"
-            style={{ color: "#2dbe8f" }}
+            style={{ color: "#007d58" }}
           >
             Politica de confidențialitate
           </Link>
@@ -64,7 +64,7 @@ export function TermsCheckbox({ registration, checked, error }: TermsCheckboxPro
         </span>
       </label>
       {error && (
-        <p className="mt-2 text-xs ml-8" style={{ color: "#ef4444" }}>
+        <p className="mt-2 text-xs ml-8" style={{ color: "#b91c1c" }}>
           {error}
         </p>
       )}

@@ -31,7 +31,7 @@ const ROLE_CARDS: { role: PickableRole; label: string; icon: typeof UserCog }[] 
 ];
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm";
 
 export function AddFdscUserModal({ dimensions, onClose }: { dimensions: Dimension[]; onClose: () => void }) {
   const [role, setRole] = useState<PickableRole | null>(null);
@@ -132,7 +132,7 @@ export function AddFdscUserModal({ dimensions, onClose }: { dimensions: Dimensio
                 <ArrowLeft size={18} />
               </button>
             )}
-            <h2 id="add-fdsc-user-title" className="font-heading font-extrabold text-lg" style={{ color: "#162040" }}>
+            <h2 id="add-fdsc-user-title" className="font-heading font-extrabold text-lg" style={{ color: "#1c1c81" }}>
               {role ? roleLabel : "Adaugă utilizator"}
             </h2>
           </div>
@@ -148,7 +148,7 @@ export function AddFdscUserModal({ dimensions, onClose }: { dimensions: Dimensio
 
         <div className="px-6 py-5 space-y-4 overflow-y-auto">
           {error && (
-            <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#ef4444]">
+            <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#b91c1c]">
               {error}
             </p>
           )}
@@ -161,15 +161,15 @@ export function AddFdscUserModal({ dimensions, onClose }: { dimensions: Dimensio
                   key={card.role}
                   type="button"
                   onClick={() => setRole(card.role)}
-                  className="w-full flex items-center gap-3 p-4 rounded-xl border border-border hover:border-[#2dbe8f] hover:bg-[#2dbe8f]/5 transition-colors text-left"
+                  className="w-full flex items-center gap-3 p-4 rounded-xl border border-border hover:border-[#00d495] hover:bg-[#00d495]/5 transition-colors text-left"
                 >
                   <div
                     className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-                    style={{ background: "rgba(45,190,143,0.12)" }}
+                    style={{ background: "rgba(0,212,149,0.12)" }}
                   >
-                    <card.icon size={18} style={{ color: "#2dbe8f" }} />
+                    <card.icon size={18} style={{ color: "#007d58" }} />
                   </div>
-                  <p className="font-semibold" style={{ color: "#162040" }}>{card.label}</p>
+                  <p className="font-semibold" style={{ color: "#1c1c81" }}>{card.label}</p>
                 </button>
               ))}
             </div>
@@ -179,7 +179,7 @@ export function AddFdscUserModal({ dimensions, onClose }: { dimensions: Dimensio
             <>
               <div>
                 <label htmlFor="fdsc-user-nume" className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
-                  Nume complet <span style={{ color: "#2dbe8f" }}>*</span>
+                  Nume complet <span style={{ color: "#007d58" }}>*</span>
                 </label>
                 <input
                   id="fdsc-user-nume"
@@ -190,13 +190,13 @@ export function AddFdscUserModal({ dimensions, onClose }: { dimensions: Dimensio
                   placeholder="ex. Ion Popescu"
                 />
                 {fieldErrors.nume && (
-                  <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>{fieldErrors.nume}</p>
+                  <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>{fieldErrors.nume}</p>
                 )}
               </div>
 
               <div>
                 <label htmlFor="fdsc-user-email" className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
-                  Adresă email <span style={{ color: "#2dbe8f" }}>*</span>
+                  Adresă email <span style={{ color: "#007d58" }}>*</span>
                 </label>
                 <input
                   id="fdsc-user-email"
@@ -207,7 +207,7 @@ export function AddFdscUserModal({ dimensions, onClose }: { dimensions: Dimensio
                   placeholder="ion.popescu@fdsc.ro"
                 />
                 {fieldErrors.email && (
-                  <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>{fieldErrors.email}</p>
+                  <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>{fieldErrors.email}</p>
                 )}
               </div>
 
@@ -235,8 +235,8 @@ export function AddFdscUserModal({ dimensions, onClose }: { dimensions: Dimensio
               type="button"
               onClick={handleSubmit}
               disabled={isPending || !nume.trim() || !email.trim()}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-70"
-              style={{ background: "#2dbe8f" }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity disabled:opacity-70"
+              style={{ background: "#00d495" }}
             >
               {isPending && <Loader2 size={14} className="animate-spin" />}
               {isPending ? "Se trimite..." : "Trimite invitația"}

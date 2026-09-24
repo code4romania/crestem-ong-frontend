@@ -13,7 +13,7 @@ export function AuthPageHeader({ eyebrow, title, subtitle, backHref, backLabel }
   return (
     <section
       className="py-16"
-      style={{ background: "linear-gradient(135deg, #0d1b35 0%, #162040 100%)" }}
+      style={{ background: "linear-gradient(135deg, #0d1b35 0%, #1c1c81 100%)" }}
     >
       <div className="max-w-3xl mx-auto px-6 text-center">
         {backHref && (
@@ -27,7 +27,7 @@ export function AuthPageHeader({ eyebrow, title, subtitle, backHref, backLabel }
         )}
         <div
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6"
-          style={{ background: "rgba(45,190,143,0.15)", color: "#2dbe8f", border: "1px solid rgba(45,190,143,0.3)" }}
+          style={{ background: "rgba(0,212,149,0.15)", color: "#00d495", border: "1px solid rgba(0,212,149,0.3)" }}
         >
           {eyebrow}
         </div>

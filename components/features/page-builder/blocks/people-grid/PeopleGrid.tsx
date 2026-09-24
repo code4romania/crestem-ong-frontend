@@ -26,7 +26,7 @@ export function PeopleGrid({ data }: { data: PeopleGridData }) {
                 fontSize: "clamp(2rem, 4vw, 2.75rem)",
                 fontWeight: 800,
                 lineHeight: 1.15,
-                color: "#162040",
+                color: "#1c1c81",
               }}
             >
               {data.titlu}

@@ -124,14 +124,14 @@ export function MediaFilters({
       <div className="relative">
         <Search
           size={14}
-          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5b6779]"
         />
         <input
           value={searchDraft}
           onChange={(event) => handleSearchChange(event.target.value)}
           placeholder="Caută după titlu…"
           aria-label="Caută după titlu"
-          className={`w-full rounded-xl border border-border py-2.5 pl-10 text-sm focus:border-[#2dbe8f] focus:outline-none ${
+          className={`w-full rounded-xl border border-border py-2.5 pl-10 text-sm focus:border-[#007d58] focus:outline-none ${
             searchDraft ? "pr-10" : "pr-4"
           }`}
         />
@@ -140,7 +140,7 @@ export function MediaFilters({
             type="button"
             onClick={clearSearch}
             aria-label="Șterge căutarea"
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-[#94a3b8] transition-colors hover:bg-slate-100 hover:text-[#475569]"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-[#5b6779] transition-colors hover:bg-slate-100 hover:text-[#475569]"
           >
             <X size={14} />
           </button>
@@ -161,7 +161,7 @@ export function MediaFilters({
           {tags.map((tag) => {
             const selected = tagSlugs.includes(tag.slug);
             const chipTone = selected
-              ? "bg-[#2dbe8f] text-white"
+              ? "bg-[#00d495] text-white"
               : "bg-slate-100 text-[#475569]";
             return (
               <span

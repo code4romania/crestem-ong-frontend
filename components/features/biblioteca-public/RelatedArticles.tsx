@@ -11,7 +11,7 @@ export function RelatedArticles({ articles }: { articles: RelatedArticleRef[] })
       <div className="mx-auto w-full max-w-6xl px-6 py-12">
         <h2
           id="articole-relationate-heading"
-          className="font-heading text-2xl font-extrabold text-[#162040]"
+          className="font-heading text-2xl font-extrabold text-[#1c1c81]"
         >
           Articole relaționate
         </h2>
@@ -31,12 +31,12 @@ export function RelatedArticles({ articles }: { articles: RelatedArticleRef[] })
                       {article.tip}
                     </span>
                   ) : null}
-                  <h3 className="mt-4 font-heading text-lg font-bold text-[#162040] wrap-break-word">
+                  <h3 className="mt-4 font-heading text-lg font-bold text-[#1c1c81] wrap-break-word">
                     {article.titlu}
                   </h3>
                 </div>
                 <div className="flex items-center justify-end border-t border-border px-6 py-3.5">
-                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#2dbe8f]">
+                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#007d58]">
                     Accesează <ChevronRight size={15} />
                   </span>
                 </div>
@@ -64,7 +64,7 @@ export function RelatedArticles({ articles }: { articles: RelatedArticleRef[] })
 
         <Link
           href="/biblioteca"
-          className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#162040] hover:text-[#2dbe8f]"
+          className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#1c1c81] hover:text-[#007d58]"
         >
           <ChevronRight size={16} />
           Vezi toate resursele din bibliotecă

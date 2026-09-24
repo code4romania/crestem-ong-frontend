@@ -36,8 +36,8 @@ export function SpacerEditor({
                 key={option.value}
                 className={
                   selected
-                    ? "flex cursor-pointer items-center gap-4 rounded-xl border border-[#2563eb] bg-[#eff6ff] px-4 py-3 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#2563eb]/30"
-                    : "flex cursor-pointer items-center gap-4 rounded-xl border border-border bg-white px-4 py-3 transition-colors hover:border-[#cbd5e1] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#2563eb]/30"
+                    ? "flex cursor-pointer items-center gap-4 rounded-xl border border-[#5656e5] bg-[#dcfafb] px-4 py-3 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#5656e5]/30"
+                    : "flex cursor-pointer items-center gap-4 rounded-xl border border-border bg-white px-4 py-3 transition-colors hover:border-[#cbd5e1] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#5656e5]/30"
                 }
               >
                 <input
@@ -58,7 +58,7 @@ export function SpacerEditor({
                 />
                 <span
                   className={`text-sm font-medium ${
-                    selected ? "text-[#2563eb]" : "text-[#162040]"
+                    selected ? "text-[#5656e5]" : "text-[#1c1c81]"
                   }`}
                 >
                   {option.label}
@@ -67,7 +67,7 @@ export function SpacerEditor({
             );
           })}
         </div>
-        <p className="mt-1.5 text-xs text-[#94a3b8]">
+        <p className="mt-1.5 text-xs text-[#5b6779]">
           Valorile se reduc automat pe ecrane mici.
         </p>
       </fieldset>

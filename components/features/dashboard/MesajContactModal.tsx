@@ -48,13 +48,13 @@ export function MesajContactModal({
         <div className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6">
           <h2
             id="mesaj-contact-title"
-            className="font-heading text-lg font-extrabold text-[#162040]"
+            className="font-heading text-lg font-extrabold text-[#1c1c81]"
           >
             {message.name}
           </h2>
 
           <p className="mt-1 text-sm text-muted-foreground">
-            <a href={`mailto:${message.email}`} className="text-[#2563eb] hover:underline">
+            <a href={`mailto:${message.email}`} className="text-[#5656e5] hover:underline">
               {message.email}
             </a>
             {" · "}
@@ -62,7 +62,7 @@ export function MesajContactModal({
           </p>
 
           <div className="mt-4 flex flex-wrap items-center gap-3 border-y border-border py-3 text-sm">
-            <span className="font-semibold text-[#162040]">{message.subject}</span>
+            <span className="font-semibold text-[#1c1c81]">{message.subject}</span>
             <span className="text-muted-foreground">{formatDate(message.createdAt)}</span>
             <span className="ml-auto">
               <ContactStatusSelect documentId={message.documentId} status={message.status} />
@@ -70,12 +70,12 @@ export function MesajContactModal({
           </div>
 
           <p className="mt-2 text-xs text-muted-foreground">
-            <span className="font-semibold text-[#162040]">Acord GDPR:</span>{" "}
+            <span className="font-semibold text-[#1c1c81]">Acord GDPR:</span>{" "}
             {formatDate(message.consentedAt)}
           </p>
 
           {/* `whitespace-pre-wrap`: rândurile scrise de vizitator s-ar lipi altfel. */}
-          <p className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-[#162040]">
+          <p className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-[#1c1c81]">
             {message.message}
           </p>
 
@@ -90,7 +90,7 @@ export function MesajContactModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-[#162040] hover:border-slate-300"
+              className="rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-[#1c1c81] hover:border-slate-300"
             >
               Închide
             </button>

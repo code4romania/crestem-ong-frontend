@@ -23,13 +23,13 @@ export function MentorCard({ mentor }: { mentor: OngMentor }) {
         ) : (
           <div
             className="w-11 h-11 shrink-0 rounded-full flex items-center justify-center"
-            style={{ background: "#eff6ff" }}
+            style={{ background: "#dcfafb" }}
           >
-            <User size={20} style={{ color: "#2563eb" }} />
+            <User size={20} style={{ color: "#5656e5" }} />
           </div>
         )}
         <div className="min-w-0">
-          <h3 className="font-semibold truncate" style={{ color: "#162040" }}>
+          <h3 className="font-semibold truncate" style={{ color: "#1c1c81" }}>
             {mentor.nume}
           </h3>
           {mentor.isDeleted && <DeletedAccountBadge className="mt-1 inline-block" />}
@@ -56,7 +56,7 @@ export function MentorCard({ mentor }: { mentor: OngMentor }) {
             <span
               key={program.documentId}
               className="px-2.5 py-1 rounded-full text-xs font-medium"
-              style={{ background: "#f0faf6", color: "#162040" }}
+              style={{ background: "#e5f9e5", color: "#1c1c81" }}
             >
               {program.name}
             </span>

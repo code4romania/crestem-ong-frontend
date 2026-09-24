@@ -63,13 +63,13 @@ export default async function Page({
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
       <Link
         href="/biblioteca"
-        className="mb-6 inline-flex items-center gap-2 text-sm text-[#475569] transition-colors hover:text-[#162040]"
+        className="mb-6 inline-flex items-center gap-2 text-sm text-[#475569] transition-colors hover:text-[#1c1c81]"
       >
         <ArrowLeft size={15} />
         Înapoi la Bibliotecă
       </Link>
 
-      <h1 className="font-heading text-3xl font-extrabold text-[#162040]">{category.nume}</h1>
+      <h1 className="font-heading text-3xl font-extrabold text-[#1c1c81]">{category.nume}</h1>
       {category.descriere && hasRichText(category.descriere) ? (
         <div
           className={`mt-2 max-w-2xl ${RICH_TEXT_PROSE}`}
@@ -107,7 +107,7 @@ export default async function Page({
       {pageCount > 1 ? (
         <nav className="mt-10 flex items-center justify-center gap-3" aria-label="Paginare">
           {page > 1 ? (
-            <Link href={hrefForPage(page - 1)} className="text-sm font-semibold text-[#2dbe8f]">
+            <Link href={hrefForPage(page - 1)} className="text-sm font-semibold text-[#007d58]">
               Anterior
             </Link>
           ) : null}
@@ -115,7 +115,7 @@ export default async function Page({
             Pagina {page} din {pageCount}
           </span>
           {page < pageCount ? (
-            <Link href={hrefForPage(page + 1)} className="text-sm font-semibold text-[#2dbe8f]">
+            <Link href={hrefForPage(page + 1)} className="text-sm font-semibold text-[#007d58]">
               Următor
             </Link>
           ) : null}

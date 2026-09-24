@@ -28,8 +28,8 @@ export function ProportionPicker({
               key={option.value}
               className={
                 selected
-                  ? "flex cursor-pointer items-center gap-3 rounded-xl border border-[#2563eb] bg-[#eff6ff] px-4 py-2.5 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#2563eb]/30"
-                  : "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-2.5 transition-colors hover:border-[#cbd5e1] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#2563eb]/30"
+                  ? "flex cursor-pointer items-center gap-3 rounded-xl border border-[#5656e5] bg-[#dcfafb] px-4 py-2.5 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#5656e5]/30"
+                  : "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-2.5 transition-colors hover:border-[#cbd5e1] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#5656e5]/30"
               }
             >
               <input
@@ -55,7 +55,7 @@ export function ProportionPicker({
               </span>
               <span
                 className={`shrink-0 text-sm font-semibold ${
-                  selected ? "text-[#2563eb]" : "text-[#475569]"
+                  selected ? "text-[#5656e5]" : "text-[#475569]"
                 }`}
               >
                 {option.label}

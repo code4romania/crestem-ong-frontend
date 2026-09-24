@@ -29,18 +29,18 @@ export interface CategoryCardData {
 
 /** One accent per icon, so a category's mark and its tint are one decision. */
 const ICON_TINT: Record<string, { bg: string; fg: string }> = {
-  folder: { bg: "#eff6ff", fg: "#2563eb" },
-  settings: { bg: "#eff6ff", fg: "#2563eb" },
+  folder: { bg: "#dcfafb", fg: "#5656e5" },
+  settings: { bg: "#dcfafb", fg: "#5656e5" },
   scale: { bg: "#fef2f2", fg: "#dc2626" },
-  message: { bg: "#ecfdf5", fg: "#059669" },
-  trending: { bg: "#fffbeb", fg: "#d97706" },
+  message: { bg: "#ecfdf5", fg: "#047857" },
+  trending: { bg: "#fffbeb", fg: "#b45309" },
   users: { bg: "#f5f3ff", fg: "#7c3aed" },
-  award: { bg: "#ecfdf5", fg: "#059669" },
-  book: { bg: "#eff6ff", fg: "#2563eb" },
-  globe: { bg: "#ecfeff", fg: "#0891b2" },
+  award: { bg: "#ecfdf5", fg: "#047857" },
+  book: { bg: "#dcfafb", fg: "#5656e5" },
+  globe: { bg: "#ecfeff", fg: "#0e7490" },
   heart: { bg: "#fdf2f8", fg: "#db2777" },
   briefcase: { bg: "#f8fafc", fg: "#475569" },
-  calendar: { bg: "#fffbeb", fg: "#d97706" },
+  calendar: { bg: "#fffbeb", fg: "#b45309" },
 };
 
 const resourceLabel = (count: number) => `${count} ${count === 1 ? "resursă" : "resurse"}`;
@@ -63,7 +63,7 @@ export function CategoryCard({ category }: { category: CategoryCardData }) {
         <Icon size={20} />
       </span>
 
-      <h2 className="font-heading text-lg font-bold text-[#162040] wrap-break-word">
+      <h2 className="font-heading text-lg font-bold text-[#1c1c81] wrap-break-word">
         {category.nume}
       </h2>
       {category.descriere && hasRichText(category.descriere) ? (
@@ -81,7 +81,7 @@ export function CategoryCard({ category }: { category: CategoryCardData }) {
         <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs text-[#475569]">
           {resourceLabel(category.numarArticole)}
         </span>
-        <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#2dbe8f]">
+        <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#007d58]">
           Vezi resurse <ChevronRight size={15} />
         </span>
       </div>

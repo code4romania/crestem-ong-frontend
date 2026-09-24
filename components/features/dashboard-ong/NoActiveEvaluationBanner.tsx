@@ -17,12 +17,12 @@ export function NoActiveEvaluationBanner({
   return (
     <div
       className="rounded-2xl p-6 mb-8 flex flex-wrap items-center justify-between gap-4"
-      style={{ background: "#162040" }}
+      style={{ background: "#1c1c81" }}
     >
       <div>
         <p
           className="text-xs font-semibold uppercase tracking-wider mb-2"
-          style={{ color: "#2dbe8f" }}
+          style={{ color: "#00d495" }}
         >
           Nicio evaluare activă
         </p>

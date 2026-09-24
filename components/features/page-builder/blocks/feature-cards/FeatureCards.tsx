@@ -4,7 +4,7 @@ import { getMediaUrl } from "@/lib/api/client";
 import { FEATURE_ICONS } from "./icons";
 import type { FeatureCard, FeatureCardsData } from "./schema";
 
-const NAVY_BG = "#162040";
+const NAVY_BG = "#1c1c81";
 /**
  * The "default" background is a tint, not page white — the white cards need
  * something to sit on. Measured off the design.
@@ -50,7 +50,7 @@ function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
       ) : (
         <span
           className="mx-6 mt-6 mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
-          style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
+          style={{ background: "rgba(0,212,149,0.12)", color: isDark ? "#00d495" : "#007d58" }}
         >
           <Icon size={22} />
         </span>
@@ -60,7 +60,7 @@ function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
       >
         <h3
           className={`mb-2 text-lg font-semibold wrap-break-word ${
-            isDark ? "text-white" : "text-[#162040]"
+            isDark ? "text-white" : "text-[#1c1c81]"
           }`}
         >
           {card.titlu}
@@ -78,7 +78,7 @@ function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
           <Link
             href={card.href}
             className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold wrap-break-word transition-colors hover:opacity-80"
-            style={{ color: "#2dbe8f" }}
+            style={{ color: isDark ? "#00d495" : "#007d58" }}
           >
             {card.ctaLabel} <ChevronRight size={16} />
           </Link>
@@ -114,7 +114,7 @@ export function FeatureCards({ data }: { data: FeatureCardsData }) {
         <div className="mx-auto mb-12 max-w-2xl text-center">
           <p
             className="mb-3 text-sm font-bold uppercase tracking-[0.12em] wrap-break-word"
-            style={{ color: "#2dbe8f" }}
+            style={{ color: isDark ? "#00d495" : "#007d58" }}
           >
             {titluSectiune}
           </p>
@@ -125,7 +125,7 @@ export function FeatureCards({ data }: { data: FeatureCardsData }) {
                 fontSize: "clamp(2rem, 4vw, 2.75rem)",
                 fontWeight: 800,
                 lineHeight: 1.15,
-                color: isDark ? "#ffffff" : "#162040",
+                color: isDark ? "#ffffff" : "#1c1c81",
               }}
             >
               {descriere}

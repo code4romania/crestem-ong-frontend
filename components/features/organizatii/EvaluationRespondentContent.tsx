@@ -51,13 +51,13 @@ export function EvaluationRespondentContent({
       <Link
         href={backHref}
         className="inline-flex items-center gap-1.5 text-sm font-medium mb-6"
-        style={{ color: "#94a3b8" }}
+        style={{ color: "#5b6779" }}
       >
         <ArrowLeft size={14} /> Înapoi la evaluare
       </Link>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+        <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
           {heading}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">{evaluation.name}</p>

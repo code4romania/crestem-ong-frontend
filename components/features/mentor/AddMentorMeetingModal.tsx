@@ -20,8 +20,8 @@ export function AddMentorMeetingModal({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90"
-        style={{ background: "#2dbe8f" }}
+        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-opacity hover:brightness-90"
+        style={{ background: "#00d495" }}
       >
         <Plus size={14} /> Adaugă întâlnire
       </button>

@@ -64,11 +64,11 @@ export function RelatedArticlesField({
                   checked={checked}
                   disabled={disabled}
                   onChange={() => toggle(candidate.documentId)}
-                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-border text-[#2dbe8f] focus:ring-[#2dbe8f] disabled:opacity-40"
+                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-border text-[#007d58] focus:ring-[#007d58] disabled:opacity-40"
                 />
                 <label
                   htmlFor={`related-${candidate.documentId}`}
-                  className={`text-sm ${disabled ? "text-muted-foreground" : "text-[#162040]"}`}
+                  className={`text-sm ${disabled ? "text-muted-foreground" : "text-[#1c1c81]"}`}
                 >
                   <span className="font-semibold">{candidate.titlu}</span>
                   {candidate.etichete.length > 0 ? (

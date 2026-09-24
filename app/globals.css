@@ -3,14 +3,18 @@
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
-  --primary: #162040;
+  --primary: #1c1c81;
   --primary-foreground: #ffffff;
-  --secondary: #f0faf6;
-  --secondary-foreground: #162040;
+  --secondary: #e5f9e5;
+  --secondary-foreground: #1c1c81;
   --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #2dbe8f;
+  --muted-foreground: #5b6779;
+  --accent: #00d495;
   --accent-foreground: #ffffff;
+  /* Accent green dark enough for text and focus rings on light surfaces
+     (WCAG AA 4.5:1). Buttons keep the brand --accent fill with white text
+     by design decision, knowingly at 1.9:1. */
+  --accent-strong: #007d58;
   --border: #e2e8f0;
   --radius: 0.75rem;
 
@@ -34,7 +38,7 @@
   /* The headline number of a stat card. Distinct hues rather than semantic
      states — they separate adjacent counters at a glance. */
   --value-teal: #0f9d76;
-  --value-blue: #2563eb;
+  --value-blue: #5656e5;
   --value-violet: #7c3aed;
   --value-red: #dc2626;
   --value-orange: #ea580c;
@@ -50,10 +54,10 @@
   /* Program status badges ------------------------------------------------ */
   --status-upcoming: #fffbeb;
   --status-upcoming-foreground: #92400e;
-  --status-active: #eff6ff;
-  --status-active-foreground: #2563eb;
+  --status-active: #dcfafb;
+  --status-active-foreground: #5656e5;
   --status-finished: #f0fdf4;
-  --status-finished-foreground: #16a34a;
+  --status-finished-foreground: #15803d;
 }
 
 @theme inline {
@@ -67,6 +71,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-strong: var(--accent-strong);
   --color-border: var(--border);
 
   --color-surface-subtle: var(--surface-subtle);

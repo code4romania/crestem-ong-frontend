@@ -15,7 +15,7 @@ export default async function MemberOngsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+        <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
           Toate ONG-urile
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -44,12 +44,12 @@ export default async function MemberOngsPage() {
                   <div className="flex items-center gap-3 min-w-0">
                     <div
                       className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-semibold text-white shrink-0"
-                      style={{ background: "#162040" }}
+                      style={{ background: "#1c1c81" }}
                     >
                       {initial}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold truncate" style={{ color: "#162040" }}>
+                      <p className="text-sm font-semibold truncate" style={{ color: "#1c1c81" }}>
                         {ong.name}
                       </p>
                       <p className="text-xs text-muted-foreground">CUI: {ong.cui}</p>
@@ -58,7 +58,7 @@ export default async function MemberOngsPage() {
                   {ong.pendingEvaluation && (
                     <span
                       className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold shrink-0"
-                      style={{ background: "#fefce8", color: "#ca8a04" }}
+                      style={{ background: "#fefce8", color: "#a16207" }}
                     >
                       <Clock size={11} /> Evaluare în așteptare
                     </span>
@@ -67,10 +67,10 @@ export default async function MemberOngsPage() {
 
                 {ong.domeniuActivitate && (
                   <div className="mb-3">
-                    <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>
+                    <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5b6779" }}>
                       Domeniu
                     </p>
-                    <p className="text-sm font-semibold" style={{ color: "#162040" }}>
+                    <p className="text-sm font-semibold" style={{ color: "#1c1c81" }}>
                       {ong.domeniuActivitate}
                     </p>
                   </div>
@@ -78,12 +78,12 @@ export default async function MemberOngsPage() {
 
                 {activeProgram && (
                   <div className="mb-4">
-                    <p className="text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#94a3b8" }}>
+                    <p className="text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#5b6779" }}>
                       Program
                     </p>
                     <span
                       className="inline-block px-2.5 py-1 rounded-full text-xs font-semibold"
-                      style={{ background: "#f0faf6", color: "#2dbe8f" }}
+                      style={{ background: "#e5f9e5", color: "#007d58" }}
                     >
                       {activeProgram.name}
                     </span>
@@ -91,7 +91,7 @@ export default async function MemberOngsPage() {
                 )}
 
                 <div className="flex justify-end">
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold" style={{ color: "#2dbe8f" }}>
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold" style={{ color: "#007d58" }}>
                     Selectează <ArrowRight size={12} />
                   </span>
                 </div>

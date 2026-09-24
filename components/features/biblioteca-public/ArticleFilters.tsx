@@ -6,7 +6,7 @@ import { ChevronDown, Search } from "lucide-react";
 import type { PublicSubcategory } from "@/lib/api/biblioteca-public-types";
 
 const controlClass =
-  "rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#2dbe8f] focus:outline-none";
+  "rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#007d58] focus:outline-none";
 
 const SEARCH_DEBOUNCE_MS = 400;
 
@@ -73,7 +73,7 @@ export function ArticleFilters({
       <div className="relative min-w-64 flex-1">
         <Search
           size={14}
-          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5b6779]"
         />
         <input
           value={term}
@@ -101,7 +101,7 @@ export function ArticleFilters({
         </select>
         <ChevronDown
           size={15}
-          className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+          className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#5b6779]"
         />
       </div>
 
@@ -121,7 +121,7 @@ export function ArticleFilters({
         </select>
         <ChevronDown
           size={15}
-          className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+          className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#5b6779]"
         />
       </div>
     </div>

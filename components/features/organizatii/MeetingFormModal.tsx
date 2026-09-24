@@ -23,7 +23,7 @@ interface ActivityTypeOption {
 }
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm";
 
 const selectClass = `${inputClass} appearance-none pr-10`;
 
@@ -134,7 +134,7 @@ function MeetingFormModalInner({
     >
       <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col">
         <div className="px-6 py-5 border-b border-border flex items-start justify-between gap-4">
-          <h2 id="meeting-form-title" className="font-heading font-extrabold text-lg" style={{ color: "#162040" }}>
+          <h2 id="meeting-form-title" className="font-heading font-extrabold text-lg" style={{ color: "#1c1c81" }}>
             {isEdit ? "Editează întâlnire" : "Adaugă întâlnire"}
           </h2>
           <button
@@ -150,14 +150,14 @@ function MeetingFormModalInner({
 
         <div className="px-6 py-5 space-y-4 overflow-y-auto">
           {error && (
-            <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#ef4444]">
+            <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#b91c1c]">
               {error}
             </p>
           )}
 
           <div>
             <label htmlFor="meeting-mentor" className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
-              Persoană resursă <span style={{ color: "#ef4444" }}>*</span>
+              Persoană resursă <span style={{ color: "#b91c1c" }}>*</span>
             </label>
             <div className="relative">
               <select
@@ -207,7 +207,7 @@ function MeetingFormModalInner({
 
           <div>
             <label htmlFor="meeting-subiect" className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
-              Subiect întâlnire <span style={{ color: "#ef4444" }}>*</span>
+              Subiect întâlnire <span style={{ color: "#b91c1c" }}>*</span>
             </label>
             <input
               id="meeting-subiect"
@@ -222,26 +222,26 @@ function MeetingFormModalInner({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label htmlFor="meeting-data" className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
-                Data <span style={{ color: "#ef4444" }}>*</span>
+                Data <span style={{ color: "#b91c1c" }}>*</span>
               </label>
               <input
                 id="meeting-data"
                 type="date"
                 className={inputClass}
-                style={{ color: "#162040" }}
+                style={{ color: "#1c1c81" }}
                 value={data}
                 onChange={(e) => setData(e.target.value)}
               />
             </div>
             <div>
               <label htmlFor="meeting-ora" className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
-                Ora <span style={{ color: "#ef4444" }}>*</span>
+                Ora <span style={{ color: "#b91c1c" }}>*</span>
               </label>
               <input
                 id="meeting-ora"
                 type="time"
                 className={inputClass}
-                style={{ color: "#162040" }}
+                style={{ color: "#1c1c81" }}
                 value={ora}
                 onChange={(e) => setOra(e.target.value)}
               />
@@ -259,7 +259,7 @@ function MeetingFormModalInner({
                 className={toggleBase}
                 style={
                   format === "online"
-                    ? { background: "#162040", color: "#fff", borderColor: "transparent" }
+                    ? { background: "#1c1c81", color: "#fff", borderColor: "transparent" }
                     : { color: "#475569", borderColor: "var(--border)" }
                 }
               >
@@ -271,7 +271,7 @@ function MeetingFormModalInner({
                 className={toggleBase}
                 style={
                   format === "fata_in_fata"
-                    ? { background: "#162040", color: "#fff", borderColor: "transparent" }
+                    ? { background: "#1c1c81", color: "#fff", borderColor: "transparent" }
                     : { color: "#475569", borderColor: "var(--border)" }
                 }
               >
@@ -334,8 +334,8 @@ function MeetingFormModalInner({
                     className="px-2.5 py-1 rounded-full text-xs font-medium border transition-colors"
                     style={
                       selected
-                        ? { background: "#f0faf6", color: "#162040", borderColor: "#2dbe8f" }
-                        : { background: "#fff", color: "#64748b", borderColor: "var(--border)" }
+                        ? { background: "#e5f9e5", color: "#1c1c81", borderColor: "#007d58" }
+                        : { background: "#fff", color: "#5b6779", borderColor: "var(--border)" }
                     }
                   >
                     {dimension.name}
@@ -375,7 +375,7 @@ function MeetingFormModalInner({
             onClick={handleSubmit}
             disabled={!canSubmit || isPending}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-50"
-            style={{ background: "#162040" }}
+            style={{ background: "#1c1c81" }}
           >
             {isPending && <Loader2 size={14} className="animate-spin" />}
             {isPending ? "Se salvează..." : isEdit ? "Salvează modificările" : "Adaugă întâlnirea"}

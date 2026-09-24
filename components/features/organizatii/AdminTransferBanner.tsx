@@ -81,9 +81,9 @@ export function AdminTransferBanner({
       style={{ background: "#fffbeb", borderColor: "#fde68a" }}
     >
       <div className="flex items-start gap-3">
-        <Clock size={18} className="mt-0.5 shrink-0" style={{ color: "#d97706" }} aria-hidden />
+        <Clock size={18} className="mt-0.5 shrink-0" style={{ color: "#b45309" }} aria-hidden />
         <div className="text-sm">
-          <p className="font-semibold" style={{ color: "#162040" }}>
+          <p className="font-semibold" style={{ color: "#1c1c81" }}>
             Transfer în așteptare către {recipient}
           </p>
           <p className="text-muted-foreground">
@@ -105,7 +105,7 @@ export function AdminTransferBanner({
             onClick={resend}
             disabled={isResending || isCancelling}
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold border border-border bg-white hover:bg-slate-50 transition-colors disabled:opacity-60"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             {isResending ? <Loader2 size={14} className="animate-spin" /> : <RotateCw size={14} />}
             Retrimite

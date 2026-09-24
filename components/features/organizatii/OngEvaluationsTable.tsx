@@ -54,7 +54,7 @@ export function OngEvaluationsTable({
               <th
                 key={h}
                 className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider whitespace-nowrap"
-                style={{ color: "#94a3b8" }}
+                style={{ color: "#5b6779" }}
               >
                 {h}
               </th>
@@ -67,19 +67,19 @@ export function OngEvaluationsTable({
               key={evaluation.documentId}
               className="border-b border-border last:border-0 transition-colors"
               style={
-                evaluation.finished ? undefined : { background: "#f0faf6" }
+                evaluation.finished ? undefined : { background: "#e5f9e5" }
               }
             >
               <td className="px-5 py-3.5">
                 <span
                   className="inline-flex items-center gap-2 font-semibold"
-                  style={{ color: "#162040" }}
+                  style={{ color: "#1c1c81" }}
                 >
                   {evaluation.name}
                   {!evaluation.finished && (
                     <span
                       className="px-2 py-0.5 rounded-full text-[11px] font-semibold"
-                      style={{ background: "#f0faf6", color: "#2dbe8f" }}
+                      style={{ background: "#e5f9e5", color: "#007d58" }}
                     >
                       curentă
                     </span>
@@ -88,7 +88,7 @@ export function OngEvaluationsTable({
               </td>
               <td
                 className="px-5 py-3.5 whitespace-nowrap"
-                style={{ color: "#64748b" }}
+                style={{ color: "#5b6779" }}
               >
                 {completionPeriod(evaluation)}
               </td>
@@ -97,7 +97,7 @@ export function OngEvaluationsTable({
               </td>
               <td
                 className="px-5 py-3.5 font-semibold"
-                style={{ color: "#162040" }}
+                style={{ color: "#1c1c81" }}
               >
                 {evaluation.scores?.overall != null
                   ? `${evaluation.scores.overall}%`
@@ -108,8 +108,8 @@ export function OngEvaluationsTable({
                   className="px-2.5 py-1 rounded-full text-xs font-semibold"
                   style={
                     evaluation.finished
-                      ? { background: "#f0fdf4", color: "#16a34a" }
-                      : { background: "#eff6ff", color: "#2563eb" }
+                      ? { background: "#f0fdf4", color: "#15803d" }
+                      : { background: "#dcfafb", color: "#5656e5" }
                   }
                 >
                   {evaluation.finished ? "Încheiată" : "În desfășurare"}
@@ -119,7 +119,7 @@ export function OngEvaluationsTable({
                 <Link
                   href={`/dashboard/organizatii/${ongDocumentId}/evaluari/${evaluation.documentId}`}
                   className="text-xs font-semibold hover:underline"
-                  style={{ color: "#2dbe8f" }}
+                  style={{ color: "#007d58" }}
                 >
                   {evaluation.finished
                     ? "Vezi rezultatele →"

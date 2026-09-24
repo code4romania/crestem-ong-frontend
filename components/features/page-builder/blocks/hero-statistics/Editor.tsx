@@ -10,8 +10,8 @@ import type { HeroStatisticsData } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 export function HeroStatisticsEditor({
   value,
@@ -42,7 +42,7 @@ export function HeroStatisticsEditor({
 
       <div>
         <label htmlFor="hs-titlu" className={labelClass}>
-          Titlu <span className="text-[#ef4444]">*</span>
+          Titlu <span className="text-[#b91c1c]">*</span>
         </label>
         <input
           id="hs-titlu"
@@ -137,7 +137,7 @@ export function HeroStatisticsEditor({
       </div>
 
       <div className="flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3">
-        <span className="text-sm font-semibold text-[#162040]">
+        <span className="text-sm font-semibold text-[#1c1c81]">
           Separator între statistici
         </span>
         <Toggle

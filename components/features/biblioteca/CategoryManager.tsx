@@ -23,7 +23,7 @@ import { slugify } from "@/components/features/content-editor/slugify";
 import { CategoryIconPicker } from "./CategoryIconPicker";
 
 const inputClass =
-  "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#2dbe8f] focus:outline-none";
+  "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#007d58] focus:outline-none";
 
 /**
  * Mirrors the backend's `descriereBase` cap in library-category validation —
@@ -341,7 +341,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
       disabled={Boolean(blocked) || pending}
       title={blocked ?? `Șterge ${row.nume}`}
       aria-label={`Șterge ${row.nume}`}
-      className="rounded-lg p-1.5 text-[#94a3b8] transition-colors hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-[#94a3b8]"
+      className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-[#94a3b8]"
     >
       <Trash2 size={15} />
     </button>
@@ -354,7 +354,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
       disabled={pending}
       title={`Editează ${row.nume}`}
       aria-label={`Editează ${row.nume}`}
-      className="rounded-lg p-1.5 text-[#94a3b8] transition-colors hover:bg-slate-100 hover:text-[#162040] disabled:cursor-not-allowed disabled:opacity-40"
+      className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-slate-100 hover:text-[#1c1c81] disabled:cursor-not-allowed disabled:opacity-40"
     >
       <Pencil size={15} />
     </button>
@@ -364,14 +364,14 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
     <div>
       <Link
         href="/dashboard/biblioteca"
-        className="mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-[#162040]"
+        className="mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-[#1c1c81]"
       >
         <ArrowLeft size={15} />
         Înapoi la bibliotecă
       </Link>
 
       <div className="mb-6">
-        <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+        <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
           Gestionează categorii &amp; subcategorii
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -381,7 +381,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
       </div>
 
       <section className="mb-6 rounded-xl border border-border bg-white p-6">
-        <h2 className="mb-4 font-heading text-lg font-bold text-[#162040]">
+        <h2 className="mb-4 font-heading text-lg font-bold text-[#1c1c81]">
           Adaugă categorie nouă
         </h2>
         <AddForm
@@ -419,10 +419,10 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                         );
                       })()}
                       <div className="min-w-0">
-                        <h3 className="font-heading text-base font-bold text-[#162040]">
+                        <h3 className="font-heading text-base font-bold text-[#1c1c81]">
                           {category.nume}
                         </h3>
-                        <code className="text-xs text-[#94a3b8]">{category.slug}</code>
+                        <code className="text-xs text-[#5b6779]">{category.slug}</code>
                         {category.descriere && hasRichText(category.descriere) ? (
                           <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
                             {richTextToPlainText(category.descriere)}
@@ -435,7 +435,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                           still says what is inside it. */}
                       <span className="text-sm font-medium text-[#7c3aed]">
                         {articleLabel(category.numarArticole)}
-                        <span className="text-[#94a3b8]">
+                        <span className="text-[#5b6779]">
                           {" · "}
                           {subcategoryLabel(category.copii.length)}
                         </span>
@@ -463,7 +463,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                               : `Extinde ${category.nume}`
                           }
                           title={isExpanded(category) ? "Restrânge" : "Extinde"}
-                          className="rounded-lg p-1.5 text-[#94a3b8] transition-colors hover:bg-slate-100 hover:text-[#162040]"
+                          className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-slate-100 hover:text-[#1c1c81]"
                         >
                           {isExpanded(category) ? (
                             <ChevronUp size={16} />
@@ -482,7 +482,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                 className="px-6 py-5"
                 hidden={!isExpanded(category)}
               >
-                <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#94a3b8]">
+                <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#5b6779]">
                   Subcategorii
                 </h4>
                 <AddForm
@@ -507,10 +507,10 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                       ) : (
                         <>
                           <div className="min-w-0">
-                            <p className="font-heading text-sm font-semibold text-[#162040]">
+                            <p className="font-heading text-sm font-semibold text-[#1c1c81]">
                               {child.nume}
                             </p>
-                            <code className="text-xs text-[#94a3b8]">{child.slug}</code>
+                            <code className="text-xs text-[#5b6779]">{child.slug}</code>
                           </div>
                           <div className="flex items-center gap-3">
                             <span className="text-sm font-medium text-[#7c3aed]">

@@ -132,7 +132,7 @@ export function OrganizatiiGrid({
     <div>
       <h1
         className="text-2xl font-heading font-extrabold"
-        style={{ color: "#162040" }}
+        style={{ color: "#1c1c81" }}
       >
         Organizații NGO
       </h1>
@@ -223,7 +223,7 @@ export function OrganizatiiGrid({
 
       {error && (
         <div className="mt-6 flex flex-col items-center gap-3">
-          <p className="text-sm" style={{ color: "#ef4444" }}>
+          <p className="text-sm" style={{ color: "#b91c1c" }}>
             {error}
           </p>
           <button

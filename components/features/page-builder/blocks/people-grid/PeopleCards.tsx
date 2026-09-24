@@ -32,18 +32,18 @@ function CardBody({ person, clickable }: { person: Person; clickable: boolean })
       ) : null}
 
       <div className="flex min-w-0 flex-1 flex-col p-6">
-        <h3 className="text-lg font-semibold text-[#162040] wrap-break-word">
+        <h3 className="text-lg font-semibold text-[#1c1c81] wrap-break-word">
           {person.nume}
         </h3>
 
         {person.rol ? (
-          <p className="mt-1 text-sm font-semibold text-[#2dbe8f] wrap-break-word">
+          <p className="mt-1 text-sm font-semibold text-[#007d58] wrap-break-word">
             {person.rol}
           </p>
         ) : null}
 
         {person.organizatie ? (
-          <p className="mt-0.5 text-sm text-[#64748b] wrap-break-word">
+          <p className="mt-0.5 text-sm text-[#5b6779] wrap-break-word">
             {person.organizatie}
           </p>
         ) : null}
@@ -61,7 +61,7 @@ function CardBody({ person, clickable }: { person: Person; clickable: boolean })
                 <span
                   key={index}
                   className="rounded-full px-2.5 py-1 text-xs font-medium wrap-break-word"
-                  style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
+                  style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
                 >
                   {tag}
                 </span>
@@ -70,7 +70,7 @@ function CardBody({ person, clickable }: { person: Person; clickable: boolean })
           ) : null}
 
           {clickable ? (
-            <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#2dbe8f]">
+            <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#007d58]">
               Citește mai mult
               <ChevronRight
                 size={16}
@@ -110,7 +110,7 @@ function PersonCard({
       type="button"
       onClick={() => onSelect?.(index)}
       aria-label={`Vezi descrierea completă: ${person.nume}`}
-      className={`group cursor-pointer text-left transition-all hover:-translate-y-1 hover:shadow-lg hover:ring-[#2dbe8f]/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2dbe8f] ${CARD_CLASS}`}
+      className={`group cursor-pointer text-left transition-all hover:-translate-y-1 hover:shadow-lg hover:ring-[#00d495]/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#007d58] ${CARD_CLASS}`}
     >
       <CardBody person={person} clickable />
     </button>

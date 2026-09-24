@@ -6,7 +6,7 @@ import type { Dimension } from "@/lib/api/dimensions";
 import { dimensionColor, dimensionLabel, dimensionPillStyle } from "@/lib/api/dimension-colors";
 
 const MAX_SELECTED = 5;
-const COLUMN_COLORS = ["#162040", "#2dbe8f", "#2563eb", "#c2410c", "#7c3aed"];
+const COLUMN_COLORS = ["#1c1c81", "#007d58", "#5656e5", "#c2410c", "#7c3aed"];
 
 /**
  * The columns are fed by two endpoints that describe the same reports for
@@ -104,7 +104,7 @@ export function EvaluationComparisonTable({
             type="button"
             onClick={resetSelection}
             className="inline-flex items-center gap-1.5 text-xs font-medium hover:underline"
-            style={{ color: "#64748b" }}
+            style={{ color: "#5b6779" }}
           >
             <RotateCcw size={13} /> Resetează comparația
           </button>
@@ -116,7 +116,7 @@ export function EvaluationComparisonTable({
             <tr>
               <th
                 className="text-left align-top px-6 py-4 text-xs font-semibold uppercase tracking-wider border-b border-border"
-                style={{ color: "#94a3b8", background: "#f8fafc", minWidth: 220 }}
+                style={{ color: "#5b6779", background: "#f8fafc", minWidth: 220 }}
               >
                 Dimensiune
               </th>
@@ -145,7 +145,7 @@ export function EvaluationComparisonTable({
                       type="button"
                       onClick={() => removeEvaluation(evaluation.documentId)}
                       className="mt-1 text-xs font-medium hover:underline print:hidden"
-                      style={{ color: "#94a3b8" }}
+                      style={{ color: "#5b6779" }}
                     >
                       Elimină ×
                     </button>
@@ -162,7 +162,7 @@ export function EvaluationComparisonTable({
                       type="button"
                       onClick={() => setDropdownOpen((open) => !open)}
                       className="w-full flex flex-col items-center gap-1 px-3 py-2 rounded-xl border border-dashed transition-colors hover:bg-slate-50"
-                      style={{ borderColor: "#cbd5e1", color: "#64748b" }}
+                      style={{ borderColor: "#cbd5e1", color: "#5b6779" }}
                     >
                       <Plus size={16} />
                       <span className="text-xs font-semibold">Adaugă evaluare</span>
@@ -176,7 +176,7 @@ export function EvaluationComparisonTable({
                         className="absolute right-0 top-full mt-2 z-20 w-56 bg-white rounded-xl border border-border shadow-lg py-2"
                         role="menu"
                       >
-                        <p className="px-3 pb-2 text-xs font-semibold uppercase tracking-wider" style={{ color: "#94a3b8" }}>
+                        <p className="px-3 pb-2 text-xs font-semibold uppercase tracking-wider" style={{ color: "#5b6779" }}>
                           Selectează evaluare
                         </p>
                         {available.length > 0 ? (
@@ -211,7 +211,7 @@ export function EvaluationComparisonTable({
               <tr key={dimension.key} className="border-b border-border last:border-0">
                 <td
                   className="px-6 py-5 text-sm font-semibold"
-                  style={{ color: "#162040", background: "#f8fafc" }}
+                  style={{ color: "#1c1c81", background: "#f8fafc" }}
                 >
                   {dimension.name}
                 </td>
@@ -234,7 +234,7 @@ export function EvaluationComparisonTable({
                       {delta != null && (
                         <p
                           className="mt-1 text-xs font-semibold"
-                          style={{ color: delta >= 0 ? "#16a34a" : "#dc2626" }}
+                          style={{ color: delta >= 0 ? "#15803d" : "#dc2626" }}
                         >
                           {delta >= 0 ? "▲" : "▼"} {delta >= 0 ? "+" : ""}
                           {delta}%

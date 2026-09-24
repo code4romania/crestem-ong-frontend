@@ -54,7 +54,7 @@ export function Video({ data }: { data: VideoData }) {
     <section>
       <div className={`mx-auto px-6 py-8 ${WIDTH_CLASS[latime]}`}>
         {titlu && (
-          <h2 className="text-2xl font-bold text-[#162040]">{titlu}</h2>
+          <h2 className="text-2xl font-bold text-[#1c1c81]">{titlu}</h2>
         )}
         {descriere && (
           <p className="mt-2 text-sm text-[#475569]">{descriere}</p>
@@ -95,7 +95,7 @@ export function Video({ data }: { data: VideoData }) {
               />
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#94a3b8]">
+            <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#5b6779]">
               Adaugă o sursă video.
             </div>
           )}
@@ -103,10 +103,10 @@ export function Video({ data }: { data: VideoData }) {
           {hasCaption && (
             <figcaption className="mt-3">
               {legenda && (
-                <span className="block text-sm text-[#64748b]">{legenda}</span>
+                <span className="block text-sm text-[#5b6779]">{legenda}</span>
               )}
               {credit && (
-                <span className="block text-xs text-[#94a3b8]">{credit}</span>
+                <span className="block text-xs text-[#5b6779]">{credit}</span>
               )}
             </figcaption>
           )}

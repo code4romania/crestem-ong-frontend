@@ -15,7 +15,7 @@ import {
 } from "@/lib/api/admin-transfer-actions";
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm";
 
 type Tab = "member" | "email";
 
@@ -100,7 +100,7 @@ export function TransferOngDialog({
             <h2
               id="transfer-ong-title"
               className="font-heading font-extrabold text-lg"
-              style={{ color: "#162040" }}
+              style={{ color: "#1c1c81" }}
             >
               {isFdsc ? "Schimbă administratorul" : "Transferă organizația"}
             </h2>
@@ -141,7 +141,7 @@ export function TransferOngDialog({
                   className="block text-sm font-semibold mb-1.5"
                   style={{ color: "#334155" }}
                 >
-                  Nume complet <span style={{ color: "#2dbe8f" }}>*</span>
+                  Nume complet <span style={{ color: "#007d58" }}>*</span>
                 </label>
                 <input
                   id="transfer-nume"
@@ -153,7 +153,7 @@ export function TransferOngDialog({
                   disabled={isPending}
                 />
                 {fieldErrors.nume && (
-                  <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+                  <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
                     {fieldErrors.nume}
                   </p>
                 )}
@@ -164,7 +164,7 @@ export function TransferOngDialog({
                   className="block text-sm font-semibold mb-1.5"
                   style={{ color: "#334155" }}
                 >
-                  Adresă email <span style={{ color: "#2dbe8f" }}>*</span>
+                  Adresă email <span style={{ color: "#007d58" }}>*</span>
                 </label>
                 <input
                   id="transfer-email"
@@ -176,7 +176,7 @@ export function TransferOngDialog({
                   disabled={isPending}
                 />
                 {fieldErrors.email && (
-                  <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+                  <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
                     {fieldErrors.email}
                   </p>
                 )}
@@ -188,7 +188,7 @@ export function TransferOngDialog({
           )}
 
           <div className="rounded-xl border border-border bg-slate-50 px-4 py-3 text-sm" style={{ color: "#334155" }}>
-            <p className="font-semibold mb-1.5" style={{ color: "#162040" }}>
+            <p className="font-semibold mb-1.5" style={{ color: "#1c1c81" }}>
               Ce se întâmplă
             </p>
             <ul className="list-disc pl-5 space-y-1">
@@ -216,7 +216,7 @@ export function TransferOngDialog({
                 className="block text-sm font-semibold mb-1.5"
                 style={{ color: "#334155" }}
               >
-                Parola ta actuală <span style={{ color: "#2dbe8f" }}>*</span>
+                Parola ta actuală <span style={{ color: "#007d58" }}>*</span>
               </label>
               {/* Without a username field, the password manager takes the
                   member search as one and fills it with the saved login. */}
@@ -237,7 +237,7 @@ export function TransferOngDialog({
                 disabled={isPending}
               />
               {fieldErrors.password && (
-                <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+                <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
                   {fieldErrors.password}
                 </p>
               )}
@@ -258,8 +258,8 @@ export function TransferOngDialog({
             type="button"
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-70"
-            style={{ background: "#2dbe8f" }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity disabled:opacity-70"
+            style={{ background: "#00d495" }}
           >
             {isPending && <Loader2 size={14} className="animate-spin" />}
             {isPending ? "Se trimite..." : "Trimite propunerea"}
@@ -302,7 +302,7 @@ function MemberPicker({
         <Search
           size={14}
           className="absolute left-5.5 top-1/2 -translate-y-1/2"
-          style={{ color: "#94a3b8" }}
+          style={{ color: "#5b6779" }}
           aria-hidden
         />
         <input
@@ -316,7 +316,7 @@ function MemberPicker({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           disabled={disabled}
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors"
         />
       </div>
 
@@ -339,21 +339,21 @@ function MemberPicker({
                   aria-checked={selected}
                   disabled={disabled || inactive}
                   onClick={() => onChange(member.documentId)}
-                  className={`w-full text-left rounded-xl border px-4 py-3 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2dbe8f]/40 disabled:cursor-not-allowed ${
+                  className={`w-full text-left rounded-xl border px-4 py-3 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#007d58] disabled:cursor-not-allowed ${
                     selected
-                      ? "border-[#2dbe8f] bg-[#f0fdf8]"
+                      ? "border-[#007d58] bg-[#f0fdf8]"
                       : "border-border hover:bg-slate-50 disabled:hover:bg-transparent"
                   }`}
                 >
                   <span
                     className={`block text-sm font-semibold ${inactive ? "text-slate-400" : ""}`}
-                    style={inactive ? undefined : { color: "#162040" }}
+                    style={inactive ? undefined : { color: "#1c1c81" }}
                   >
                     {member.nume}
                   </span>
                   <span className="block text-xs text-muted-foreground">{member.email}</span>
                   {inactive && (
-                    <span className="mt-1 block text-xs" style={{ color: "#d97706" }}>
+                    <span className="mt-1 block text-xs" style={{ color: "#b45309" }}>
                       Contul nu este încă activat. Transferul este posibil după activare.
                     </span>
                   )}

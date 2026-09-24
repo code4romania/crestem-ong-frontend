@@ -12,7 +12,7 @@ function formatDate(value: string | null | undefined) {
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>
+      <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5b6779" }}>
         {label}
       </p>
       <p className="text-sm" style={{ color: "#334155" }}>
@@ -40,7 +40,7 @@ export function OrgContactCard({
   return (
     <div className="bg-white rounded-2xl border border-border p-6">
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-base font-heading font-extrabold" style={{ color: "#162040" }}>
+        <h2 className="text-[#5b6779]ase font-heading font-extrabold" style={{ color: "#1c1c81" }}>
           Persoană de contact
         </h2>
         {action}

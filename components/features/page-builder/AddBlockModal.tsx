@@ -93,7 +93,7 @@ export function AddBlockModal({
         <div className="flex items-start justify-between gap-4 border-b border-border px-6 py-5">
           <h2
             id="add-block-title"
-            className="font-heading text-lg font-extrabold text-[#162040]"
+            className="font-heading text-lg font-extrabold text-[#1c1c81]"
           >
             Adaugă bloc de conținut
           </h2>
@@ -113,7 +113,7 @@ export function AddBlockModal({
             into an unusably narrow strip on a phone. */}
         <div className="flex min-h-0 flex-1 flex-col sm:flex-row">
           <nav className="shrink-0 overflow-x-auto border-b border-border p-3 sm:w-44 sm:overflow-x-visible sm:overflow-y-auto sm:border-b-0 sm:border-r">
-            <p className="px-2 pb-2 text-[11px] font-semibold uppercase tracking-wide text-[#94a3b8]">
+            <p className="px-2 pb-2 text-[11px] font-semibold uppercase tracking-wide text-[#5b6779]">
               Categorii
             </p>
             <ul className="flex gap-1.5 sm:block sm:space-y-0.5">
@@ -129,7 +129,7 @@ export function AddBlockModal({
                       }}
                       className={`flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors sm:w-full ${
                         active
-                          ? "bg-[#eff6ff] text-[#2563eb]"
+                          ? "bg-[#dcfafb] text-[#5656e5]"
                           : "text-[#475569] hover:bg-slate-50"
                       }`}
                     >
@@ -149,14 +149,14 @@ export function AddBlockModal({
             <div className="relative mb-4">
               <Search
                 size={16}
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8]"
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#5b6779]"
               />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Caută bloc..."
                 aria-label="Caută bloc"
-                className="w-full rounded-xl border border-border py-2.5 pl-9 pr-4 text-sm transition-colors focus:border-[#2dbe8f] focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30"
+                className="w-full rounded-xl border border-border py-2.5 pl-9 pr-4 text-sm transition-colors focus:border-[#007d58] focus:outline-none focus:ring-2 focus:ring-[#00d495]/30"
               />
             </div>
 
@@ -186,10 +186,10 @@ export function AddBlockModal({
                         </span>
                         <span className="min-w-0">
                           <span className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-[#162040]">
+                            <span className="text-sm font-semibold text-[#1c1c81]">
                               {card.name}
                             </span>
-                            <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-[#94a3b8]">
+                            <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-[#5b6779]">
                               în curând
                             </span>
                           </span>
@@ -206,7 +206,7 @@ export function AddBlockModal({
                       key={card.key}
                       type="button"
                       onClick={() => onSelect(type)}
-                      className="flex gap-3 rounded-xl border border-border p-4 text-left transition-colors hover:border-[#2dbe8f] hover:bg-[#f0fdf9]"
+                      className="flex gap-3 rounded-xl border border-border p-4 text-left transition-colors hover:border-[#00d495] hover:bg-[#f0fdf9]"
                     >
                       <span
                         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
@@ -215,7 +215,7 @@ export function AddBlockModal({
                         <Icon size={18} />
                       </span>
                       <span className="min-w-0">
-                        <span className="block text-sm font-semibold text-[#162040]">
+                        <span className="block text-sm font-semibold text-[#1c1c81]">
                           {card.name}
                         </span>
                         <span className="mt-0.5 block text-xs text-muted-foreground">

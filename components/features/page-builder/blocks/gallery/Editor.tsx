@@ -10,8 +10,8 @@ import type { GalleryData } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
-const optionalHint = "ml-1.5 font-normal normal-case text-[#94a3b8]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
+const optionalHint = "ml-1.5 font-normal normal-case text-[#5b6779]";
 
 export function GalleryEditor({
   value,
@@ -95,7 +95,7 @@ export function GalleryEditor({
           ]}
         />
         {value.stil === "carusel" && (
-          <p className="mt-1 text-xs text-[#94a3b8]">
+          <p className="mt-1 text-xs text-[#5b6779]">
             Numărul de imagini vizibile simultan în carusel.
           </p>
         )}
@@ -104,7 +104,7 @@ export function GalleryEditor({
       <div className="flex items-center justify-between gap-4 rounded-xl border border-border p-4">
         <label
           htmlFor="gallery-lightbox"
-          className="text-sm font-medium text-[#162040]"
+          className="text-sm font-medium text-[#1c1c81]"
         >
           Deschide imaginile în lightbox
         </label>

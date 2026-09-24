@@ -10,8 +10,8 @@ export interface MenuItemValues {
 }
 
 const VARIANT = {
-  root: { strip: "bg-slate-50", submit: "bg-[#2563eb]" },
-  child: { strip: "bg-[#f0faf6]", submit: "bg-[#2dbe8f]" },
+  root: { strip: "bg-slate-50", submit: "bg-[#5656e5] text-white" },
+  child: { strip: "bg-[#e5f9e5]", submit: "bg-[#00d495] text-white" },
 } as const;
 
 /**
@@ -22,7 +22,7 @@ const VARIANT = {
 export type PageMode = "required" | "optional" | "hidden";
 
 const fieldBase =
-  "rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-[#2dbe8f] focus:outline-none";
+  "rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-[#007d58] focus:outline-none";
 
 /**
  * The inline strip used both for adding an item and for editing one in place.
@@ -115,7 +115,7 @@ export function MenuItemForm({
           type="button"
           onClick={submit}
           disabled={pending}
-          className={`rounded-lg px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60 ${styles.submit}`}
+          className={`rounded-lg px-4 py-2 text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-60 ${styles.submit}`}
         >
           {submitLabel}
         </button>
@@ -137,7 +137,7 @@ export function MenuItemForm({
       )}
 
       {error && (
-        <p role="alert" className="mt-2 text-xs text-[#ef4444]">
+        <p role="alert" className="mt-2 text-xs text-[#b91c1c]">
           {error}
         </p>
       )}

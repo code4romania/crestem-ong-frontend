@@ -19,7 +19,7 @@ function StatCell({ stat, className }: { stat: Stat; className: string }) {
   return (
     <div className={className}>
       <p
-        style={{ fontSize: "2rem", fontWeight: 800, color: "#162040" }}
+        style={{ fontSize: "2rem", fontWeight: 800, color: "#1c1c81" }}
         className="wrap-break-word"
       >
         {stat.valoare}
@@ -28,7 +28,7 @@ function StatCell({ stat, className }: { stat: Stat; className: string }) {
         {stat.eticheta}
       </p>
       {stat.descriere ? (
-        <p className="mt-1 text-xs text-[#94a3b8] wrap-break-word">
+        <p className="mt-1 text-xs text-[#5b6779] wrap-break-word">
           {stat.descriere}
         </p>
       ) : null}
@@ -75,7 +75,7 @@ export function Statistics({ data }: { data: StatisticsData }) {
         {hasHeader ? (
           <div className="mb-10">
             {subtitlu ? (
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#2dbe8f] wrap-break-word">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#007d58] wrap-break-word">
                 {subtitlu}
               </p>
             ) : null}
@@ -86,7 +86,7 @@ export function Statistics({ data }: { data: StatisticsData }) {
                   fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
                   fontWeight: 800,
                   lineHeight: 1.2,
-                  color: "#162040",
+                  color: "#1c1c81",
                 }}
               >
                 {titlu}
@@ -114,7 +114,7 @@ export function Statistics({ data }: { data: StatisticsData }) {
               <Link
                 href={primaryCta.href}
                 className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:opacity-90"
-                style={{ background: "#162040" }}
+                style={{ background: "#1c1c81" }}
               >
                 {primaryCta.label} <ArrowRight size={18} />
               </Link>
@@ -122,7 +122,7 @@ export function Statistics({ data }: { data: StatisticsData }) {
             {hasSecondary ? (
               <Link
                 href={secondaryCta.href}
-                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3.5 font-semibold text-[#162040] transition-all hover:bg-slate-50"
+                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3.5 font-semibold text-[#1c1c81] transition-all hover:bg-slate-50"
               >
                 {secondaryCta.label} <ChevronRight size={18} />
               </Link>

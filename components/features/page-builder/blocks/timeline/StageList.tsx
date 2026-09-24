@@ -6,8 +6,8 @@ import { EMPTY_STAGE, type TimelineStage } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
-const optionalHint = "font-normal normal-case text-[#94a3b8]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
+const optionalHint = "font-normal normal-case text-[#5b6779]";
 
 /**
  * The "Etape" repeater: add / reorder / delete rows, each with a
@@ -42,11 +42,11 @@ export function StageList({
         <span className="text-xs font-semibold uppercase tracking-wide text-[#475569]">
           Etape
         </span>
-        <span className="text-xs text-[#94a3b8]">{value.length} adăugate</span>
+        <span className="text-xs text-[#5b6779]">{value.length} adăugate</span>
       </div>
 
       {value.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-[#94a3b8]">
+        <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-[#5b6779]">
           Nicio etapă adăugată încă.
         </p>
       ) : (
@@ -57,8 +57,8 @@ export function StageList({
               className="rounded-xl border border-border bg-slate-50/60 p-4"
             >
               <div className="mb-3 flex items-center justify-between gap-2">
-                <span className="flex items-center gap-2 text-sm font-semibold text-[#162040]">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#162040] text-xs font-bold text-white">
+                <span className="flex items-center gap-2 text-sm font-semibold text-[#1c1c81]">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1c1c81] text-xs font-bold text-white">
                     {index + 1}
                   </span>
                   <span className="truncate">
@@ -88,7 +88,7 @@ export function StageList({
                     type="button"
                     onClick={() => remove(index)}
                     aria-label="Elimină etapa"
-                    className="rounded-lg p-1.5 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
+                    className="rounded-lg p-1.5 text-[#b91c1c] transition-colors hover:bg-[#fef2f2]"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -138,12 +138,12 @@ export function StageList({
         </ul>
       )}
 
-      {error && <p className="mt-1 text-xs text-[#ef4444]">{error}</p>}
+      {error && <p className="mt-1 text-xs text-[#b91c1c]">{error}</p>}
 
       <button
         type="button"
         onClick={() => onChange([...value, { ...EMPTY_STAGE }])}
-        className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040]"
+        className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81]"
       >
         <Plus size={16} /> Adaugă etapă
       </button>

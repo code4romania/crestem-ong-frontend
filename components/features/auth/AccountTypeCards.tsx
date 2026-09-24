@@ -5,8 +5,8 @@ const OPTIONS = [
   {
     id: "utilizator",
     icon: User,
-    iconBg: "#eff6ff",
-    iconColor: "#2563eb",
+    iconBg: "#dcfafb",
+    iconColor: "#5656e5",
     title: "Creează cont de utilizator",
     desc: "Accesează resurse, ghiduri și instrumente din biblioteca Crestem.ONG. Ideal dacă ești profesionist în sectorul nonprofit sau dorești să explorezi platforma.",
     benefits: ["Acces la biblioteca completă de resurse", "Participare la webinarii și evenimente", "Newsletter săptămânal cu resurse noi"],
@@ -18,8 +18,8 @@ const OPTIONS = [
   {
     id: "ong",
     icon: Building2,
-    iconBg: "#f0faf6",
-    iconColor: "#2dbe8f",
+    iconBg: "#e5f9e5",
+    iconColor: "#007d58",
     title: "Reprezint un ONG",
     desc: "Înscrie organizația ta în platforma Crestem.ONG pentru a accesa evaluarea organizațională, programele de accelerare și mentorat specializat.",
     benefits: ["Evaluare organizațională completă", "Acces la programe și acceleratoare", "Mentorat 1:1 cu experți ONG"],
@@ -40,14 +40,14 @@ export function AccountTypeCards() {
             key={opt.id}
             className="rounded-2xl border flex flex-col p-8 relative bg-white"
             style={{
-              borderColor: opt.recommended ? "#2dbe8f" : "#e2e8f0",
-              boxShadow: opt.recommended ? "0 0 0 2px #2dbe8f22" : undefined,
+              borderColor: opt.recommended ? "#007d58" : "#e2e8f0",
+              boxShadow: opt.recommended ? "0 0 0 2px #00d49522" : undefined,
             }}
           >
             {opt.recommended && (
               <div
                 className="absolute -top-3 left-8 px-3 py-1 rounded-full text-xs font-bold"
-                style={{ background: "#2dbe8f", color: "#fff" }}
+                style={{ background: "#00d495", color: "#ffffff" }}
               >
                 Recomandat pentru ONG-uri
               </div>
@@ -55,10 +55,10 @@ export function AccountTypeCards() {
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6" style={{ background: opt.iconBg }}>
               <Icon size={26} style={{ color: opt.iconColor }} />
             </div>
-            <h2 className="mb-3 font-heading font-extrabold text-xl" style={{ color: "#162040" }}>
+            <h2 className="mb-3 font-heading font-extrabold text-xl" style={{ color: "#1c1c81" }}>
               {opt.title}
             </h2>
-            <p className="mb-6 leading-relaxed text-sm" style={{ color: "#64748b" }}>
+            <p className="mb-6 leading-relaxed text-sm" style={{ color: "#5b6779" }}>
               {opt.desc}
             </p>
             <ul className="space-y-2.5 mb-8 flex-1">
@@ -72,8 +72,8 @@ export function AccountTypeCards() {
             {opt.available ? (
               <Link
                 href={opt.href}
-                className="w-full py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all hover:opacity-90 hover:-translate-y-0.5 text-white"
-                style={{ background: "#2dbe8f", boxShadow: "0 4px 20px rgba(45,190,143,0.3)" }}
+                className="w-full py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all hover:brightness-90 hover:-translate-y-0.5 text-white"
+                style={{ background: "#00d495", boxShadow: "0 4px 20px rgba(0,212,149,0.3)" }}
               >
                 {opt.cta} <ArrowRight size={16} />
               </Link>
@@ -82,11 +82,11 @@ export function AccountTypeCards() {
                 <button
                   disabled
                   className="w-full py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 opacity-50 cursor-not-allowed"
-                  style={{ background: "#f1f5f9", color: "#64748b" }}
+                  style={{ background: "#f1f5f9", color: "#5b6779" }}
                 >
                   {opt.cta} <ArrowRight size={16} />
                 </button>
-                <p className="text-center text-xs mt-2" style={{ color: "#94a3b8" }}>În curând</p>
+                <p className="text-center text-xs mt-2" style={{ color: "#5b6779" }}>În curând</p>
               </>
             )}
           </div>

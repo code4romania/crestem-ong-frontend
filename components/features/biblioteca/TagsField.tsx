@@ -62,7 +62,7 @@ export function TagsField({
                 type="button"
                 onClick={() => onChange(value.filter((entry) => entry !== tag))}
                 aria-label={`Elimină eticheta ${tag}`}
-                className="text-[#94a3b8] transition-colors hover:text-red-600"
+                className="text-[#5b6779] transition-colors hover:text-red-600"
               >
                 <X size={12} />
               </button>

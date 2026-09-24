@@ -17,7 +17,7 @@ export default function DashboardError({
   return (
     <div className="min-h-screen flex items-center justify-center p-8" style={{ background: "#f8fafc" }}>
       <div className="bg-white rounded-xl border border-border p-8 text-center max-w-md">
-        <p className="text-sm mb-4" style={{ color: "#ef4444" }}>
+        <p className="text-sm mb-4" style={{ color: "#b91c1c" }}>
           A apărut o eroare neașteptată. Încearcă din nou.
         </p>
         <div className="flex items-center justify-center gap-3">
@@ -25,7 +25,7 @@ export default function DashboardError({
             type="button"
             onClick={() => reset()}
             className="px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-            style={{ background: "#162040" }}
+            style={{ background: "#1c1c81" }}
           >
             Încearcă din nou
           </button>

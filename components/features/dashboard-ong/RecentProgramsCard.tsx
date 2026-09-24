@@ -18,7 +18,7 @@ export function RecentProgramsCard({
         <h2 className="font-heading font-bold text-primary">Programe recente</h2>
         <Link
           href="/dashboard/programe"
-          className="text-sm font-semibold text-accent hover:underline"
+          className="text-sm font-semibold text-accent-strong hover:underline"
         >
           Vezi toate →
         </Link>

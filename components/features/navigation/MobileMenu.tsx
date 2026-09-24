@@ -97,7 +97,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
               <>
                 <p
                   className="flex items-center gap-1.5 px-3 text-sm font-medium truncate"
-                  style={{ color: "#162040" }}
+                  style={{ color: "#1c1c81" }}
                 >
                   <User size={16} className="shrink-0" />
                   {user.nume}
@@ -110,7 +110,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                 <a
                   href={user.dashboardHref}
                   className="flex items-center justify-center gap-2 py-3 text-center rounded-lg text-sm font-semibold text-white"
-                  style={{ background: "#2dbe8f" }}
+                  style={{ background: "#00d495" }}
                 >
                   Mergi la dashboard
                 </a>
@@ -121,7 +121,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                   href="/autentificare"
                   onClick={closeIfSamePage("/autentificare")}
                   className="flex items-center justify-center gap-2 py-3 text-center rounded-lg text-sm font-medium transition-colors hover:bg-muted"
-                  style={{ color: "#162040", border: "1.5px solid #e2e8f0" }}
+                  style={{ color: "#1c1c81", border: "1.5px solid #e2e8f0" }}
                 >
                   Intră în cont
                   <LinkPendingIndicator />
@@ -130,7 +130,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                   href="/inregistrare"
                   onClick={closeIfSamePage("/inregistrare")}
                   className="flex items-center justify-center gap-2 py-3 text-center rounded-lg text-sm font-semibold text-white"
-                  style={{ background: "#2dbe8f" }}
+                  style={{ background: "#00d495" }}
                 >
                   Înregistrează-te
                   <LinkPendingIndicator />

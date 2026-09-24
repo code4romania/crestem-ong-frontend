@@ -58,7 +58,7 @@ export function ImageText({ data }: { data: ImageTextData }) {
   const textColumn = (
     <div className="flex min-w-0 flex-col justify-center">
       {supratitlu ? (
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#2dbe8f] wrap-break-word">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#007d58] wrap-break-word">
           {supratitlu}
         </p>
       ) : null}
@@ -70,7 +70,7 @@ export function ImageText({ data }: { data: ImageTextData }) {
             fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
             fontWeight: 800,
             lineHeight: 1.2,
-            color: "#162040",
+            color: "#1c1c81",
           }}
         >
           {titlu}
@@ -89,10 +89,10 @@ export function ImageText({ data }: { data: ImageTextData }) {
           {hasPrimary ? (
             <Link
               href={primaryCta.href}
-              className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:brightness-90"
               style={{
-                background: "#2dbe8f",
-                boxShadow: "0 4px 24px rgba(45,190,143,0.35)",
+                background: "#00d495",
+                boxShadow: "0 4px 24px rgba(0,212,149,0.35)",
               }}
             >
               {primaryCta.label} <ArrowRight size={18} />
@@ -101,7 +101,7 @@ export function ImageText({ data }: { data: ImageTextData }) {
           {hasSecondary ? (
             <Link
               href={secondaryCta.href}
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3.5 font-semibold text-[#162040] transition-all hover:bg-slate-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3.5 font-semibold text-[#1c1c81] transition-all hover:bg-slate-50"
             >
               {secondaryCta.label} <ChevronRight size={18} />
             </Link>
@@ -129,7 +129,7 @@ export function ImageText({ data }: { data: ImageTextData }) {
       />
     </div>
   ) : (
-    <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#94a3b8]">
+    <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#5b6779]">
       Adaugă o imagine.
     </div>
   );

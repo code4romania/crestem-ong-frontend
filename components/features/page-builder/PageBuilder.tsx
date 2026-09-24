@@ -523,7 +523,7 @@ export function PageBuilder({
 
     const { Renderer } = definition;
     const cardBtn =
-      "rounded-md p-1 text-[#64748b] transition-colors hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent";
+      "rounded-md p-1 text-[#5b6779] transition-colors hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent";
 
     return (
       <div className="group relative">
@@ -534,7 +534,7 @@ export function PageBuilder({
             {...dragHandle.attributes}
             {...(dragHandle.listeners ?? {})}
             aria-label="Trage pentru reordonare"
-            className="absolute left-3 top-3 z-10 cursor-grab touch-none rounded-md bg-white/90 p-1 text-[#94a3b8] opacity-0 shadow-sm transition-opacity hover:text-[#64748b] group-hover:opacity-100"
+            className="absolute left-3 top-3 z-10 cursor-grab touch-none rounded-md bg-white/90 p-1 text-[#5b6779] opacity-0 shadow-sm transition-opacity hover:text-[#5b6779] group-hover:opacity-100"
           >
             <GripVertical size={16} aria-hidden="true" />
           </button>
@@ -583,7 +583,7 @@ export function PageBuilder({
                 type="button"
                 onClick={() => deleteBlock(block.id)}
                 aria-label="Șterge blocul"
-                className="rounded-md p-1 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
+                className="rounded-md p-1 text-[#b91c1c] transition-colors hover:bg-[#fef2f2]"
               >
                 <Trash2 size={15} />
               </button>
@@ -616,7 +616,7 @@ export function PageBuilder({
       <div className="mx-auto max-w-6xl">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+            <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
               {title}
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">{description}</p>
@@ -634,8 +634,8 @@ export function PageBuilder({
             <button
               type="button"
               onClick={openPickerTop}
-              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-              style={{ background: "#2dbe8f" }}
+              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:brightness-90"
+              style={{ background: "#00d495" }}
             >
               <Plus size={16} />
               Adaugă bloc
@@ -702,7 +702,7 @@ export function PageBuilder({
           <ModalPortal>
             <div className="fixed inset-0 z-50 flex flex-col bg-white">
               <div className="flex shrink-0 items-center justify-between gap-4 border-b border-border px-6 py-3">
-                <span className="text-sm font-semibold text-[#162040]">
+                <span className="text-sm font-semibold text-[#1c1c81]">
                   Previzualizare
                 </span>
                 <button

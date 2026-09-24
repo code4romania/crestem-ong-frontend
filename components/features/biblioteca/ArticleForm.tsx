@@ -189,7 +189,7 @@ export function ArticleForm({
     <div className="mx-auto max-w-6xl">
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+          <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
             {article ? "Editează articolul" : "Articol nou"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -216,7 +216,7 @@ export function ArticleForm({
         }
         slugHint={
           previewCale ? (
-            <span className="mt-1.5 block font-mono text-xs text-[#94a3b8]">{previewCale}</span>
+            <span className="mt-1.5 block font-mono text-xs text-[#5b6779]">{previewCale}</span>
           ) : null
         }
         extraFields={
@@ -371,7 +371,7 @@ export function ArticleForm({
           type="button"
           onClick={() => save()}
           disabled={pending}
-          className="rounded-xl bg-[#2dbe8f] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="rounded-xl bg-[#00d495] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:brightness-90 disabled:opacity-60"
         >
           {pending ? "Se salvează…" : article ? "Salvează modificările" : "Creează articolul"}
         </button>

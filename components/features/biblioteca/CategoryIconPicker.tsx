@@ -30,8 +30,8 @@ export function CategoryIconPicker({
             onClick={() => onChange(key)}
             className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${
               active
-                ? "border-[#2dbe8f] bg-[#2dbe8f]/10 text-[#2dbe8f]"
-                : "border-border text-[#94a3b8] hover:bg-slate-50"
+                ? "border-[#007d58] bg-[#00d495]/10 text-[#007d58]"
+                : "border-border text-[#5b6779] hover:bg-slate-50"
             }`}
           >
             <Icon size={16} />

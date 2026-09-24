@@ -73,7 +73,7 @@ export default async function MemberOngPage({
             disabled
             title="Disponibil în curând"
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-white opacity-40 cursor-not-allowed"
-            style={{ background: "#162040" }}
+            style={{ background: "#1c1c81" }}
           >
             <Rows3 size={13} /> Compară evaluări
           </button>

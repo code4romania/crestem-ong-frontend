@@ -31,7 +31,7 @@ export function MesajeContactTable({ messages }: { messages: ContactMessage[] })
                 <th
                   key={h}
                   className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                  style={{ color: "#94a3b8" }}
+                  style={{ color: "#5b6779" }}
                 >
                   {h}
                 </th>
@@ -55,7 +55,7 @@ export function MesajeContactTable({ messages }: { messages: ContactMessage[] })
                       e.stopPropagation();
                       setOpenId(message.documentId);
                     }}
-                    className="font-semibold text-[#162040] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2dbe8f]/40 rounded"
+                    className="font-semibold text-[#1c1c81] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#007d58] rounded"
                   >
                     {message.name}
                   </button>

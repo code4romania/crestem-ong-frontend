@@ -93,7 +93,7 @@ export function OngMentorsTable({ mentors }: { mentors: OngDashboardMentor[] }) 
                             className="w-8 h-8 rounded-full flex items-center justify-center text-white text-[11px] font-bold shrink-0"
                             style={{
                               background: mentor.isDeleted
-                                ? "#94a3b8"
+                                ? "#5b6779"
                                 : avatarColorFor(mentor.documentId),
                             }}
                           >
@@ -104,12 +104,12 @@ export function OngMentorsTable({ mentors }: { mentors: OngDashboardMentor[] }) 
                         {mentor.isDeleted && <DeletedAccountBadge />}
                       </div>
                     </td>
-                    <td className="px-5 py-3 text-accent">
+                    <td className="px-5 py-3 text-accent-strong">
                       {mentor.mentorJobTitle ?? "—"}
                     </td>
                     <td className="px-5 py-3">
                       {mentor.program ? (
-                        <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-secondary text-value-teal">
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-secondary text-accent-strong">
                           {mentor.program.name}
                         </span>
                       ) : (

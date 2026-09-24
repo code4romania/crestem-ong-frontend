@@ -22,13 +22,13 @@ export default async function MemberEvaluationWizardPage({
     const message = err instanceof ApiError ? err.message : "Nu am putut încărca evaluarea.";
     return (
       <div className="bg-white rounded-xl border border-border p-8 text-center">
-        <p className="text-sm mb-4" style={{ color: "#ef4444" }}>
+        <p className="text-sm mb-4" style={{ color: "#b91c1c" }}>
           {message}
         </p>
         <Link
           href={`/dashboard/${ongDocumentId}`}
           className="text-sm font-semibold hover:underline"
-          style={{ color: "#2dbe8f" }}
+          style={{ color: "#007d58" }}
         >
           Înapoi la evaluările mele
         </Link>

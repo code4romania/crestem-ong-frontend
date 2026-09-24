@@ -48,7 +48,7 @@ export default async function OngPersoaneResursaIntalniriPage({ searchParams }: 
     <div>
       <PersoaneResursaTabs active="intalniri" />
 
-      <h1 className="text-2xl font-heading font-extrabold mb-4" style={{ color: "#162040" }}>
+      <h1 className="text-2xl font-heading font-extrabold mb-4" style={{ color: "#1c1c81" }}>
         Toate întâlnirile
       </h1>
 

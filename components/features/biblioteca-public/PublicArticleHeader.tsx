@@ -24,7 +24,7 @@ export function PublicArticleHeader({ article }: { article: ArticleDetail }) {
   ];
 
   return (
-    <section className="relative overflow-hidden" style={{ background: "#162040" }}>
+    <section className="relative overflow-hidden" style={{ background: "#1c1c81" }}>
       <div className="mx-auto w-full max-w-4xl px-6 py-16">
         <nav
           aria-label="Breadcrumb"

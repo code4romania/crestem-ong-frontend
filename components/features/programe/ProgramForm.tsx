@@ -220,14 +220,14 @@ export function ProgramForm({
       <Link
         href={backHref}
         className="inline-flex items-center gap-1.5 text-sm font-medium mb-4"
-        style={{ color: "#162040" }}
+        style={{ color: "#1c1c81" }}
       >
         <ArrowLeft size={16} /> Înapoi la programe
       </Link>
 
       <h1
         className="mb-8 font-heading font-extrabold text-2xl"
-        style={{ color: "#162040" }}
+        style={{ color: "#1c1c81" }}
       >
         {mode === "create" ? "Adaugă program nou" : "Editează program"}
       </h1>
@@ -240,7 +240,7 @@ export function ProgramForm({
             style={{
               background: "#fff5f5",
               border: "1.5px solid #fca5a5",
-              color: "#ef4444",
+              color: "#b91c1c",
             }}
           >
             <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
@@ -249,7 +249,7 @@ export function ProgramForm({
         )}
 
         <div className="bg-white rounded-2xl border border-border p-7 space-y-5">
-          <h2 className="font-bold text-base" style={{ color: "#162040" }}>
+          <h2 className="font-bold text-base" style={{ color: "#1c1c81" }}>
             Detalii program
           </h2>
           <div>
@@ -262,11 +262,11 @@ export function ProgramForm({
             <input
               placeholder="ex. Social Change Accelerator"
               className={inputClass}
-              style={{ color: "#162040" }}
+              style={{ color: "#1c1c81" }}
               {...register("name")}
             />
             {errors.name && (
-              <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+              <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
                 {errors.name.message}
               </p>
             )}
@@ -282,11 +282,11 @@ export function ProgramForm({
               <input
                 type="date"
                 className={inputClass}
-                style={{ color: "#162040" }}
+                style={{ color: "#1c1c81" }}
                 {...register("startDate")}
               />
               {errors.startDate && (
-                <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+                <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
                   {errors.startDate.message}
                 </p>
               )}
@@ -301,11 +301,11 @@ export function ProgramForm({
               <input
                 type="date"
                 className={inputClass}
-                style={{ color: "#162040" }}
+                style={{ color: "#1c1c81" }}
                 {...register("endDate")}
               />
               {errors.endDate && (
-                <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+                <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
                   {errors.endDate.message}
                 </p>
               )}
@@ -315,7 +315,7 @@ export function ProgramForm({
 
         <div className="bg-white rounded-2xl border border-border p-7">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="font-bold text-base" style={{ color: "#162040" }}>
+            <h2 className="font-bold text-base" style={{ color: "#1c1c81" }}>
               Faze program
             </h2>
             {!draftPhase && (
@@ -355,7 +355,7 @@ export function ProgramForm({
                     }
                     placeholder="ex. Recrutare aplicanți"
                     className={draftInputClass}
-                    style={{ color: "#162040" }}
+                    style={{ color: "#1c1c81" }}
                   />
                 </div>
                 <div>
@@ -374,7 +374,7 @@ export function ProgramForm({
                       )
                     }
                     className={draftInputClass}
-                    style={{ color: "#162040" }}
+                    style={{ color: "#1c1c81" }}
                   />
                 </div>
                 <div>
@@ -393,7 +393,7 @@ export function ProgramForm({
                       )
                     }
                     className={draftInputClass}
-                    style={{ color: "#162040" }}
+                    style={{ color: "#1c1c81" }}
                   />
                 </div>
               </div>
@@ -459,7 +459,7 @@ export function ProgramForm({
                       <th
                         key={h}
                         className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                        style={{ color: "#94a3b8" }}
+                        style={{ color: "#5b6779" }}
                       >
                         {h}
                       </th>
@@ -486,7 +486,7 @@ export function ProgramForm({
                       </td>
                       <td
                         className="px-4 py-3.5 font-semibold"
-                        style={{ color: "#162040" }}
+                        style={{ color: "#1c1c81" }}
                       >
                         {phase.title}
                       </td>
@@ -501,8 +501,8 @@ export function ProgramForm({
                           className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold"
                           style={
                             phase.hasEvaluation
-                              ? { background: "#ecfdf5", color: "#059669" }
-                              : { background: "#f1f5f9", color: "#64748b" }
+                              ? { background: "#ecfdf5", color: "#047857" }
+                              : { background: "#f1f5f9", color: "#5b6779" }
                           }
                         >
                           {phase.hasEvaluation ? (
@@ -519,7 +519,7 @@ export function ProgramForm({
                             type="button"
                             onClick={() => openEditPhase(phase)}
                             className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
-                            style={{ color: "#64748b" }}
+                            style={{ color: "#5b6779" }}
                             title="Editează"
                           >
                             <Edit2 size={13} />
@@ -528,7 +528,7 @@ export function ProgramForm({
                             type="button"
                             onClick={() => setPendingDeleteKey(phase.key)}
                             className="p-1.5 rounded-lg hover:bg-red-50 transition-colors"
-                            style={{ color: "#94a3b8" }}
+                            style={{ color: "#5b6779" }}
                             title="Șterge"
                           >
                             <Trash2 size={13} />
@@ -547,14 +547,14 @@ export function ProgramForm({
               className="w-full rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center py-12 gap-2 hover:border-violet-200 transition-colors"
             >
               <Plus size={24} style={{ color: "#cbd5e1" }} />
-              <p className="text-sm" style={{ color: "#94a3b8" }}>
+              <p className="text-sm" style={{ color: "#5b6779" }}>
                 Apasă „Adaugă fază” pentru a crea prima etapă
               </p>
             </button>
           ) : null}
 
           {phasesListError && (
-            <p className="mt-3 text-xs" style={{ color: "#ef4444" }}>
+            <p className="mt-3 text-xs" style={{ color: "#b91c1c" }}>
               {phasesListError}
             </p>
           )}

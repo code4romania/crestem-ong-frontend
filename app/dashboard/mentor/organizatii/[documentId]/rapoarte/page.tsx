@@ -16,7 +16,7 @@ export default async function MentorOrganizatieRapoartePage({
   return (
     <div>
       <div className="mb-4">
-        <h2 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+        <h2 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
           Arhivă rapoarte
         </h2>
         <p className="text-sm text-muted-foreground">

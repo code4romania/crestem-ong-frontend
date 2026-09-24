@@ -14,10 +14,10 @@ export const MEMBER_STATUS_LABELS: Record<string, string> = {
 };
 
 export const MEMBER_STATUS_COLORS: Record<string, { bg: string; color: string }> = {
-  neinceput: { bg: "#f8fafc", color: "#94a3b8" },
-  in_lucru: { bg: "#fefce8", color: "#ca8a04" },
-  completat: { bg: "#f0fdf4", color: "#16a34a" },
-  nefinalizat: { bg: "#fff5f5", color: "#dc2626" },
+  neinceput: { bg: "#f8fafc", color: "#5b6779" },
+  in_lucru: { bg: "#fefce8", color: "#a16207" },
+  completat: { bg: "#f0fdf4", color: "#15803d" },
+  nefinalizat: { bg: "#fff5f5", color: "#b91c1c" },
 };
 
 export const MEMBER_STATUS_ICONS: Record<string, typeof CheckCircle2> = {

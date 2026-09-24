@@ -46,7 +46,7 @@ export function ImageCaption({ data }: { data: ImageCaptionData }) {
     return (
       <section>
         <div className="mx-auto max-w-3xl px-6 py-8">
-          <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#94a3b8]">
+          <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#5b6779]">
             Adaugă o imagine.
           </div>
         </div>
@@ -83,7 +83,7 @@ export function ImageCaption({ data }: { data: ImageCaptionData }) {
             <figcaption className="mt-3 text-sm text-[#475569]">
               {legenda && <span className="block">{legenda}</span>}
               {credit && (
-                <span className="mt-1 block text-xs text-[#94a3b8]">
+                <span className="mt-1 block text-xs text-[#5b6779]">
                   {credit}
                 </span>
               )}

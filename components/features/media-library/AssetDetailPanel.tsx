@@ -28,8 +28,8 @@ import type {
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
-const sectionTitleClass = "font-heading text-sm font-semibold text-[#162040]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
+const sectionTitleClass = "font-heading text-sm font-semibold text-[#1c1c81]";
 
 export function AssetDetailPanel({
   asset,
@@ -274,7 +274,7 @@ export function AssetDetailPanel({
           <div className="flex items-start justify-between gap-4 border-b border-border px-6 py-5">
             <h2
               id="asset-detail-title"
-              className="min-w-0 truncate font-heading text-lg font-extrabold text-[#162040]"
+              className="min-w-0 truncate font-heading text-lg font-extrabold text-[#1c1c81]"
             >
               {asset.titlu}
             </h2>
@@ -319,7 +319,7 @@ export function AssetDetailPanel({
                   <FileTypeBadge ext={asset.fisier.ext} url={asset.fisier.url} />
                 )}
               </div>
-              <p className="mt-2 truncate text-xs text-[#94a3b8]">{asset.fisier.name}</p>
+              <p className="mt-2 truncate text-xs text-[#5b6779]">{asset.fisier.name}</p>
               <a
                 href={`/api/media-library/download/${asset.documentId}`}
                 download={asset.fisier.name}
@@ -373,7 +373,7 @@ export function AssetDetailPanel({
                 type="button"
                 onClick={handleSave}
                 disabled={savePending}
-                className="self-start rounded-xl bg-[#2dbe8f] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                className="self-start rounded-xl bg-[#00d495] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:brightness-90 disabled:opacity-60"
               >
                 {savePending ? "Se salvează..." : "Salvează"}
               </button>
@@ -388,7 +388,7 @@ export function AssetDetailPanel({
                     <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-[#475569]">
                       <input
                         type="checkbox"
-                        className="h-4 w-4 rounded border-border accent-[#2dbe8f]"
+                        className="h-4 w-4 rounded border-border accent-[#007d58]"
                         checked={asset.etichete.some((e) => e.id === tag.id)}
                         onChange={() => toggleTag(tag)}
                         disabled={tagsPending}
@@ -400,14 +400,14 @@ export function AssetDetailPanel({
                       onClick={() => setDeletingTag(tag)}
                       disabled={tagsPending}
                       aria-label={`Șterge eticheta ${tag.nume}`}
-                      className="shrink-0 rounded p-1 text-[#94a3b8] transition-colors hover:bg-red-50 hover:text-[#dc2626] disabled:opacity-60"
+                      className="shrink-0 rounded p-1 text-[#5b6779] transition-colors hover:bg-red-50 hover:text-[#b91c1c] disabled:opacity-60"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
                   </div>
                 ))}
                 {tags.length === 0 && (
-                  <p className="col-span-2 text-xs text-[#94a3b8]">Nicio etichetă definită încă.</p>
+                  <p className="col-span-2 text-xs text-[#5b6779]">Nicio etichetă definită încă.</p>
                 )}
               </div>
               <div className="flex items-center gap-2">
@@ -438,7 +438,7 @@ export function AssetDetailPanel({
             {/* Replace file */}
             <div className="flex flex-col gap-2">
               <span className={sectionTitleClass}>Înlocuiește fișierul</span>
-              <p className="text-xs text-[#94a3b8]">
+              <p className="text-xs text-[#5b6779]">
                 Fișierul nou trebuie să aibă același format
                 {asset.fisier.ext
                   ? ` (${asset.fisier.ext.replace(/^\./, "").toUpperCase()})`
@@ -469,7 +469,7 @@ export function AssetDetailPanel({
               <span className="flex items-center gap-2">
                 <span className={sectionTitleClass}>Folosit pe</span>
                 {asset.utilizari.length > 0 && (
-                  <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[#2dbe8f]/10 px-1.5 text-xs font-semibold text-[#2dbe8f]">
+                  <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[#00d495]/10 px-1.5 text-xs font-semibold text-[#007d58]">
                     {asset.utilizari.length}
                   </span>
                 )}
@@ -482,20 +482,20 @@ export function AssetDetailPanel({
                         href={u.cale}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center gap-3 rounded-xl border border-border px-3 py-2 transition-colors hover:border-[#2dbe8f]/40 hover:bg-slate-50"
+                        className="group flex items-center gap-3 rounded-xl border border-border px-3 py-2 transition-colors hover:border-[#00d495]/40 hover:bg-slate-50"
                       >
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#2dbe8f]/10 text-[#2dbe8f]">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#00d495]/10 text-[#007d58]">
                           <FileText className="h-4 w-4" />
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate text-sm font-medium text-[#162040]">
+                          <span className="block truncate text-sm font-medium text-[#1c1c81]">
                             {u.titlu || u.cale}
                           </span>
-                          <span className="block truncate text-xs text-[#94a3b8]">
+                          <span className="block truncate text-xs text-[#5b6779]">
                             {u.cale}
                           </span>
                         </span>
-                        <ArrowUpRight className="h-4 w-4 shrink-0 text-[#94a3b8] transition-colors group-hover:text-[#2dbe8f]" />
+                        <ArrowUpRight className="h-4 w-4 shrink-0 text-[#5b6779] transition-colors group-hover:text-[#007d58]" />
                       </Link>
                     </li>
                   ))}
@@ -503,7 +503,7 @@ export function AssetDetailPanel({
               ) : (
                 <div className="flex flex-col items-center gap-1.5 rounded-xl border border-dashed border-border px-3 py-6 text-center">
                   <FileText className="h-5 w-5 text-[#cbd5e1]" />
-                  <p className="text-sm text-[#94a3b8]">Nefolosit încă.</p>
+                  <p className="text-sm text-[#5b6779]">Nefolosit încă.</p>
                 </div>
               )}
             </div>

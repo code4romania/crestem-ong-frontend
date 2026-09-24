@@ -17,7 +17,7 @@ const ACCEPTED_FILE_TYPES = [
 ];
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm";
 
 const selectClass = `${inputClass} appearance-none pr-10`;
 
@@ -151,7 +151,7 @@ export function AddFdscReportModal({
         type="button"
         onClick={() => setOpen(true)}
         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90"
-        style={{ background: "#162040" }}
+        style={{ background: "#1c1c81" }}
       >
         <Plus size={14} /> Încarcă raport
       </button>
@@ -163,7 +163,7 @@ export function AddFdscReportModal({
               <h2
                 id="add-fdsc-report-title"
                 className="font-heading font-extrabold text-lg"
-                style={{ color: "#162040" }}
+                style={{ color: "#1c1c81" }}
               >
                 Încarcă raport
               </h2>
@@ -182,7 +182,7 @@ export function AddFdscReportModal({
               {error && (
                 <p
                   role="alert"
-                  className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#ef4444]"
+                  className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#b91c1c]"
                 >
                   {error}
                 </p>
@@ -194,7 +194,7 @@ export function AddFdscReportModal({
                   className="block text-sm font-semibold mb-1.5"
                   style={{ color: "#334155" }}
                 >
-                  Program <span style={{ color: "#ef4444" }}>*</span>
+                  Program <span style={{ color: "#b91c1c" }}>*</span>
                 </label>
                 <div className="relative">
                   <select
@@ -223,7 +223,7 @@ export function AddFdscReportModal({
                   className="block text-sm font-semibold mb-1.5"
                   style={{ color: "#334155" }}
                 >
-                  Evaluare <span style={{ color: "#ef4444" }}>*</span>
+                  Evaluare <span style={{ color: "#b91c1c" }}>*</span>
                 </label>
                 <div className="relative">
                   <select
@@ -252,7 +252,7 @@ export function AddFdscReportModal({
                   />
                 </div>
                 {evaluationsError && (
-                  <p className="mt-1.5 text-xs" style={{ color: "#ef4444" }}>
+                  <p className="mt-1.5 text-xs" style={{ color: "#b91c1c" }}>
                     {evaluationsError}
                   </p>
                 )}
@@ -269,7 +269,7 @@ export function AddFdscReportModal({
                   className="block text-sm font-semibold mb-1.5"
                   style={{ color: "#334155" }}
                 >
-                  Denumire raport <span style={{ color: "#ef4444" }}>*</span>
+                  Denumire raport <span style={{ color: "#b91c1c" }}>*</span>
                 </label>
                 <input
                   id="fdsc-report-name"
@@ -286,7 +286,7 @@ export function AddFdscReportModal({
                   className="block text-sm font-semibold mb-1.5"
                   style={{ color: "#334155" }}
                 >
-                  Fișier <span style={{ color: "#ef4444" }}>*</span>
+                  Fișier <span style={{ color: "#b91c1c" }}>*</span>
                 </p>
                 <div className="relative">
                   <label
@@ -299,7 +299,7 @@ export function AddFdscReportModal({
                     onDrop={handleDrop}
                     className={`flex items-center gap-2 rounded-xl border-2 border-dashed px-4 py-3 text-sm cursor-pointer transition-colors ${
                       file ? "pr-10" : ""
-                    } ${isDragging ? "border-[#2dbe8f] bg-[#2dbe8f]/5" : "border-border bg-slate-50 hover:bg-slate-100"}`}
+                    } ${isDragging ? "border-[#007d58] bg-[#00d495]/5" : "border-border bg-slate-50 hover:bg-slate-100"}`}
                   >
                     <Upload
                       size={16}
@@ -307,7 +307,7 @@ export function AddFdscReportModal({
                     />
                     <span
                       className="truncate"
-                      style={{ color: file ? "#162040" : "#64748b" }}
+                      style={{ color: file ? "#1c1c81" : "#5b6779" }}
                     >
                       {file ? file.name : "Selectează fișierul (PDF, DOC, XLS)"}
                     </span>
@@ -325,14 +325,14 @@ export function AddFdscReportModal({
                       type="button"
                       onClick={handleRemoveFile}
                       aria-label="Elimină fișierul"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:text-[#ef4444] transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:text-[#b91c1c] transition-colors"
                     >
                       <X size={14} />
                     </button>
                   )}
                 </div>
                 {fileError && (
-                  <p className="mt-1.5 text-xs" style={{ color: "#ef4444" }}>
+                  <p className="mt-1.5 text-xs" style={{ color: "#b91c1c" }}>
                     {fileError}
                   </p>
                 )}
@@ -354,7 +354,7 @@ export function AddFdscReportModal({
                 onClick={handleSubmit}
                 disabled={!canSubmit || isPending}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-50"
-                style={{ background: "#162040" }}
+                style={{ background: "#1c1c81" }}
               >
                 {isPending && <Loader2 size={14} className="animate-spin" />}
                 {isPending ? "Se încarcă..." : "Încarcă raport"}

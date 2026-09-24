@@ -19,7 +19,7 @@ export function FaqCollection({ data }: { data: FaqCollectionData }) {
               fontSize: "clamp(2rem, 4vw, 2.75rem)",
               fontWeight: 800,
               lineHeight: 1.15,
-              color: "#162040",
+              color: "#1c1c81",
             }}
           >
             {titlu}
@@ -27,7 +27,7 @@ export function FaqCollection({ data }: { data: FaqCollectionData }) {
         ) : null}
 
         {intrebari.length === 0 ? (
-          <p className="mx-auto max-w-3xl rounded-2xl border border-dashed border-border px-6 py-12 text-center text-sm text-[#94a3b8]">
+          <p className="mx-auto max-w-3xl rounded-2xl border border-dashed border-border px-6 py-12 text-center text-sm text-[#5b6779]">
             Nicio întrebare de afișat.
           </p>
         ) : (

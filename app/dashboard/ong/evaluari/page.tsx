@@ -18,8 +18,8 @@ function formatDate(iso: string) {
 
 function reportStatus(report: ReportListItem) {
   if (report.finished)
-    return { bg: "#f0fdf4", color: "#16a34a", label: "Finalizat" };
-  return { bg: "#eff6ff", color: "#2563eb", label: "În desfășurare" };
+    return { bg: "#f0fdf4", color: "#15803d", label: "Finalizat" };
+  return { bg: "#dcfafb", color: "#5656e5", label: "În desfășurare" };
 }
 
 export default async function OngEvaluariPage() {
@@ -93,7 +93,7 @@ export default async function OngEvaluariPage() {
                     <th
                       key={h}
                       className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                      style={{ color: "#94a3b8" }}
+                      style={{ color: "#5b6779" }}
                     >
                       {h}
                     </th>
@@ -112,7 +112,7 @@ export default async function OngEvaluariPage() {
                     >
                       <td
                         className="px-4 py-3.5 font-semibold"
-                        style={{ color: "#162040" }}
+                        style={{ color: "#1c1c81" }}
                       >
                         {report.name}
                         <p className="text-xs font-normal text-muted-foreground mt-0.5">
@@ -140,7 +140,7 @@ export default async function OngEvaluariPage() {
                         <Link
                           href={`/dashboard/evaluari/${report.documentId}`}
                           className="text-xs font-semibold hover:underline"
-                          style={{ color: "#2dbe8f" }}
+                          style={{ color: "#007d58" }}
                         >
                           Vezi detalii →
                         </Link>

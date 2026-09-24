@@ -8,7 +8,7 @@ const ALIGN_CLASS: Record<HeroIntroData["horizontalAlign"], string> = {
   dreapta: "items-end text-right",
 };
 
-const NAVY_BG = "#162040";
+const NAVY_BG = "#1c1c81";
 
 /**
  * "Hero – Intro" — a short intro section: uppercase supratitlu, headline,
@@ -49,7 +49,7 @@ export function HeroIntro({ data }: { data: HeroIntroData }) {
         {supratitlu ? (
           <p
             className="mb-4 text-xs font-semibold uppercase tracking-wider wrap-break-word"
-            style={{ color: "#2dbe8f" }}
+            style={{ color: isDark ? "#00d495" : "#007d58" }}
           >
             {supratitlu}
           </p>
@@ -60,7 +60,7 @@ export function HeroIntro({ data }: { data: HeroIntroData }) {
             fontSize: "clamp(2.5rem, 5vw, 3.75rem)",
             fontWeight: 800,
             lineHeight: 1.1,
-            color: isDark ? "#ffffff" : "#162040",
+            color: isDark ? "#ffffff" : "#1c1c81",
           }}
         >
           {titlu}
@@ -82,10 +82,10 @@ export function HeroIntro({ data }: { data: HeroIntroData }) {
             {hasPrimary ? (
               <Link
                 href={primaryCta.href}
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white transition-all hover:opacity-90 hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white transition-all hover:brightness-90 hover:-translate-y-0.5"
                 style={{
-                  background: "#2dbe8f",
-                  boxShadow: "0 4px 24px rgba(45,190,143,0.35)",
+                  background: "#00d495",
+                  boxShadow: "0 4px 24px rgba(0,212,149,0.35)",
                 }}
               >
                 {primaryCta.label} <ArrowRight size={18} />
@@ -104,8 +104,8 @@ export function HeroIntro({ data }: { data: HeroIntroData }) {
                         border: "1.5px solid rgba(255,255,255,0.2)",
                       }
                     : {
-                        color: "#162040",
-                        border: "1.5px solid rgba(22,32,64,0.2)",
+                        color: "#1c1c81",
+                        border: "1.5px solid rgba(28,28,129,0.2)",
                       }
                 }
               >

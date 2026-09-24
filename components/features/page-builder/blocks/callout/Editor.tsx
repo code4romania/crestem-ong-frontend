@@ -11,8 +11,8 @@ import type { CalloutData } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 export function CalloutEditor({
   value,
@@ -30,7 +30,7 @@ export function CalloutEditor({
       <div className="flex items-center justify-between gap-4">
         <label
           htmlFor="callout-afiseaza-icon"
-          className="text-sm font-medium text-[#162040]"
+          className="text-sm font-medium text-[#1c1c81]"
         >
           Afișează iconița
         </label>
@@ -66,7 +66,7 @@ export function CalloutEditor({
 
       <div>
         <span className={labelClass}>
-          Text <span className="text-[#ef4444]">*</span>
+          Text <span className="text-[#b91c1c]">*</span>
         </span>
         <RichTextField
           value={value.text}

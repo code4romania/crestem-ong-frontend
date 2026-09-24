@@ -24,7 +24,7 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm";
 
 export function LoginForm({ returnTo }: { returnTo?: string | null }) {
   const [apiError, setApiError] = useState<string | null>(null);
@@ -86,7 +86,7 @@ export function LoginForm({ returnTo }: { returnTo?: string | null }) {
         <div
           role="alert"
           className="flex items-start gap-2.5 rounded-xl p-4 text-sm"
-          style={{ background: "#fff5f5", border: "1.5px solid #fca5a5", color: "#ef4444" }}
+          style={{ background: "#fff5f5", border: "1.5px solid #fca5a5", color: "#b91c1c" }}
         >
           <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
           {apiError}
@@ -106,7 +106,7 @@ export function LoginForm({ returnTo }: { returnTo?: string | null }) {
           {...register("identifier")}
         />
         {errors.identifier && (
-          <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+          <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
             {errors.identifier.message}
           </p>
         )}
@@ -120,7 +120,7 @@ export function LoginForm({ returnTo }: { returnTo?: string | null }) {
           <Link
             href="/parola-uitata"
             className="text-xs font-semibold transition-opacity hover:opacity-75"
-            style={{ color: "#2dbe8f" }}
+            style={{ color: "#007d58" }}
           >
             Ai uitat parola?
           </Link>
@@ -133,7 +133,7 @@ export function LoginForm({ returnTo }: { returnTo?: string | null }) {
           {...register("password")}
         />
         {errors.password && (
-          <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+          <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
             {errors.password.message}
           </p>
         )}
@@ -142,8 +142,8 @@ export function LoginForm({ returnTo }: { returnTo?: string | null }) {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white transition-all hover:opacity-90 disabled:opacity-60"
-        style={{ background: "#2dbe8f", boxShadow: "0 4px 16px rgba(45,190,143,0.3)" }}
+        className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white transition-all hover:brightness-90 disabled:opacity-60"
+        style={{ background: "#00d495", boxShadow: "0 4px 16px rgba(0,212,149,0.3)" }}
       >
         {isSubmitting && <Loader2 size={18} className="animate-spin" />}
         Autentifică-te

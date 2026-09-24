@@ -39,7 +39,7 @@ export function DeleteAccountModal({ onClose }: { onClose: () => void }) {
         <h2
           id="delete-account-title"
           className="font-heading font-extrabold text-lg mb-2"
-          style={{ color: "#162040" }}
+          style={{ color: "#1c1c81" }}
         >
           Șterge contul
         </h2>
@@ -60,7 +60,7 @@ export function DeleteAccountModal({ onClose }: { onClose: () => void }) {
         <label
           htmlFor="delete-account-current-password"
           className="block text-sm font-semibold mb-1"
-          style={{ color: "#162040" }}
+          style={{ color: "#1c1c81" }}
         >
           Parola actuală
         </label>
@@ -76,7 +76,7 @@ export function DeleteAccountModal({ onClose }: { onClose: () => void }) {
         <label
           htmlFor="delete-account-confirmare"
           className="block text-sm font-semibold mb-1"
-          style={{ color: "#162040" }}
+          style={{ color: "#1c1c81" }}
         >
           Scrie {DELETE_CONFIRMATION_WORD} pentru a confirma
         </label>
@@ -92,7 +92,7 @@ export function DeleteAccountModal({ onClose }: { onClose: () => void }) {
         {error && (
           <p
             role="alert"
-            className="mb-4 rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#ef4444]"
+            className="mb-4 rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#b91c1c]"
           >
             {error}
           </p>
@@ -104,7 +104,7 @@ export function DeleteAccountModal({ onClose }: { onClose: () => void }) {
             onClick={onClose}
             disabled={loading}
             className="px-4 py-2.5 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors disabled:opacity-50"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             Anulează
           </button>
