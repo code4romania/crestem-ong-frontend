@@ -26,7 +26,7 @@ export function Quote({ data }: { data: QuoteData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-3xl px-6 py-8">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         <figure
           className={`flex flex-col ${COLUMN_ALIGN[aliniere]} ${
             evidentiat
@@ -43,7 +43,7 @@ export function Quote({ data }: { data: QuoteData }) {
           />
 
           <blockquote
-            className="wrap-break-word text-[#334155]"
+            className="max-w-3xl wrap-break-word text-[#334155]"
             style={{
               fontSize: evidentiat
                 ? "0.9375rem"
