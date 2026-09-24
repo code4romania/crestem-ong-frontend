@@ -10,10 +10,10 @@ import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibr
 import { IconPicker } from "./IconPicker";
 import { ProgramSelect } from "./ProgramSelect";
 import { StatList } from "./StatList";
-import { SupporterList } from "./SupporterList";
+import { SupporterGroupList } from "./SupporterGroupList";
 import type { DirectoryProgram } from "@/lib/api/people";
 import type { BlockFieldErrors } from "../../types";
-import type { ProgramHeaderData } from "./schema";
+import { migrateProgramHeader, type ProgramHeaderData } from "./schema";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -22,7 +22,7 @@ const inputClass =
 const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 export function ProgramHeaderEditor({
-  value,
+  value: rawValue,
   onChange,
   errors,
 }: {
@@ -34,6 +34,10 @@ export function ProgramHeaderEditor({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // The drawer hands over raw stored data; blocks saved before supporter
+  // groups existed still carry the flat `sustinatori` list.
+  const value = migrateProgramHeader(rawValue) as ProgramHeaderData;
 
   const set = (patch: Partial<ProgramHeaderData>) =>
     onChange({ ...value, ...patch });
@@ -237,23 +241,10 @@ export function ProgramHeaderEditor({
         />
       </div>
 
-      <div>
-        <label htmlFor="ph-sustinut-de" className={labelClass}>
-          Etichetă susținători
-        </label>
-        <input
-          id="ph-sustinut-de"
-          className={inputClass}
-          value={value.sustinutDeTitlu}
-          onChange={(e) => set({ sustinutDeTitlu: e.target.value })}
-          placeholder="Susținut de:"
-        />
-      </div>
-
-      <SupporterList
-        value={value.sustinatori}
-        onChange={(sustinatori) => set({ sustinatori })}
-        error={errors.sustinatori}
+      <SupporterGroupList
+        value={value.grupuri}
+        onChange={(grupuri) => set({ grupuri })}
+        error={errors.grupuri}
       />
 
       <StatList

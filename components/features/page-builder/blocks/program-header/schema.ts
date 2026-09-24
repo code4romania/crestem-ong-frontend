@@ -54,6 +54,18 @@ const supporterSchema = z.object({
   imagineAlt: z.string().trim().default(""),
 });
 
+/**
+ * A named row of supporters ("Finanțatori", "Parteneri", …). The admin names
+ * each group; the same organisation can sit in more than one group.
+ */
+const supporterGroupSchema = z.object({
+  titlu: z.string().trim().default(""),
+  sustinatori: z.array(supporterSchema).default([]),
+});
+
+export const MAX_SUPPORTER_GROUPS = 3;
+const LEGACY_SUPPORTER_LABEL = "Susținut de:";
+
 const statSchema = z.object({
   valoare: z.string().trim().default(""),
   eticheta: z.string().trim().default(""),
@@ -71,7 +83,42 @@ const programRefSchema = z.object({
   nume: z.string().trim().default(""),
 });
 
-export const programHeaderSchema = z
+/**
+ * Blocks saved before supporter groups existed stored one label
+ * (`sustinutDeTitlu`) and one flat list (`sustinatori`). Fold those into a
+ * single group so old pages keep rendering unchanged; the next save writes the
+ * new shape. Idempotent — data that already has `grupuri` is returned as is.
+ *
+ * Exported because only the public renderer parses stored data through the
+ * schema; the builder canvas and the editor receive the raw block data.
+ */
+export function migrateProgramHeader(raw: unknown): unknown {
+  if (!raw || typeof raw !== "object" || "grupuri" in raw) return raw;
+  const { sustinutDeTitlu, sustinatori, ...rest } = raw as Record<
+    string,
+    unknown
+  >;
+  return {
+    ...rest,
+    grupuri: [
+      {
+        titlu:
+          typeof sustinutDeTitlu === "string"
+            ? sustinutDeTitlu
+            : LEGACY_SUPPORTER_LABEL,
+        sustinatori: Array.isArray(sustinatori) ? sustinatori : [],
+      },
+    ],
+  };
+}
+
+function allSupporters(d: {
+  grupuri: { sustinatori: z.infer<typeof supporterSchema>[] }[];
+}) {
+  return d.grupuri.flatMap((g) => g.sustinatori);
+}
+
+const programHeaderObjectSchema = z
   .object({
     program: programRefSchema.default({ documentId: "", nume: "" }),
     sursaVizual: iconSourceSchema.default("predefinita"),
@@ -80,9 +127,13 @@ export const programHeaderSchema = z
     imagineAlt: z.string().trim().default(""),
     titlu: z.string().trim().min(1, "Titlul este obligatoriu"),
     subtitlu: z.string().trim().default(""),
-    /** Small uppercase eyebrow in front of the logo row. */
-    sustinutDeTitlu: z.string().trim().default("Susținut de:"),
-    sustinatori: z.array(supporterSchema).default([]),
+    grupuri: z
+      .array(supporterGroupSchema)
+      .max(
+        MAX_SUPPORTER_GROUPS,
+        `Poți adăuga cel mult ${MAX_SUPPORTER_GROUPS} categorii de susținători`,
+      )
+      .default([]),
     statistici: z.array(statSchema).default([]),
   })
   .refine((d) => d.sursaVizual !== "imagine" || d.imagine, {
@@ -93,27 +144,36 @@ export const programHeaderSchema = z
     path: ["imagine"],
     message: "Imaginea programului are nevoie de un text alternativ",
   })
-  .refine((d) => d.sustinatori.every((s) => s.nume), {
-    path: ["sustinatori"],
+  .refine((d) => allSupporters(d).every((s) => s.nume), {
+    path: ["grupuri"],
     message: "Fiecare susținător are nevoie de un nume",
   })
   .refine(
-    (d) => d.sustinatori.every((s) => s.sursaIcon !== "imagine" || s.imagine),
+    (d) => allSupporters(d).every((s) => s.sursaIcon !== "imagine" || s.imagine),
     {
-      path: ["sustinatori"],
+      path: ["grupuri"],
       message: "Încarcă un logo pentru fiecare susținător setat pe imagine proprie",
     },
   )
-  .refine((d) => d.sustinatori.every((s) => !s.imagine || s.imagineAlt.length > 0), {
-    path: ["sustinatori"],
-    message: "Fiecare logo are nevoie de un text alternativ",
-  })
+  .refine(
+    (d) => allSupporters(d).every((s) => !s.imagine || s.imagineAlt.length > 0),
+    {
+      path: ["grupuri"],
+      message: "Fiecare logo are nevoie de un text alternativ",
+    },
+  )
   .refine((d) => d.statistici.every((s) => s.valoare && s.eticheta), {
     path: ["statistici"],
     message: "Fiecare statistică are nevoie de valoare și etichetă",
   });
 
-export type ProgramHeaderData = z.infer<typeof programHeaderSchema>;
+export const programHeaderSchema = z.preprocess(
+  migrateProgramHeader,
+  programHeaderObjectSchema,
+);
+
+export type ProgramHeaderData = z.infer<typeof programHeaderObjectSchema>;
+export type ProgramSupporterGroup = z.infer<typeof supporterGroupSchema>;
 export type ProgramSupporter = z.infer<typeof supporterSchema>;
 export type ProgramHeaderStat = z.infer<typeof statSchema>;
 
@@ -130,8 +190,7 @@ export const PROGRAM_HEADER_DEFAULTS: ProgramHeaderData = {
   imagineAlt: "",
   titlu: "",
   subtitlu: "",
-  sustinutDeTitlu: "Susținut de:",
-  sustinatori: [],
+  grupuri: [{ titlu: LEGACY_SUPPORTER_LABEL, sustinatori: [] }],
   statistici: [],
 };
 
@@ -141,6 +200,11 @@ export const EMPTY_SUPPORTER: ProgramSupporter = {
   icon: "building",
   imagine: null,
   imagineAlt: "",
+};
+
+export const EMPTY_SUPPORTER_GROUP: ProgramSupporterGroup = {
+  titlu: "",
+  sustinatori: [],
 };
 
 export const EMPTY_STAT: ProgramHeaderStat = { valoare: "", eticheta: "" };

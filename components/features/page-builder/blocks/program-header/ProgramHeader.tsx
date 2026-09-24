@@ -1,6 +1,10 @@
 import { getMediaUrl } from "@/lib/api/client";
 import { PROGRAM_HEADER_ICONS } from "./icons";
-import type { ProgramHeaderData, ProgramSupporter } from "./schema";
+import {
+  migrateProgramHeader,
+  type ProgramHeaderData,
+  type ProgramSupporter,
+} from "./schema";
 
 const NAVY_BG = "#1c1c81";
 /** The supporter band sits on a tint, a touch bluer than `#f8fafc`. */
@@ -12,20 +16,20 @@ function SupporterLogo({ supporter }: { supporter: ProgramSupporter }) {
   const useImage = supporter.sursaIcon === "imagine" && supporter.imagine;
 
   return (
-    <span className="flex h-16 shrink-0 items-center justify-center text-[#5656e5]">
+    <span className="flex h-20 shrink-0 items-center justify-center text-[#5656e5] md:h-24">
       {useImage && supporter.imagine ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
           src={getMediaUrl(supporter.imagine.url)}
           alt={supporter.imagineAlt || supporter.nume}
-          className="h-full w-auto object-contain"
+          className="h-full w-auto max-w-[280px] object-contain"
         />
       ) : (
         <span
-          className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white"
+          className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white md:h-24 md:w-24"
           style={{ border: `1.5px solid ${BORDER}` }}
         >
-          <Icon size={32} aria-hidden />
+          <Icon size={40} className="md:h-12 md:w-12" aria-hidden />
         </span>
       )}
     </span>
@@ -37,6 +41,9 @@ function SupporterLogo({ supporter }: { supporter: ProgramSupporter }) {
  * tagline on white, then the supporters band, then the dark stats bar. Content
  * is snapshotted from the picked programme in the editor, so this renderer is
  * pure (no hooks, no `"use client"`) and works for a signed-out visitor.
+ *
+ * The builder canvas passes raw stored data, so blocks saved before supporter
+ * groups existed are migrated here as well as in the schema.
  */
 export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
   const {
@@ -46,14 +53,13 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
     imagineAlt,
     titlu,
     subtitlu,
-    sustinutDeTitlu,
-    sustinatori,
+    grupuri,
     statistici,
-  } = data;
+  } = migrateProgramHeader(data) as ProgramHeaderData;
 
   const Icon = PROGRAM_HEADER_ICONS[icon];
   const useImage = sursaVizual === "imagine" && imagine;
-  const hasSupporters = sustinatori.length > 0;
+  const groups = grupuri.filter((g) => g.sustinatori.length > 0);
   const hasStats = statistici.length > 0;
 
   return (
@@ -115,19 +121,29 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
         </div>
       </div>
 
-      {hasSupporters ? (
+      {groups.length > 0 ? (
         <div style={{ background: SUPPORTER_BG, borderTop: `1px solid ${BORDER}` }}>
-          <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-8 px-6 py-6">
-            {sustinutDeTitlu ? (
-              <span className="text-xs font-semibold uppercase tracking-widest text-[#5b6779]">
-                {sustinutDeTitlu}
-              </span>
-            ) : null}
-            <div className="flex flex-wrap items-center gap-10">
-              {sustinatori.map((supporter, index) => (
-                <SupporterLogo key={index} supporter={supporter} />
-              ))}
-            </div>
+          <div className="mx-auto max-w-7xl px-6">
+            {groups.map((group, groupIndex) => (
+              <div
+                key={groupIndex}
+                className="flex flex-col gap-4 py-6 md:flex-row md:items-center md:gap-8"
+                style={
+                  groupIndex > 0 ? { borderTop: `1px solid ${BORDER}` } : undefined
+                }
+              >
+                {group.titlu ? (
+                  <span className="text-xs font-semibold uppercase tracking-widest text-[#5b6779] wrap-break-word md:w-48 md:shrink-0">
+                    {group.titlu}
+                  </span>
+                ) : null}
+                <div className="flex flex-wrap items-center gap-10">
+                  {group.sustinatori.map((supporter, index) => (
+                    <SupporterLogo key={index} supporter={supporter} />
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       ) : null}

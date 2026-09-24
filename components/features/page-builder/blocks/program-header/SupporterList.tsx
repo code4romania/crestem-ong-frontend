@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useId, useRef, useState, useTransition } from "react";
 import {
   ArrowDown,
   ArrowUp,
@@ -47,6 +47,8 @@ export function SupporterList({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // One list per supporter group, so field ids must be unique per instance.
+  const idPrefix = useId();
 
   const openNew = () => {
     setDraft({ ...EMPTY_SUPPORTER });
@@ -133,11 +135,11 @@ export function SupporterList({
 
         <div className="space-y-4">
           <div>
-            <label htmlFor="ph-sustinator-nume" className={labelClass}>
+            <label htmlFor={`${idPrefix}-nume`} className={labelClass}>
               Nume <span className="text-[#b91c1c]">*</span>
             </label>
             <input
-              id="ph-sustinator-nume"
+              id={`${idPrefix}-nume`}
               className={inputClass}
               value={draft.nume}
               onChange={(e) => setField({ nume: e.target.value })}
@@ -248,11 +250,11 @@ export function SupporterList({
 
           {usesImage && draft.imagine ? (
             <div>
-              <label htmlFor="ph-sustinator-alt" className={labelClass}>
+              <label htmlFor={`${idPrefix}-alt`} className={labelClass}>
                 Text alternativ imagine <span className="text-[#b91c1c]">*</span>
               </label>
               <input
-                id="ph-sustinator-alt"
+                id={`${idPrefix}-alt`}
                 className={inputClass}
                 value={draft.imagineAlt}
                 onChange={(e) => setField({ imagineAlt: e.target.value })}
