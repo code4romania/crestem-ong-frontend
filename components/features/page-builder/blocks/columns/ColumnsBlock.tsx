@@ -13,7 +13,9 @@ import {
  *
  * Child blocks are resolved through `BLOCK_REGISTRY` (a benign import cycle with
  * `registry.ts`, safe because the registry is only read at render time). A
- * column is its own content width, so children ignore the `fullBleed` flag here.
+ * column is its own content width, so children ignore the `fullBleed` flag here
+ * and have their wrapper max-width / side padding stripped (every block renders
+ * `section > div.mx-auto.max-w-* px-6`), so they fill the column edge to edge.
  */
 export function ColumnsBlock({ data }: { data: ColumnsData }) {
   const count = columnCountFor(data.numarColoane);
@@ -30,7 +32,7 @@ export function ColumnsBlock({ data }: { data: ColumnsData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-5xl px-6 py-8">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         {/* Column gap only: each child block already carries its own py-8
             top/bottom padding as vertical rhythm (see BlockRenderer, which
             stacks top-level blocks with no extra gap). Adding a row gap here
@@ -40,7 +42,7 @@ export function ColumnsBlock({ data }: { data: ColumnsData }) {
             (-mt-8) to leave a single, tighter gap instead of two stacked. */}
         <div className={`grid gap-x-8 ${gridClass} [&>*+*]:-mt-8 md:[&>*+*]:mt-0`}>
           {columns.map((column, index) => (
-            <div key={index} className={`flex flex-col gap-8 ${spanFor(index)}`}>
+            <div key={index} className={`flex min-w-0 flex-col gap-8 [&>section>div]:max-w-none [&>section>div]:px-0 ${spanFor(index)}`}>
               {column.blocuri.map((child) => {
                 const definition = BLOCK_REGISTRY[child.type];
                 if (!definition) return null;

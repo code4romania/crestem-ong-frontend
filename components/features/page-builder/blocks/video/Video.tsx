@@ -4,9 +4,9 @@ import { VideoFacade } from "./VideoFacade";
 import { type VideoData } from "./schema";
 
 const WIDTH_CLASS: Record<VideoData["latime"], string> = {
-  compacta: "max-w-2xl",
-  standard: "max-w-3xl",
-  lata: "max-w-5xl",
+  compacta: "max-w-3xl",
+  standard: "max-w-5xl",
+  lata: "max-w-7xl",
   full: "max-w-none",
 };
 

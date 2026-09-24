@@ -26,7 +26,7 @@ export function Embed({ data }: { data: EmbedData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-3xl px-6 py-8">
+      <div className="mx-auto max-w-5xl px-6 py-8">
         {titlu && (
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#5b6779]">
             {titlu}
