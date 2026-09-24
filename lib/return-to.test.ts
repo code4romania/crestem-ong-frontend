@@ -37,6 +37,14 @@ describe("safeReturnTo", () => {
     expect(safeReturnTo("/biblioteca")).toBeNull();
   });
 
+  it("keeps the admin-transfer invitation page with its token (US-3 step 2)", () => {
+    expect(safeReturnTo("/transfer-admin?token=abc_-123")).toBe("/transfer-admin?token=abc_-123");
+  });
+
+  it("drops a path that merely starts with transfer-admin", () => {
+    expect(safeReturnTo("/transfer-admin-evil")).toBeNull();
+  });
+
   it("drops a path that merely starts with the word dashboard", () => {
     expect(safeReturnTo("/dashboards-evil")).toBeNull();
   });

@@ -6,12 +6,16 @@ import { ProfileHeaderCard } from "@/components/features/dashboard/ProfileHeader
 import { ProfileActivitySections } from "@/components/features/dashboard/ProfileActivitySections";
 import { ProfileActionsMenu } from "@/components/features/dashboard/ProfileActionsMenu";
 import { OngMembershipCard } from "@/components/features/dashboard-member/OngMembershipCard";
+import { IncomingAdminTransferCard } from "@/components/features/dashboard-member/IncomingAdminTransferCard";
+import { getIncomingAdminTransfer } from "@/lib/api/admin-transfer";
 
 export default async function MemberProfilePage() {
-  const user = await getCurrentUser();
-  const { data: ongs } = await serverApiFetch<{ data: MyOng[] }>(
-    "/api/me/ongs",
-  );
+  const [user, { data: ongs }, incomingTransfer] = await Promise.all([
+    getCurrentUser(),
+    serverApiFetch<{ data: MyOng[] }>("/api/me/ongs"),
+    // Optional: the profile still renders if this lookup fails.
+    getIncomingAdminTransfer().catch(() => null),
+  ]);
 
   return (
     <div>
@@ -29,6 +33,8 @@ export default async function MemberProfilePage() {
         </div>
         <ProfileActionsMenu />
       </div>
+
+      {incomingTransfer && <IncomingAdminTransferCard transfer={incomingTransfer} />}
 
       <ProfileHeaderCard
         nume={userDisplayName(user!)}

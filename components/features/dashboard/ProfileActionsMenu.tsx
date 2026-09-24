@@ -1,17 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, KeyRound, Mail, Plus, Trash2 } from "lucide-react";
+import { ArrowRightLeft, ChevronDown, KeyRound, Mail, Plus, Trash2 } from "lucide-react";
 import { AddOngRequestModal } from "./AddOngRequestModal";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { ChangeEmailModal } from "./ChangeEmailModal";
 import { DeleteAccountModal } from "./DeleteAccountModal";
 import { DeleteOwnOngDialog } from "../organizatii/DeleteOwnOngDialog";
+import { TransferOngDialog } from "../organizatii/TransferOngDialog";
+import type { TransferCandidate } from "@/lib/api/admin-transfer";
 
 export function ProfileActionsMenu({
   showAddOng = true,
   showChangeEmail = true,
   deleteOng,
+  transferOng,
 }: {
   showAddOng?: boolean;
   /**
@@ -25,6 +28,11 @@ export function ProfileActionsMenu({
    * refuses any organization the caller does not belong to.
    */
   deleteOng?: { documentId: string; name: string };
+  /**
+   * „Transferă organizația” (US-1 AC1): only the Admin ONG's profile passes
+   * it. Disabled while a transfer is pending — one at a time (US-1 A2).
+   */
+  transferOng?: { ongName: string; members: TransferCandidate[]; pending: boolean };
 } = {}) {
   const [open, setOpen] = useState(false);
   const [adding, setAdding] = useState(false);
@@ -32,6 +40,7 @@ export function ProfileActionsMenu({
   const [changingEmail, setChangingEmail] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deletingOng, setDeletingOng] = useState(false);
+  const [transferring, setTransferring] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -112,6 +121,30 @@ export function ProfileActionsMenu({
           {/* Above "Șterge contul" on purpose: BR-32 refuses to delete an
               ngo-admin's account until the organization is gone, so this is the
               step they have to take first. */}
+          {transferOng && (
+            <>
+              <button
+                type="button"
+                role="menuitem"
+                disabled={transferOng.pending}
+                title={
+                  transferOng.pending
+                    ? "Există deja un transfer în așteptare. Anulează-l înainte de a iniția unul nou."
+                    : undefined
+                }
+                onClick={() => {
+                  setOpen(false);
+                  setTransferring(true);
+                }}
+                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-semibold hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                style={{ color: "#162040" }}
+              >
+                <ArrowRightLeft size={16} style={{ color: "#2dbe8f" }} />
+                Transferă organizația
+              </button>
+              <div className="my-1.5 border-t border-border" />
+            </>
+          )}
           {deleteOng && (
             <>
               <button
@@ -156,6 +189,14 @@ export function ProfileActionsMenu({
           documentId={deleteOng.documentId}
           ongName={deleteOng.name}
           onClose={() => setDeletingOng(false)}
+        />
+      )}
+      {transferOng && transferring && (
+        <TransferOngDialog
+          mode="ngo-admin"
+          ongName={transferOng.ongName}
+          members={transferOng.members}
+          onClose={() => setTransferring(false)}
         />
       )}
       {deleting && <DeleteAccountModal onClose={() => setDeleting(false)} />}

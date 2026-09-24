@@ -1,6 +1,14 @@
 import { DASHBOARD_ROOT } from "./dashboard-routes";
 
 /**
+ * The admin-transfer invitation page sits outside the dashboard but asks an
+ * existing account to sign in and come back to it (US-3 step 2).
+ */
+export const TRANSFER_ADMIN_PATH = "/transfer-admin";
+
+const RETURN_TO_ROOTS = [DASHBOARD_ROOT, TRANSFER_ADMIN_PATH];
+
+/**
  * Where to send someone once they have signed in, when they arrived at the
  * login page from a protected one rather than on their own. The proxy puts the
  * path in this query param on its way to `/autentificare`; it lives only in
@@ -9,15 +17,16 @@ import { DASHBOARD_ROOT } from "./dashboard-routes";
  *
  * The value reaches us from the address bar, so it is only ever used after
  * passing through here: anything off-origin would turn the login form into an
- * open redirect. Nothing outside the dashboard is allowed either, which keeps
+ * open redirect. Nothing outside the dashboard (and the transfer invitation) is allowed, which keeps
  * `/autentificare` from being pointed at itself and looping.
  */
 export function safeReturnTo(value: string | null | undefined): string | null {
   if (!value) return null;
-  if (!value.startsWith(DASHBOARD_ROOT)) return null;
+  const root = RETURN_TO_ROOTS.find((candidate) => value.startsWith(candidate));
+  if (!root) return null;
   // `/dashboards-evil` starts with the root but is a different path; only a
   // boundary right after it counts.
-  const next = value.charAt(DASHBOARD_ROOT.length);
+  const next = value.charAt(root.length);
   if (next !== "" && next !== "/" && next !== "?") return null;
   return value;
 }

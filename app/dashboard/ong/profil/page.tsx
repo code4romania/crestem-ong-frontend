@@ -2,6 +2,9 @@ import { serverApiFetch } from "@/lib/api/server";
 import { getMediaUrl } from "@/lib/api/client";
 import { getCurrentUser } from "@/lib/api/session-server";
 import type { MyOng } from "@/lib/api/ongs";
+import type { OngMember } from "@/lib/api/reports";
+import { getCurrentAdminTransfer } from "@/lib/api/admin-transfer";
+import { AdminTransferBanner } from "@/components/features/organizatii/AdminTransferBanner";
 import { OngProfileHeaderActions } from "@/components/features/organizatii/OngProfileHeaderActions";
 import { ProfileActionsMenu } from "@/components/features/dashboard/ProfileActionsMenu";
 import { ProfileActivitySections } from "@/components/features/dashboard/ProfileActivitySections";
@@ -18,9 +21,11 @@ function formatJoinDate(iso: string) {
 export default async function OngProfilPage() {
   // The contact person on /ongs/me is the logged-in admin's own account, so the
   // account actions (change password, join date) belong in that card.
-  const [{ data: ong }, user] = await Promise.all([
+  const [{ data: ong }, user, { data: members }, pendingTransfer] = await Promise.all([
     serverApiFetch<{ data: MyOng }>("/api/ongs/me"),
     getCurrentUser(),
+    serverApiFetch<{ data: OngMember[] }>("/api/ongs/members"),
+    getCurrentAdminTransfer(),
   ]);
 
   return (
@@ -45,8 +50,24 @@ export default async function OngProfilPage() {
           showAddOng={false}
           showChangeEmail={false}
           deleteOng={{ documentId: ong.documentId, name: ong.name }}
+          transferOng={{
+            ongName: ong.name,
+            members: members.map((member) => ({
+              documentId: member.documentId,
+              nume: member.nume,
+              email: member.email,
+              accountStatus: member.accountStatus,
+            })),
+            pending: pendingTransfer !== null,
+          }}
         />
       </div>
+
+      {pendingTransfer && (
+        <div className="mb-6">
+          <AdminTransferBanner transfer={pendingTransfer} mode="ngo-admin" />
+        </div>
+      )}
 
       <div className="bg-white rounded-xl border border-border p-6 mb-6">
         <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:justify-between">

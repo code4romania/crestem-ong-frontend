@@ -22,13 +22,29 @@ function Field({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
-export function OrgContactCard({ ong }: { ong: Ong }) {
+/**
+ * `action` sits next to the heading and `children` under the details — the
+ * FDSC Admin's „Schimbă administratorul” and its pending-transfer status. The
+ * mentor's view of the same card passes neither.
+ */
+export function OrgContactCard({
+  ong,
+  action,
+  children,
+}: {
+  ong: Ong;
+  action?: React.ReactNode;
+  children?: React.ReactNode;
+}) {
   const admin = ong.admin;
   return (
     <div className="bg-white rounded-2xl border border-border p-6">
-      <h2 className="text-base font-heading font-extrabold mb-5" style={{ color: "#162040" }}>
-        Persoană de contact
-      </h2>
+      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-base font-heading font-extrabold" style={{ color: "#162040" }}>
+          Persoană de contact
+        </h2>
+        {action}
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-5">
         <Field label="Nume complet" value={admin?.nume ?? "—"} />
         <Field label="Email" value={admin?.email ?? "—"} />
@@ -36,6 +52,7 @@ export function OrgContactCard({ ong }: { ong: Ong }) {
         <Field label="Înregistrat la" value={formatDate(admin?.createdAt)} />
         <Field label="Ultima autentificare" value={formatDate(admin?.lastLogin)} />
       </div>
+      {children && <div className="mt-5">{children}</div>}
     </div>
   );
 }
