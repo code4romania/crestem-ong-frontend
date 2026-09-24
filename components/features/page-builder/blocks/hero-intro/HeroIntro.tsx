@@ -44,7 +44,7 @@ export function HeroIntro({ data }: { data: HeroIntroData }) {
       style={sectionStyle}
     >
       <div
-        className={`relative max-w-3xl mx-auto px-6 py-10 flex flex-col w-full ${ALIGN_CLASS[horizontalAlign]}`}
+        className={`relative max-w-5xl mx-auto px-6 py-10 flex flex-col w-full ${ALIGN_CLASS[horizontalAlign]}`}
       >
         {supratitlu ? (
           <p
@@ -57,7 +57,7 @@ export function HeroIntro({ data }: { data: HeroIntroData }) {
         <h1
           className="mb-5 font-heading wrap-break-word max-w-full"
           style={{
-            fontSize: "clamp(2.5rem, 5vw, 3.75rem)",
+            fontSize: "clamp(2rem, 4vw, 3rem)",
             fontWeight: 800,
             lineHeight: 1.1,
             color: isDark ? "#ffffff" : "#1c1c81",
@@ -71,7 +71,7 @@ export function HeroIntro({ data }: { data: HeroIntroData }) {
             style={{
               fontSize: "1.125rem",
               color: isDark ? "rgba(255,255,255,0.72)" : "#475569",
-              maxWidth: "560px",
+              maxWidth: "760px",
             }}
           >
             {textIntroductiv}
