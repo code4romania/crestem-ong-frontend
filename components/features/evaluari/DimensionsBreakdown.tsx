@@ -13,14 +13,38 @@ export type SelectedAnswers = Record<
   Pick<EvaluationAnswer, "answer" | "answerLabel">
 >;
 
+function optionRange(question: DimensionQuestion) {
+  const values = (question.options ?? []).map((option) => option.value);
+  return values.length
+    ? { min: Math.min(...values), max: Math.max(...values) }
+    : { min: 1, max: 5 };
+}
+
+/**
+ * A dimension's score in points ("17/25"), shown under its percentage. The
+ * percentage runs from the lowest possible total, not from zero, so points are
+ * recovered from it the same way: min + score × (max − min). On an aggregate
+ * report that makes them the respondents' average, hence the one decimal.
+ */
+function dimensionPoints(dimension: Dimension, score: number | null) {
+  if (score == null || !dimension.quiz?.length) return null;
+  const ranges = dimension.quiz.map(optionRange);
+  const min = ranges.reduce((sum, range) => sum + range.min, 0);
+  const max = ranges.reduce((sum, range) => sum + range.max, 0);
+  const points = Math.round((min + (score / 100) * (max - min)) * 10) / 10;
+  return `${points}/${max}`;
+}
+
 /**
  * The option a single respondent picked for one sub-indicator, shown in the
  * expanded details. FDSC staff and the resource person open a member's own matrix
  * to read these; the chip alone only carries the score, not which answer it came from.
  */
 function SelectedAnswer({
+  question,
   entry,
 }: {
+  question: DimensionQuestion;
   entry: Pick<EvaluationAnswer, "answer" | "answerLabel"> | undefined;
 }) {
   if (!entry || entry.answer == null) {
@@ -39,7 +63,9 @@ function SelectedAnswer({
     >
       <CheckCircle2 size={14} className="mt-0.5 shrink-0" style={{ color: "#2dbe8f" }} />
       <span className="text-xs" style={{ color: "#162040" }}>
-        <span className="font-bold">{entry.answer}</span>
+        <span className="font-bold">
+          {entry.answer}/{optionRange(question).max}
+        </span>
         {entry.answerLabel ? (
           <span className="font-medium"> · {entry.answerLabel}</span>
         ) : null}
@@ -104,6 +130,7 @@ function DimensionCard({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const hasDetails = Boolean(answers) || comments.length > 0;
+  const points = dimensionPoints(dimension, score);
 
   return (
     <div className="py-4 border-b border-border last:border-0">
@@ -118,9 +145,16 @@ function DimensionCard({
         </span>
         <div className="flex items-center gap-2 flex-shrink-0">
           <ScoreBar score={score} width="w-28" height="h-2" />
-          <span className="text-sm font-bold w-12 text-right" style={{ color: dimensionColor(score) }}>
-            {score != null ? `${score}%` : "—"}
-          </span>
+          <div className="w-14 flex flex-col items-center leading-tight">
+            <span className="text-sm font-bold" style={{ color: dimensionColor(score) }}>
+              {score != null ? `${score}%` : "—"}
+            </span>
+            {points && (
+              <span className="text-[11px] font-semibold whitespace-nowrap" style={{ color: dimensionColor(score) }}>
+                {points}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -182,7 +216,7 @@ function DimensionCard({
                   <p className="text-xs" style={{ color: "#64748b" }}>
                     {question.question}
                   </p>
-                  <SelectedAnswer entry={answers[question.id]} />
+                  <SelectedAnswer question={question} entry={answers[question.id]} />
                 </div>
               ))}
             </div>
