@@ -68,8 +68,10 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
       style={{ borderBottom: `1px solid ${BORDER}` }}
     >
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col items-center gap-8 pb-14 text-center md:flex-row-reverse md:items-center md:justify-between md:text-left">
-          <div className="w-full shrink-0 md:w-1/2">
+        <div className="flex flex-col items-center gap-8 pb-14 text-center md:flex-row-reverse md:items-center md:gap-12 md:text-left">
+          {/* The visual takes the larger share on desktop so the title column
+              doesn't leave a wide empty band on the left. */}
+          <div className="w-full shrink-0 md:w-1/2 lg:w-7/12">
             <div
               className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-white"
               style={{
@@ -92,7 +94,7 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
             </div>
           </div>
 
-          <div className="flex w-full flex-col items-center md:w-1/2 md:items-start">
+          <div className="flex w-full min-w-0 flex-col items-center md:flex-1 md:items-start">
             <h1
               className="mb-3 font-heading text-[#1c1c81] wrap-break-word"
               style={{
