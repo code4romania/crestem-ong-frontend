@@ -49,7 +49,7 @@ export function FaqAccordion({
                 onClick={() => toggle(index)}
                 className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
               >
-                <span className="text-base font-semibold text-[#1c1c81] wrap-break-word">
+                <span className="text-base font-semibold text-[#1c1c81] text-pretty wrap-break-word">
                   {item.intrebare}
                 </span>
                 <ChevronDown
@@ -66,7 +66,7 @@ export function FaqAccordion({
                 id={panelId}
                 role="region"
                 aria-labelledby={headerId}
-                className="border-t border-border px-6 pt-4 pb-5 text-sm leading-relaxed text-[#475569] wrap-break-word"
+                className="border-t border-border px-6 pt-4 pb-5 text-[15px] leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word"
               >
                 {item.raspuns}
               </div>

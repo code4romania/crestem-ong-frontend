@@ -153,13 +153,13 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
       {hasStats ? (
         <div style={{ background: NAVY_BG }}>
           <div className="mx-auto max-w-7xl px-6">
-            <div className="flex flex-wrap gap-10 py-5">
+            <div className="flex flex-wrap gap-x-12 gap-y-6 py-6">
               {statistici.map((stat, index) => (
                 <div key={index} className="min-w-0 text-left">
-                  <p className="font-heading text-xl font-extrabold text-white wrap-break-word">
+                  <p className="font-heading text-2xl font-extrabold text-white wrap-break-word md:text-3xl">
                     {stat.valoare}
                   </p>
-                  <p className="mt-1 text-xs text-white/45 wrap-break-word">
+                  <p className="mt-1 text-sm text-white/70 wrap-break-word">
                     {stat.eticheta}
                   </p>
                 </div>

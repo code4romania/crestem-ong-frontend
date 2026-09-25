@@ -22,7 +22,7 @@ function StatCell({ stat, className }: { stat: HeroStat; className: string }) {
       </p>
       <p className="mt-1 text-sm text-white/60 wrap-break-word">{stat.eticheta}</p>
       {stat.descriere ? (
-        <p className="mt-1 text-xs text-white/40 wrap-break-word">{stat.descriere}</p>
+        <p className="mt-1 text-xs text-white/60 wrap-break-word">{stat.descriere}</p>
       ) : null}
     </div>
   );

@@ -13,7 +13,7 @@ function StageBody({ etapa }: { etapa: TimelineStage }) {
         {etapa.titlu}
       </p>
       {etapa.text ? (
-        <p className="mt-1.5 text-sm text-[#475569] wrap-break-word">
+        <p className="mt-1.5 text-[15px] leading-relaxed text-[#475569] wrap-break-word">
           {etapa.text}
         </p>
       ) : null}

@@ -55,8 +55,13 @@ export function ImageText({ data }: { data: ImageTextData }) {
   const hasSecondary = Boolean(secondaryCta.label && secondaryCta.href);
   const stacked = aliniere === "centru";
 
+  // Side by side, the copy is capped (like the hero's) rather than the whole
+  // block, so the image keeps the page's shared edges while lines stay a
+  // readable length. Stacked, it already sits in a max-w-3xl column.
   const textColumn = (
-    <div className="flex min-w-0 flex-col justify-center">
+    <div
+      className={`flex min-w-0 flex-col justify-center ${stacked ? "" : "max-w-xl"}`}
+    >
       {supratitlu ? (
         <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#007d58] wrap-break-word">
           {supratitlu}

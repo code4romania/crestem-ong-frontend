@@ -12,17 +12,30 @@ const NAVY_BG = "#1c1c81";
 const DEFAULT_BG = "#f8faff";
 
 /**
- * `auto-rows-fr` is what keeps every card the same height: 1fr rows all resolve
- * to the tallest row's track, so a short card in row 1 matches a long one in
- * row 2, not just its own row's siblings. Scoped to `sm:` — below it the grid
- * is a single column, where stretching every card to the longest description
- * would only add dead space.
+ * Per-card width for each column count, laid out as a wrapping flex row rather
+ * than a grid so an incomplete last row (5 cards in 3 columns) sits centred
+ * instead of hugging the left edge. The `calc` subtracts the `gap-6` (1.5rem)
+ * gutters. Cards in a row share its height (flex stretch + `h-full`), but rows
+ * size independently, so a short row isn't padded to the tallest card.
  */
-const COL_CLASS: Record<FeatureCardsData["coloane"], string> = {
-  "1": "sm:grid-cols-1 lg:grid-cols-1",
-  "2": "sm:auto-rows-fr sm:grid-cols-2 lg:grid-cols-2",
-  "3": "sm:auto-rows-fr sm:grid-cols-2 lg:grid-cols-3",
-  "4": "sm:auto-rows-fr sm:grid-cols-2 lg:grid-cols-4",
+const ITEM_WIDTH_CLASS: Record<FeatureCardsData["coloane"], string> = {
+  "1": "w-full",
+  "2": "w-full sm:w-[calc((100%-1.5rem)/2)]",
+  "3": "w-full sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]",
+  "4": "w-full sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-4.5rem)/4)]",
+};
+
+/**
+ * The grid is capped by column count rather than always spanning `max-w-7xl`,
+ * so card text keeps a readable line length and the block lines up with the
+ * `max-w-3xl` text column of the rich-text blocks around it instead of
+ * sprawling to the page edges.
+ */
+const WIDTH_CLASS: Record<FeatureCardsData["coloane"], string> = {
+  "1": "max-w-3xl",
+  "2": "max-w-4xl",
+  "3": "max-w-6xl",
+  "4": "max-w-7xl",
 };
 
 function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
@@ -67,7 +80,7 @@ function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
         </h3>
         {card.descriere ? (
           <p
-            className={`text-sm leading-relaxed wrap-break-word line-clamp-5 ${
+            className={`text-[15px] leading-relaxed wrap-break-word ${
               isDark ? "text-white/60" : "text-[#475569]"
             }`}
           >
@@ -111,7 +124,7 @@ export function FeatureCards({ data }: { data: FeatureCardsData }) {
         {/* Section title is the small green eyebrow; the subtitle under it is
             the display-size line, matching the rest of the site's section
             headers (see `people-collection`). */}
-        <div className="mx-auto mb-12 max-w-2xl text-center">
+        <div className="mx-auto mb-8 max-w-2xl text-center">
           <p
             className="mb-3 text-sm font-bold uppercase tracking-[0.12em] wrap-break-word"
             style={{ color: isDark ? "#00d495" : "#007d58" }}
@@ -134,9 +147,13 @@ export function FeatureCards({ data }: { data: FeatureCardsData }) {
         </div>
 
         {carduri.length > 0 ? (
-          <div className={`grid grid-cols-1 gap-6 ${COL_CLASS[coloane]}`}>
+          <div
+            className={`mx-auto flex flex-wrap justify-center gap-6 ${WIDTH_CLASS[coloane]}`}
+          >
             {carduri.map((card, index) => (
-              <Card key={index} card={card} isDark={isDark} />
+              <div key={index} className={`min-w-0 ${ITEM_WIDTH_CLASS[coloane]}`}>
+                <Card card={card} isDark={isDark} />
+              </div>
             ))}
           </div>
         ) : null}

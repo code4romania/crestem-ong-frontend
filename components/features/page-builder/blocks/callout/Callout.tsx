@@ -40,7 +40,9 @@ export function Callout({ data }: { data: CalloutData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-7xl px-6 py-8">
+      {/* Capped to the same column as the rich-text blocks around it, so the
+          card reads as part of the page's copy rather than a full-width banner. */}
+      <div className="mx-auto max-w-4xl px-6 py-8">
         <div
           className="relative overflow-hidden rounded-3xl px-8 py-14 shadow-xl sm:px-14"
           style={{ background: NAVY_BG }}

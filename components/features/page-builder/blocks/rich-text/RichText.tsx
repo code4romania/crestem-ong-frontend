@@ -22,7 +22,11 @@ export function RichText({ data }: { data: RichTextData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-3xl px-6 py-8">
+      {/* Copy that ends on a heading is introducing the block below it, so drop
+          the bottom padding and let that block sit under its heading rather
+          than a full section gap away. Not when nothing follows (the footer
+          does). */}
+      <div className="mx-auto max-w-4xl px-6 py-8 [section:not(:last-child)>&:has(>div>:is(h2,h3,h4):last-child)]:pb-0 [section:not(:last-child)>&:has(>div>:is(h2,h3,h4)+p:empty:last-child)]:pb-0">
         {titlu ? (
           <h2
             className={`mb-6 font-heading wrap-break-word ${ALIGN_CLASS[aliniere]}`}
@@ -37,8 +41,13 @@ export function RichText({ data }: { data: RichTextData }) {
           </h2>
         ) : null}
 
+        {/* A stray empty paragraph (an extra Enter in the editor) only adds
+            margin, which stacks onto the gap before the next block — so drop
+            it, and the bottom margin of whatever is really last. Kept out of
+            the shared prose classes: in the editor that empty line is where
+            the caret sits. */}
         <div
-          className={`${RICH_TEXT_PROSE} ${ALIGN_CLASS[aliniere]} wrap-break-word`}
+          className={`${RICH_TEXT_PROSE} ${ALIGN_CLASS[aliniere]} wrap-break-word [&>p:empty]:hidden [&>:last-child]:mb-0 [&>:has(+p:empty:last-child)]:mb-0`}
           dangerouslySetInnerHTML={{ __html: continut }}
         />
       </div>

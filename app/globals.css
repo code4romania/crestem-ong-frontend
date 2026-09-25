@@ -115,6 +115,16 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
+/* Even out multi-line headings so a wrap never strands a lone word (e.g. a
+   year) on the last line. In `base` so a utility can still override it. */
+@layer base {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
 @media print {
   main {
     background: #ffffff !important;
