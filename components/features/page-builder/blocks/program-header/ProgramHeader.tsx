@@ -16,7 +16,7 @@ function SupporterLogo({ supporter }: { supporter: ProgramSupporter }) {
   const useImage = supporter.sursaIcon === "imagine" && supporter.imagine;
 
   return (
-    <span className="flex h-20 shrink-0 items-center justify-center text-[#5656e5] md:h-24">
+    <span className="flex h-16 shrink-0 items-center justify-center text-[#5656e5] md:h-20">
       {useImage && supporter.imagine ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
@@ -26,10 +26,10 @@ function SupporterLogo({ supporter }: { supporter: ProgramSupporter }) {
         />
       ) : (
         <span
-          className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white md:h-24 md:w-24"
+          className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white md:h-20 md:w-20"
           style={{ border: `1.5px solid ${BORDER}` }}
         >
-          <Icon size={40} className="md:h-12 md:w-12" aria-hidden />
+          <Icon size={32} className="md:h-10 md:w-10" aria-hidden />
         </span>
       )}
     </span>
@@ -64,14 +64,15 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
 
   return (
     <section
-      className="bg-white pt-14 pb-0"
+      className="bg-white pt-10 pb-0"
       style={{ borderBottom: `1px solid ${BORDER}` }}
     >
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col items-center gap-8 pb-14 text-center md:flex-row-reverse md:items-center md:gap-12 md:text-left">
-          {/* The visual takes the larger share on desktop so the title column
-              doesn't leave a wide empty band on the left. */}
-          <div className="w-full shrink-0 md:w-1/2 lg:w-7/12">
+        <div className="flex flex-col items-center gap-8 pb-10 text-center md:flex-row-reverse md:items-center md:gap-12 md:text-left">
+          {/* The visual is kept to under half the row so the whole header —
+              title, supporters band and stats bar — fits in one laptop-height
+              screen instead of pushing the supporters below the fold. */}
+          <div className="w-full shrink-0 md:w-5/12">
             <div
               className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-white"
               style={{
@@ -129,7 +130,7 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
             {groups.map((group, groupIndex) => (
               <div
                 key={groupIndex}
-                className="flex flex-col gap-4 py-6 md:flex-row md:items-center md:gap-8"
+                className="flex flex-col gap-4 py-5 md:flex-row md:items-center md:gap-8"
                 style={
                   groupIndex > 0 ? { borderTop: `1px solid ${BORDER}` } : undefined
                 }
@@ -153,7 +154,7 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
       {hasStats ? (
         <div style={{ background: NAVY_BG }}>
           <div className="mx-auto max-w-7xl px-6">
-            <div className="flex flex-wrap gap-x-12 gap-y-6 py-6">
+            <div className="flex flex-wrap gap-x-12 gap-y-6 py-5">
               {statistici.map((stat, index) => (
                 <div key={index} className="min-w-0 text-left">
                   <p className="font-heading text-2xl font-extrabold text-white wrap-break-word md:text-3xl">
