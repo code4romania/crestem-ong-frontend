@@ -2,6 +2,8 @@ import { GalleryCarousel } from "./GalleryCarousel";
 import { GalleryGrid } from "./GalleryGrid";
 import { GalleryLightbox } from "./GalleryLightbox";
 import type { GalleryData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 /**
  * "Gallery" — a titled photo gallery rendered as a grid, a CSS-columns masonry
@@ -30,10 +32,11 @@ export function Gallery({ data }: { data: GalleryData }) {
           </h2>
         ) : null}
 
-        {descriere ? (
-          <p className="mb-10 max-w-2xl whitespace-pre-line text-[#475569] wrap-break-word">
-            {descriere}
-          </p>
+        {hasRichText(descriere) ? (
+          <RichTextContent
+            html={descriere}
+            className="mb-10 max-w-2xl text-[#475569] wrap-break-word"
+          />
         ) : (
           <div className="mb-10" />
         )}

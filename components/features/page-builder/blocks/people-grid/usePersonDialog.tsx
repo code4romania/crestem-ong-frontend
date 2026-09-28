@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import { ModalPortal } from "@/components/ui/ModalPortal";
 import type { Person } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 /**
  * Detail overlay for the People Grid block. Call `open(index)` from a card
@@ -125,11 +126,7 @@ export function usePersonDialog(people: Person[], fullImage = false) {
               </div>
             ) : null}
 
-            {current.descriere ? (
-              <p className="mt-5 text-sm leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word">
-                {current.descriere}
-              </p>
-            ) : null}
+            <RichTextContent html={current.descriere} className="mt-5 text-sm leading-relaxed text-[#475569] wrap-break-word" />
           </div>
         </div>
       </div>

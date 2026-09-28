@@ -15,6 +15,7 @@ import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL } from "../../upload";
 import type { BlockFieldErrors } from "../../types";
 import type { VideoData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -349,16 +350,14 @@ export function VideoEditor({
       </div>
 
       <div>
-        <label htmlFor="video-descriere" className={labelClass}>
+        <span className={labelClass}>
           Descriere
-        </label>
-        <textarea
-          id="video-descriere"
-          rows={3}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.descriere}
-          onChange={(e) => set({ descriere: e.target.value })}
-          placeholder="Context scurt afișat deasupra player-ului"
+          onChange={(html) => set({ descriere: html })}
+          ariaLabel="Descriere"
+          compact
         />
       </div>
 

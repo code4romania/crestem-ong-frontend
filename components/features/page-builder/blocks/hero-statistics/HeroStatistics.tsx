@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Star } from "lucide-react";
 import type { HeroStat, HeroStatisticsData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const NAVY_BG = "#1c1c81";
 
@@ -91,18 +92,15 @@ export function HeroStatistics({ data }: { data: HeroStatisticsData }) {
           >
             {titlu}
           </h1>
-          {subtitlu ? (
-            <p
-              className="mb-8 leading-relaxed whitespace-pre-line wrap-break-word"
-              style={{
-                fontSize: "1.125rem",
-                color: "rgba(255,255,255,0.72)",
-                maxWidth: "480px",
-              }}
-            >
-              {subtitlu}
-            </p>
-          ) : null}
+          <RichTextContent
+            html={subtitlu}
+            className="mb-8 leading-relaxed wrap-break-word"
+            style={{
+              fontSize: "1.125rem",
+              color: "rgba(255,255,255,0.72)",
+              maxWidth: "480px",
+            }}
+          />
           {hasPrimary || hasSecondary ? (
             <div className="flex flex-wrap gap-4">
               {hasPrimary ? (

@@ -1,4 +1,5 @@
 import type { SectionHeaderData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 /** Full literal classes so the Tailwind scanner picks them up. */
 const ALIGN_CLASS: Record<SectionHeaderData["aliniere"], string> = {
@@ -32,11 +33,7 @@ export function SectionHeader({ data }: { data: SectionHeaderData }) {
         >
           {titlu}
         </h2>
-        {subtitlu ? (
-          <p className="mt-4 text-lg whitespace-pre-line text-[#475569] wrap-break-word">
-            {subtitlu}
-          </p>
-        ) : null}
+        <RichTextContent html={subtitlu} className="mt-4 text-lg text-[#475569] wrap-break-word" />
       </div>
     </section>
   );

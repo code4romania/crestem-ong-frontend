@@ -5,6 +5,7 @@ import {
   type ProgramHeaderData,
   type ProgramSupporter,
 } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const NAVY_BG = "#1c1c81";
 /** The supporter band sits on a tint, a touch bluer than `#f8fafc`. */
@@ -108,18 +109,15 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
               {titlu}
             </h1>
 
-            {subtitlu ? (
-              <p
-                className="whitespace-pre-line text-[#5b6779] wrap-break-word"
-                style={{
-                  fontSize: "1.0625rem",
-                  lineHeight: 1.7,
-                  maxWidth: "520px",
-                }}
-              >
-                {subtitlu}
-              </p>
-            ) : null}
+            <RichTextContent
+              html={subtitlu}
+              className="whitespace-pre-line text-[#5b6779] wrap-break-word"
+              style={{
+                fontSize: "1.0625rem",
+                lineHeight: 1.7,
+                maxWidth: "520px",
+              }}
+            />
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { StatList } from "./StatList";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { HeroStatisticsData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -56,16 +57,14 @@ export function HeroStatisticsEditor({
       </div>
 
       <div>
-        <label htmlFor="hs-subtitlu" className={labelClass}>
+        <span className={labelClass}>
           Subtitlu (opțional)
-        </label>
-        <textarea
-          id="hs-subtitlu"
-          rows={3}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.subtitlu}
-          onChange={(e) => set({ subtitlu: e.target.value })}
-          placeholder="Un diagnostic organizațional complet pe 10 dimensiuni-cheie, urmat de un plan de acțiune personalizat."
+          onChange={(html) => set({ subtitlu: html })}
+          ariaLabel="Subtitlu"
+          compact
         />
       </div>
 

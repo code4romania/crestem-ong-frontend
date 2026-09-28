@@ -6,6 +6,7 @@ import { StatList } from "./StatList";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { StatisticsData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -55,16 +56,14 @@ export function StatisticsEditor({
       </div>
 
       <div>
-        <label htmlFor="stat-descriere" className={labelClass}>
+        <span className={labelClass}>
           Descriere <span className={optionalHint}>(opțional)</span>
-        </label>
-        <textarea
-          id="stat-descriere"
-          rows={3}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.descriere}
-          onChange={(e) => set({ descriere: e.target.value })}
-          placeholder="Un program intensiv de 12 săptămâni care ajută organizațiile să-și valideze modelul de impact."
+          onChange={(html) => set({ descriere: html })}
+          ariaLabel="Descriere"
+          compact
         />
       </div>
 

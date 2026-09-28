@@ -10,6 +10,8 @@ import {
   Trash2,
 } from "lucide-react";
 import { EMPTY_TESTIMONIAL, type Testimonial } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -34,7 +36,7 @@ export function TestimonialList({
   const [editing, setEditing] = useState<number | null>(null);
   const [draft, setDraft] = useState<Testimonial>(EMPTY_TESTIMONIAL);
 
-  const canSave = Boolean(draft.testimonial.trim() && draft.nume.trim());
+  const canSave = Boolean(hasRichText(draft.testimonial) && draft.nume.trim());
 
   const openNew = () => {
     setDraft({ ...EMPTY_TESTIMONIAL });
@@ -97,16 +99,14 @@ export function TestimonialList({
 
         <div className="space-y-4">
           <div>
-            <label htmlFor="ts-item-text" className={labelClass}>
+            <span className={labelClass}>
               Testimonial <span className="text-[#b91c1c]">*</span>
-            </label>
-            <textarea
-              id="ts-item-text"
-              rows={4}
-              className={inputClass}
+            </span>
+            <RichTextField
               value={draft.testimonial}
-              onChange={(e) => setField({ testimonial: e.target.value })}
-              placeholder="Citatul persoanei..."
+              onChange={(html) => setField({ testimonial: html })}
+              ariaLabel="Testimonial"
+              compact
             />
           </div>
 

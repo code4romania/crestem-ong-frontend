@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import type { Stat, StatisticsData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 const ALIGN_CLASS: Record<StatisticsData["aliniere"], string> = {
   stanga: "text-left",
@@ -57,7 +59,7 @@ export function Statistics({ data }: { data: StatisticsData }) {
 
   const hasPrimary = Boolean(primaryCta.label && primaryCta.href);
   const hasSecondary = Boolean(secondaryCta.label && secondaryCta.href);
-  const hasHeader = Boolean(subtitlu || titlu || descriere);
+  const hasHeader = Boolean(subtitlu || titlu) || hasRichText(descriere);
   const hasStats = statistici.length > 0;
 
   // Separator variant: a 1px grid gap over a slate ground shows through as
@@ -92,11 +94,7 @@ export function Statistics({ data }: { data: StatisticsData }) {
                 {titlu}
               </h2>
             ) : null}
-            {descriere ? (
-              <p className="mt-4 max-w-2xl whitespace-pre-line text-[#475569] wrap-break-word">
-                {descriere}
-              </p>
-            ) : null}
+            <RichTextContent html={descriere} className="mt-4 max-w-2xl text-[#475569] wrap-break-word" />
           </div>
         ) : null}
 

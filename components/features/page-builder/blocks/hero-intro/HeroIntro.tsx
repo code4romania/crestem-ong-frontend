@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import type { HeroIntroData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const ALIGN_CLASS: Record<HeroIntroData["horizontalAlign"], string> = {
   stanga: "items-start text-left",
@@ -65,18 +66,15 @@ export function HeroIntro({ data }: { data: HeroIntroData }) {
         >
           {titlu}
         </h1>
-        {textIntroductiv ? (
-          <p
-            className="mb-8 leading-relaxed whitespace-pre-line wrap-break-word"
-            style={{
-              fontSize: "1.125rem",
-              color: isDark ? "rgba(255,255,255,0.72)" : "#475569",
-              maxWidth: "760px",
-            }}
-          >
-            {textIntroductiv}
-          </p>
-        ) : null}
+        <RichTextContent
+          html={textIntroductiv}
+          className="mb-8 leading-relaxed wrap-break-word"
+          style={{
+            fontSize: "1.125rem",
+            color: isDark ? "rgba(255,255,255,0.72)" : "#475569",
+            maxWidth: "760px",
+          }}
+        />
         {hasPrimary || hasSecondary ? (
           <div className="flex flex-wrap gap-4">
             {hasPrimary ? (

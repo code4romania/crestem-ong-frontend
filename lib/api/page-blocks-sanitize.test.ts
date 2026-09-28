@@ -22,6 +22,33 @@ describe("sanitizeBlocks", () => {
     expect((out[1].data as { text: string }).text).toBe(CLEAN);
   });
 
+  it("cleans rich-text fields on repeater items", () => {
+    const out = sanitizeBlocks([
+      {
+        id: "1",
+        type: "faq-collection",
+        data: { intrebari: [{ intrebare: "Q", raspuns: DIRTY }] },
+      },
+      {
+        id: "2",
+        type: "feature-cards",
+        data: { descriere: DIRTY, carduri: [{ titlu: "T", descriere: DIRTY }] },
+      },
+    ]);
+    const faq = out[0].data as { intrebari: { intrebare: string; raspuns: string }[] };
+    expect(faq.intrebari[0]).toEqual({ intrebare: "Q", raspuns: CLEAN });
+    const cards = out[1].data as { descriere: string; carduri: { descriere: string }[] };
+    expect(cards.descriere).toBe(CLEAN);
+    expect(cards.carduri[0].descriere).toBe(CLEAN);
+  });
+
+  it("converts a legacy plain-text value to escaped HTML", () => {
+    const out = sanitizeBlocks([
+      { id: "1", type: "hero-centered", data: { subtitlu: "a < b\nc" } },
+    ]);
+    expect((out[0].data as { subtitlu: string }).subtitlu).toBe("<p>a &lt; b<br />c</p>");
+  });
+
   it("recurses into a section's children", () => {
     const out = sanitizeBlocks([
       {

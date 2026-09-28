@@ -2,6 +2,7 @@
 
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { EMPTY_STEP, type ProcessStep } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -107,16 +108,14 @@ export function StepList({
                 />
               </div>
               <div className="mt-3">
-                <label htmlFor={`step-${index}-text`} className={labelClass}>
+                <span className={labelClass}>
                   Text (opțional)
-                </label>
-                <textarea
-                  id={`step-${index}-text`}
-                  rows={2}
-                  className={inputClass}
+                </span>
+                <RichTextField
                   value={step.text}
-                  onChange={(e) => update(index, { text: e.target.value })}
-                  placeholder="Completezi formularul online, anexezi raportul de activitate și descrii modelul de impact al organizației tale."
+                  onChange={(html) => update(index, { text: html })}
+                  ariaLabel="Text"
+                  compact
                 />
               </div>
             </li>

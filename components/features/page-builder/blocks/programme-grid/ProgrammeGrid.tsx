@@ -7,6 +7,7 @@ import {
 } from "../shared/image-ratio";
 import { PROGRAMME_ICONS } from "./icons";
 import type { Program, ProgrammeGridData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const COL_CLASS: Record<ProgrammeGridData["coloane"], string> = {
   "1": "sm:grid-cols-1 lg:grid-cols-1",
@@ -57,11 +58,7 @@ function ProgramCard({
           </p>
         ) : null}
 
-        {program.descriere ? (
-          <p className="mt-3 text-sm leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word line-clamp-3">
-            {program.descriere}
-          </p>
-        ) : null}
+        <RichTextContent html={program.descriere} className="mt-3 text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3" />
 
         {program.perioada || hasCta ? (
           <div className="mt-auto flex flex-col gap-4 pt-4">

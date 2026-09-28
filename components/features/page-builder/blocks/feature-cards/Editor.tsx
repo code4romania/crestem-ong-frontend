@@ -6,6 +6,7 @@ import { BackgroundPicker } from "./BackgroundPicker";
 import { CardList } from "./CardList";
 import type { BlockEditorHandle, BlockFieldErrors } from "../../types";
 import type { FeatureCardsData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -49,16 +50,14 @@ export function FeatureCardsEditor({
       <div>
         {/* Stored as `descriere` for backwards compatibility with pages saved
             before this became the display-size subtitle. */}
-        <label htmlFor="fc-descriere" className={labelClass}>
+        <span className={labelClass}>
           Subtitlu
-        </label>
-        <textarea
-          id="fc-descriere"
-          rows={2}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.descriere}
-          onChange={(e) => set({ descriere: e.target.value })}
-          placeholder="ex. Valorile noastre"
+          onChange={(html) => set({ descriere: html })}
+          ariaLabel="Subtitlu"
+          compact
         />
       </div>
 

@@ -4,6 +4,7 @@ import { getMediaUrl } from "@/lib/api/client";
 import { imageRatioClass, type ImageRatio } from "../shared/image-ratio";
 import { FEATURE_ICONS } from "./icons";
 import type { FeatureCard, FeatureCardsData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const NAVY_BG = "#1c1c81";
 /**
@@ -85,15 +86,12 @@ function Card({
         >
           {card.titlu}
         </h3>
-        {card.descriere ? (
-          <p
-            className={`text-[15px] leading-relaxed whitespace-pre-line wrap-break-word ${
-              isDark ? "text-white/60" : "text-[#475569]"
-            }`}
-          >
-            {card.descriere}
-          </p>
-        ) : null}
+        <RichTextContent
+          html={card.descriere}
+          className={`text-[15px] leading-relaxed wrap-break-word ${
+            isDark ? "text-white/60" : "text-[#475569]"
+          }`}
+        />
         {hasCta ? (
           <Link
             href={card.href}
@@ -139,19 +137,18 @@ export function FeatureCards({ data }: { data: FeatureCardsData }) {
           >
             {titluSectiune}
           </p>
-          {descriere ? (
-            <h2
-              className="font-heading whitespace-pre-line wrap-break-word"
-              style={{
-                fontSize: "clamp(2rem, 4vw, 2.75rem)",
-                fontWeight: 800,
-                lineHeight: 1.15,
-                color: isDark ? "#ffffff" : "#1c1c81",
-              }}
-            >
-              {descriere}
-            </h2>
-          ) : null}
+          <RichTextContent
+            html={descriere}
+            role="heading"
+            aria-level={2}
+            className="font-heading wrap-break-word"
+            style={{
+              fontSize: "clamp(2rem, 4vw, 2.75rem)",
+              fontWeight: 800,
+              lineHeight: 1.15,
+              color: isDark ? "#ffffff" : "#1c1c81",
+            }}
+          />
         </div>
 
         {carduri.length > 0 ? (

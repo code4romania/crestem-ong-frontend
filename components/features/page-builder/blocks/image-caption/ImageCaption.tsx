@@ -1,5 +1,7 @@
 import { getMediaUrl } from "@/lib/api/client";
 import type { ImageCaptionData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 const WIDTH_CLASS: Record<ImageCaptionData["latime"], string> = {
   compacta: "max-w-3xs",
@@ -59,7 +61,7 @@ export function ImageCaption({ data }: { data: ImageCaptionData }) {
   const aspectClass = raport === "original" ? null : ASPECT_CLASS[raport];
 
   const credit = [creditFoto, sursa].filter(Boolean).join(" · ");
-  const hasCaption = Boolean(legenda || credit);
+  const hasCaption = hasRichText(legenda) || Boolean(credit);
 
   return (
     <section>
@@ -81,7 +83,7 @@ export function ImageCaption({ data }: { data: ImageCaptionData }) {
 
           {hasCaption && (
             <figcaption className="mt-3 text-sm text-[#475569]">
-              {legenda && <span className="block whitespace-pre-line">{legenda}</span>}
+              <RichTextContent html={legenda} />
               {credit && (
                 <span className="mt-1 block text-xs text-[#5b6779]">
                   {credit}

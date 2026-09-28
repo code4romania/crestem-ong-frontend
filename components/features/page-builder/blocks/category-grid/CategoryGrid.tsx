@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { CATEGORY_ICONS } from "./icons";
 import type { Category, CategoryGridData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const COL_CLASS: Record<CategoryGridData["coloane"], string> = {
   "1": "sm:grid-cols-1 lg:grid-cols-1",
@@ -28,11 +29,7 @@ function CategoryCard({ category }: { category: Category }) {
         {category.titlu}
       </h3>
 
-      {category.descriere ? (
-        <p className="mt-2 text-sm leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word line-clamp-3">
-          {category.descriere}
-        </p>
-      ) : null}
+      <RichTextContent html={category.descriere} className="mt-2 text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3" />
 
       {hasFooter ? (
         <div className="mt-auto flex items-center gap-3 pt-5">

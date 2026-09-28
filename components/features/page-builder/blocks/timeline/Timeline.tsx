@@ -1,4 +1,5 @@
 import type { TimelineData, TimelineStage } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 /** The număr/perioadă → titlu → text block, shared by both orientations. */
 function StageBody({ etapa }: { etapa: TimelineStage }) {
@@ -12,11 +13,7 @@ function StageBody({ etapa }: { etapa: TimelineStage }) {
       <p className="mt-1 font-semibold text-[#1c1c81] wrap-break-word">
         {etapa.titlu}
       </p>
-      {etapa.text ? (
-        <p className="mt-1.5 text-[15px] leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word">
-          {etapa.text}
-        </p>
-      ) : null}
+      <RichTextContent html={etapa.text} className="mt-1.5 text-[15px] leading-relaxed text-[#475569] wrap-break-word" />
     </div>
   );
 }

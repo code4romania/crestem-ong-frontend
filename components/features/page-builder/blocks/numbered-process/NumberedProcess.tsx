@@ -1,4 +1,5 @@
 import type { NumberedProcessData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 /**
  * "Structure – Numbered Process" — an optional heading over a vertical list of
@@ -48,11 +49,7 @@ export function NumberedProcess({ data }: { data: NumberedProcessData }) {
                     <span className="sr-only">Pasul {index + 1}: </span>
                     {pas.titlu}
                   </p>
-                  {pas.text ? (
-                    <p className="mt-1.5 text-[15px] leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word">
-                      {pas.text}
-                    </p>
-                  ) : null}
+                  <RichTextContent html={pas.text} className="mt-1.5 text-[15px] leading-relaxed text-[#475569] wrap-break-word" />
                 </div>
               </li>
             ))}

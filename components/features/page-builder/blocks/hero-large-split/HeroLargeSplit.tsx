@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronRight, Star } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import type { HeroLargeSplitData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const VERTICAL_ALIGN_CLASS: Record<HeroLargeSplitData["verticalAlign"], string> = {
   centru: "lg:items-center",
@@ -51,18 +52,15 @@ export function HeroLargeSplit({ data }: { data: HeroLargeSplitData }) {
       >
         {titlu}
       </h1>
-      {subtitlu ? (
-        <p
-          className="mb-8 leading-relaxed whitespace-pre-line wrap-break-word"
-          style={{
-            fontSize: "1.125rem",
-            color: "rgba(255,255,255,0.72)",
-            maxWidth: "480px",
-          }}
-        >
-          {subtitlu}
-        </p>
-      ) : null}
+      <RichTextContent
+        html={subtitlu}
+        className="mb-8 leading-relaxed wrap-break-word"
+        style={{
+          fontSize: "1.125rem",
+          color: "rgba(255,255,255,0.72)",
+          maxWidth: "480px",
+        }}
+      />
       {hasPrimary || hasSecondary ? (
         <div className="flex flex-wrap gap-4">
           {hasPrimary ? (

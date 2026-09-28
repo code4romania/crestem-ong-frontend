@@ -5,6 +5,8 @@ import {
   type ImageRatioWithImplicit,
 } from "../shared/image-ratio";
 import type { Person, PeopleGridData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 /**
  * Shared card grid for the People Grid block. Pure (no hooks, no `"use client"`)
@@ -62,11 +64,7 @@ function CardBody({
           </p>
         ) : null}
 
-        {person.descriere ? (
-          <p className="mt-3 text-sm leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word line-clamp-4">
-            {person.descriere}
-          </p>
-        ) : null}
+        <RichTextContent html={person.descriere} className="mt-3 text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-4" />
 
         <div className="mt-auto">
           {person.taguri.length > 0 ? (
@@ -111,7 +109,7 @@ function PersonCard({
   onSelect?: (index: number) => void;
 }) {
   // Only a person who actually has something more to read is worth opening.
-  const clickable = Boolean(onSelect && person.descriere);
+  const clickable = Boolean(onSelect) && hasRichText(person.descriere);
 
   if (!clickable) {
     return (

@@ -14,6 +14,7 @@ import { SupporterGroupList } from "./SupporterGroupList";
 import type { DirectoryProgram } from "@/lib/api/people";
 import type { BlockFieldErrors } from "../../types";
 import { migrateProgramHeader, type ProgramHeaderData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -228,16 +229,14 @@ export function ProgramHeaderEditor({
       </div>
 
       <div>
-        <label htmlFor="ph-subtitlu" className={labelClass}>
+        <span className={labelClass}>
           Subtitlu (opțional)
-        </label>
-        <textarea
-          id="ph-subtitlu"
-          rows={2}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.subtitlu}
-          onChange={(e) => set({ subtitlu: e.target.value })}
-          placeholder="12 săptămâni care îți transformă organizația"
+          onChange={(html) => set({ subtitlu: html })}
+          ariaLabel="Subtitlu"
+          compact
         />
       </div>
 

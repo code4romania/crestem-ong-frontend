@@ -2,6 +2,8 @@ import { getMediaUrl } from "@/lib/api/client";
 import { getEmbedSrc } from "./embed-src";
 import { VideoFacade } from "./VideoFacade";
 import { type VideoData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 const WIDTH_CLASS: Record<VideoData["latime"], string> = {
   compacta: "max-w-3xl",
@@ -56,11 +58,9 @@ export function Video({ data }: { data: VideoData }) {
         {titlu && (
           <h2 className="text-2xl font-bold text-[#1c1c81]">{titlu}</h2>
         )}
-        {descriere && (
-          <p className="mt-2 text-sm whitespace-pre-line text-[#475569]">{descriere}</p>
-        )}
+        <RichTextContent html={descriere} className="mt-2 text-sm text-[#475569]" />
 
-        <figure className={titlu || descriere ? "mt-6" : ""}>
+        <figure className={titlu || hasRichText(descriere) ? "mt-6" : ""}>
           {embedSrc ? (
             <div
               className={`overflow-hidden rounded-2xl bg-black ${

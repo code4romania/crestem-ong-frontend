@@ -9,6 +9,7 @@ import { usePageImageUpload } from "../../upload";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { HeroLargeSplitData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -67,16 +68,14 @@ export function HeroLargeSplitEditor({
       </div>
 
       <div>
-        <label htmlFor="hls-subtitlu" className={labelClass}>
+        <span className={labelClass}>
           Subtitlu (opțional)
-        </label>
-        <textarea
-          id="hls-subtitlu"
-          rows={3}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.subtitlu}
-          onChange={(e) => set({ subtitlu: e.target.value })}
-          placeholder="Instrumente, resurse și sprijin pentru organizații care construiesc comunități mai puternice."
+          onChange={(html) => set({ subtitlu: html })}
+          ariaLabel="Subtitlu"
+          compact
         />
       </div>
 

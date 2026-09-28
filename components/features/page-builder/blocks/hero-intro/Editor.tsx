@@ -5,6 +5,7 @@ import { BackgroundPicker } from "./BackgroundPicker";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { HeroIntroData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -54,16 +55,14 @@ export function HeroIntroEditor({
       </div>
 
       <div>
-        <label htmlFor="hi-text" className={labelClass}>
+        <span className={labelClass}>
           Text introductiv (opțional)
-        </label>
-        <textarea
-          id="hi-text"
-          rows={3}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.textIntroductiv}
-          onChange={(e) => set({ textIntroductiv: e.target.value })}
-          placeholder="Modelul nostru de evaluare acoperă toate aspectele critice ale unui ONG sănătos și sustenabil."
+          onChange={(html) => set({ textIntroductiv: html })}
+          ariaLabel="Text introductiv"
+          compact
         />
       </div>
 

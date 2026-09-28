@@ -18,6 +18,7 @@ import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibr
 import { IconPicker } from "./IconPicker";
 import { PROGRAMME_ICONS } from "./icons";
 import { EMPTY_PROGRAM, type Program } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -269,16 +270,14 @@ export function ProgramList({
           </div>
 
           <div>
-            <label htmlFor="pg-prog-descriere" className={labelClass}>
+            <span className={labelClass}>
               Descriere
-            </label>
-            <textarea
-              id="pg-prog-descriere"
-              rows={3}
-              className={inputClass}
+            </span>
+            <RichTextField
               value={draft.descriere}
-              onChange={(e) => setField({ descriere: e.target.value })}
-              placeholder="Scurtă descriere a programului..."
+              onChange={(html) => setField({ descriere: html })}
+              ariaLabel="Descriere"
+              compact
             />
           </div>
 

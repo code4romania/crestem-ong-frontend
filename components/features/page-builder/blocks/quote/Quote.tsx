@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Quote as QuoteIcon } from "lucide-react";
 import type { QuoteData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const COLUMN_ALIGN: Record<QuoteData["aliniere"], string> = {
   stanga: "items-start text-left",
@@ -42,8 +43,10 @@ export function Quote({ data }: { data: QuoteData }) {
             aria-hidden
           />
 
-          <blockquote
-            className="max-w-3xl whitespace-pre-line wrap-break-word text-[#334155]"
+          <RichTextContent
+            as="blockquote"
+            html={citat}
+            className="max-w-3xl wrap-break-word text-[#334155]"
             style={{
               fontSize: evidentiat
                 ? "0.9375rem"
@@ -51,9 +54,7 @@ export function Quote({ data }: { data: QuoteData }) {
               lineHeight: 1.6,
               fontWeight: evidentiat ? 400 : 500,
             }}
-          >
-            {citat}
-          </blockquote>
+          />
 
           {hasCaption ? (
             <figcaption className="mt-5">

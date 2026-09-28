@@ -1,5 +1,6 @@
 import { Quote } from "lucide-react";
 import type { Testimonial } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 /** "Ana Moldovan" -> "AM" for the attribution avatar. */
 function initials(nume: string): string {
@@ -27,9 +28,11 @@ export function TestimonialCard({ item }: { item: Testimonial }) {
         style={{ color: "#007d58" }}
         aria-hidden
       />
-      <blockquote className="mt-4 flex-1 text-sm leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word">
-        {item.testimonial}
-      </blockquote>
+      <RichTextContent
+        as="blockquote"
+        html={item.testimonial}
+        className="mt-4 flex-1 text-sm leading-relaxed text-[#475569] wrap-break-word"
+      />
       <figcaption className="mt-5 flex items-center gap-3">
         <span
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import ImageExtension from "@tiptap/extension-image";
@@ -16,6 +16,7 @@ import {
   Unlink,
 } from "lucide-react";
 import { RICH_TEXT_PROSE } from "./prose";
+import { hasRichText, toRichTextHtml } from "./has-rich-text";
 
 const btnBase =
   "flex h-8 w-8 items-center justify-center rounded-lg text-[#475569] transition-colors hover:bg-slate-200/70 disabled:opacity-40";
@@ -84,10 +85,16 @@ export function RichTextField({
   invalid,
   allowImages = false,
   onUploadImage,
+  compact = false,
+  ariaLabel,
 }: {
   value: string;
   onChange: (html: string) => void;
   invalid?: boolean;
+  /** Shorter writing surface, for fields that used to be small textareas. */
+  compact?: boolean;
+  /** Accessible name for the editing surface, which a `<label>` can't target. */
+  ariaLabel?: string;
   /**
    * Off by default: the page-builder's `sanitizeRichText` strips `<img>`, so a
    * surface that allows images must also be rendered through a sanitiser that
@@ -127,10 +134,15 @@ export function RichTextField({
         ? [ResizableImage.configure({ inline: false, allowBase64: false })]
         : []),
     ],
-    content: value,
+    // Legacy plain-text values (fields that used to be textareas) keep their
+    // line breaks instead of collapsing into one paragraph.
+    content: toRichTextHtml(value),
     editorProps: {
       attributes: {
-        class: `min-h-[180px] px-4 py-3 focus:outline-none ${RICH_TEXT_PROSE}${
+        role: "textbox",
+        "aria-multiline": "true",
+        ...(ariaLabel ? { "aria-label": ariaLabel } : {}),
+        class: `${compact ? "min-h-[96px]" : "min-h-[180px]"} px-4 py-3 focus:outline-none ${RICH_TEXT_PROSE}${
           allowImages
             ? " [&_img]:my-3 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg [&_img.ProseMirror-selectednode]:outline [&_img.ProseMirror-selectednode]:outline-2 [&_img.ProseMirror-selectednode]:outline-offset-2 [&_img.ProseMirror-selectednode]:outline-[#007d58]"
             : ""
@@ -139,6 +151,17 @@ export function RichTextField({
     },
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
   });
+
+  // `content` above is read once. Follow a value that changes from outside —
+  // a repeater row reordered under an index key, a draft swapped for another —
+  // without touching the echo of the editor's own `onUpdate`.
+  useEffect(() => {
+    if (!editor || editor.isDestroyed) return;
+    const current = editor.getHTML();
+    if (value === current) return;
+    if (!hasRichText(value) && editor.isEmpty) return;
+    editor.commands.setContent(toRichTextHtml(value), { emitUpdate: false });
+  }, [editor, value]);
 
   const openLink = useCallback(() => {
     if (!editor) return;
@@ -169,7 +192,9 @@ export function RichTextField({
 
   if (!editor) {
     return (
-      <div className="min-h-[232px] rounded-xl border border-border bg-slate-50" />
+      <div
+        className={`${compact ? "min-h-[148px]" : "min-h-[232px]"} rounded-xl border border-border bg-slate-50`}
+      />
     );
   }
 

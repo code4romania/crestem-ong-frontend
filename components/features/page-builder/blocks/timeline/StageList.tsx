@@ -2,6 +2,7 @@
 
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { EMPTY_STAGE, type TimelineStage } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -121,16 +122,14 @@ export function StageList({
                 />
               </div>
               <div className="mt-3">
-                <label htmlFor={`stage-${index}-text`} className={labelClass}>
+                <span className={labelClass}>
                   Text <span className={optionalHint}>(opțional)</span>
-                </label>
-                <textarea
-                  id={`stage-${index}-text`}
-                  rows={2}
-                  className={inputClass}
+                </span>
+                <RichTextField
                   value={stage.text}
-                  onChange={(e) => update(index, { text: e.target.value })}
-                  placeholder="Primele 20 de organizații intră în programul-pilot și încep sesiunile de mentorat."
+                  onChange={(html) => update(index, { text: html })}
+                  ariaLabel="Text"
+                  compact
                 />
               </div>
             </li>

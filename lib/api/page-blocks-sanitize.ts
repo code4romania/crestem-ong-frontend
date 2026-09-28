@@ -1,4 +1,5 @@
 import { sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize.server";
+import { toRichTextHtml } from "@/components/features/page-builder/rich-text/has-rich-text";
 import type { PageBlock } from "./pages-types";
 
 /**
@@ -13,10 +14,32 @@ import type { PageBlock } from "./pages-types";
  * `custom-html` is deliberately absent. Its markup is written by FDSC staff and
  * rendered raw on purpose; sanitising it would break the feature.
  */
+/**
+ * `list[].field` names a field on every item of a repeater array.
+ */
 const RICH_TEXT_FIELDS: Record<string, readonly string[]> = {
   "rich-text": ["continut"],
   callout: ["text"],
   "image-text": ["text"],
+  "category-grid": ["categorii[].descriere"],
+  "faq-collection": ["intrebari[].raspuns"],
+  "feature-cards": ["descriere", "carduri[].descriere"],
+  gallery: ["descriere"],
+  "hero-centered": ["subtitlu"],
+  "hero-intro": ["textIntroductiv"],
+  "hero-large-split": ["subtitlu"],
+  "hero-statistics": ["subtitlu"],
+  "image-caption": ["legenda"],
+  "numbered-process": ["pasi[].text"],
+  "people-grid": ["persoane[].descriere"],
+  "program-header": ["subtitlu"],
+  "programme-grid": ["programe[].descriere"],
+  quote: ["citat"],
+  "section-header": ["subtitlu"],
+  statistics: ["descriere"],
+  testimonials: ["testimoniale[].testimonial"],
+  timeline: ["etape[].text"],
+  video: ["descriere"],
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -50,6 +73,34 @@ function sanitizeChildren(type: string, data: Record<string, unknown>) {
   return data;
 }
 
+/**
+ * Legacy plain text (fields that used to be textareas) is converted to HTML
+ * first, so everything stored from here on is HTML and renders one way.
+ */
+function cleanField(value: string): string {
+  return sanitizeRichText(toRichTextHtml(value));
+}
+
+function sanitizeField(data: Record<string, unknown>, field: string) {
+  const [list, itemField] = field.split("[].");
+  if (itemField === undefined) {
+    return typeof data[field] === "string"
+      ? { ...data, [field]: cleanField(data[field]) }
+      : data;
+  }
+
+  const items = data[list];
+  if (!Array.isArray(items)) return data;
+  return {
+    ...data,
+    [list]: items.map((item) =>
+      isRecord(item) && typeof item[itemField] === "string"
+        ? { ...item, [itemField]: cleanField(item[itemField]) }
+        : item,
+    ),
+  };
+}
+
 /** Returns a new tree; the caller's blocks are left as they were. */
 export function sanitizeBlocks(blocks: PageBlock[]): PageBlock[] {
   return blocks.map((block) => {
@@ -58,9 +109,7 @@ export function sanitizeBlocks(blocks: PageBlock[]): PageBlock[] {
     let data = sanitizeChildren(block.type, block.data);
 
     for (const field of RICH_TEXT_FIELDS[block.type] ?? []) {
-      if (typeof data[field] === "string") {
-        data = { ...data, [field]: sanitizeRichText(data[field]) };
-      }
+      data = sanitizeField(data, field);
     }
 
     return data === block.data ? block : { ...block, data };

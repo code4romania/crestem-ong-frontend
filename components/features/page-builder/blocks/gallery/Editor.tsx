@@ -7,6 +7,7 @@ import { Toggle } from "@/components/ui/Toggle";
 import { GalleryImageList } from "./GalleryImageList";
 import type { BlockFieldErrors } from "../../types";
 import type { GalleryData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -49,16 +50,14 @@ export function GalleryEditor({
       </div>
 
       <div>
-        <label htmlFor="gallery-descriere" className={labelClass}>
+        <span className={labelClass}>
           Descriere<span className={optionalHint}>(opțional)</span>
-        </label>
-        <textarea
-          id="gallery-descriere"
-          rows={3}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.descriere}
-          onChange={(e) => set({ descriere: e.target.value })}
-          placeholder="Câteva momente din activitățile desfășurate împreună cu organizațiile participante."
+          onChange={(html) => set({ descriere: html })}
+          ariaLabel="Descriere"
+          compact
         />
       </div>
 

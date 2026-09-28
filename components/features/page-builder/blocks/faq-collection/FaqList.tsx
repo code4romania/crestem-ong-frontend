@@ -10,6 +10,8 @@ import {
   Trash2,
 } from "lucide-react";
 import { EMPTY_FAQ_ITEM, type FaqItem } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -34,7 +36,7 @@ export function FaqList({
   const [editing, setEditing] = useState<number | null>(null);
   const [draft, setDraft] = useState<FaqItem>(EMPTY_FAQ_ITEM);
 
-  const canSave = Boolean(draft.intrebare.trim() && draft.raspuns.trim());
+  const canSave = Boolean(draft.intrebare.trim() && hasRichText(draft.raspuns));
 
   const openNew = () => {
     setDraft({ ...EMPTY_FAQ_ITEM });
@@ -106,16 +108,14 @@ export function FaqList({
           </div>
 
           <div>
-            <label htmlFor="faq-item-raspuns" className={labelClass}>
+            <span className={labelClass}>
               Răspuns <span className="text-[#b91c1c]">*</span>
-            </label>
-            <textarea
-              id="faq-item-raspuns"
-              rows={4}
-              className={inputClass}
+            </span>
+            <RichTextField
               value={draft.raspuns}
-              onChange={(e) => setField({ raspuns: e.target.value })}
-              placeholder="Răspunsul la întrebare..."
+              onChange={(html) => setField({ raspuns: html })}
+              ariaLabel="Răspuns"
+              compact
             />
           </div>
 

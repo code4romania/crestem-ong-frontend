@@ -1,6 +1,7 @@
 import { PeopleCards } from "./PeopleCards";
 import { PeopleGridDialog } from "./PeopleGridDialog";
 import type { PeopleGridData } from "./schema";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 /**
  * "People Grid" — a titled section with a responsive grid of authored people
@@ -13,7 +14,7 @@ import type { PeopleGridData } from "./schema";
  * server unchanged.
  */
 export function PeopleGrid({ data }: { data: PeopleGridData }) {
-  const expandable = data.persoane.some((person) => person.descriere);
+  const expandable = data.persoane.some((person) => hasRichText(person.descriere));
   const raport = data.raport ?? "implicit";
 
   return (

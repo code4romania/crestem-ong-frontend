@@ -8,6 +8,7 @@ import { getMediaUrl } from "@/lib/api/client";
 import { usePageImageUpload } from "../../upload";
 import type { BlockFieldErrors } from "../../types";
 import type { ImageCaptionData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -136,15 +137,14 @@ export function ImageCaptionEditor({
       </div>
 
       <div>
-        <label htmlFor="image-caption-legenda" className={labelClass}>
+        <span className={labelClass}>
           Legendă<span className={optionalHint}>(opțional)</span>
-        </label>
-        <textarea
-          id="image-caption-legenda"
-          className={`${inputClass} min-h-20 resize-y`}
+        </span>
+        <RichTextField
           value={value.legenda}
-          onChange={(e) => set({ legenda: e.target.value })}
-          placeholder="Participanți în cadrul atelierului de dezvoltare organizațională, București, 2026."
+          onChange={(html) => set({ legenda: html })}
+          ariaLabel="Legendă"
+          compact
         />
       </div>
 

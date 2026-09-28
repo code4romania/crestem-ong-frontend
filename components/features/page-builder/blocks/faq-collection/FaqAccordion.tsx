@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import type { FaqItem } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 /**
  * The rendered accordion. Panels toggle independently — any number can be open
@@ -66,9 +67,9 @@ export function FaqAccordion({
                 id={panelId}
                 role="region"
                 aria-labelledby={headerId}
-                className="border-t border-border px-6 pt-4 pb-5 text-[15px] leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word"
+                className="border-t border-border px-6 pt-4 pb-5 text-[15px] leading-relaxed text-[#475569] wrap-break-word"
               >
-                {item.raspuns}
+                <RichTextContent html={item.raspuns} />
               </div>
             ) : null}
           </div>

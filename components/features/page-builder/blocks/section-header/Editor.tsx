@@ -3,6 +3,7 @@
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import type { BlockFieldErrors } from "../../types";
 import type { SectionHeaderData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -41,16 +42,14 @@ export function SectionHeaderEditor({
       </div>
 
       <div>
-        <label htmlFor="section-header-subtitlu" className={labelClass}>
+        <span className={labelClass}>
           Subtitlu <span className={optionalHint}>(opțional)</span>
-        </label>
-        <textarea
-          id="section-header-subtitlu"
-          rows={2}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.subtitlu}
-          onChange={(e) => set({ subtitlu: e.target.value })}
-          placeholder="O privire de ansamblu asupra etapelor prin care trece fiecare organizație."
+          onChange={(html) => set({ subtitlu: html })}
+          ariaLabel="Subtitlu"
+          compact
         />
       </div>
 

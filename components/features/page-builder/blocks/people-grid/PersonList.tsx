@@ -17,6 +17,7 @@ import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
 import { TagInput } from "./TagInput";
 import { EMPTY_PERSON, type Person } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -273,16 +274,14 @@ export function PersonList({
           </div>
 
           <div>
-            <label htmlFor="pl-person-descriere" className={labelClass}>
+            <span className={labelClass}>
               Descriere
-            </label>
-            <textarea
-              id="pl-person-descriere"
-              rows={3}
-              className={inputClass}
+            </span>
+            <RichTextField
               value={draft.descriere}
-              onChange={(e) => setField({ descriere: e.target.value })}
-              placeholder="Scurtă descriere a persoanei..."
+              onChange={(html) => setField({ descriere: html })}
+              ariaLabel="Descriere"
+              compact
             />
           </div>
 

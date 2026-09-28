@@ -7,6 +7,7 @@ import { IconPicker } from "./IconPicker";
 import { FEATURE_ICONS } from "./icons";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import { EMPTY_CARD, type FeatureCard } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -143,16 +144,14 @@ export function CardList({
           </div>
 
           <div>
-            <label htmlFor="fc-card-descriere" className={labelClass}>
+            <span className={labelClass}>
               Descriere
-            </label>
-            <textarea
-              id="fc-card-descriere"
-              rows={3}
-              className={inputClass}
+            </span>
+            <RichTextField
               value={draft.descriere}
-              onChange={(e) => setField({ descriere: e.target.value })}
-              placeholder="Scurtă descriere a funcționalității..."
+              onChange={(html) => setField({ descriere: html })}
+              ariaLabel="Descriere"
+              compact
             />
           </div>
 

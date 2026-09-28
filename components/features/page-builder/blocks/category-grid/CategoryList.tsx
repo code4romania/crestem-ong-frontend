@@ -6,6 +6,7 @@ import { IconPicker } from "./IconPicker";
 import { CATEGORY_ICONS } from "./icons";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import { EMPTY_CATEGORY, type Category } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -112,16 +113,14 @@ export function CategoryList({
           </div>
 
           <div>
-            <label htmlFor="cl-cat-descriere" className={labelClass}>
+            <span className={labelClass}>
               Descriere
-            </label>
-            <textarea
-              id="cl-cat-descriere"
-              rows={3}
-              className={inputClass}
+            </span>
+            <RichTextField
               value={draft.descriere}
-              onChange={(e) => setField({ descriere: e.target.value })}
-              placeholder="Scurtă descriere a categoriei..."
+              onChange={(html) => setField({ descriere: html })}
+              ariaLabel="Descriere"
+              compact
             />
           </div>
 

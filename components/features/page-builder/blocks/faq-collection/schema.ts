@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 /** One question / answer pair in the accordion. Both fields are required. */
 const faqItemSchema = z.object({
@@ -13,7 +14,7 @@ export const faqCollectionSchema = z
     primaDeschisa: z.boolean().default(true),
     intrebari: z.array(faqItemSchema).default([]),
   })
-  .refine((d) => d.intrebari.every((q) => q.intrebare && q.raspuns), {
+  .refine((d) => d.intrebari.every((q) => q.intrebare && hasRichText(q.raspuns)), {
     path: ["intrebari"],
     message: "Fiecare întrebare are nevoie de text și de un răspuns",
   });

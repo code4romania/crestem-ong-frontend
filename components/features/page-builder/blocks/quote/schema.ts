@@ -1,7 +1,8 @@
 import { z } from "zod";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 export const quoteSchema = z.object({
-  citat: z.string().trim().min(1, "Citatul nu poate fi gol"),
+  citat: z.string().trim().refine(hasRichText, "Citatul nu poate fi gol"),
   autor: z.string().trim().default(""),
   functie: z.string().trim().default(""),
   organizatie: z.string().trim().default(""),
@@ -14,7 +15,7 @@ export type QuoteData = z.infer<typeof quoteSchema>;
 
 /**
  * Plain literal, not `schema.parse({})`. `citat: ""` is intentionally invalid
- * (fails `.min(1)`) so a blank draft can't pass validation when the admin
+ * (fails `hasRichText`) so a blank draft can't pass validation when the admin
  * clicks "Adaugă blocul".
  */
 export const QUOTE_DEFAULTS: QuoteData = {

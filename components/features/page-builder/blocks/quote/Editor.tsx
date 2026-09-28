@@ -3,6 +3,7 @@
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import type { BlockFieldErrors } from "../../types";
 import type { QuoteData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -24,16 +25,15 @@ export function QuoteEditor({
   return (
     <div className="space-y-5">
       <div>
-        <label htmlFor="quote-citat" className={labelClass}>
+        <span className={labelClass}>
           Citat <span className="text-[#b91c1c]">*</span>
-        </label>
-        <textarea
-          id="quote-citat"
-          rows={4}
-          className={`${inputClass} min-h-[104px] resize-y`}
+        </span>
+        <RichTextField
           value={value.citat}
-          onChange={(e) => set({ citat: e.target.value })}
-          placeholder="ex. Acceleratorul ne-a ajutat să trecem de la o organizație care funcționa din inerție la una care știe exact unde merge."
+          onChange={(html) => set({ citat: html })}
+          ariaLabel="Citat"
+          compact
+          invalid={Boolean(errors.citat)}
         />
         {errors.citat && <p className={errorClass}>{errors.citat}</p>}
       </div>

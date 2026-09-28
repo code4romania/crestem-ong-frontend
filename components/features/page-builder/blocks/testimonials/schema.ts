@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 /**
  * One testimonial in the repeater. `testimonial` (the quote) and `nume` are the
@@ -21,7 +22,7 @@ export const testimonialsSchema = z
     afiseazaNavigarea: z.boolean().default(true),
     testimoniale: z.array(testimonialSchema).default([]),
   })
-  .refine((d) => d.testimoniale.every((t) => t.testimonial && t.nume), {
+  .refine((d) => d.testimoniale.every((t) => hasRichText(t.testimonial) && t.nume), {
     path: ["testimoniale"],
     message: "Fiecare testimonial are nevoie de text și de un nume",
   });

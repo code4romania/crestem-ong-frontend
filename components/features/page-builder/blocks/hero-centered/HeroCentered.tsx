@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronRight, Star } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import type { HeroCenteredData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const ALIGN_CLASS: Record<HeroCenteredData["horizontalAlign"], string> = {
   stanga: "items-start text-left",
@@ -86,18 +87,15 @@ export function HeroCentered({ data }: { data: HeroCenteredData }) {
         >
           {titlu}
         </h1>
-        {subtitlu ? (
-          <p
-            className="mb-8 leading-relaxed whitespace-pre-line wrap-break-word"
-            style={{
-              fontSize: "1.125rem",
-              color: isDark ? "rgba(255,255,255,0.72)" : "#475569",
-              maxWidth: "760px",
-            }}
-          >
-            {subtitlu}
-          </p>
-        ) : null}
+        <RichTextContent
+          html={subtitlu}
+          className="mb-8 leading-relaxed wrap-break-word"
+          style={{
+            fontSize: "1.125rem",
+            color: isDark ? "rgba(255,255,255,0.72)" : "#475569",
+            maxWidth: "760px",
+          }}
+        />
         {hasPrimary || hasSecondary ? (
           <div className="flex flex-wrap gap-4">
             {hasPrimary ? (
