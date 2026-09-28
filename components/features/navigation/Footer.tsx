@@ -30,7 +30,7 @@ export function Footer({ content, items }: { content: FooterContent; items: Menu
   if (empty) return null;
 
   return (
-    <footer className="bg-[#101c30] text-white">
+    <footer className="bg-primary text-white">
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div>
@@ -96,7 +96,7 @@ export function Footer({ content, items }: { content: FooterContent; items: Menu
 
         {content.copyright && (
           <div className="mt-12 border-t border-white/10 pt-6">
-            <p className="text-sm text-white/50">{content.copyright}</p>
+            <p className="text-sm text-white/60">{content.copyright}</p>
           </div>
         )}
       </div>
