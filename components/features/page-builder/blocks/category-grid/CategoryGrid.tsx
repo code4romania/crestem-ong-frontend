@@ -29,7 +29,7 @@ function CategoryCard({ category }: { category: Category }) {
       </h3>
 
       {category.descriere ? (
-        <p className="mt-2 text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3">
+        <p className="mt-2 text-sm leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word line-clamp-3">
           {category.descriere}
         </p>
       ) : null}

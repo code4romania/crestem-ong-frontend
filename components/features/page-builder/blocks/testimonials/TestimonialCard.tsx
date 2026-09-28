@@ -27,7 +27,7 @@ export function TestimonialCard({ item }: { item: Testimonial }) {
         style={{ color: "#007d58" }}
         aria-hidden
       />
-      <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-[#475569] wrap-break-word">
+      <blockquote className="mt-4 flex-1 text-sm leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word">
         {item.testimonial}
       </blockquote>
       <figcaption className="mt-5 flex items-center gap-3">

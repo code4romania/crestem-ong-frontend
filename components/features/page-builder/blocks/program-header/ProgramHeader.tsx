@@ -110,7 +110,7 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
 
             {subtitlu ? (
               <p
-                className="text-[#5b6779] wrap-break-word"
+                className="whitespace-pre-line text-[#5b6779] wrap-break-word"
                 style={{
                   fontSize: "1.0625rem",
                   lineHeight: 1.7,

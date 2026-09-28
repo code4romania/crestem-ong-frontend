@@ -33,7 +33,7 @@ export function SectionHeader({ data }: { data: SectionHeaderData }) {
           {titlu}
         </h2>
         {subtitlu ? (
-          <p className="mt-4 text-lg text-[#475569] wrap-break-word">
+          <p className="mt-4 text-lg whitespace-pre-line text-[#475569] wrap-break-word">
             {subtitlu}
           </p>
         ) : null}

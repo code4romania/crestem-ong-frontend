@@ -63,7 +63,7 @@ function CardBody({
         ) : null}
 
         {person.descriere ? (
-          <p className="mt-3 text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-4">
+          <p className="mt-3 text-sm leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word line-clamp-4">
             {person.descriere}
           </p>
         ) : null}

@@ -87,7 +87,7 @@ function Card({
         </h3>
         {card.descriere ? (
           <p
-            className={`text-[15px] leading-relaxed wrap-break-word ${
+            className={`text-[15px] leading-relaxed whitespace-pre-line wrap-break-word ${
               isDark ? "text-white/60" : "text-[#475569]"
             }`}
           >

@@ -31,7 +31,7 @@ export function Gallery({ data }: { data: GalleryData }) {
         ) : null}
 
         {descriere ? (
-          <p className="mb-10 max-w-2xl text-[#475569] wrap-break-word">
+          <p className="mb-10 max-w-2xl whitespace-pre-line text-[#475569] wrap-break-word">
             {descriere}
           </p>
         ) : (

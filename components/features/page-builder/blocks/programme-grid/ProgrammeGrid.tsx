@@ -58,7 +58,7 @@ function ProgramCard({
         ) : null}
 
         {program.descriere ? (
-          <p className="mt-3 text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3">
+          <p className="mt-3 text-sm leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word line-clamp-3">
             {program.descriere}
           </p>
         ) : null}

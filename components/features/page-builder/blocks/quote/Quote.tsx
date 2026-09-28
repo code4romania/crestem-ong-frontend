@@ -43,7 +43,7 @@ export function Quote({ data }: { data: QuoteData }) {
           />
 
           <blockquote
-            className="max-w-3xl wrap-break-word text-[#334155]"
+            className="max-w-3xl whitespace-pre-line wrap-break-word text-[#334155]"
             style={{
               fontSize: evidentiat
                 ? "0.9375rem"

@@ -49,7 +49,7 @@ export function NumberedProcess({ data }: { data: NumberedProcessData }) {
                     {pas.titlu}
                   </p>
                   {pas.text ? (
-                    <p className="mt-1.5 text-[15px] leading-relaxed text-[#475569] wrap-break-word">
+                    <p className="mt-1.5 text-[15px] leading-relaxed whitespace-pre-line text-[#475569] wrap-break-word">
                       {pas.text}
                     </p>
                   ) : null}

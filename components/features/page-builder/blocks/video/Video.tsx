@@ -57,7 +57,7 @@ export function Video({ data }: { data: VideoData }) {
           <h2 className="text-2xl font-bold text-[#1c1c81]">{titlu}</h2>
         )}
         {descriere && (
-          <p className="mt-2 text-sm text-[#475569]">{descriere}</p>
+          <p className="mt-2 text-sm whitespace-pre-line text-[#475569]">{descriere}</p>
         )}
 
         <figure className={titlu || descriere ? "mt-6" : ""}>

@@ -93,7 +93,7 @@ export function Statistics({ data }: { data: StatisticsData }) {
               </h2>
             ) : null}
             {descriere ? (
-              <p className="mt-4 max-w-2xl text-[#475569] wrap-break-word">
+              <p className="mt-4 max-w-2xl whitespace-pre-line text-[#475569] wrap-break-word">
                 {descriere}
               </p>
             ) : null}

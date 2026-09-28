@@ -81,7 +81,7 @@ export function ImageCaption({ data }: { data: ImageCaptionData }) {
 
           {hasCaption && (
             <figcaption className="mt-3 text-sm text-[#475569]">
-              {legenda && <span className="block">{legenda}</span>}
+              {legenda && <span className="block whitespace-pre-line">{legenda}</span>}
               {credit && (
                 <span className="mt-1 block text-xs text-[#5b6779]">
                   {credit}

@@ -53,7 +53,7 @@ export function HeroLargeSplit({ data }: { data: HeroLargeSplitData }) {
       </h1>
       {subtitlu ? (
         <p
-          className="mb-8 leading-relaxed wrap-break-word"
+          className="mb-8 leading-relaxed whitespace-pre-line wrap-break-word"
           style={{
             fontSize: "1.125rem",
             color: "rgba(255,255,255,0.72)",
