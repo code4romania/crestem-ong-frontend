@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Clock } from "lucide-react";
 import type { AdminReportRow } from "@/lib/api/evaluations";
 import { formatDate } from "@/lib/utils/date";
+import { withEvaluariFrom } from "./evaluari-from";
 
 const COLUMNS = [
   "Organizație",
@@ -29,7 +30,14 @@ export const ROUND_STATUS = {
   },
 } as const;
 
-export function EvaluariOrganizatiiTable({ reports }: { reports: AdminReportRow[] }) {
+export function EvaluariOrganizatiiTable({
+  reports,
+  listHref,
+}: {
+  reports: AdminReportRow[];
+  /** This list's own URL, so the opened evaluation can link back to it. */
+  listHref: string;
+}) {
   if (reports.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-border p-8 text-center">
@@ -60,7 +68,10 @@ export function EvaluariOrganizatiiTable({ reports }: { reports: AdminReportRow[
               const status = ROUND_STATUS[report.roundStatus] ?? ROUND_STATUS.in_desfasurare;
               const StatusIcon = status.icon;
               const href = report.ong
-                ? `/dashboard/organizatii/${report.ong.documentId}/evaluari/${report.documentId}`
+                ? withEvaluariFrom(
+                    `/dashboard/organizatii/${report.ong.documentId}/evaluari/${report.documentId}`,
+                    listHref,
+                  )
                 : null;
               return (
                 <tr

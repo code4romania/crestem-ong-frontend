@@ -15,6 +15,7 @@ import {
   RESPONDENTS_TABLE_TITLE,
   respondentLabel,
 } from "./respondent-label";
+import { withEvaluariFrom } from "@/components/features/dashboard/evaluari-from";
 
 function formatDate(iso: string) {
   if (!iso) return "—";
@@ -36,9 +37,12 @@ function formatDate(iso: string) {
 export function EvaluationRespondentsTable({
   respondents,
   anonymous = false,
+  from = null,
 }: {
   respondents: OngEvaluationRespondent[];
   anonymous?: boolean;
+  /** The Evaluări list the report was opened from, carried on to each respondent. */
+  from?: string | null;
 }) {
   const pathname = usePathname();
   const completedCount = respondents.filter(
@@ -133,7 +137,11 @@ export function EvaluationRespondentsTable({
                     <td className="px-5 py-3.5 text-center">
                       {respondent.progress?.complete && (
                         <Link
-                          href={`${pathname}/membru/${respondent.documentId}`}
+                          href={
+                            from
+                              ? withEvaluariFrom(`${pathname}/membru/${respondent.documentId}`, from)
+                              : `${pathname}/membru/${respondent.documentId}`
+                          }
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-border transition-colors hover:bg-slate-50"
                           style={{ color: "#1c1c81" }}
                         >

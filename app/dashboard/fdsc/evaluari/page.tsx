@@ -4,7 +4,7 @@ import {
   type AdminEvaluationsPagination,
 } from "@/lib/api/evaluations";
 import { EvaluariFilters } from "@/components/features/dashboard/EvaluariFilters";
-import { statusOptionsForTab } from "@/components/features/dashboard/evaluari-query";
+import { evaluariHref, statusOptionsForTab } from "@/components/features/dashboard/evaluari-query";
 import { EvaluariTable } from "@/components/features/dashboard/EvaluariTable";
 import { EvaluariOrganizatiiTable } from "@/components/features/dashboard/EvaluariOrganizatiiTable";
 import { EvaluariPagination } from "@/components/features/dashboard/EvaluariPagination";
@@ -88,9 +88,15 @@ export default async function Page({ searchParams }: PageProps) {
       </p>
 
       {tab === "organizatii" ? (
-        <EvaluariOrganizatiiTable reports={data as Awaited<ReturnType<typeof listAdminReports>>["data"]} />
+        <EvaluariOrganizatiiTable
+          listHref={evaluariHref(query)}
+          reports={data as Awaited<ReturnType<typeof listAdminReports>>["data"]}
+        />
       ) : (
-        <EvaluariTable evaluations={data as Awaited<ReturnType<typeof listAdminEvaluations>>["data"]} />
+        <EvaluariTable
+          listHref={evaluariHref(query)}
+          evaluations={data as Awaited<ReturnType<typeof listAdminEvaluations>>["data"]}
+        />
       )}
 
       <EvaluariPagination pagination={meta.pagination} query={query} />

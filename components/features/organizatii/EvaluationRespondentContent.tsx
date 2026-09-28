@@ -19,12 +19,14 @@ export function EvaluationRespondentContent({
   respondent,
   dimensions,
   backHref,
+  backLabel = "Înapoi la evaluare",
   anonymous = false,
 }: {
   evaluation: OngEvaluationDetail;
   respondent: OngEvaluationRespondent;
   dimensions: Dimension[];
   backHref: string;
+  backLabel?: string;
   anonymous?: boolean;
 }) {
   const respondents = evaluation.evaluations ?? [];
@@ -53,7 +55,7 @@ export function EvaluationRespondentContent({
         className="inline-flex items-center gap-1.5 text-sm font-medium mb-6"
         style={{ color: "#5b6779" }}
       >
-        <ArrowLeft size={14} /> Înapoi la evaluare
+        <ArrowLeft size={14} /> {backLabel}
       </Link>
 
       <div className="mb-6">

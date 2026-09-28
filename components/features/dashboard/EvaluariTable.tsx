@@ -7,6 +7,7 @@ import {
   MEMBER_STATUS_LABELS,
 } from "@/components/features/evaluari/evaluation-status";
 import { formatDate } from "@/lib/utils/date";
+import { withEvaluariFrom } from "./evaluari-from";
 
 const COLUMNS = [
   "Organizație",
@@ -18,7 +19,14 @@ const COLUMNS = [
   "Acțiuni",
 ];
 
-export function EvaluariTable({ evaluations }: { evaluations: AdminEvaluationRow[] }) {
+export function EvaluariTable({
+  evaluations,
+  listHref,
+}: {
+  evaluations: AdminEvaluationRow[];
+  /** This list's own URL, so the opened evaluation can link back to it. */
+  listHref: string;
+}) {
   if (evaluations.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-border p-8 text-center">
@@ -55,7 +63,10 @@ export function EvaluariTable({ evaluations }: { evaluations: AdminEvaluationRow
               // submitted, so an unfinished response has nothing to open.
               const href =
                 evaluation.ong && evaluation.report && evaluation.status === "completat"
-                  ? `/dashboard/organizatii/${evaluation.ong.documentId}/evaluari/${evaluation.report.documentId}/membru/${evaluation.documentId}`
+                  ? withEvaluariFrom(
+                      `/dashboard/organizatii/${evaluation.ong.documentId}/evaluari/${evaluation.report.documentId}/membru/${evaluation.documentId}`,
+                      listHref,
+                    )
                   : null;
               return (
                 <tr

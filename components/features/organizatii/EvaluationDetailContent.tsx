@@ -14,15 +14,20 @@ function formatDate(iso: string) {
  * `anonymous` withholds who answered what: arguments lose their author and the
  * respondents table becomes a numbered list of evaluations. Mentors read the
  * evaluation this way; FDSC staff see the real people.
+ *
+ * `from` is the Evaluări list this page was opened from, if any — handed on to
+ * the respondent links so the way back still leads to that list.
  */
 export function EvaluationDetailContent({
   evaluation,
   dimensions,
   anonymous = false,
+  from = null,
 }: {
   evaluation: OngEvaluationDetail;
   dimensions: Dimension[];
   anonymous?: boolean;
+  from?: string | null;
 }) {
   const phase = evaluation.phases?.[0] ?? null;
   const programName = phase?.program?.name ?? "Evaluare independentă";
@@ -115,7 +120,11 @@ export function EvaluationDetailContent({
         comments={collectComments(completed, { attributed: !anonymous })}
       />
 
-      <EvaluationRespondentsTable respondents={respondents} anonymous={anonymous} />
+      <EvaluationRespondentsTable
+        respondents={respondents}
+        anonymous={anonymous}
+        from={from}
+      />
     </>
   );
 }
