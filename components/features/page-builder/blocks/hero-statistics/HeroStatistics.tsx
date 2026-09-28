@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ChevronRight, Star } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import type { HeroStat, HeroStatisticsData } from "./schema";
 import { RichTextContent } from "../../rich-text/RichTextContent";
 
@@ -78,7 +78,6 @@ export function HeroStatistics({ data }: { data: HeroStatisticsData }) {
                 border: "1px solid rgba(0,212,149,0.3)",
               }}
             >
-              <Star size={12} className="shrink-0" />
               {supratitlu}
             </div>
           ) : null}

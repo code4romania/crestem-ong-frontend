@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ChevronRight, Star } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import type { HeroLargeSplitData } from "./schema";
 import { RichTextContent } from "../../rich-text/RichTextContent";
@@ -42,7 +42,6 @@ export function HeroLargeSplit({ data }: { data: HeroLargeSplitData }) {
             border: "1px solid rgba(0,212,149,0.3)",
           }}
         >
-          <Star size={12} className="shrink-0" />
           {supratitlu}
         </div>
       ) : null}
