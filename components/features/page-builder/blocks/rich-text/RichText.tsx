@@ -7,6 +7,12 @@ const ALIGN_CLASS: Record<RichTextData["aliniere"], string> = {
   dreapta: "text-right",
 };
 
+/** Body copy set "left" is justified (client request); the title stays left. */
+const BODY_ALIGN_CLASS: Record<RichTextData["aliniere"], string> = {
+  ...ALIGN_CLASS,
+  stanga: "text-justify",
+};
+
 /**
  * "Rich Text" — an optional heading over a body of formatted copy, in a single
  * readable column. Pure (no hooks, no `"use client"`) so it renders on the
@@ -47,7 +53,7 @@ export function RichText({ data }: { data: RichTextData }) {
             the shared prose classes: in the editor that empty line is where
             the caret sits. */}
         <div
-          className={`${RICH_TEXT_PROSE} ${ALIGN_CLASS[aliniere]} wrap-break-word [&>p:empty]:hidden [&>:last-child]:mb-0 [&>:has(+p:empty:last-child)]:mb-0`}
+          className={`${RICH_TEXT_PROSE} ${BODY_ALIGN_CLASS[aliniere]} wrap-break-word [&>p:empty]:hidden [&>:last-child]:mb-0 [&>:has(+p:empty:last-child)]:mb-0`}
           dangerouslySetInnerHTML={{ __html: continut }}
         />
       </div>
