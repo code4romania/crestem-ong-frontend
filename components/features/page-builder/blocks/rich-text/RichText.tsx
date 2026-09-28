@@ -7,10 +7,15 @@ const ALIGN_CLASS: Record<RichTextData["aliniere"], string> = {
   dreapta: "text-right",
 };
 
-/** Body copy set "left" is justified (client request); the title stays left. */
+/**
+ * Body paragraphs set "left" are justified (client request). Headings — the
+ * block title and any h2/h3 inside the copy — stay left: a heading that wraps
+ * gets its first line stretched into wide gaps. Phones stay left too: a
+ * narrow column leaves too few words per line to justify without rivers.
+ */
 const BODY_ALIGN_CLASS: Record<RichTextData["aliniere"], string> = {
   ...ALIGN_CLASS,
-  stanga: "text-justify",
+  stanga: "text-left md:[&_p]:text-justify",
 };
 
 /**
