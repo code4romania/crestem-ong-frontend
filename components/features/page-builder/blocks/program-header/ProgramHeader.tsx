@@ -60,7 +60,13 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
 
   const Icon = PROGRAM_HEADER_ICONS[icon];
   const useImage = sursaVizual === "imagine" && imagine;
-  const groups = grupuri.filter((g) => g.sustinatori.length > 0);
+  // The first two groups ("Implementat de", "Susținut de") share one row; any
+  // later group (partners) wraps onto its own row below. Split by stored
+  // position before dropping empty groups, so an empty first group doesn't
+  // pull the partners up into the top row.
+  const rows = [grupuri.slice(0, 2), grupuri.slice(2)]
+    .map((row) => row.filter((g) => g.sustinatori.length > 0))
+    .filter((row) => row.length > 0);
   const hasStats = statistici.length > 0;
 
   return (
@@ -122,27 +128,38 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
         </div>
       </div>
 
-      {groups.length > 0 ? (
+      {rows.length > 0 ? (
         <div style={{ background: SUPPORTER_BG, borderTop: `1px solid ${BORDER}` }}>
           <div className="mx-auto max-w-7xl px-6">
-            {groups.map((group, groupIndex) => (
+            {rows.map((row, rowIndex) => (
               <div
-                key={groupIndex}
-                className="flex flex-col gap-4 py-5 md:flex-row md:items-center md:gap-8"
+                key={rowIndex}
+                className="flex flex-col gap-4 py-3 md:flex-row md:flex-wrap md:items-center md:gap-x-16 md:gap-y-4"
                 style={
-                  groupIndex > 0 ? { borderTop: `1px solid ${BORDER}` } : undefined
+                  rowIndex > 0 ? { borderTop: `1px solid ${BORDER}` } : undefined
                 }
               >
-                {group.titlu ? (
-                  <span className="text-xs font-semibold uppercase tracking-widest text-[#5b6779] wrap-break-word md:w-48 md:shrink-0">
-                    {group.titlu}
-                  </span>
-                ) : null}
-                <div className="flex flex-wrap items-center gap-10">
-                  {group.sustinatori.map((supporter, index) => (
-                    <SupporterLogo key={index} supporter={supporter} />
-                  ))}
-                </div>
+                {row.map((group, groupIndex) => (
+                  <div
+                    key={groupIndex}
+                    className="flex flex-col gap-4 md:flex-row md:items-center md:gap-8"
+                  >
+                    {group.titlu ? (
+                      <span
+                        className={`text-xs font-semibold uppercase tracking-widest text-[#5b6779] wrap-break-word md:shrink-0 ${
+                          groupIndex === 0 ? "md:w-48" : ""
+                        }`}
+                      >
+                        {group.titlu}
+                      </span>
+                    ) : null}
+                    <div className="flex flex-wrap items-center gap-10">
+                      {group.sustinatori.map((supporter, index) => (
+                        <SupporterLogo key={index} supporter={supporter} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
