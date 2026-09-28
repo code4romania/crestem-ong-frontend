@@ -92,11 +92,22 @@ export interface InviteOngMemberInput {
   rol: string;
 }
 
+interface InviteOngMemberResponse {
+  message: string;
+  emailSent: boolean;
+  alreadyMember?: boolean;
+}
+
+/**
+ * A failed email send comes back as `emailSent: false` on a 200 — the member
+ * was still added, so it surfaces as a `warning`, not an `error`.
+ */
 export async function inviteOngMemberAction(
   input: InviteOngMemberInput,
-): Promise<{ error?: string; fieldErrors?: Record<string, string> }> {
+): Promise<{ error?: string; fieldErrors?: Record<string, string>; warning?: string; message?: string }> {
+  let res: InviteOngMemberResponse;
   try {
-    await serverApiFetch("/api/auth/register/member", {
+    res = await serverApiFetch<InviteOngMemberResponse>("/api/auth/register/member", {
       method: "POST",
       body: JSON.stringify(input),
     });
@@ -106,7 +117,8 @@ export async function inviteOngMemberAction(
   }
 
   revalidateDashboardPath("/dashboard/ong/utilizatori");
-  return {};
+  if (!res.emailSent && !res.alreadyMember) return { warning: res.message };
+  return { message: res.message };
 }
 
 /**

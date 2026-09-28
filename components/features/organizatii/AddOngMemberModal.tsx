@@ -29,7 +29,11 @@ export function AddOngMemberModal({ onClose }: { onClose: () => void }) {
       if (result.error || Object.keys(result.fieldErrors ?? {}).length > 0) {
         return;
       }
-      toast.success("Invitația a fost trimisă.");
+      if (result.warning) {
+        toast.warning(result.warning);
+      } else {
+        toast.success(result.message ?? "Invitația a fost trimisă.");
+      }
       onClose();
     });
   };
