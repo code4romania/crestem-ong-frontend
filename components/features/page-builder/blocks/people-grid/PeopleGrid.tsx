@@ -14,6 +14,7 @@ import type { PeopleGridData } from "./schema";
  */
 export function PeopleGrid({ data }: { data: PeopleGridData }) {
   const expandable = data.persoane.some((person) => person.descriere);
+  const raport = data.raport ?? "implicit";
 
   return (
     <section className="relative overflow-hidden">
@@ -39,9 +40,17 @@ export function PeopleGrid({ data }: { data: PeopleGridData }) {
             Nicio persoană de afișat.
           </p>
         ) : expandable ? (
-          <PeopleGridDialog people={data.persoane} coloane={data.coloane} />
+          <PeopleGridDialog
+            people={data.persoane}
+            coloane={data.coloane}
+            raport={raport}
+          />
         ) : (
-          <PeopleCards people={data.persoane} coloane={data.coloane} />
+          <PeopleCards
+            people={data.persoane}
+            coloane={data.coloane}
+            raport={raport}
+          />
         )}
       </div>
     </section>

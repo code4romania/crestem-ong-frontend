@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { Calendar, ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
+import {
+  imageRatioClass,
+  type ImageRatioWithImplicit,
+} from "../shared/image-ratio";
 import { PROGRAMME_ICONS } from "./icons";
 import type { Program, ProgrammeGridData } from "./schema";
 
@@ -11,7 +15,13 @@ const COL_CLASS: Record<ProgrammeGridData["coloane"], string> = {
   "4": "sm:grid-cols-2 lg:grid-cols-4",
 };
 
-function ProgramCard({ program }: { program: Program }) {
+function ProgramCard({
+  program,
+  raport,
+}: {
+  program: Program;
+  raport: ImageRatioWithImplicit;
+}) {
   const Icon = PROGRAMME_ICONS[program.icon];
   const hasCta = Boolean(program.href && program.ctaLabel);
 
@@ -22,7 +32,9 @@ function ProgramCard({ program }: { program: Program }) {
         <img
           src={getMediaUrl(program.imagine.url)}
           alt={program.imagineAlt || program.titlu}
-          className="block h-44 w-full object-cover"
+          className={`block w-full ${
+            raport === "implicit" ? "h-44 object-cover" : imageRatioClass(raport)
+          }`}
         />
       ) : null}
 
@@ -106,7 +118,11 @@ export function ProgrammeGrid({ data }: { data: ProgrammeGridData }) {
         {data.programe.length > 0 ? (
           <div className={`grid grid-cols-1 gap-6 ${COL_CLASS[data.coloane]}`}>
             {data.programe.map((program, index) => (
-              <ProgramCard key={index} program={program} />
+              <ProgramCard
+                key={index}
+                program={program}
+                raport={data.raport ?? "implicit"}
+              />
             ))}
           </div>
         ) : (

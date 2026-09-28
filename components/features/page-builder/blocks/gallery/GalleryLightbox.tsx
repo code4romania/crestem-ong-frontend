@@ -2,6 +2,7 @@
 
 import { GalleryGrid } from "./GalleryGrid";
 import { useGalleryLightbox } from "./useGalleryLightbox";
+import type { ImageRatio } from "../shared/image-ratio";
 import type { GalleryData, GalleryImage } from "./schema";
 
 /**
@@ -13,10 +14,12 @@ export function GalleryLightbox({
   images,
   stil,
   coloane,
+  raport,
 }: {
   images: GalleryImage[];
   stil: "grid" | "masonry";
   coloane: GalleryData["coloane"];
+  raport: ImageRatio;
 }) {
   const { open, overlay } = useGalleryLightbox(images);
 
@@ -26,6 +29,7 @@ export function GalleryLightbox({
         images={images}
         stil={stil}
         coloane={coloane}
+        raport={raport}
         onSelect={open}
       />
       {overlay}

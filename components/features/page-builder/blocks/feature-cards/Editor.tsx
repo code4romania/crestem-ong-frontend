@@ -1,6 +1,7 @@
 "use client";
 
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { IMAGE_RATIO_OPTIONS } from "../shared/image-ratio";
 import { BackgroundPicker } from "./BackgroundPicker";
 import { CardList } from "./CardList";
 import type { BlockEditorHandle, BlockFieldErrors } from "../../types";
@@ -82,6 +83,20 @@ export function FeatureCardsEditor({
           value={value.background}
           onChange={(background) => set({ background })}
         />
+      </div>
+
+      <div>
+        <span className={labelClass}>Raport imagine</span>
+        <SegmentedControl
+          ariaLabel="Raport imagine"
+          value={value.raport ?? "16:9"}
+          onChange={(raport) => set({ raport })}
+          options={IMAGE_RATIO_OPTIONS}
+        />
+        <p className="mt-1.5 text-xs text-[#5b6779]">
+          Se aplică imaginilor din toate cardurile. „Original” afișează imaginea
+          întreagă, fără decupare.
+        </p>
       </div>
 
       <CardList

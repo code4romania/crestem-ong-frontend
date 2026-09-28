@@ -11,6 +11,7 @@ import type { GalleryData } from "./schema";
  */
 export function Gallery({ data }: { data: GalleryData }) {
   const { titlu, descriere, imagini, stil, coloane, lightbox } = data;
+  const raport = data.raport ?? "4:3";
 
   return (
     <section>
@@ -45,12 +46,23 @@ export function Gallery({ data }: { data: GalleryData }) {
           <GalleryCarousel
             images={imagini}
             coloane={coloane}
+            raport={raport}
             lightbox={lightbox}
           />
         ) : lightbox ? (
-          <GalleryLightbox images={imagini} stil={stil} coloane={coloane} />
+          <GalleryLightbox
+            images={imagini}
+            stil={stil}
+            coloane={coloane}
+            raport={raport}
+          />
         ) : (
-          <GalleryGrid images={imagini} stil={stil} coloane={coloane} />
+          <GalleryGrid
+            images={imagini}
+            stil={stil}
+            coloane={coloane}
+            raport={raport}
+          />
         )}
       </div>
     </section>

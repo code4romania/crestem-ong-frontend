@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
+import { imageRatioClass, type ImageRatio } from "../shared/image-ratio";
 import { useGalleryLightbox } from "./useGalleryLightbox";
 import type { GalleryData, GalleryImage } from "./schema";
 
@@ -23,10 +24,12 @@ const SLIDE_BASIS: Record<GalleryData["coloane"], string> = {
 export function GalleryCarousel({
   images,
   coloane,
+  raport,
   lightbox = false,
 }: {
   images: GalleryImage[];
   coloane: GalleryData["coloane"];
+  raport: ImageRatio;
   lightbox?: boolean;
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start" });
@@ -59,7 +62,7 @@ export function GalleryCarousel({
               <img
                 src={getMediaUrl(image.url)}
                 alt={image.alt}
-                className="aspect-[4/3] w-full rounded-xl object-cover"
+                className={`w-full rounded-xl ${imageRatioClass(raport)}`}
               />
             );
             return (

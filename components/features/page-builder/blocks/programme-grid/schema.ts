@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ctaHasTarget } from "../shared/cta";
+import { IMAGE_RATIOS_WITH_IMPLICIT } from "../shared/image-ratio";
 
 /**
  * Fixed icon palette for a programme card — same set as Feature Cards. Stored as
@@ -49,6 +50,8 @@ export const programmeGridSchema = z
   .object({
     titlu: z.string().trim().default(""),
     coloane: z.enum(["1", "2", "3", "4"]).default("2"),
+    /** Card image ratio; see `blocks/shared/image-ratio.ts`. */
+    raport: z.enum(IMAGE_RATIOS_WITH_IMPLICIT).default("implicit"),
     programe: z.array(programSchema).default([]),
   })
   .refine((d) => d.programe.every((p) => p.titlu), {
@@ -79,6 +82,7 @@ export type ProgramImage = z.infer<typeof imageSchema>;
 export const PROGRAMME_GRID_DEFAULTS: ProgrammeGridData = {
   titlu: "",
   coloane: "2",
+  raport: "implicit",
   programe: [],
 };
 

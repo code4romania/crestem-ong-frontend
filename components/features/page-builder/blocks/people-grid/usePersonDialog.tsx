@@ -13,7 +13,7 @@ import type { Person } from "./schema";
  * lock and focus restore — but portalled to <body> (see `<ModalPortal>`) so a
  * transformed ancestor on the public page can't shrink the backdrop.
  */
-export function usePersonDialog(people: Person[]) {
+export function usePersonDialog(people: Person[], fullImage = false) {
   const [active, setActive] = useState<number | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const restoreFocusRef = useRef<HTMLElement | null>(null);
@@ -83,7 +83,11 @@ export function usePersonDialog(people: Person[]) {
             <img
               src={getMediaUrl(current.imagine.url)}
               alt={current.imagineAlt || current.nume}
-              className="block h-72 w-full object-cover"
+              className={
+                fullImage
+                  ? "block max-h-[60vh] w-full bg-slate-50 object-contain"
+                  : "block h-72 w-full object-cover"
+              }
             />
           ) : null}
 

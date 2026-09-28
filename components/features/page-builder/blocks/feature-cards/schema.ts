@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ctaHasTarget } from "../shared/cta";
+import { IMAGE_RATIOS } from "../shared/image-ratio";
 
 /**
  * Fixed icon palette for a feature card. Stored as a string key (not a component
@@ -58,6 +59,8 @@ export const featureCardsSchema = z
     descriere: z.string().trim().default(""),
     coloane: z.enum(["1", "2", "3", "4"]).default("3"),
     background: z.enum(["default", "light", "accent"]).default("default"),
+    /** Card image ratio; see `blocks/shared/image-ratio.ts`. */
+    raport: z.enum(IMAGE_RATIOS).default("16:9"),
     carduri: z.array(cardSchema).default([]),
   })
   .refine((d) => d.carduri.every((c) => c.titlu), {
@@ -81,6 +84,7 @@ export const FEATURE_CARDS_DEFAULTS: FeatureCardsData = {
   descriere: "",
   coloane: "3",
   background: "default",
+  raport: "16:9",
   carduri: [],
 };
 

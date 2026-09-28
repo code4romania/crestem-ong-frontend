@@ -1,5 +1,9 @@
 import { ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
+import {
+  imageRatioClass,
+  type ImageRatioWithImplicit,
+} from "../shared/image-ratio";
 import type { Person, PeopleGridData } from "./schema";
 
 /**
@@ -19,7 +23,15 @@ const COL_CLASS: Record<PeopleGridData["coloane"], string> = {
 const CARD_CLASS =
   "flex min-w-0 flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-border";
 
-function CardBody({ person, clickable }: { person: Person; clickable: boolean }) {
+function CardBody({
+  person,
+  clickable,
+  raport,
+}: {
+  person: Person;
+  clickable: boolean;
+  raport: ImageRatioWithImplicit;
+}) {
   return (
     <>
       {person.imagine ? (
@@ -27,7 +39,9 @@ function CardBody({ person, clickable }: { person: Person; clickable: boolean })
         <img
           src={getMediaUrl(person.imagine.url)}
           alt={person.imagineAlt || person.nume}
-          className="block h-64 w-full object-cover"
+          className={`block w-full ${
+            raport === "implicit" ? "h-64 object-cover" : imageRatioClass(raport)
+          }`}
         />
       ) : null}
 
@@ -88,10 +102,12 @@ function CardBody({ person, clickable }: { person: Person; clickable: boolean })
 function PersonCard({
   person,
   index,
+  raport,
   onSelect,
 }: {
   person: Person;
   index: number;
+  raport: ImageRatioWithImplicit;
   onSelect?: (index: number) => void;
 }) {
   // Only a person who actually has something more to read is worth opening.
@@ -100,7 +116,7 @@ function PersonCard({
   if (!clickable) {
     return (
       <div className={CARD_CLASS}>
-        <CardBody person={person} clickable={false} />
+        <CardBody person={person} clickable={false} raport={raport} />
       </div>
     );
   }
@@ -112,7 +128,7 @@ function PersonCard({
       aria-label={`Vezi descrierea completă: ${person.nume}`}
       className={`group cursor-pointer text-left transition-all hover:-translate-y-1 hover:shadow-lg hover:ring-[#00d495]/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#007d58] ${CARD_CLASS}`}
     >
-      <CardBody person={person} clickable />
+      <CardBody person={person} clickable raport={raport} />
     </button>
   );
 }
@@ -120,10 +136,12 @@ function PersonCard({
 export function PeopleCards({
   people,
   coloane,
+  raport,
   onSelect,
 }: {
   people: Person[];
   coloane: PeopleGridData["coloane"];
+  raport: ImageRatioWithImplicit;
   onSelect?: (index: number) => void;
 }) {
   return (
@@ -133,6 +151,7 @@ export function PeopleCards({
           key={index}
           person={person}
           index={index}
+          raport={raport}
           onSelect={onSelect}
         />
       ))}

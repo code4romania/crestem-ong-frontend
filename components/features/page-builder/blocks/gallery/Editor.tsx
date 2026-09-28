@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { IMAGE_RATIO_OPTIONS } from "../shared/image-ratio";
 import { Toggle } from "@/components/ui/Toggle";
 import { GalleryImageList } from "./GalleryImageList";
 import type { BlockFieldErrors } from "../../types";
@@ -100,6 +101,23 @@ export function GalleryEditor({
           </p>
         )}
       </div>
+
+      {/* Masonry always shows images whole, so the ratio only applies to the
+          grid and carousel styles. */}
+      {value.stil !== "masonry" && (
+        <div>
+          <span className={labelClass}>Raport imagine</span>
+          <SegmentedControl
+            ariaLabel="Raport imagine"
+            value={value.raport ?? "4:3"}
+            onChange={(raport) => set({ raport })}
+            options={IMAGE_RATIO_OPTIONS}
+          />
+          <p className="mt-1.5 text-xs text-[#5b6779]">
+            „Original” afișează fiecare imagine întreagă, fără decupare.
+          </p>
+        </div>
+      )}
 
       <div className="flex items-center justify-between gap-4 rounded-xl border border-border p-4">
         <label

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { IMAGE_RATIOS_WITH_IMPLICIT } from "../shared/image-ratio";
 
 /** Uploaded media, same shape the Hero blocks store from `uploadPageImageAction`. */
 const imageSchema = z
@@ -21,6 +22,11 @@ export const peopleGridSchema = z
   .object({
     titlu: z.string().trim().default(""),
     coloane: z.enum(["1", "2", "3", "4"]).default("3"),
+    /**
+     * Card image ratio; see `blocks/shared/image-ratio.ts`. Also decides whether
+     * the detail dialog crops ("implicit") or shows the whole image.
+     */
+    raport: z.enum(IMAGE_RATIOS_WITH_IMPLICIT).default("implicit"),
     persoane: z.array(personSchema).default([]),
   })
   .refine((d) => d.persoane.every((p) => p.nume), {
@@ -44,6 +50,7 @@ export type PersonImage = z.infer<typeof imageSchema>;
 export const PEOPLE_GRID_DEFAULTS: PeopleGridData = {
   titlu: "",
   coloane: "3",
+  raport: "implicit",
   persoane: [],
 };
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
+import { imageRatioClass, type ImageRatio } from "../shared/image-ratio";
 import { FEATURE_ICONS } from "./icons";
 import type { FeatureCard, FeatureCardsData } from "./schema";
 
@@ -38,7 +39,15 @@ const WIDTH_CLASS: Record<FeatureCardsData["coloane"], string> = {
   "4": "max-w-7xl",
 };
 
-function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
+function Card({
+  card,
+  isDark,
+  raport,
+}: {
+  card: FeatureCard;
+  isDark: boolean;
+  raport: ImageRatio;
+}) {
   const Icon = FEATURE_ICONS[card.icon];
   const hasCta = Boolean(card.href && card.ctaLabel);
   const hasImage = Boolean(card.iconImage);
@@ -52,14 +61,12 @@ function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
       }`}
     >
       {card.iconImage ? (
-        <div className="aspect-[16/9] w-full shrink-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={getMediaUrl(card.iconImage.url)}
-            alt=""
-            className="h-full w-full object-cover"
-          />
-        </div>
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
+          src={getMediaUrl(card.iconImage.url)}
+          alt=""
+          className={`block w-full shrink-0 ${imageRatioClass(raport)}`}
+        />
       ) : (
         <span
           className="mx-6 mt-6 mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
@@ -109,6 +116,7 @@ function Card({ card, isDark }: { card: FeatureCard; isDark: boolean }) {
  */
 export function FeatureCards({ data }: { data: FeatureCardsData }) {
   const { titluSectiune, descriere, coloane, background, carduri } = data;
+  const raport = data.raport ?? "16:9";
 
   const isDark = background === "accent";
   const sectionStyle: React.CSSProperties =
@@ -152,7 +160,7 @@ export function FeatureCards({ data }: { data: FeatureCardsData }) {
           >
             {carduri.map((card, index) => (
               <div key={index} className={`min-w-0 ${ITEM_WIDTH_CLASS[coloane]}`}>
-                <Card card={card} isDark={isDark} />
+                <Card card={card} isDark={isDark} raport={raport} />
               </div>
             ))}
           </div>

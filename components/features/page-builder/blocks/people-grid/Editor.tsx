@@ -1,6 +1,7 @@
 "use client";
 
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { IMAGE_RATIO_OPTIONS_WITH_IMPLICIT } from "../shared/image-ratio";
 import { PersonList } from "./PersonList";
 import type { BlockFieldErrors } from "../../types";
 import type { PeopleGridData } from "./schema";
@@ -50,6 +51,20 @@ export function PeopleGridEditor({
             { value: "4", label: "4 col." },
           ]}
         />
+      </div>
+
+      <div>
+        <span className={labelClass}>Raport imagine</span>
+        <SegmentedControl
+          ariaLabel="Raport imagine"
+          value={value.raport ?? "implicit"}
+          onChange={(raport) => set({ raport })}
+          options={IMAGE_RATIO_OPTIONS_WITH_IMPLICIT}
+        />
+        <p className="mt-1.5 text-xs text-[#5b6779]">
+          Se aplică imaginilor din toate cardurile. „Original” afișează imaginea
+          întreagă, fără decupare.
+        </p>
       </div>
 
       <PersonList
