@@ -1,12 +1,14 @@
 export const MAINTENANCE_PATH = "/mentenanta";
 
 /**
- * Set `MAINTENANCE_MODE=true` in the Vercel project's environment variables to
- * send every visitor to the maintenance page. Vercel only applies env changes
- * to new deployments, so flipping it takes a redeploy.
+ * `MAINTENANCE_MODE` in the Vercel project's environment variables:
+ * `ACTIVE` sends every visitor to the maintenance page, `OFFLINE` serves the
+ * site normally. Any other value (or none) also serves the site, so a typo
+ * cannot lock everyone out. Vercel only applies env changes to new
+ * deployments, so flipping it takes a redeploy.
  */
-export function isMaintenanceMode() {
-  return process.env.MAINTENANCE_MODE === "true";
+export function isMaintenanceMode(value = process.env.MAINTENANCE_MODE) {
+  return value === "ACTIVE";
 }
 
 export type MaintenanceAction =

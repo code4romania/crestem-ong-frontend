@@ -1,5 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { MAINTENANCE_PATH, maintenanceAction } from "./maintenance";
+import { MAINTENANCE_PATH, isMaintenanceMode, maintenanceAction } from "./maintenance";
+
+describe("isMaintenanceMode", () => {
+  it("is on only for ACTIVE", () => {
+    expect(isMaintenanceMode("ACTIVE")).toBe(true);
+  });
+
+  it("is off for OFFLINE, a missing value, or anything unexpected", () => {
+    expect(isMaintenanceMode("OFFLINE")).toBe(false);
+    expect(isMaintenanceMode(undefined)).toBe(false);
+    expect(isMaintenanceMode("true")).toBe(false);
+    expect(isMaintenanceMode("active")).toBe(false);
+  });
+});
 
 describe("maintenanceAction", () => {
   describe("when maintenance is on", () => {
