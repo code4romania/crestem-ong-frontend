@@ -60,13 +60,9 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
   } = migrateProgramHeader(data) as ProgramHeaderData;
 
   const useImage = sursaVizual === "imagine" && imagine;
-  // The first two groups ("Implementat de", "Susținut de") share one row; any
-  // later group (partners) wraps onto its own row below. Split by stored
-  // position before dropping empty groups, so an empty first group doesn't
-  // pull the partners up into the top row.
-  const rows = [grupuri.slice(0, 2), grupuri.slice(2)]
-    .map((row) => row.filter((g) => g.sustinatori.length > 0))
-    .filter((row) => row.length > 0);
+  // All groups share one wrapping band; a group that doesn't fit beside the
+  // previous one moves to the next line as a whole (see the band below).
+  const groups = grupuri.filter((g) => g.sustinatori.length > 0);
   const hasStats = statistici.length > 0;
 
   return (
@@ -130,50 +126,37 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
         </div>
       </div>
 
-      {rows.length > 0 ? (
+      {groups.length > 0 ? (
         <div style={{ background: SUPPORTER_BG, borderTop: `1px solid ${BORDER}` }}>
           <div className="mx-auto max-w-7xl px-6">
-            {rows.map((row, rowIndex) => (
-              <div
-                key={rowIndex}
-                // Two groups ("Implementat de" / "Susținut de") split the row
-                // into equal halves; a lone group (e.g. partners) runs full width.
-                // Label sits above the logos until `lg`, where there's room
-                // for it to sit beside them.
-                className={`flex flex-col gap-4 py-3 md:gap-x-16 lg:py-3.5 lg:gap-y-4 ${
-                  row.length === 2
-                    ? "md:grid md:grid-cols-2 md:items-start lg:items-center"
-                    : "lg:flex-row lg:flex-wrap lg:items-center"
-                }`}
-                style={
-                  rowIndex > 0 ? { borderTop: `1px solid ${BORDER}` } : undefined
-                }
-              >
-                {row.map((group, groupIndex) => (
-                  <div
-                    key={groupIndex}
-                    className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-8"
-                  >
-                    {group.titlu ? (
-                      <span
-                        className={`text-xs font-semibold uppercase tracking-widest text-[#5b6779] wrap-break-word lg:shrink-0 ${
-                          // Fixed width only lines logos up across rows; with
-                          // a single row it would just leave a gap.
-                          groupIndex === 0 && rows.length > 1 ? "lg:w-48" : ""
-                        }`}
-                      >
-                        {group.titlu}
-                      </span>
-                    ) : null}
-                    <div className="flex flex-wrap items-center gap-10">
-                      {group.sustinatori.map((supporter, index) => (
-                        <SupporterLogo key={index} supporter={supporter} />
-                      ))}
-                    </div>
+            <div
+              // Each group is sized to its logos on one line; when the next
+              // group can't fit beside it, the whole group wraps to the next
+              // line instead of its logos wrapping. `max-w-full` on the group
+              // caps it at the band width, so logos only wrap inside a group
+              // that's wider than the viewport on its own (narrow screens).
+              // Label sits above the logos until `lg`, where there's room
+              // for it to sit beside them.
+              className="flex flex-wrap items-start gap-x-16 gap-y-4 py-3 lg:items-center lg:py-3.5"
+            >
+              {groups.map((group, groupIndex) => (
+                <div
+                  key={groupIndex}
+                  className="flex max-w-full flex-col gap-4 lg:flex-row lg:items-center lg:gap-8"
+                >
+                  {group.titlu ? (
+                    <span className="text-xs font-semibold uppercase tracking-widest text-[#5b6779] wrap-break-word lg:shrink-0">
+                      {group.titlu}
+                    </span>
+                  ) : null}
+                  <div className="flex flex-wrap items-center gap-10">
+                    {group.sustinatori.map((supporter, index) => (
+                      <SupporterLogo key={index} supporter={supporter} />
+                    ))}
                   </div>
-                ))}
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       ) : null}
