@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Logo } from "@/components/ui/Logo";
 
 export const metadata: Metadata = {
-  title: "Revenim în curând | Crestem ONG",
+  title: "Revenim în curând | Creștem ONG",
   robots: { index: false, follow: false },
 };
 
@@ -15,7 +15,7 @@ export default function MaintenancePage() {
         <div className="maintenance-blob absolute left-1/2 top-1/3 size-72 rounded-full bg-secondary blur-3xl" />
       </div>
 
-      <div className="maintenance-stagger max-w-md text-center">
+      <div className="maintenance-stagger max-w-xl text-center">
         <div className="relative mx-auto mb-10 flex size-56 items-center justify-center">
           <div
             aria-hidden
@@ -31,13 +31,25 @@ export default function MaintenancePage() {
           </div>
           <Logo height={48} />
         </div>
-        <h1 className="mb-3 font-heading text-2xl font-extrabold text-primary">
-          Revenim în câteva ore
+        <h1 className="mb-6 font-heading text-3xl font-extrabold text-primary">
+          Revenim în curând
         </h1>
-        <p className="text-muted-foreground">
-          Lansăm noua platformă Crestem ONG. Site-ul este indisponibil pentru
-          câteva ore. Îți mulțumim pentru răbdare!
-        </p>
+        <div className="space-y-6 text-pretty leading-relaxed text-muted-foreground">
+          <p>
+            Am lucrat de zor la o versiune nouă și îmbunătățită a platformei
+            Creștem ONG, care va fi disponibilă în scurt timp.
+          </p>
+          <p className="font-medium text-primary">
+            În acest moment facem actualizarea website-ului, iar platforma este
+            temporar indisponibilă. Cât timp este actualizat website-ul, nu va
+            fi posibilă vizualizarea resurselor, accesarea conturilor existente
+            sau crearea unor conturi noi.
+          </p>
+          <p>
+            Îți mulțumim pentru răbdare și înțelegere. Revenim online cât mai
+            curând!
+          </p>
+        </div>
       </div>
     </section>
   );
