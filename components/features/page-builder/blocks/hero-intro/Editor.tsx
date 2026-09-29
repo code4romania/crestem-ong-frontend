@@ -41,7 +41,7 @@ export function HeroIntroEditor({
 
       <div>
         <label htmlFor="hi-titlu" className={labelClass}>
-          Titlu <span className="text-[#b91c1c]">*</span>
+          Titlu
         </label>
         <input
           id="hi-titlu"

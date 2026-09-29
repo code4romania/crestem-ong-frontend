@@ -35,7 +35,7 @@ export function DocumentsEditor({
     <div className="space-y-5">
       <div>
         <label htmlFor="documents-titlu" className={labelClass}>
-          Titlu <span className="text-[#b91c1c]">*</span>
+          Titlu<span className={optionalHint}>(opțional)</span>
         </label>
         <input
           id="documents-titlu"

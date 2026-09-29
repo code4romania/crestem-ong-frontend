@@ -45,12 +45,14 @@ export function HeroLargeSplit({ data }: { data: HeroLargeSplitData }) {
           {supratitlu}
         </div>
       ) : null}
-      <h1
-        className="mb-6 text-white font-heading wrap-break-word"
-        style={{ fontSize: "clamp(2.5rem, 5vw, 3.75rem)", fontWeight: 800, lineHeight: 1.1 }}
-      >
-        {titlu}
-      </h1>
+      {titlu ? (
+        <h1
+          className="mb-6 text-white font-heading wrap-break-word"
+          style={{ fontSize: "clamp(2.5rem, 5vw, 3.75rem)", fontWeight: 800, lineHeight: 1.1 }}
+        >
+          {titlu}
+        </h1>
+      ) : null}
       <RichTextContent
         html={subtitlu}
         className="mb-8 leading-relaxed wrap-break-word"

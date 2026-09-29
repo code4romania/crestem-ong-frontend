@@ -66,17 +66,19 @@ export function ArticleHeader({ data }: { data: ArticleHeaderData }) {
           </div>
         ) : null}
 
-        <h1
-          className="font-heading wrap-break-word max-w-full"
-          style={{
-            fontSize: "clamp(2rem, 4.5vw, 3.25rem)",
-            fontWeight: 800,
-            lineHeight: 1.12,
-            color: isDark ? "#ffffff" : "#1c1c81",
-          }}
-        >
-          {titlu}
-        </h1>
+        {titlu ? (
+          <h1
+            className="font-heading wrap-break-word max-w-full"
+            style={{
+              fontSize: "clamp(2rem, 4.5vw, 3.25rem)",
+              fontWeight: 800,
+              lineHeight: 1.12,
+              color: isDark ? "#ffffff" : "#1c1c81",
+            }}
+          >
+            {titlu}
+          </h1>
+        ) : null}
 
         {etichete.length > 0 ? (
           <div className="mt-6 flex flex-wrap gap-2">

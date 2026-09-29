@@ -101,17 +101,19 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
           </div>
 
           <div className="flex w-full min-w-0 flex-col items-center md:flex-1 md:items-start">
-            <h1
-              className="mb-3 font-heading text-[#1c1c81] wrap-break-word"
-              style={{
-                fontSize: "clamp(2rem, 5vw, 3rem)",
-                fontWeight: 800,
-                lineHeight: 1.15,
-                maxWidth: "640px",
-              }}
-            >
-              {titlu}
-            </h1>
+            {titlu ? (
+              <h1
+                className="mb-3 font-heading text-[#1c1c81] wrap-break-word"
+                style={{
+                  fontSize: "clamp(2rem, 5vw, 3rem)",
+                  fontWeight: 800,
+                  lineHeight: 1.15,
+                  maxWidth: "640px",
+                }}
+              >
+                {titlu}
+              </h1>
+            ) : null}
 
             <RichTextContent
               html={subtitlu}

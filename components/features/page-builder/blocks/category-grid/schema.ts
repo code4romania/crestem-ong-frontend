@@ -18,10 +18,6 @@ export const categoryGridSchema = z
     titlu: z.string().trim().default(""),
     coloane: z.enum(["1", "2", "3", "4"]).default("3"),
     categorii: z.array(categorySchema).default([]),
-  })
-  .refine((d) => d.categorii.every((c) => c.titlu), {
-    path: ["categorii"],
-    message: "Fiecare categorie are nevoie de un titlu",
   });
 
 export type CategoryGridData = z.infer<typeof categoryGridSchema>;

@@ -53,13 +53,11 @@ export function CardList({
 
   const closeForm = () => setEditing(null);
 
-  /** Same rule the "Salvează cardul" button enforces: a blank title isn't worth keeping. */
   const commitDraft = (
     current: FeatureCard,
     editingIndex: number,
     list: FeatureCard[],
-  ): FeatureCard[] | null => {
-    if (!current.titlu.trim()) return null;
+  ): FeatureCard[] => {
     const clean: FeatureCard = { ...current, titlu: current.titlu.trim() };
     return editingIndex === list.length
       ? [...list, clean]
@@ -68,9 +66,7 @@ export function CardList({
 
   const saveDraft = () => {
     if (editing === null) return;
-    const next = commitDraft(draft, editing, value);
-    if (!next) return;
-    onChange(next);
+    onChange(commitDraft(draft, editing, value));
     setEditing(null);
   };
 
@@ -79,7 +75,7 @@ export function CardList({
     bindHandle({
       flush: () => {
         if (editing === null) return value;
-        return commitDraft(draft, editing, value) ?? value;
+        return commitDraft(draft, editing, value);
       },
       hasUnsavedNestedDraft: () => {
         if (editing === null) return false;
@@ -132,7 +128,7 @@ export function CardList({
 
           <div>
             <label htmlFor="fc-card-titlu" className={labelClass}>
-              Titlu <span className="text-[#b91c1c]">*</span>
+              Titlu
             </label>
             <input
               id="fc-card-titlu"
@@ -181,7 +177,6 @@ export function CardList({
           <button
             type="button"
             onClick={saveDraft}
-            disabled={!draft.titlu.trim()}
             className="rounded-xl bg-[#5656e5] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-40"
           >
             Salvează cardul

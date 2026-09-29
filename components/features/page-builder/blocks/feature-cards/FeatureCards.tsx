@@ -78,13 +78,15 @@ function Card({
       <div
         className={`flex min-h-0 flex-1 flex-col p-6 ${hasImage ? "" : "pt-0"}`}
       >
-        <h3
-          className={`mb-2 text-lg font-semibold wrap-break-word ${
-            isDark ? "text-white" : "text-[#1c1c81]"
-          }`}
-        >
-          {card.titlu}
-        </h3>
+        {card.titlu ? (
+          <h3
+            className={`mb-2 text-lg font-semibold wrap-break-word ${
+              isDark ? "text-white" : "text-[#1c1c81]"
+            }`}
+          >
+            {card.titlu}
+          </h3>
+        ) : null}
         <RichTextContent
           html={card.descriere}
           className={`text-[15px] leading-relaxed wrap-break-word ${

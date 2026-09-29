@@ -10,10 +10,12 @@ function StageBody({ etapa }: { etapa: TimelineStage }) {
           {etapa.numar}
         </p>
       ) : null}
-      <p className="mt-1 font-semibold text-[#1c1c81] wrap-break-word">
-        {etapa.titlu}
-      </p>
-      <RichTextContent html={etapa.text} className="mt-1.5 text-[15px] leading-relaxed text-[#475569] wrap-break-word" />
+      {etapa.titlu ? (
+        <p className="mt-1 font-semibold text-[#1c1c81] wrap-break-word">
+          {etapa.titlu}
+        </p>
+      ) : null}
+      <RichTextContent html={etapa.text} className={`${etapa.titlu ? "mt-1.5" : "mt-1"} text-[15px] leading-relaxed text-[#475569] wrap-break-word`} />
     </div>
   );
 }

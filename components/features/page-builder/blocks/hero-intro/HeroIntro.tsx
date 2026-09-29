@@ -55,17 +55,19 @@ export function HeroIntro({ data }: { data: HeroIntroData }) {
             {supratitlu}
           </p>
         ) : null}
-        <h1
-          className="mb-5 font-heading wrap-break-word max-w-full"
-          style={{
-            fontSize: "clamp(2rem, 4vw, 3rem)",
-            fontWeight: 800,
-            lineHeight: 1.1,
-            color: isDark ? "#ffffff" : "#1c1c81",
-          }}
-        >
-          {titlu}
-        </h1>
+        {titlu ? (
+          <h1
+            className="mb-5 font-heading wrap-break-word max-w-full"
+            style={{
+              fontSize: "clamp(2rem, 4vw, 3rem)",
+              fontWeight: 800,
+              lineHeight: 1.1,
+              color: isDark ? "#ffffff" : "#1c1c81",
+            }}
+          >
+            {titlu}
+          </h1>
+        ) : null}
         <RichTextContent
           html={textIntroductiv}
           className="mb-8 leading-relaxed wrap-break-word"

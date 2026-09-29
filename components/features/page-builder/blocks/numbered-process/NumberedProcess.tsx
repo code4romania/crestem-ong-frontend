@@ -45,11 +45,13 @@ export function NumberedProcess({ data }: { data: NumberedProcessData }) {
                   {index + 1}
                 </span>
                 <div className="pt-0.5">
-                  <p className="font-semibold text-[#1c1c81] wrap-break-word">
-                    <span className="sr-only">Pasul {index + 1}: </span>
-                    {pas.titlu}
-                  </p>
-                  <RichTextContent html={pas.text} className="mt-1.5 text-[15px] leading-relaxed text-[#475569] wrap-break-word" />
+                  {pas.titlu ? (
+                    <p className="font-semibold text-[#1c1c81] wrap-break-word">
+                      <span className="sr-only">Pasul {index + 1}: </span>
+                      {pas.titlu}
+                    </p>
+                  ) : null}
+                  <RichTextContent html={pas.text} className={`${pas.titlu ? "mt-1.5" : ""} text-[15px] leading-relaxed text-[#475569] wrap-break-word`} />
                 </div>
               </li>
             ))}

@@ -42,10 +42,6 @@ export const featureCardsSchema = z
     raport: z.enum(IMAGE_RATIOS).default("16:9"),
     carduri: z.array(cardSchema).default([]),
   })
-  .refine((d) => d.carduri.every((c) => c.titlu), {
-    path: ["carduri"],
-    message: "Fiecare card are nevoie de un titlu",
-  })
   .refine((d) => d.carduri.every((c) => ctaHasTarget(c) === Boolean(c.ctaLabel)), {
     path: ["carduri"],
     message: "La un card cu link completează și eticheta CTA (și invers)",
@@ -56,7 +52,7 @@ export type FeatureCard = z.infer<typeof cardSchema>;
 
 /**
  * Plain literal, not `schema.parse({})` — the `.refine` chain makes that throw.
- * The section title is optional; only each card needs its own title.
+ * The section title and the card titles are optional.
  */
 export const FEATURE_CARDS_DEFAULTS: FeatureCardsData = {
   titluSectiune: "",

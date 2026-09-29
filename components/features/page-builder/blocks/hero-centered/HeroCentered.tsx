@@ -75,17 +75,19 @@ export function HeroCentered({ data }: { data: HeroCenteredData }) {
             {supratitlu}
           </div>
         ) : null}
-        <h1
-          className="mb-6 font-heading wrap-break-word max-w-full"
-          style={{
-            fontSize: "clamp(2.5rem, 5vw, 3.75rem)",
-            fontWeight: 800,
-            lineHeight: 1.1,
-            color: isDark ? "#ffffff" : "#1c1c81",
-          }}
-        >
-          {titlu}
-        </h1>
+        {titlu ? (
+          <h1
+            className="mb-6 font-heading wrap-break-word max-w-full"
+            style={{
+              fontSize: "clamp(2.5rem, 5vw, 3.75rem)",
+              fontWeight: 800,
+              lineHeight: 1.1,
+              color: isDark ? "#ffffff" : "#1c1c81",
+            }}
+          >
+            {titlu}
+          </h1>
+        ) : null}
         <RichTextContent
           html={subtitlu}
           className="mb-8 leading-relaxed wrap-break-word"

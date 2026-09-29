@@ -67,7 +67,7 @@ export function ProgramList({
   const closeForm = () => setEditing(null);
 
   const missingAlt = Boolean(draft.imagine) && !draft.imagineAlt.trim();
-  const canSave = Boolean(draft.titlu.trim()) && !missingAlt;
+  const canSave = !missingAlt;
 
   const saveDraft = () => {
     if (!canSave) return;
@@ -246,7 +246,7 @@ export function ProgramList({
 
           <div>
             <label htmlFor="pg-prog-titlu" className={labelClass}>
-              Titlu <span className="text-[#b91c1c]">*</span>
+              Titlu
             </label>
             <input
               id="pg-prog-titlu"

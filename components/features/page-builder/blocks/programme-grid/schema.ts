@@ -32,10 +32,6 @@ export const programmeGridSchema = z
     raport: z.enum(IMAGE_RATIOS_WITH_IMPLICIT).default("implicit"),
     programe: z.array(programSchema).default([]),
   })
-  .refine((d) => d.programe.every((p) => p.titlu), {
-    path: ["programe"],
-    message: "Fiecare program are nevoie de un titlu",
-  })
   .refine((d) => d.programe.every((p) => !p.imagine || p.imagineAlt.length > 0), {
     path: ["programe"],
     message: "Fiecare imagine are nevoie de un text alternativ",

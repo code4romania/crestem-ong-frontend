@@ -43,7 +43,7 @@ export function HeroStatisticsEditor({
 
       <div>
         <label htmlFor="hs-titlu" className={labelClass}>
-          Titlu <span className="text-[#b91c1c]">*</span>
+          Titlu
         </label>
         <input
           id="hs-titlu"

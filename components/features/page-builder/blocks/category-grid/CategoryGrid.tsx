@@ -24,11 +24,13 @@ function CategoryCard({ category }: { category: Category }) {
         <LucideIcon value={category.icon} scope="category" size={20} />
       </span>
 
-      <h3 className="mt-4 min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word">
-        {category.titlu}
-      </h3>
+      {category.titlu ? (
+        <h3 className="mt-4 min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word">
+          {category.titlu}
+        </h3>
+      ) : null}
 
-      <RichTextContent html={category.descriere} className="mt-2 text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3" />
+      <RichTextContent html={category.descriere} className={`${category.titlu ? "mt-2" : "mt-4"} text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3`} />
 
       {hasFooter ? (
         <div className="mt-auto flex items-center gap-3 pt-5">

@@ -54,7 +54,7 @@ export function HeroLargeSplitEditor({
 
       <div>
         <label htmlFor="hls-titlu" className={labelClass}>
-          Titlu <span className="text-[#b91c1c]">*</span>
+          Titlu
         </label>
         <input
           id="hls-titlu"

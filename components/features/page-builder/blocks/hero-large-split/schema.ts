@@ -4,7 +4,7 @@ import { CTA_DEFAULTS, ctaHasTarget, ctaSchema } from "../shared/cta";
 export const heroLargeSplitSchema = z
   .object({
     supratitlu: z.string().trim().default(""),
-    titlu: z.string().trim().min(1, "Titlul este obligatoriu"),
+    titlu: z.string().trim().default(""),
     subtitlu: z.string().trim().default(""),
     image: z
       .object({ id: z.number(), url: z.string(), name: z.string().default("") })
@@ -33,8 +33,6 @@ export type HeroLargeSplitData = z.infer<typeof heroLargeSplitSchema>;
 
 /**
  * Plain literal, not `schema.parse({})` — the `.refine` chain makes that throw.
- * `titlu: ""` is intentionally invalid so a blank draft can't pass validation
- * when the admin clicks "Adaugă blocul".
  */
 export const HERO_LARGE_SPLIT_DEFAULTS: HeroLargeSplitData = {
   supratitlu: "",

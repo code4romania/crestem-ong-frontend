@@ -44,10 +44,7 @@ export function CategoryList({
 
   const closeForm = () => setEditing(null);
 
-  const canSave = Boolean(draft.titlu.trim());
-
   const saveDraft = () => {
-    if (!canSave) return;
     const clean: Category = {
       ...draft,
       titlu: draft.titlu.trim(),
@@ -102,7 +99,7 @@ export function CategoryList({
 
           <div>
             <label htmlFor="cl-cat-titlu" className={labelClass}>
-              Titlu <span className="text-[#b91c1c]">*</span>
+              Titlu
             </label>
             <input
               id="cl-cat-titlu"
@@ -163,7 +160,6 @@ export function CategoryList({
           <button
             type="button"
             onClick={saveDraft}
-            disabled={!canSave}
             className="rounded-xl bg-[#5656e5] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-40"
           >
             Salvează categoria

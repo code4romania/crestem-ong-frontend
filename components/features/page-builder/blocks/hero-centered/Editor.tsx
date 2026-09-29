@@ -73,7 +73,7 @@ export function HeroCenteredEditor({
 
       <div>
         <label htmlFor="hc-titlu" className={labelClass}>
-          Titlu <span className="text-[#b91c1c]">*</span>
+          Titlu
         </label>
         <input
           id="hc-titlu"

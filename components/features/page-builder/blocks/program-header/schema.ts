@@ -93,7 +93,7 @@ const programHeaderObjectSchema = z
     icon: iconSchema("program-header", "layers"),
     imagine: imageSchema,
     imagineAlt: z.string().trim().default(""),
-    titlu: z.string().trim().min(1, "Titlul este obligatoriu"),
+    titlu: z.string().trim().default(""),
     subtitlu: z.string().trim().default(""),
     grupuri: z
       .array(supporterGroupSchema)
@@ -147,8 +147,6 @@ export type ProgramHeaderStat = z.infer<typeof statSchema>;
 
 /**
  * Plain literal, not `schema.parse({})` — the `.refine` chain makes that throw.
- * `titlu: ""` is intentionally invalid so a blank draft can't pass validation
- * when the admin clicks "Adaugă blocul".
  */
 export const PROGRAM_HEADER_DEFAULTS: ProgramHeaderData = {
   program: { documentId: "", nume: "" },

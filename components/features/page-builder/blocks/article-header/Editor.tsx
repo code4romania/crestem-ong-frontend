@@ -39,7 +39,7 @@ export function ArticleHeaderEditor({
     <div className="space-y-5">
       <div>
         <label htmlFor="ah-titlu" className={labelClass}>
-          Titlu <span className="text-[#b91c1c]">*</span>
+          Titlu
         </label>
         <input
           id="ah-titlu"

@@ -46,9 +46,11 @@ function ProgramCard({
           >
             <LucideIcon value={program.icon} scope="programme" size={18} />
           </span>
-          <h3 className="min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word">
-            {program.titlu}
-          </h3>
+          {program.titlu ? (
+            <h3 className="min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word">
+              {program.titlu}
+            </h3>
+          ) : null}
         </div>
 
         {program.subtitlu ? (

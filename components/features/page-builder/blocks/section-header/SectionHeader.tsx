@@ -12,28 +12,28 @@ const ALIGN_CLASS: Record<SectionHeaderData["aliniere"], string> = {
  * "Structure – Section Header" — a section title with an optional subtitle,
  * aligned left, centered or right. Pure (no hooks, no `"use client"`) so it
  * renders on the public page unchanged once a backend feeds it the same data
- * shape. Renders nothing when the title is empty.
+ * shape.
  */
 export function SectionHeader({ data }: { data: SectionHeaderData }) {
   const { titlu, subtitlu, aliniere } = data;
 
-  if (!titlu) return null;
-
   return (
     <section>
       <div className={`mx-auto max-w-3xl px-6 py-8 ${ALIGN_CLASS[aliniere]}`}>
-        <h2
-          className="font-heading wrap-break-word"
-          style={{
-            fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
-            fontWeight: 800,
-            lineHeight: 1.2,
-            color: "#1c1c81",
-          }}
-        >
-          {titlu}
-        </h2>
-        <RichTextContent html={subtitlu} className="mt-4 text-lg text-[#475569] wrap-break-word" />
+        {titlu ? (
+          <h2
+            className="font-heading wrap-break-word"
+            style={{
+              fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
+              fontWeight: 800,
+              lineHeight: 1.2,
+              color: "#1c1c81",
+            }}
+          >
+            {titlu}
+          </h2>
+        ) : null}
+        <RichTextContent html={subtitlu} className={`${titlu ? "mt-4" : ""} text-lg text-[#475569] wrap-break-word`} />
       </div>
     </section>
   );
