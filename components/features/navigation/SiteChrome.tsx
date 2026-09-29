@@ -23,8 +23,11 @@ export function SiteChrome({
 }) {
   const pathname = usePathname();
   const isDashboard = pathname?.startsWith("/dashboard") ?? false;
+  // The maintenance page stands alone: nav and footer links would lead into a
+  // site that is down.
+  const isMaintenance = pathname === "/mentenanta";
 
-  if (isDashboard) {
+  if (isDashboard || isMaintenance) {
     return <>{children}</>;
   }
 

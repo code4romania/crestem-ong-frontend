@@ -174,3 +174,68 @@ body {
     animation: none;
   }
 }
+
+/* Maintenance page ------------------------------------------------------- */
+
+@keyframes maintenance-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes maintenance-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, 30px) scale(1.1);
+  }
+}
+
+@keyframes maintenance-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Children fade up one after another: logo, heading, text. */
+.maintenance-stagger > * {
+  animation: maintenance-rise 600ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.maintenance-stagger > :nth-child(2) {
+  animation-delay: 120ms;
+}
+.maintenance-stagger > :nth-child(3) {
+  animation-delay: 240ms;
+}
+
+.maintenance-blob {
+  animation: maintenance-drift 14s ease-in-out infinite;
+}
+.maintenance-blob-alt {
+  animation-duration: 18s;
+  animation-direction: reverse;
+}
+
+/* Rings around the logo, turning in opposite directions. */
+.maintenance-orbit {
+  animation: maintenance-orbit 6s linear infinite;
+}
+.maintenance-orbit-reverse {
+  animation-duration: 9s;
+  animation-direction: reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maintenance-stagger > *,
+  .maintenance-blob,
+  .maintenance-orbit {
+    animation: none;
+  }
+}

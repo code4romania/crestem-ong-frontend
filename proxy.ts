@@ -19,6 +19,7 @@ import {
   isDashboardSegment,
   stripDashboardSegment,
 } from "@/lib/dashboard-routes";
+import { isMaintenanceMode, maintenanceAction } from "@/lib/maintenance";
 
 function mergedCookieHeader(request: NextRequest, overrides: Record<string, string>) {
   const cookies = new Map(request.cookies.getAll().map((c) => [c.name, c.value]));
@@ -118,7 +119,28 @@ async function routeDashboard(
   return response;
 }
 
+/** The paths the session/dashboard handling below has always covered. */
+function needsSessionHandling(request: NextRequest) {
+  const path = request.nextUrl.pathname;
+  return isDashboardRequest(request) || (path.startsWith("/api/") && !path.startsWith("/api/auth/"));
+}
+
 export async function proxy(request: NextRequest) {
+  const maintenance = maintenanceAction(request.nextUrl.pathname, isMaintenanceMode());
+  if (maintenance.type === "redirect") {
+    return NextResponse.redirect(new URL(maintenance.to, request.url));
+  }
+  if (maintenance.type === "unavailable") {
+    return NextResponse.json(
+      { error: "Platforma este în mentenanță." },
+      { status: 503, headers: { "Retry-After": "3600" } },
+    );
+  }
+
+  // The matcher is wide so maintenance mode can reach every page; everything
+  // else keeps its old scope.
+  if (!needsSessionHandling(request)) return NextResponse.next();
+
   const jwt = request.cookies.get(SESSION_COOKIE)?.value;
   if (jwt && !isJwtExpired(jwt)) {
     return routeDashboard(request, jwt);
@@ -160,5 +182,7 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/api/((?!auth/).*)"],
+  // Every route except Next's own assets and files with an extension (the
+  // logo, favicon, images), which the maintenance page itself needs to load.
+  matcher: ["/((?!_next/static|_next/image|.*\\.\\w+$).*)"],
 };
