@@ -27,6 +27,7 @@ import {
   MessageCircle,
   Loader2,
   Globe,
+  Scale,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
@@ -104,6 +105,16 @@ const FDSC_NAV_SECTIONS: DashboardNavSection[] = [
   },
 ];
 
+/** Links to the public tool pages, shown to ONG admins, ONG members and individual users. */
+const TOOLS_NAV_SECTION: DashboardNavSection = {
+  label: "Instrumente",
+  items: [
+    { href: "/biblioteca", label: "Bibliotecă", icon: BookOpen },
+    { href: "/legixplore", label: "LegiXplore", icon: Scale },
+    // { href: "/dashboard/e-learning", label: "E-Learning", icon: GraduationCap }, // E-learning: not implemented yet
+  ],
+};
+
 const ONG_NAV_SECTIONS: DashboardNavSection[] = [
   {
     items: [
@@ -117,7 +128,6 @@ const ONG_NAV_SECTIONS: DashboardNavSection[] = [
       },
       { href: "/dashboard/programe", label: "Programele mele", icon: Layers },
       { href: "/dashboard/utilizatori", label: "Utilizatori", icon: Users },
-      // { href: "/dashboard/e-learning", label: "E-Learning", icon: GraduationCap }, // E-learning: not implemented yet
       {
         href: "/dashboard/persoane-resursa",
         label: "Persoane resursă",
@@ -125,6 +135,7 @@ const ONG_NAV_SECTIONS: DashboardNavSection[] = [
       },
     ],
   },
+  TOOLS_NAV_SECTION,
 ];
 
 const MEMBER_NAV_SECTIONS: DashboardNavSection[] = [
@@ -132,18 +143,18 @@ const MEMBER_NAV_SECTIONS: DashboardNavSection[] = [
     items: [
       { href: "/dashboard/profil", label: "Profilul meu", icon: User },
       { href: "/dashboard", label: "Evaluările mele", icon: ClipboardList },
-      // { href: "/dashboard/e-learning", label: "E-Learning", icon: GraduationCap }, // E-learning: not implemented yet
     ],
   },
+  TOOLS_NAV_SECTION,
 ];
 
 const INDIVIDUAL_NAV_SECTIONS: DashboardNavSection[] = [
   {
     items: [
       { href: "/dashboard", label: "Profilul meu", icon: User },
-      // { href: "/dashboard/e-learning", label: "E-Learning", icon: GraduationCap }, // E-learning: not implemented yet
     ],
   },
+  TOOLS_NAV_SECTION,
 ];
 
 const MENTOR_NAV_SECTIONS: DashboardNavSection[] = [
