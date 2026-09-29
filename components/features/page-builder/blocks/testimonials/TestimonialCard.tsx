@@ -2,20 +2,11 @@ import { Quote } from "lucide-react";
 import type { Testimonial } from "./schema";
 import { RichTextContent } from "../../rich-text/RichTextContent";
 
-/** "Ana Moldovan" -> "AM" for the attribution avatar. */
-function initials(nume: string): string {
-  return nume
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? "")
-    .join("");
-}
-
 /**
  * One testimonial card — the shared visual for both the grid and the carousel.
  * Pure (no hooks, no `"use client"`) so the grid renders on the server and the
- * client carousel can import it unchanged.
+ * client carousel can import it unchanged. The attribution is optional and the
+ * caption is dropped entirely when none of its fields are filled.
  */
 export function TestimonialCard({ item }: { item: Testimonial }) {
   const meta = [item.functie, item.organizatie].filter(Boolean).join(" · ");
@@ -33,25 +24,20 @@ export function TestimonialCard({ item }: { item: Testimonial }) {
         html={item.testimonial}
         className="mt-4 flex-1 text-sm leading-relaxed text-[#475569] wrap-break-word"
       />
-      <figcaption className="mt-5 flex items-center gap-3">
-        <span
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold"
-          style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
-          aria-hidden
-        >
-          {initials(item.nume)}
-        </span>
-        <span className="min-w-0">
-          <span className="block text-sm font-semibold text-[#1c1c81] wrap-break-word">
-            {item.nume}
-          </span>
+      {item.nume || meta ? (
+        <figcaption className="mt-5 min-w-0">
+          {item.nume ? (
+            <span className="block text-sm font-semibold text-[#1c1c81] wrap-break-word">
+              {item.nume}
+            </span>
+          ) : null}
           {meta ? (
             <span className="block text-xs text-[#5b6779] wrap-break-word">
               {meta}
             </span>
           ) : null}
-        </span>
-      </figcaption>
+        </figcaption>
+      ) : null}
     </figure>
   );
 }

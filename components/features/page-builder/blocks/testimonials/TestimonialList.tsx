@@ -11,7 +11,10 @@ import {
 } from "lucide-react";
 import { EMPTY_TESTIMONIAL, type Testimonial } from "./schema";
 import { RichTextField } from "../../rich-text/RichTextField";
-import { hasRichText } from "../../rich-text/has-rich-text";
+import {
+  hasRichText,
+  richTextToPlainText,
+} from "../../rich-text/has-rich-text";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
@@ -36,7 +39,7 @@ export function TestimonialList({
   const [editing, setEditing] = useState<number | null>(null);
   const [draft, setDraft] = useState<Testimonial>(EMPTY_TESTIMONIAL);
 
-  const canSave = Boolean(hasRichText(draft.testimonial) && draft.nume.trim());
+  const canSave = hasRichText(draft.testimonial);
 
   const openNew = () => {
     setDraft({ ...EMPTY_TESTIMONIAL });
@@ -112,7 +115,7 @@ export function TestimonialList({
 
           <div>
             <label htmlFor="ts-item-nume" className={labelClass}>
-              Nume <span className="text-[#b91c1c]">*</span>
+              Nume
             </label>
             <input
               id="ts-item-nume"
@@ -192,7 +195,7 @@ export function TestimonialList({
                   <Quote size={16} />
                 </span>
                 <span className="truncate text-sm font-semibold text-[#1c1c81]">
-                  {item.nume || "fără nume"}
+                  {item.nume || richTextToPlainText(item.testimonial)}
                 </span>
               </button>
               <span className="flex shrink-0 items-center gap-1">

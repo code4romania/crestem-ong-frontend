@@ -39,6 +39,20 @@ export function TestimonialsEditor({
       </div>
 
       <div>
+        <span className={labelClass}>Aliniere titlu</span>
+        <SegmentedControl
+          ariaLabel="Aliniere titlu"
+          value={value.aliniereTitlu}
+          onChange={(aliniereTitlu) => set({ aliniereTitlu })}
+          options={[
+            { value: "stanga", label: "Stânga" },
+            { value: "centru", label: "Centrat" },
+            { value: "dreapta", label: "Dreapta" },
+          ]}
+        />
+      </div>
+
+      <div>
         <span className={labelClass}>Mod de afișare</span>
         <SegmentedControl
           ariaLabel="Mod de afișare"

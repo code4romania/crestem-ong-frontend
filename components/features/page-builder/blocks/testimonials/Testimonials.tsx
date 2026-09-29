@@ -2,6 +2,13 @@ import { TestimonialCard } from "./TestimonialCard";
 import { TestimonialCarousel } from "./TestimonialCarousel";
 import type { TestimonialsData } from "./schema";
 
+/** Full literal classes so the Tailwind scanner picks them up. */
+const TITLE_ALIGN_CLASS: Record<TestimonialsData["aliniereTitlu"], string> = {
+  stanga: "mr-auto text-left",
+  centru: "mx-auto text-center",
+  dreapta: "ml-auto text-right",
+};
+
 /**
  * "Testimonials" — a titled section rendering its items either as a responsive
  * grid or an Embla carousel. Server component; the carousel branch delegates to
@@ -18,14 +25,14 @@ function gridColumns(count: number): string {
 }
 
 export function Testimonials({ data }: { data: TestimonialsData }) {
-  const { titlu, modAfisare, autoplay, afiseazaNavigarea, testimoniale } = data;
+  const { titlu, aliniereTitlu, modAfisare, autoplay, afiseazaNavigarea, testimoniale } = data;
 
   return (
     <section>
       <div className="mx-auto max-w-7xl px-6 py-10">
         {titlu ? (
           <h2
-            className="mx-auto mb-12 max-w-2xl text-center font-heading wrap-break-word"
+            className={`mb-12 max-w-2xl font-heading wrap-break-word ${TITLE_ALIGN_CLASS[aliniereTitlu]}`}
             style={{
               fontSize: "clamp(2rem, 4vw, 2.75rem)",
               fontWeight: 800,
