@@ -1,8 +1,8 @@
 import { ExternalLink } from "lucide-react";
 import { SocialIcon } from "@/components/ui/SocialIcon";
 import { socialName } from "@/lib/api/footer-types";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
 import { ContactForm } from "./ContactForm";
-import { CONTACT_ICONS } from "./icons";
 import { mapEmbedUrl, mapLinkUrl } from "./map-url";
 import type { ContactData } from "./schema";
 
@@ -32,11 +32,10 @@ export function Contact({ data }: { data: ContactData }) {
             {data.infoItems.length > 0 && (
               <ul className="mt-6 space-y-5">
                 {data.infoItems.map((item, index) => {
-                  const Icon = CONTACT_ICONS[item.icon];
                   return (
                     <li key={index} className="flex items-start gap-4">
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#eafaf4] text-[#007d58]">
-                        <Icon size={18} />
+                        <LucideIcon value={item.icon} scope="contact" size={18} />
                       </span>
                       <span>
                         {item.label && (

@@ -3,7 +3,7 @@
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
 import { RichTextField } from "../../rich-text/RichTextField";
-import { IconPicker } from "./IconPicker";
+import { IconPicker } from "@/components/ui/icons/IconPicker";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { CalloutData } from "./schema";
@@ -45,6 +45,7 @@ export function CalloutEditor({
       <div>
         <span className={labelClass}>Iconiță</span>
         <IconPicker
+          scope="callout"
           value={value.icon}
           onChange={(icon) => set({ icon })}
           disabled={!value.afiseazaIcon}

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
 import { RICH_TEXT_PROSE_INVERSE } from "../../rich-text/prose";
 import { hasRichText } from "../../rich-text/has-rich-text";
-import { CALLOUT_ICONS } from "./icons";
 import type { CalloutData } from "./schema";
 
 const NAVY_BG = "#1c1c81";
@@ -32,9 +32,7 @@ const CTA_JUSTIFY: Record<CalloutData["aliniere"], string> = {
  */
 export function Callout({ data }: { data: CalloutData }) {
   const { icon, afiseazaIcon, titlu, text, primaryCta, secondaryCta, aliniere } = data;
-
-  const Icon = CALLOUT_ICONS[icon];
-  const showIcon = afiseazaIcon && Boolean(Icon);
+  const showIcon = afiseazaIcon;
   const hasPrimary = Boolean(primaryCta.label && primaryCta.href);
   const hasSecondary = Boolean(secondaryCta.label && secondaryCta.href);
 
@@ -50,7 +48,7 @@ export function Callout({ data }: { data: CalloutData }) {
           <div className={`relative flex flex-col ${COLUMN_ALIGN[aliniere]}`}>
             {showIcon ? (
               <span className="mb-6 inline-flex rounded-2xl bg-white/10 p-3.5 text-[#00d495]">
-                <Icon size={32} aria-hidden />
+                <LucideIcon value={icon} scope="callout" size={32} />
               </span>
             ) : null}
 

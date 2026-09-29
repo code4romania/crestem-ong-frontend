@@ -1,16 +1,10 @@
 import Link from "next/link";
-import { ChevronRight, type LucideIcon } from "lucide-react";
-import { CATEGORY_ICONS } from "@/components/features/page-builder/blocks/category-grid/icons";
+import { ChevronRight } from "lucide-react";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { resolveIconName } from "@/components/ui/icons/registry";
 import { hasRichText } from "@/components/features/page-builder/rich-text/has-rich-text";
 import { RICH_TEXT_PROSE } from "@/components/features/page-builder/rich-text/prose";
-
-/**
- * Indexed by a plain string on purpose: a category can carry an icon key this
- * build does not know — saved by a newer one, or edited by hand — and the card
- * should fall back rather than fail to compile against a closed union it cannot
- * guarantee at runtime.
- */
-const ICONS: Record<string, LucideIcon> = CATEGORY_ICONS;
+import { categoryTint } from "./category-tint";
 
 /**
  * Only the fields the card actually paints, rather than a whole `PublicCategory`.
@@ -22,32 +16,18 @@ export interface CategoryCardData {
   nume: string;
   slug: string;
   descriere: string;
-  /** A key from the twelve-icon palette; anything unknown falls back to `folder`. */
+  /** Stored icon value (`lucide:<name>` or a legacy key); unknown → `folder`. */
   icon: string;
   numarArticole: number;
 }
 
-/** One accent per icon, so a category's mark and its tint are one decision. */
-const ICON_TINT: Record<string, { bg: string; fg: string }> = {
-  folder: { bg: "#dcfafb", fg: "#5656e5" },
-  settings: { bg: "#dcfafb", fg: "#5656e5" },
-  scale: { bg: "#fef2f2", fg: "#dc2626" },
-  message: { bg: "#ecfdf5", fg: "#047857" },
-  trending: { bg: "#fffbeb", fg: "#b45309" },
-  users: { bg: "#f5f3ff", fg: "#7c3aed" },
-  award: { bg: "#ecfdf5", fg: "#047857" },
-  book: { bg: "#dcfafb", fg: "#5656e5" },
-  globe: { bg: "#ecfeff", fg: "#0e7490" },
-  heart: { bg: "#fdf2f8", fg: "#db2777" },
-  briefcase: { bg: "#f8fafc", fg: "#475569" },
-  calendar: { bg: "#fffbeb", fg: "#b45309" },
-};
-
 const resourceLabel = (count: number) => `${count} ${count === 1 ? "resursă" : "resurse"}`;
 
 export function CategoryCard({ category }: { category: CategoryCardData }) {
-  const Icon = ICONS[category.icon] ?? CATEGORY_ICONS.folder;
-  const tint = ICON_TINT[category.icon] ?? ICON_TINT.folder;
+  // Resolved once for the tint; `LucideIcon` resolves the same way. Unknown
+  // values (saved by a newer build, or hand-edited) fall back to `folder`.
+  const iconName = resolveIconName(category.icon, "library", "folder");
+  const tint = categoryTint(iconName);
 
   return (
     <Link
@@ -60,7 +40,7 @@ export function CategoryCard({ category }: { category: CategoryCardData }) {
         className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl"
         style={{ background: tint.bg, color: tint.fg }}
       >
-        <Icon size={20} />
+        <LucideIcon value={category.icon} scope="library" fallback="folder" size={20} />
       </span>
 
       <h2 className="font-heading text-lg font-bold text-[#1c1c81] wrap-break-word">

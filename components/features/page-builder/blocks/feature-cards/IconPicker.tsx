@@ -4,19 +4,15 @@ import { useState } from "react";
 import { ImagePlus, Loader2 } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
+import { IconPicker as LucideIconPicker } from "@/components/ui/icons/IconPicker";
 import { usePageImageUpload } from "../../upload";
-import { FEATURE_ICONS } from "./icons";
-import {
-  FEATURE_ICON_KEYS,
-  type FeatureCardIconImage,
-  type FeatureIconKey,
-} from "./schema";
+import type { FeatureCardIconImage } from "./schema";
 
 /**
- * The "Pictogramă" field for a feature card. Two mutually exclusive modes:
- * pick from the site's fixed icon collection (a 6-column grid), or upload a
- * custom image that replaces the icon in the same chip. An uploaded image wins;
- * removing it returns the card to preset mode.
+ * The "Pictogramă" field for a feature card (and a partner). Two mutually
+ * exclusive modes: pick any lucide icon (shared searchable picker), or upload
+ * a custom image that replaces the icon. An uploaded image wins; removing it
+ * returns the card to icon mode.
  */
 export function IconPicker({
   value,
@@ -24,8 +20,8 @@ export function IconPicker({
   iconImage,
   onIconImageChange,
 }: {
-  value: FeatureIconKey;
-  onChange: (next: FeatureIconKey) => void;
+  value: string;
+  onChange: (next: string) => void;
   iconImage: FeatureCardIconImage | null;
   onIconImageChange: (next: FeatureCardIconImage | null) => void;
 }) {
@@ -73,33 +69,12 @@ export function IconPicker({
         </div>
       ) : (
         <>
-          <div
-            role="radiogroup"
-            aria-label="Pictogramă"
-            className="grid grid-cols-6 gap-2"
-          >
-            {FEATURE_ICON_KEYS.map((key) => {
-              const Icon = FEATURE_ICONS[key];
-              const selected = key === value;
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  aria-label={key}
-                  onClick={() => onChange(key)}
-                  className={`flex aspect-square items-center justify-center rounded-xl border-2 transition-colors ${
-                    selected
-                      ? "border-[#5656e5] bg-[#eef1fd] text-[#5656e5]"
-                      : "border-slate-200 bg-white text-[#475569] hover:border-slate-300"
-                  }`}
-                >
-                  <Icon size={18} />
-                </button>
-              );
-            })}
-          </div>
+          <LucideIconPicker
+            value={value}
+            scope="feature"
+            onChange={onChange}
+            label="Pictogramă"
+          />
 
           <button
             type="button"

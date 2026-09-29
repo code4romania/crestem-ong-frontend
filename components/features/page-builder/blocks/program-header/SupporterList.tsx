@@ -15,8 +15,8 @@ import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
-import { IconPicker } from "./IconPicker";
-import { PROGRAM_HEADER_ICONS } from "./icons";
+import { LazyLucideIcon } from "@/components/ui/icons/LazyLucideIcon";
+import { IconPicker } from "@/components/ui/icons/IconPicker";
 import { EMPTY_SUPPORTER, type ProgramSupporter } from "./schema";
 
 const labelClass =
@@ -242,9 +242,10 @@ export function SupporterList({
             </div>
           ) : (
             <IconPicker
+              scope="program-header"
               value={draft.icon}
               onChange={(icon) => setField({ icon })}
-              ariaLabel="Iconiță susținător"
+              label="Iconiță susținător"
             />
           )}
 
@@ -298,7 +299,6 @@ export function SupporterList({
       ) : (
         <ul className="space-y-2">
           {value.map((supporter, index) => {
-            const Icon = PROGRAM_HEADER_ICONS[supporter.icon];
             return (
               <li
                 key={index}
@@ -318,7 +318,7 @@ export function SupporterList({
                         className="h-full w-full object-contain"
                       />
                     ) : (
-                      <Icon size={16} />
+                      <LazyLucideIcon value={supporter.icon} scope="program-header" size={16} />
                     )}
                   </span>
                   <span className="truncate text-sm font-semibold text-[#1c1c81]">

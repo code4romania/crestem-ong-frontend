@@ -1,5 +1,5 @@
 import { getMediaUrl } from "@/lib/api/client";
-import { PROGRAM_HEADER_ICONS } from "./icons";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
 import {
   migrateProgramHeader,
   type ProgramHeaderData,
@@ -13,7 +13,6 @@ const SUPPORTER_BG = "#f8faff";
 const BORDER = "#e2e8f0";
 
 function SupporterLogo({ supporter }: { supporter: ProgramSupporter }) {
-  const Icon = PROGRAM_HEADER_ICONS[supporter.icon];
   const useImage = supporter.sursaIcon === "imagine" && supporter.imagine;
 
   return (
@@ -30,7 +29,7 @@ function SupporterLogo({ supporter }: { supporter: ProgramSupporter }) {
           className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white md:h-20 md:w-20"
           style={{ border: `1.5px solid ${BORDER}` }}
         >
-          <Icon size={32} className="md:h-10 md:w-10" aria-hidden />
+          <LucideIcon value={supporter.icon} scope="program-header" size={32} className="md:h-10 md:w-10" />
         </span>
       )}
     </span>
@@ -58,7 +57,6 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
     statistici,
   } = migrateProgramHeader(data) as ProgramHeaderData;
 
-  const Icon = PROGRAM_HEADER_ICONS[icon];
   const useImage = sursaVizual === "imagine" && imagine;
   // The first two groups ("Implementat de", "Susținut de") share one row; any
   // later group (partners) wraps onto its own row below. Split by stored
@@ -96,7 +94,7 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">
-                  <Icon size={72} style={{ color: "#007d58" }} aria-hidden />
+                  <LucideIcon value={icon} scope="program-header" size={72} style={{ color: "#007d58" }} />
                 </div>
               )}
             </div>

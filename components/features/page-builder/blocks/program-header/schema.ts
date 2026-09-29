@@ -1,37 +1,5 @@
 import { z } from "zod";
-
-/**
- * Fixed icon palette for the programme mark and for a supporter logo. Stored as
- * a string key (not a component reference) so the schema stays serialisable and
- * the renderer stays pure — `icons.ts` maps the key back to a `lucide-react`
- * icon at render time. Same approach as `partner-collection/icons.ts`.
- */
-export const PROGRAM_HEADER_ICON_KEYS = [
-  "layers",
-  "rocket",
-  "graduation",
-  "users",
-  "handshake",
-  "building",
-  "landmark",
-  "globe",
-  "award",
-  "trophy",
-  "target",
-  "compass",
-  "sparkles",
-  "star",
-  "lightbulb",
-  "book",
-  "briefcase",
-  "calendar",
-  "chart",
-  "heart",
-  "leaf",
-  "shield",
-] as const;
-
-export type ProgramHeaderIconKey = (typeof PROGRAM_HEADER_ICON_KEYS)[number];
+import { iconSchema } from "@/components/ui/icons/schema";
 
 /** Uploaded media, same shape the Hero and Partner blocks store. */
 const imageSchema = z
@@ -49,7 +17,7 @@ const iconSourceSchema = z.enum(["predefinita", "imagine"]);
 const supporterSchema = z.object({
   nume: z.string().trim().default(""),
   sursaIcon: iconSourceSchema.default("predefinita"),
-  icon: z.enum(PROGRAM_HEADER_ICON_KEYS).default("building"),
+  icon: iconSchema("program-header", "building"),
   imagine: imageSchema,
   imagineAlt: z.string().trim().default(""),
 });
@@ -122,7 +90,7 @@ const programHeaderObjectSchema = z
   .object({
     program: programRefSchema.default({ documentId: "", nume: "" }),
     sursaVizual: iconSourceSchema.default("predefinita"),
-    icon: z.enum(PROGRAM_HEADER_ICON_KEYS).default("layers"),
+    icon: iconSchema("program-header", "layers"),
     imagine: imageSchema,
     imagineAlt: z.string().trim().default(""),
     titlu: z.string().trim().min(1, "Titlul este obligatoriu"),
@@ -185,7 +153,7 @@ export type ProgramHeaderStat = z.infer<typeof statSchema>;
 export const PROGRAM_HEADER_DEFAULTS: ProgramHeaderData = {
   program: { documentId: "", nume: "" },
   sursaVizual: "predefinita",
-  icon: "layers",
+  icon: "lucide:layers",
   imagine: null,
   imagineAlt: "",
   titlu: "",
@@ -197,7 +165,7 @@ export const PROGRAM_HEADER_DEFAULTS: ProgramHeaderData = {
 export const EMPTY_SUPPORTER: ProgramSupporter = {
   nume: "",
   sursaIcon: "predefinita",
-  icon: "building",
+  icon: "lucide:building-complex",
   imagine: null,
   imagineAlt: "",
 };

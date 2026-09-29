@@ -5,36 +5,17 @@
  * touch. Same split as `pages-types.ts`.
  */
 
-/**
- * The icon palette, identical to the backend's `LIBRARY_ICON_KEYS` in
- * `src/api/library-category/validation/library-category.ts` and to this repo's
- * own `CATEGORY_ICON_KEYS` in `blocks/category-grid/schema.ts`. Kept as a
- * literal here rather than shared: there is no shared package between the two
- * repos, and this list changes about never.
- */
-export const LIBRARY_ICON_KEYS = [
-  "folder",
-  "settings",
-  "scale",
-  "message",
-  "trending",
-  "users",
-  "award",
-  "book",
-  "globe",
-  "heart",
-  "briefcase",
-  "calendar",
-] as const;
-
-export type LibraryIconKey = (typeof LIBRARY_ICON_KEYS)[number];
-
 export interface LibrarySubcategory {
   documentId: string;
   nume: string;
   slug: string;
   descriere: string;
-  icon: LibraryIconKey;
+  /**
+   * Stored icon value: `lucide:<name>`, or a legacy key of the old twelve-icon
+   * palette (`folder`, `book`…). Read it with scope `library` — see
+   * `components/ui/icons`.
+   */
+  icon: string;
   /** Articles filed here, drafts included. */
   numarArticole: number;
 }

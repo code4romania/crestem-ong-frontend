@@ -3,7 +3,7 @@
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { Toggle } from "@/components/ui/Toggle";
 import { SOCIAL_LABEL, SOCIAL_PLATFORMS } from "@/lib/api/footer-types";
-import { IconPicker } from "./IconPicker";
+import { IconPicker } from "@/components/ui/icons/IconPicker";
 import {
   EMPTY_INFO_ITEM,
   EMPTY_SOCIAL,
@@ -212,6 +212,7 @@ export function ContactEditor({
               <div>
                 <span className={labelClass}>Iconiță</span>
                 <IconPicker
+                  scope="contact"
                   value={item.icon}
                   onChange={(icon) => setInfoItem(index, { icon })}
                 />

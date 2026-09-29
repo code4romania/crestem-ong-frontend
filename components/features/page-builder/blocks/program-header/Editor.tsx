@@ -7,7 +7,7 @@ import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
-import { IconPicker } from "./IconPicker";
+import { IconPicker } from "@/components/ui/icons/IconPicker";
 import { ProgramSelect } from "./ProgramSelect";
 import { StatList } from "./StatList";
 import { SupporterGroupList } from "./SupporterGroupList";
@@ -191,9 +191,10 @@ export function ProgramHeaderEditor({
         </div>
       ) : (
         <IconPicker
+          scope="program-header"
           value={value.icon}
           onChange={(icon) => set({ icon })}
-          ariaLabel="Iconiță program"
+          label="Iconiță program"
         />
       )}
 

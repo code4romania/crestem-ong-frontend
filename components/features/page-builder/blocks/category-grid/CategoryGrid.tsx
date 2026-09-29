@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { CATEGORY_ICONS } from "./icons";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
 import type { Category, CategoryGridData } from "./schema";
 import { RichTextContent } from "../../rich-text/RichTextContent";
 
@@ -12,7 +12,6 @@ const COL_CLASS: Record<CategoryGridData["coloane"], string> = {
 };
 
 function CategoryCard({ category }: { category: Category }) {
-  const Icon = CATEGORY_ICONS[category.icon];
   const hasCount = category.numarResurse !== null;
   const hasFooter = hasCount || Boolean(category.href);
 
@@ -22,7 +21,7 @@ function CategoryCard({ category }: { category: Category }) {
         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
         style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
       >
-        <Icon size={20} />
+        <LucideIcon value={category.icon} scope="category" size={20} />
       </span>
 
       <h3 className="mt-4 min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word">

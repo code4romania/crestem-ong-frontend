@@ -1,28 +1,7 @@
 import { z } from "zod";
+import { iconSchema } from "@/components/ui/icons/schema";
 import { ctaHasTarget } from "../shared/cta";
 import { IMAGE_RATIOS } from "../shared/image-ratio";
-
-/**
- * Fixed icon palette for a feature card. Stored as a string key (not a component
- * reference) so the schema stays serialisable and the renderer stays pure — it
- * maps the key back to a `lucide-react` icon at render time.
- */
-export const FEATURE_ICON_KEYS = [
-  "book",
-  "users",
-  "award",
-  "globe",
-  "graduation",
-  "library",
-  "layers",
-  "file",
-  "zap",
-  "calendar",
-  "chart",
-  "check",
-] as const;
-
-export type FeatureIconKey = (typeof FEATURE_ICON_KEYS)[number];
 
 /** A file uploaded via `uploadPageImageAction` — same shape as the `image` block. */
 const iconImageSchema = z.object({
@@ -33,10 +12,10 @@ const iconImageSchema = z.object({
 
 const cardSchema = z.object({
   /**
-   * Preset key from the site's icon collection. Always present; used as the
+   * Lucide icon (see `components/ui/icons`). Always present; used as the
    * fallback when `iconImage` is not set.
    */
-  icon: z.enum(FEATURE_ICON_KEYS).default("layers"),
+  icon: iconSchema("feature", "layers"),
   /**
    * Optional custom image uploaded for this card. When set it replaces the
    * preset `icon` in the same chip; clearing it returns the card to preset mode.
@@ -89,7 +68,7 @@ export const FEATURE_CARDS_DEFAULTS: FeatureCardsData = {
 };
 
 export const EMPTY_CARD: FeatureCard = {
-  icon: "layers",
+  icon: "lucide:layers",
   iconImage: null,
   titlu: "",
   descriere: "",

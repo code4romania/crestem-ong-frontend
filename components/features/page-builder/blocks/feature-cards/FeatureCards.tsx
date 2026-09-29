@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
 import { imageRatioClass, type ImageRatio } from "../shared/image-ratio";
-import { FEATURE_ICONS } from "./icons";
 import type { FeatureCard, FeatureCardsData } from "./schema";
 import { RichTextContent } from "../../rich-text/RichTextContent";
 
@@ -49,7 +49,6 @@ function Card({
   isDark: boolean;
   raport: ImageRatio;
 }) {
-  const Icon = FEATURE_ICONS[card.icon];
   const hasCta = Boolean(card.href && card.ctaLabel);
   const hasImage = Boolean(card.iconImage);
 
@@ -73,7 +72,7 @@ function Card({
           className="mx-6 mt-6 mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
           style={{ background: "rgba(0,212,149,0.12)", color: isDark ? "#00d495" : "#007d58" }}
         >
-          <Icon size={22} />
+          <LucideIcon value={card.icon} scope="feature" size={22} />
         </span>
       )}
       <div

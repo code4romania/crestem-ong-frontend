@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUp, ChevronLeft, Plus, Trash2 } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
+import { LazyLucideIcon } from "@/components/ui/icons/LazyLucideIcon";
 import { IconPicker } from "../feature-cards/IconPicker";
-import { FEATURE_ICONS } from "../feature-cards/icons";
 import { EMPTY_PARTNER, type Partner } from "./schema";
 
 const labelClass =
@@ -148,7 +148,6 @@ export function PartnerList({
       ) : (
         <ul className="space-y-2">
           {value.map((partner, index) => {
-            const Icon = FEATURE_ICONS[partner.icon];
             return (
               <li
                 key={index}
@@ -170,7 +169,7 @@ export function PartnerList({
                     </span>
                   ) : (
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#dcfafb] text-[#5656e5]">
-                      <Icon size={16} />
+                      <LazyLucideIcon value={partner.icon} scope="feature" size={16} />
                     </span>
                   )}
                   <span className="truncate text-sm font-semibold text-[#1c1c81]">

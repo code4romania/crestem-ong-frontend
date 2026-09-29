@@ -15,8 +15,8 @@ import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
-import { IconPicker } from "./IconPicker";
-import { PARTNER_ICONS } from "./icons";
+import { LazyLucideIcon } from "@/components/ui/icons/LazyLucideIcon";
+import { IconPicker } from "@/components/ui/icons/IconPicker";
 import { EMPTY_PARTNER, type Partner } from "./schema";
 
 const labelClass =
@@ -257,6 +257,7 @@ export function PartnerList({
             </div>
           ) : (
             <IconPicker
+              scope="partner-collection"
               value={draft.icon}
               onChange={(icon) => setField({ icon })}
             />
@@ -312,7 +313,6 @@ export function PartnerList({
       ) : (
         <ul className="space-y-2">
           {value.map((partner, index) => {
-            const Icon = PARTNER_ICONS[partner.icon];
             return (
               <li
                 key={index}
@@ -332,7 +332,7 @@ export function PartnerList({
                         className="h-full w-full object-contain"
                       />
                     ) : (
-                      <Icon size={16} />
+                      <LazyLucideIcon value={partner.icon} scope="partner-collection" size={16} />
                     )}
                   </span>
                   <span className="truncate text-sm font-semibold text-[#1c1c81]">

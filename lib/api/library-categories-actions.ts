@@ -7,7 +7,6 @@ import { serverApiFetch } from "./server";
 import { getCurrentUser } from "./session-server";
 import { isFdscStaff } from "@/lib/roles";
 import { sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize.server";
-import type { LibraryIconKey } from "./library-categories-types";
 
 export interface CategoryInput {
   nume: string;
@@ -15,7 +14,7 @@ export interface CategoryInput {
   /** Parent category documentId, or null for a top-level category. */
   parinte: string | null;
   descriere: string;
-  icon: LibraryIconKey;
+  icon: string;
 }
 
 const FORBIDDEN = "Nu ai permisiunea necesară pentru această acțiune.";

@@ -64,11 +64,24 @@ describe("contactSchema", () => {
     expect(parsed.success).toBe(true);
   });
 
-  it("rejects an unknown icon key", () => {
+  it("falls back to the default icon for an unknown icon key", () => {
     const parsed = contactSchema.safeParse({
       ...CONTACT_DEFAULTS,
       infoItems: [{ icon: "nonexistent", label: "X", value: "Y" }],
     });
-    expect(parsed.success).toBe(false);
+    expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect(parsed.data.infoItems[0].icon).toBe("lucide:map-pin");
+    }
+  });
+
+  it("reads the legacy contact `calendar` key as calendar-days", () => {
+    const parsed = contactSchema.safeParse({
+      ...CONTACT_DEFAULTS,
+      infoItems: [{ icon: "calendar", label: "X", value: "Y" }],
+    });
+    expect(parsed.success && parsed.data.infoItems[0].icon).toBe(
+      "lucide:calendar-days",
+    );
   });
 });

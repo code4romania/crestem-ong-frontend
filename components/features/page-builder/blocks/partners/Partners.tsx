@@ -1,5 +1,5 @@
 import { getMediaUrl } from "@/lib/api/client";
-import { FEATURE_ICONS } from "../feature-cards/icons";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
 import type { Partner, PartnersData } from "./schema";
 
 const COL_CLASS: Record<PartnersData["coloane"], string> = {
@@ -12,7 +12,6 @@ const COL_CLASS: Record<PartnersData["coloane"], string> = {
 };
 
 function PartnerCard({ partner }: { partner: Partner }) {
-  const Icon = FEATURE_ICONS[partner.icon];
 
   return (
     <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-white p-4 shadow-sm">
@@ -30,7 +29,7 @@ function PartnerCard({ partner }: { partner: Partner }) {
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
           style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
         >
-          <Icon size={20} />
+          <LucideIcon value={partner.icon} scope="feature" size={20} />
         </span>
       )}
       <div className="min-w-0">

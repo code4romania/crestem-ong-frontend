@@ -1,5 +1,5 @@
 import { getMediaUrl } from "@/lib/api/client";
-import { PARTNER_ICONS } from "./icons";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
 import type { Partner, PartnerCollectionData } from "./schema";
 
 /**
@@ -19,7 +19,6 @@ const COL_CLASS: Record<PartnerCollectionData["coloane"], string> = {
 };
 
 function PartnerCard({ partner }: { partner: Partner }) {
-  const Icon = PARTNER_ICONS[partner.icon];
   const useImage = partner.sursaIcon === "imagine" && partner.imagine;
 
   return (
@@ -33,7 +32,7 @@ function PartnerCard({ partner }: { partner: Partner }) {
             className="h-full w-full object-contain"
           />
         ) : (
-          <Icon size={28} aria-hidden />
+          <LucideIcon value={partner.icon} scope="partner-collection" size={28} />
         )}
       </span>
 

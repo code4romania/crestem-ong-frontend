@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { Calendar, ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
 import {
   imageRatioClass,
   type ImageRatioWithImplicit,
 } from "../shared/image-ratio";
-import { PROGRAMME_ICONS } from "./icons";
 import type { Program, ProgrammeGridData } from "./schema";
 import { RichTextContent } from "../../rich-text/RichTextContent";
 
@@ -23,7 +23,6 @@ function ProgramCard({
   program: Program;
   raport: ImageRatioWithImplicit;
 }) {
-  const Icon = PROGRAMME_ICONS[program.icon];
   const hasCta = Boolean(program.href && program.ctaLabel);
 
   return (
@@ -45,7 +44,7 @@ function ProgramCard({
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
             style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
           >
-            <Icon size={18} />
+            <LucideIcon value={program.icon} scope="programme" size={18} />
           </span>
           <h3 className="min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word">
             {program.titlu}

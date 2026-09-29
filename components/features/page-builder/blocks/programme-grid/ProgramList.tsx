@@ -10,13 +10,13 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
+import { LazyLucideIcon } from "@/components/ui/icons/LazyLucideIcon";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import { getMediaUrl, errorMessage } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
 import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
-import { IconPicker } from "./IconPicker";
-import { PROGRAMME_ICONS } from "./icons";
+import { IconPicker } from "@/components/ui/icons/IconPicker";
 import { EMPTY_PROGRAM, type Program } from "./schema";
 import { RichTextField } from "../../rich-text/RichTextField";
 
@@ -137,6 +137,7 @@ export function ProgramList({
           <div>
             <span className={labelClass}>Pictogramă</span>
             <IconPicker
+              scope="programme"
               value={draft.icon}
               onChange={(icon) => setField({ icon })}
             />
@@ -346,7 +347,6 @@ export function ProgramList({
       ) : (
         <ul className="space-y-2">
           {value.map((program, index) => {
-            const Icon = PROGRAMME_ICONS[program.icon];
             return (
               <li
                 key={index}
@@ -358,7 +358,7 @@ export function ProgramList({
                   className="flex min-w-0 flex-1 items-center gap-3 text-left"
                 >
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#dcfafb] text-[#5656e5]">
-                    <Icon size={16} />
+                    <LazyLucideIcon value={program.icon} scope="programme" size={16} />
                   </span>
                   <span className="truncate text-sm font-semibold text-[#1c1c81]">
                     {program.titlu || "fără titlu"}

@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, ChevronDown, ChevronUp, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { CATEGORY_ICONS } from "@/components/features/page-builder/blocks/category-grid/icons";
+import { IconPicker } from "@/components/ui/icons/IconPicker";
+import { LazyLucideIcon } from "@/components/ui/icons/LazyLucideIcon";
 import { RichTextField } from "@/components/features/page-builder/rich-text/RichTextField";
 import { hasRichText, richTextToPlainText } from "@/components/features/page-builder/rich-text/has-rich-text";
 import {
@@ -16,11 +17,9 @@ import {
 } from "@/lib/api/library-categories-actions";
 import type {
   LibraryCategory,
-  LibraryIconKey,
   LibrarySubcategory,
 } from "@/lib/api/library-categories-types";
 import { slugify } from "@/components/features/content-editor/slugify";
-import { CategoryIconPicker } from "./CategoryIconPicker";
 
 const inputClass =
   "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#007d58] focus:outline-none";
@@ -113,7 +112,7 @@ function AddForm({
   const [slug, setSlug] = useState("");
   const [slugTouched, setSlugTouched] = useState(false);
   const [descriere, setDescriere] = useState("");
-  const [icon, setIcon] = useState<LibraryIconKey>("folder");
+  const [icon, setIcon] = useState<string>("lucide:folder");
   const [pending, startTransition] = useTransition();
 
   const setName = (value: string) => {
@@ -149,7 +148,7 @@ function AddForm({
       setNume("");
       setSlug("");
       setDescriere("");
-      setIcon("folder");
+      setIcon("lucide:folder");
       setSlugTouched(false);
       router.refresh();
     });
@@ -183,7 +182,7 @@ function AddForm({
       {isCategory ? (
         <>
           <DescriereField value={descriere} onChange={setDescriere} />
-          <CategoryIconPicker value={icon} onChange={setIcon} />
+          <IconPicker value={icon} scope="library" onChange={setIcon} />
         </>
       ) : null}
     </div>
@@ -203,7 +202,7 @@ function EditForm({
   const [nume, setNume] = useState(row.nume);
   const [slug, setSlug] = useState(row.slug);
   const [descriere, setDescriere] = useState(row.descriere);
-  const [icon, setIcon] = useState<LibraryIconKey>(row.icon);
+  const [icon, setIcon] = useState<string>(row.icon);
   const [pending, startTransition] = useTransition();
 
   const submit = () => {
@@ -257,7 +256,7 @@ function EditForm({
       {isCategory ? (
         <>
           <DescriereField value={descriere} onChange={setDescriere} />
-          <CategoryIconPicker value={icon} onChange={setIcon} />
+          <IconPicker value={icon} scope="library" onChange={setIcon} />
         </>
       ) : null}
       <div className="flex justify-end gap-2">
@@ -410,14 +409,9 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                 ) : (
                   <>
                     <div className="flex min-w-0 items-start gap-3">
-                      {(() => {
-                        const Icon = CATEGORY_ICONS[category.icon] ?? CATEGORY_ICONS.folder;
-                        return (
-                          <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-[#475569]">
-                            <Icon size={16} />
-                          </span>
-                        );
-                      })()}
+                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-[#475569]">
+                        <LazyLucideIcon value={category.icon} scope="library" fallback="folder" size={16} />
+                      </span>
                       <div className="min-w-0">
                         <h3 className="font-heading text-base font-bold text-[#1c1c81]">
                           {category.nume}

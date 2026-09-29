@@ -5,10 +5,7 @@
  * `pages-types.ts`.
  */
 
-import type { LibraryIconKey } from "./library-categories-types";
 import type { ArticleSummary } from "./articles-types";
-
-export type { LibraryIconKey };
 
 export interface PublicSubcategory {
   documentId: string;
@@ -20,7 +17,7 @@ export interface PublicSubcategory {
 }
 
 export interface PublicCategory extends PublicSubcategory {
-  icon: LibraryIconKey;
+  icon: string;
   copii: PublicSubcategory[];
 }
 

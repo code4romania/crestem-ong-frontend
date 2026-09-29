@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUp, ChevronLeft, Plus, Trash2 } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
+import { LazyLucideIcon } from "@/components/ui/icons/LazyLucideIcon";
 import { IconPicker } from "./IconPicker";
-import { FEATURE_ICONS } from "./icons";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import { EMPTY_CARD, type FeatureCard } from "./schema";
 import { RichTextField } from "../../rich-text/RichTextField";
@@ -207,7 +207,6 @@ export function CardList({
       ) : (
         <ul className="space-y-2">
           {value.map((card, index) => {
-            const Icon = FEATURE_ICONS[card.icon];
             return (
               <li
                 key={index}
@@ -229,7 +228,7 @@ export function CardList({
                     </span>
                   ) : (
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#dcfafb] text-[#5656e5]">
-                      <Icon size={16} />
+                      <LazyLucideIcon value={card.icon} scope="feature" size={16} />
                     </span>
                   )}
                   <span className="truncate text-sm font-semibold text-[#1c1c81]">

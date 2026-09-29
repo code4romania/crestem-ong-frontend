@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { ArrowDown, ArrowUp, ChevronLeft, Plus, Trash2 } from "lucide-react";
-import { IconPicker } from "./IconPicker";
-import { CATEGORY_ICONS } from "./icons";
+import { LazyLucideIcon } from "@/components/ui/icons/LazyLucideIcon";
+import { IconPicker } from "@/components/ui/icons/IconPicker";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import { EMPTY_CATEGORY, type Category } from "./schema";
 import { RichTextField } from "../../rich-text/RichTextField";
@@ -94,6 +94,7 @@ export function CategoryList({
           <div>
             <span className={labelClass}>Iconiță</span>
             <IconPicker
+              scope="category"
               value={draft.icon}
               onChange={(icon) => setField({ icon })}
             />
@@ -188,7 +189,6 @@ export function CategoryList({
       ) : (
         <ul className="space-y-2">
           {value.map((category, index) => {
-            const Icon = CATEGORY_ICONS[category.icon];
             return (
               <li
                 key={index}
@@ -200,7 +200,7 @@ export function CategoryList({
                   className="flex min-w-0 flex-1 items-center gap-3 text-left"
                 >
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#dcfafb] text-[#5656e5]">
-                    <Icon size={16} />
+                    <LazyLucideIcon value={category.icon} scope="category" size={16} />
                   </span>
                   <span className="truncate text-sm font-semibold text-[#1c1c81]">
                     {category.titlu || "fără titlu"}

@@ -1,31 +1,9 @@
 import { z } from "zod";
+import { iconSchema } from "@/components/ui/icons/schema";
 import { SOCIAL_PLATFORMS } from "@/lib/api/footer-types";
 
-/**
- * Paleta fixă de iconițe pentru rândurile de informații. Stocată ca string
- * (nu ca referință de componentă), ca la `category-grid`: schema rămâne
- * serializabilă, iar `icons.ts` mapează cheia la un icon `lucide-react` abia
- * la randare.
- */
-export const CONTACT_ICON_KEYS = [
-  "map-pin",
-  "phone",
-  "smartphone",
-  "mail",
-  "clock",
-  "globe",
-  "building",
-  "user",
-  "message-circle",
-  "printer",
-  "calendar",
-  "info",
-] as const;
-
-export type ContactIconKey = (typeof CONTACT_ICON_KEYS)[number];
-
 const infoItemSchema = z.object({
-  icon: z.enum(CONTACT_ICON_KEYS).default("map-pin"),
+  icon: iconSchema("contact", "map-pin"),
   label: z.string().trim().default(""),
   value: z.string().trim().default(""),
 });
@@ -94,7 +72,7 @@ export const CONTACT_DEFAULTS: ContactData = {
 };
 
 export const EMPTY_INFO_ITEM: ContactInfoItem = {
-  icon: "map-pin",
+  icon: "lucide:map-pin",
   label: "",
   value: "",
 };
