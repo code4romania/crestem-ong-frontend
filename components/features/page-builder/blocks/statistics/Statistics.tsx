@@ -10,6 +10,28 @@ const ALIGN_CLASS: Record<StatisticsData["aliniere"], string> = {
   dreapta: "text-right",
 };
 
+/**
+ * Heading alignment. The description is width-capped, so it needs an auto
+ * margin to follow the text alignment. Full literal classes so the Tailwind
+ * scanner picks them up.
+ */
+const HEADER_ALIGN_CLASS: Record<StatisticsData["aliniereTitlu"], string> = {
+  stanga: "text-left",
+  centru: "text-center",
+  dreapta: "text-right",
+};
+const DESCRIPTION_ALIGN_CLASS: Record<StatisticsData["aliniereTitlu"], string> = {
+  stanga: "mr-auto",
+  centru: "mx-auto",
+  dreapta: "ml-auto",
+};
+
+const CTA_ALIGN_CLASS: Record<StatisticsData["aliniereButoane"], string> = {
+  stanga: "justify-start",
+  centru: "justify-center",
+  dreapta: "justify-end",
+};
+
 const COL_CLASS: Record<StatisticsData["coloane"], string> = {
   "1": "sm:grid-cols-1 lg:grid-cols-1",
   "2": "sm:grid-cols-2 lg:grid-cols-2",
@@ -51,8 +73,10 @@ export function Statistics({ data }: { data: StatisticsData }) {
     descriere,
     statistici,
     coloane,
+    aliniereTitlu,
     aliniere,
     separator,
+    aliniereButoane,
     primaryCta,
     secondaryCta,
   } = data;
@@ -75,7 +99,7 @@ export function Statistics({ data }: { data: StatisticsData }) {
     <section>
       <div className="mx-auto max-w-7xl px-6 py-8">
         {hasHeader ? (
-          <div className="mb-10">
+          <div className={`mb-10 ${HEADER_ALIGN_CLASS[aliniereTitlu]}`}>
             {subtitlu ? (
               <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#007d58] wrap-break-word">
                 {subtitlu}
@@ -94,7 +118,10 @@ export function Statistics({ data }: { data: StatisticsData }) {
                 {titlu}
               </h2>
             ) : null}
-            <RichTextContent html={descriere} className="mt-4 max-w-2xl text-[#475569] wrap-break-word" />
+            <RichTextContent
+              html={descriere}
+              className={`mt-4 max-w-2xl text-[#475569] wrap-break-word ${DESCRIPTION_ALIGN_CLASS[aliniereTitlu]}`}
+            />
           </div>
         ) : null}
 
@@ -107,7 +134,9 @@ export function Statistics({ data }: { data: StatisticsData }) {
         ) : null}
 
         {hasPrimary || hasSecondary ? (
-          <div className="mt-10 flex flex-wrap gap-4">
+          <div
+            className={`mt-10 flex flex-wrap gap-4 ${CTA_ALIGN_CLASS[aliniereButoane]}`}
+          >
             {hasPrimary ? (
               <Link
                 href={primaryCta.href}

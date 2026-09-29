@@ -67,6 +67,21 @@ export function StatisticsEditor({
         />
       </div>
 
+      <div>
+        <span className={labelClass}>Aliniere titlu</span>
+        <SegmentedControl
+          ariaLabel="Aliniere titlu"
+          // Blocks saved before this field existed open without it.
+          value={value.aliniereTitlu ?? "stanga"}
+          onChange={(aliniereTitlu) => set({ aliniereTitlu })}
+          options={[
+            { value: "stanga", label: "Stânga" },
+            { value: "centru", label: "Centrat" },
+            { value: "dreapta", label: "Dreapta" },
+          ]}
+        />
+      </div>
+
       <StatList
         value={value.statistici}
         onChange={(statistici) => set({ statistici })}
@@ -160,6 +175,21 @@ export function StatisticsEditor({
           <p className={errorClass}>{errors.secondaryCta}</p>
         )}
       </fieldset>
+
+      <div>
+        <span className={labelClass}>Aliniere butoane</span>
+        <SegmentedControl
+          ariaLabel="Aliniere butoane"
+          // Blocks saved before this field existed open without it.
+          value={value.aliniereButoane ?? "stanga"}
+          onChange={(aliniereButoane) => set({ aliniereButoane })}
+          options={[
+            { value: "stanga", label: "Stânga" },
+            { value: "centru", label: "Centrat" },
+            { value: "dreapta", label: "Dreapta" },
+          ]}
+        />
+      </div>
     </div>
   );
 }

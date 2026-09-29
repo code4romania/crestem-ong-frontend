@@ -15,9 +15,13 @@ export const statisticsSchema = z
     statistici: z.array(statSchema).default([]),
     // Text spec says 1-4; the screenshot shows a 2-wide grid.
     coloane: z.enum(["1", "2", "3", "4"]).default("2"),
+    /** How the heading (eyebrow, title, description) aligns. */
+    aliniereTitlu: z.enum(["stanga", "centru", "dreapta"]).default("stanga"),
     /** How each counter cell aligns its value, label and description. */
     aliniere: z.enum(["stanga", "centru", "dreapta"]).default("stanga"),
     separator: z.boolean().default(false),
+    /** How the CTA row aligns. */
+    aliniereButoane: z.enum(["stanga", "centru", "dreapta"]).default("stanga"),
     primaryCta: ctaSchema.default(CTA_DEFAULTS),
     secondaryCta: ctaSchema.default(CTA_DEFAULTS),
   })
@@ -52,8 +56,10 @@ export const STATISTICS_DEFAULTS: StatisticsData = {
   descriere: "",
   statistici: [],
   coloane: "2",
+  aliniereTitlu: "stanga",
   aliniere: "stanga",
   separator: false,
+  aliniereButoane: "stanga",
   primaryCta: { ...CTA_DEFAULTS },
   secondaryCta: { ...CTA_DEFAULTS },
 };
