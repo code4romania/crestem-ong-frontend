@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter_Tight } from "next/font/google";
 import { Toaster } from "sonner";
 import { SiteChrome } from "@/components/features/navigation/SiteChrome";
 import { PirschAnalytics } from "@/components/features/analytics/PirschAnalytics";
@@ -19,16 +19,11 @@ const EMPTY_FOOTER: FooterContent = {
   socials: [],
 };
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-});
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+// Variable font: headlines use ExtraBold (800), subheadlines Semibold (600),
+// body Regular (400). latin-ext carries the Romanian ș/ț glyphs.
+const interTight = Inter_Tight({
+  variable: "--font-inter-tight",
+  subsets: ["latin", "latin-ext"],
 });
 
 export const metadata: Metadata = {
@@ -68,7 +63,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="ro"
-      className={`${inter.variable} ${plusJakartaSans.variable} h-full antialiased`}
+      className={`${interTight.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <SiteChrome

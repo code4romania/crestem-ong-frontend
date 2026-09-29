@@ -105,8 +105,8 @@
   --color-status-finished-foreground: var(--status-finished-foreground);
 
   --radius-lg: var(--radius);
-  --font-sans: var(--font-inter);
-  --font-heading: var(--font-plus-jakarta-sans);
+  --font-sans: var(--font-inter-tight);
+  --font-heading: var(--font-inter-tight);
 }
 
 body {
