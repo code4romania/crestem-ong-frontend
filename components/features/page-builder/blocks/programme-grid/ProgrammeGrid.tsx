@@ -26,19 +26,23 @@ function ProgramCard({
   const hasCta = Boolean(program.href && program.ctaLabel);
 
   return (
-    <div className="flex min-w-0 flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-border">
+    // Two rows of the parent grid (image, body) via subgrid, so cards in the
+    // same row line up even when "original" images have different heights.
+    <div className="row-span-2 grid min-w-0 grid-rows-subgrid gap-0 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-border">
       {program.imagine ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
           src={getMediaUrl(program.imagine.url)}
           alt={program.imagineAlt || program.titlu}
-          className={`block w-full ${
+          className={`block w-full self-center ${
             raport === "implicit" ? "h-44 object-cover" : imageRatioClass(raport)
           }`}
         />
       ) : null}
 
-      <div className="flex min-w-0 flex-1 flex-col p-6">
+      <div
+        className={`flex min-w-0 flex-col p-6 ${program.imagine ? "" : "row-span-2"}`}
+      >
         <div className="flex items-center gap-3">
           <span
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
