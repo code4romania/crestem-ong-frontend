@@ -16,20 +16,22 @@ function SupporterLogo({ supporter }: { supporter: ProgramSupporter }) {
   const useImage = supporter.sursaIcon === "imagine" && supporter.imagine;
 
   return (
-    <span className="flex h-16 shrink-0 items-center justify-center text-[#5656e5] md:h-20">
+    // Logos are uploaded tightly cropped, so a modest height keeps the band
+    // subordinate to the title and hero visual above it.
+    <span className="flex h-10 shrink-0 items-center justify-center text-[#5656e5] md:h-12">
       {useImage && supporter.imagine ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
           src={getMediaUrl(supporter.imagine.url)}
           alt={supporter.imagineAlt || supporter.nume}
-          className="h-full w-auto max-w-[280px] object-contain"
+          className="h-full w-auto max-w-[200px] object-contain md:max-w-[240px]"
         />
       ) : (
         <span
-          className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white md:h-20 md:w-20"
+          className="flex h-10 w-10 items-center justify-center rounded-xl bg-white md:h-12 md:w-12"
           style={{ border: `1.5px solid ${BORDER}` }}
         >
-          <LucideIcon value={supporter.icon} scope="program-header" size={32} className="md:h-10 md:w-10" />
+          <LucideIcon value={supporter.icon} scope="program-header" size={20} className="md:h-6 md:w-6" />
         </span>
       )}
     </span>
@@ -134,7 +136,15 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
             {rows.map((row, rowIndex) => (
               <div
                 key={rowIndex}
-                className="flex flex-col gap-4 py-3 md:flex-row md:flex-wrap md:items-center md:gap-x-16 md:gap-y-4"
+                // Two groups ("Implementat de" / "Susținut de") split the row
+                // into equal halves; a lone group (e.g. partners) runs full width.
+                // Label sits above the logos until `lg`, where there's room
+                // for it to sit beside them.
+                className={`flex flex-col gap-4 py-3 md:gap-x-16 lg:py-3.5 lg:gap-y-4 ${
+                  row.length === 2
+                    ? "md:grid md:grid-cols-2 md:items-start lg:items-center"
+                    : "lg:flex-row lg:flex-wrap lg:items-center"
+                }`}
                 style={
                   rowIndex > 0 ? { borderTop: `1px solid ${BORDER}` } : undefined
                 }
@@ -142,12 +152,14 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
                 {row.map((group, groupIndex) => (
                   <div
                     key={groupIndex}
-                    className="flex flex-col gap-4 md:flex-row md:items-center md:gap-8"
+                    className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-8"
                   >
                     {group.titlu ? (
                       <span
-                        className={`text-xs font-semibold uppercase tracking-widest text-[#5b6779] wrap-break-word md:shrink-0 ${
-                          groupIndex === 0 ? "md:w-48" : ""
+                        className={`text-xs font-semibold uppercase tracking-widest text-[#5b6779] wrap-break-word lg:shrink-0 ${
+                          // Fixed width only lines logos up across rows; with
+                          // a single row it would just leave a gap.
+                          groupIndex === 0 && rows.length > 1 ? "lg:w-48" : ""
                         }`}
                       >
                         {group.titlu}
@@ -169,13 +181,16 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
       {hasStats ? (
         <div style={{ background: NAVY_BG }}>
           <div className="mx-auto max-w-7xl px-6">
-            <div className="flex flex-wrap gap-x-12 gap-y-6 py-5">
+            {/* Equal halves on mobile so the stats line up in columns; on
+                desktop they flow in a single row, with content trimmed to the logos'
+                48px height so both bands share padding and height. */}
+            <div className="grid grid-cols-2 gap-x-6 gap-y-6 py-5 md:flex md:flex-wrap md:gap-x-12 lg:py-3.5">
               {statistici.map((stat, index) => (
                 <div key={index} className="min-w-0 text-left">
-                  <p className="font-heading text-2xl font-extrabold text-white wrap-break-word md:text-3xl">
+                  <p className="font-heading text-2xl font-extrabold text-white wrap-break-word md:text-3xl lg:leading-7">
                     {stat.valoare}
                   </p>
-                  <p className="mt-1 text-sm text-white/70 wrap-break-word">
+                  <p className="mt-1 text-sm lg:mt-0.5 lg:leading-4.5 text-white/70 wrap-break-word">
                     {stat.eticheta}
                   </p>
                 </div>
