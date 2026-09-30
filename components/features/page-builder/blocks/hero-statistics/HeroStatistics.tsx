@@ -85,7 +85,7 @@ export function HeroStatistics({ data }: { data: HeroStatisticsData }) {
             <h1
               className="mb-6 text-white font-heading wrap-break-word"
               style={{
-                fontSize: "clamp(2.5rem, 5vw, 3.75rem)",
+                fontSize: "clamp(2.25rem, 4.5vw, 3.25rem)",
                 fontWeight: 800,
                 lineHeight: 1.1,
               }}
