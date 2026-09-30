@@ -149,20 +149,38 @@ export function EditMentorProfileModal({
           />
         </div>
 
-        <div className="px-6 py-4 border-t border-border flex justify-end gap-3">
-          <button type="button" onClick={onClose} disabled={isPending} className="px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors disabled:opacity-50 text-[#475569]">
-            Anulează
-          </button>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={isPending || !nume.trim()}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-70"
-            style={{ background: "#5656e5" }}
+        <div className="px-6 py-4 border-t border-border space-y-4">
+          <p
+            className="rounded-xl px-4 py-3 text-sm bg-[#f8faff] border-[1.5px] border-[#e2e8f0]"
+            style={{ color: "#334155" }}
           >
-            {isPending && <Loader2 size={14} className="animate-spin" />}
-            {isPending ? "Se salvează..." : "Salvează"}
-          </button>
+            Sunt de acord cu prelucrarea datelor cu caracter personal conform{" "}
+            <a
+              href="/politica-de-confidentialitate"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold underline hover:opacity-80"
+              style={{ color: "#5656e5" }}
+            >
+              politicii
+            </a>{" "}
+            privind colectarea datelor cu caracter personal
+          </p>
+          <div className="flex justify-end gap-3">
+            <button type="button" onClick={onClose} disabled={isPending} className="px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors disabled:opacity-50 text-[#475569]">
+              Anulează
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={isPending || !nume.trim()}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-70"
+              style={{ background: "#5656e5" }}
+            >
+              {isPending && <Loader2 size={14} className="animate-spin" />}
+              {isPending ? "Se salvează..." : "Salvează"}
+            </button>
+          </div>
         </div>
       </div>
     </ModalOverlay>
