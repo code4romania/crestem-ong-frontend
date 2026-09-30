@@ -82,7 +82,7 @@ export const videoSchema = z
     legenda: z.string().trim().default(""),
     credit: z.string().trim().default(""),
     latime: z.enum(["compacta", "standard", "lata", "full"]).default("standard"),
-    raport: z.enum(["16:9", "4:3", "original"]).default("16:9"),
+    raport: z.enum(["16:9", "4:3", "9:16", "original"]).default("16:9"),
     autoplay: z.boolean().default(false),
     controale: z.boolean().default(true),
     loop: z.boolean().default(false),

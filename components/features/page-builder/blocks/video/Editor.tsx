@@ -412,6 +412,7 @@ export function VideoEditor({
           options={[
             { value: "16:9", label: "16:9" },
             { value: "4:3", label: "4:3" },
+            { value: "9:16", label: "9:16" },
             { value: "original", label: "Original" },
           ]}
         />

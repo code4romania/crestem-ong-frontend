@@ -12,9 +12,13 @@ const WIDTH_CLASS: Record<VideoData["latime"], string> = {
   full: "max-w-none",
 };
 
-const ASPECT_CLASS: Record<"16:9" | "4:3", string> = {
+const ASPECT_CLASS: Record<"16:9" | "4:3" | "9:16", string> = {
   "16:9": "aspect-video",
   "4:3": "aspect-[4/3]",
+  // Capped and centred: at the block's full width a vertical frame would be
+  // several screens tall. Width is also tied to viewport height (75svh × 9/16)
+  // so the whole frame stays on screen on short laptop displays.
+  "9:16": "mx-auto aspect-[9/16] w-full max-w-[min(24rem,calc(75svh*9/16))]",
 };
 
 /**
