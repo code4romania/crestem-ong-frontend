@@ -80,9 +80,10 @@ export function CookieNotice() {
         </button>
       </div>
       <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-        Pentru a-ți oferi o experiență bună de navigare, utilizăm fișiere de tip
-        cookie. Dacă nu ești de acord cu utilizarea cookie-urilor, poți să îți
-        retragi consimțământul prin modificarea setărilor din browser-ul tău.
+        Acest site folosește cookie-uri tehnice strict necesare pentru
+        funcționarea contului (atunci când te autentifici) și statistici de
+        trafic anonime care nu plasează fișiere pe dispozitivul tău. Nu folosim
+        cookie-uri de publicitate sau de urmărire.
       </p>
       <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
         <button
