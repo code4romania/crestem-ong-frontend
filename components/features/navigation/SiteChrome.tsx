@@ -5,6 +5,7 @@ import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import type { NavUser } from "./types";
 import { PageTransition } from "@/components/ui/PageTransition";
+import { CookieNotice } from "@/components/features/cookie-notice/CookieNotice";
 import type { FooterContent } from "@/lib/api/footer-types";
 import type { MenuItem } from "@/lib/api/menus";
 
@@ -38,6 +39,7 @@ export function SiteChrome({
         <PageTransition>{children}</PageTransition>
       </main>
       <Footer content={footerContent} items={footerItems} />
+      <CookieNotice />
     </>
   );
 }
