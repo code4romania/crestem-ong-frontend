@@ -44,7 +44,7 @@ export function TermsCheckbox({ registration, checked, error }: TermsCheckboxPro
           </div>
         </div>
         <span className="text-sm leading-relaxed" style={{ color: "#475569" }}>
-          Sunt de acord cu{" "}
+          Prin crearea contului, confirm că am citit și sunt de acord cu{" "}
           <Link
             href="/termeni-si-conditii"
             className="underline font-medium"
@@ -52,7 +52,7 @@ export function TermsCheckbox({ registration, checked, error }: TermsCheckboxPro
           >
             Termenii și condițiile
           </Link>{" "}
-          și cu{" "}
+          și{" "}
           <Link
             href="/politica-de-confidentialitate"
             className="underline font-medium"
@@ -60,7 +60,7 @@ export function TermsCheckbox({ registration, checked, error }: TermsCheckboxPro
           >
             Politica de confidențialitate
           </Link>
-          . Datele nu vor fi partajate cu terțe părți și pot fi șterse oricând la cerere.
+          .
         </span>
       </label>
       {error && (
