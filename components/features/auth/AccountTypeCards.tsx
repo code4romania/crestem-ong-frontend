@@ -9,7 +9,7 @@ const OPTIONS = [
     iconColor: "#5656e5",
     title: "Creează cont de utilizator",
     desc: "Accesează resurse, ghiduri și instrumente din biblioteca Crestem.ONG. Ideal dacă ești profesionist în sectorul nonprofit sau dorești să explorezi platforma.",
-    benefits: ["Acces la biblioteca completă de resurse", "Participare la webinarii și evenimente", "Newsletter săptămânal cu resurse noi"],
+    benefits: ["Acces la biblioteca completă de resurse", "Participare la webinarii și evenimente", "Newsletter cu resurse și noutăți"],
     cta: "Creează cont",
     href: "/inregistrare/utilizator",
     available: true,

@@ -33,6 +33,9 @@ export function EditMentorProfileModal({
     avatarFile: null,
     avatarRemoved: false,
   });
+  // Required on every save and never stored — it only gates the button.
+  const [dataConsent, setDataConsent] = useState(false);
+  const [consentError, setConsentError] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isPending, startTransition] = useTransition();
@@ -40,6 +43,11 @@ export function EditMentorProfileModal({
   const handleSubmit = () => {
     setError(null);
     setFieldErrors({});
+
+    if (!dataConsent) {
+      setConsentError(true);
+      return;
+    }
 
     startTransition(async () => {
       try {
@@ -150,22 +158,44 @@ export function EditMentorProfileModal({
         </div>
 
         <div className="px-6 py-4 border-t border-border space-y-4">
-          <p
-            className="rounded-xl px-4 py-3 text-sm bg-[#f8faff] border-[1.5px] border-[#e2e8f0]"
-            style={{ color: "#334155" }}
+          <div
+            className={`rounded-xl px-4 py-3 border-[1.5px] ${
+              consentError ? "bg-[#fff5f5] border-[#fca5a5]" : "bg-[#f8faff] border-[#e2e8f0]"
+            }`}
           >
-            Sunt de acord cu prelucrarea datelor cu caracter personal conform{" "}
-            <a
-              href="/politica-de-confidentialitate"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold underline hover:opacity-80"
-              style={{ color: "#5656e5" }}
-            >
-              politicii
-            </a>{" "}
-            privind colectarea datelor cu caracter personal
-          </p>
+            <div className="flex items-start gap-3">
+              <input
+                id="edit-mentor-profile-consent"
+                type="checkbox"
+                checked={dataConsent}
+                onChange={(e) => {
+                  setDataConsent(e.target.checked);
+                  if (e.target.checked) setConsentError(false);
+                }}
+                aria-invalid={consentError}
+                aria-describedby={consentError ? "edit-mentor-profile-consent-error" : undefined}
+                className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#5656e5]"
+              />
+              <label htmlFor="edit-mentor-profile-consent" className="text-sm cursor-pointer" style={{ color: "#334155" }}>
+                Sunt de acord cu prelucrarea datelor cu caracter personal conform{" "}
+                <a
+                  href="/politica-de-confidentialitate"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold underline hover:opacity-80"
+                  style={{ color: "#5656e5" }}
+                >
+                  politicii
+                </a>{" "}
+                privind colectarea datelor cu caracter personal
+              </label>
+            </div>
+            {consentError && (
+              <p id="edit-mentor-profile-consent-error" className="mt-2 ml-7 text-xs" style={{ color: "#b91c1c" }}>
+                Trebuie să fii de acord cu prelucrarea datelor pentru a salva profilul.
+              </p>
+            )}
+          </div>
           <div className="flex justify-end gap-3">
             <button type="button" onClick={onClose} disabled={isPending} className="px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors disabled:opacity-50 text-[#475569]">
               Anulează
