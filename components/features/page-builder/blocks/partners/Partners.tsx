@@ -1,5 +1,6 @@
 import { getMediaUrl } from "@/lib/api/client";
 import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { hasIcon } from "@/components/ui/icons/names";
 import type { Partner, PartnersData } from "./schema";
 
 const COL_CLASS: Record<PartnersData["coloane"], string> = {
@@ -24,14 +25,14 @@ function PartnerCard({ partner }: { partner: Partner }) {
             className="h-full w-full object-contain"
           />
         </span>
-      ) : (
+      ) : hasIcon(partner.icon) ? (
         <span
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
           style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
         >
           <LucideIcon value={partner.icon} scope="feature" size={20} />
         </span>
-      )}
+      ) : null}
       <div className="min-w-0">
         <p className="truncate text-sm font-bold text-[#1c1c81]">
           {partner.nume}

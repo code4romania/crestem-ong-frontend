@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Calendar, ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { hasIcon } from "@/components/ui/icons/names";
 import {
   imageRatioClass,
   type ImageRatioWithImplicit,
@@ -44,12 +45,14 @@ function ProgramCard({
         className={`flex min-w-0 flex-col p-6 ${program.imagine ? "" : "row-span-2"}`}
       >
         <div className="flex items-center gap-3">
-          <span
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-            style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
-          >
-            <LucideIcon value={program.icon} scope="programme" size={18} />
-          </span>
+          {hasIcon(program.icon) ? (
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+              style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
+            >
+              <LucideIcon value={program.icon} scope="programme" size={18} />
+            </span>
+          ) : null}
           {program.titlu ? (
             <h3 className="min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word">
               {program.titlu}

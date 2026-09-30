@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { hasIcon } from "@/components/ui/icons/names";
 import type { Category, CategoryGridData } from "./schema";
 import { RichTextContent } from "../../rich-text/RichTextContent";
 
@@ -14,23 +15,26 @@ const COL_CLASS: Record<CategoryGridData["coloane"], string> = {
 function CategoryCard({ category }: { category: Category }) {
   const hasCount = category.numarResurse !== null;
   const hasFooter = hasCount || Boolean(category.href);
+  const showIcon = hasIcon(category.icon);
 
   return (
     <div className="flex min-w-0 flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-border">
-      <span
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
-        style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
-      >
-        <LucideIcon value={category.icon} scope="category" size={20} />
-      </span>
+      {showIcon ? (
+        <span
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+          style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
+        >
+          <LucideIcon value={category.icon} scope="category" size={20} />
+        </span>
+      ) : null}
 
       {category.titlu ? (
-        <h3 className="mt-4 min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word">
+        <h3 className={`${showIcon ? "mt-4" : ""} min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word`}>
           {category.titlu}
         </h3>
       ) : null}
 
-      <RichTextContent html={category.descriere} className={`${category.titlu ? "mt-2" : "mt-4"} text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3`} />
+      <RichTextContent html={category.descriere} className={`${category.titlu ? "mt-2" : showIcon ? "mt-4" : ""} text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3`} />
 
       {hasFooter ? (
         <div className="mt-auto flex items-center gap-3 pt-5">

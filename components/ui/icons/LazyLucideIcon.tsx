@@ -2,7 +2,7 @@
 
 import { createElement, type CSSProperties } from "react";
 import type { IconScope } from "./legacy";
-import { FALLBACK_ICON } from "./names";
+import { FALLBACK_ICON, hasIcon } from "./names";
 import { useIconRegistry } from "./use-icon-registry";
 
 /**
@@ -27,6 +27,7 @@ export function LazyLucideIcon({
   style?: CSSProperties;
 }) {
   const registry = useIconRegistry();
+  if (!hasIcon(value)) return null;
   if (!registry) {
     return (
       <span

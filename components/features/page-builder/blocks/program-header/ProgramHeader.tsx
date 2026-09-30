@@ -1,5 +1,6 @@
 import { getMediaUrl } from "@/lib/api/client";
 import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { hasIcon } from "@/components/ui/icons/names";
 import {
   migrateProgramHeader,
   type ProgramHeaderData,
@@ -14,6 +15,7 @@ const BORDER = "#e2e8f0";
 
 function SupporterLogo({ supporter }: { supporter: ProgramSupporter }) {
   const useImage = supporter.sursaIcon === "imagine" && supporter.imagine;
+  if (!useImage && !hasIcon(supporter.icon)) return null;
 
   return (
     // Logos are uploaded tightly cropped, so a modest height keeps the band
@@ -31,7 +33,12 @@ function SupporterLogo({ supporter }: { supporter: ProgramSupporter }) {
           className="flex h-10 w-10 items-center justify-center rounded-xl bg-white md:h-12 md:w-12"
           style={{ border: `1.5px solid ${BORDER}` }}
         >
-          <LucideIcon value={supporter.icon} scope="program-header" size={20} className="md:h-6 md:w-6" />
+          <LucideIcon
+            value={supporter.icon}
+            scope="program-header"
+            size={20}
+            className="md:h-6 md:w-6"
+          />
         </span>
       )}
     </span>
@@ -60,6 +67,7 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
   } = migrateProgramHeader(data) as ProgramHeaderData;
 
   const useImage = sursaVizual === "imagine" && imagine;
+  const showVisual = useImage || hasIcon(icon);
   // All groups share one wrapping band; a group that doesn't fit beside the
   // previous one moves to the next line as a whole (see the band below).
   const groups = grupuri.filter((g) => g.sustinatori.length > 0);
@@ -75,28 +83,35 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
           {/* The visual is kept to under half the row so the whole header —
               title, supporters band and stats bar — fits in one laptop-height
               screen instead of pushing the supporters below the fold. */}
-          <div className="w-full shrink-0 md:w-5/12">
-            <div
-              className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-white"
-              style={{
-                boxShadow: "0 4px 24px rgba(28,28,129,0.10)",
-                border: `1.5px solid ${BORDER}`,
-              }}
-            >
-              {useImage && imagine ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src={getMediaUrl(imagine.url)}
-                  alt={imagineAlt || titlu}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                  <LucideIcon value={icon} scope="program-header" size={72} style={{ color: "#007d58" }} />
-                </div>
-              )}
+          {showVisual ? (
+            <div className="w-full shrink-0 md:w-5/12">
+              <div
+                className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-white"
+                style={{
+                  boxShadow: "0 4px 24px rgba(28,28,129,0.10)",
+                  border: `1.5px solid ${BORDER}`,
+                }}
+              >
+                {useImage && imagine ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={getMediaUrl(imagine.url)}
+                    alt={imagineAlt || titlu}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center">
+                    <LucideIcon
+                      value={icon}
+                      scope="program-header"
+                      size={72}
+                      style={{ color: "#007d58" }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          ) : null}
 
           <div className="flex w-full min-w-0 flex-col items-center md:flex-1 md:items-start">
             {titlu ? (
@@ -127,7 +142,9 @@ export function ProgramHeader({ data }: { data: ProgramHeaderData }) {
       </div>
 
       {groups.length > 0 ? (
-        <div style={{ background: SUPPORTER_BG, borderTop: `1px solid ${BORDER}` }}>
+        <div
+          style={{ background: SUPPORTER_BG, borderTop: `1px solid ${BORDER}` }}
+        >
           <div className="mx-auto max-w-7xl px-6">
             <div
               // Each group is sized to its logos on one line; when the next

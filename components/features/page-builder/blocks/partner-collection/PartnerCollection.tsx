@@ -1,5 +1,6 @@
 import { getMediaUrl } from "@/lib/api/client";
 import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { hasIcon } from "@/components/ui/icons/names";
 import type { Partner, PartnerCollectionData } from "./schema";
 
 /**
@@ -20,21 +21,28 @@ const COL_CLASS: Record<PartnerCollectionData["coloane"], string> = {
 
 function PartnerCard({ partner }: { partner: Partner }) {
   const useImage = partner.sursaIcon === "imagine" && partner.imagine;
+  const showMark = useImage || hasIcon(partner.icon);
 
   return (
     <div className="flex min-w-0 items-center gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-border">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden text-[#5656e5]">
-        {useImage && partner.imagine ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            src={getMediaUrl(partner.imagine.url)}
-            alt={partner.imagineAlt || partner.nume}
-            className="h-full w-full object-contain"
-          />
-        ) : (
-          <LucideIcon value={partner.icon} scope="partner-collection" size={28} />
-        )}
-      </span>
+      {showMark ? (
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden text-[#5656e5]">
+          {useImage && partner.imagine ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={getMediaUrl(partner.imagine.url)}
+              alt={partner.imagineAlt || partner.nume}
+              className="h-full w-full object-contain"
+            />
+          ) : (
+            <LucideIcon
+              value={partner.icon}
+              scope="partner-collection"
+              size={28}
+            />
+          )}
+        </span>
+      ) : null}
 
       <span className="flex min-w-0 flex-col">
         <span className="text-xs font-bold uppercase leading-tight tracking-wide text-[#1c1c81] wrap-break-word">

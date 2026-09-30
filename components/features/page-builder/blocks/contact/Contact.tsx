@@ -2,6 +2,7 @@ import { ExternalLink } from "lucide-react";
 import { SocialIcon } from "@/components/ui/SocialIcon";
 import { socialName } from "@/lib/api/footer-types";
 import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { hasIcon } from "@/components/ui/icons/names";
 import { ContactForm } from "./ContactForm";
 import { mapEmbedUrl, mapLinkUrl } from "./map-url";
 import type { ContactData } from "./schema";
@@ -34,9 +35,11 @@ export function Contact({ data }: { data: ContactData }) {
                 {data.infoItems.map((item, index) => {
                   return (
                     <li key={index} className="flex items-start gap-4">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#eafaf4] text-[#007d58]">
-                        <LucideIcon value={item.icon} scope="contact" size={18} />
-                      </span>
+                      {hasIcon(item.icon) ? (
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#eafaf4] text-[#007d58]">
+                          <LucideIcon value={item.icon} scope="contact" size={18} />
+                        </span>
+                      ) : null}
                       <span>
                         {item.label && (
                           <span className="block text-xs font-bold tracking-wide text-muted-foreground">

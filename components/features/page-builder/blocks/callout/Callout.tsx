@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { hasIcon } from "@/components/ui/icons/names";
 import { RICH_TEXT_PROSE_INVERSE } from "../../rich-text/prose";
 import { hasRichText } from "../../rich-text/has-rich-text";
 import type { CalloutData } from "./schema";
@@ -32,7 +33,7 @@ const CTA_JUSTIFY: Record<CalloutData["aliniere"], string> = {
  */
 export function Callout({ data }: { data: CalloutData }) {
   const { icon, afiseazaIcon, titlu, text, primaryCta, secondaryCta, aliniere } = data;
-  const showIcon = afiseazaIcon;
+  const showIcon = afiseazaIcon && hasIcon(icon);
   const hasPrimary = Boolean(primaryCta.label && primaryCta.href);
   const hasSecondary = Boolean(secondaryCta.label && secondaryCta.href);
 

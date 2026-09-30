@@ -66,6 +66,10 @@ describe("iconSchema", () => {
     expect(schema.parse(schema.parse("lucide:book"))).toBe("lucide:book");
   });
 
+  it("keeps a cleared icon cleared", () => {
+    expect(schema.parse("")).toBe("");
+  });
+
   it("uses the default for missing or invalid values instead of failing", () => {
     expect(schema.parse(undefined)).toBe("lucide:layers");
     expect(schema.parse("junk")).toBe("lucide:layers");

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { hasIcon } from "@/components/ui/icons/names";
 import { imageRatioClass, type ImageRatio } from "../shared/image-ratio";
 import type { FeatureCard, FeatureCardsData } from "./schema";
 import { RichTextContent } from "../../rich-text/RichTextContent";
@@ -51,6 +52,7 @@ function Card({
 }) {
   const hasCta = Boolean(card.href && card.ctaLabel);
   const hasImage = Boolean(card.iconImage);
+  const showIcon = !hasImage && hasIcon(card.icon);
 
   return (
     <div
@@ -67,16 +69,16 @@ function Card({
           alt=""
           className={`block w-full shrink-0 ${imageRatioClass(raport)}`}
         />
-      ) : (
+      ) : showIcon ? (
         <span
           className="mx-6 mt-6 mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
           style={{ background: "rgba(0,212,149,0.12)", color: isDark ? "#00d495" : "#007d58" }}
         >
           <LucideIcon value={card.icon} scope="feature" size={22} />
         </span>
-      )}
+      ) : null}
       <div
-        className={`flex min-h-0 flex-1 flex-col p-6 ${hasImage ? "" : "pt-0"}`}
+        className={`flex min-h-0 flex-1 flex-col p-6 ${showIcon ? "pt-0" : ""}`}
       >
         {card.titlu ? (
           <h3

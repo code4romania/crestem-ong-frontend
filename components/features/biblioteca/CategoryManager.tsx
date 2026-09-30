@@ -182,7 +182,7 @@ function AddForm({
       {isCategory ? (
         <>
           <DescriereField value={descriere} onChange={setDescriere} />
-          <IconPicker value={icon} scope="library" onChange={setIcon} />
+          <IconPicker value={icon} scope="library" onChange={setIcon} allowNone={false} />
         </>
       ) : null}
     </div>
@@ -256,7 +256,7 @@ function EditForm({
       {isCategory ? (
         <>
           <DescriereField value={descriere} onChange={setDescriere} />
-          <IconPicker value={icon} scope="library" onChange={setIcon} />
+          <IconPicker value={icon} scope="library" onChange={setIcon} allowNone={false} />
         </>
       ) : null}
       <div className="flex justify-end gap-2">

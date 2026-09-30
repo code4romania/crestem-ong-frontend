@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { Search } from "lucide-react";
 import { RECOMMENDED_ICONS, type IconScope } from "./legacy";
-import { FALLBACK_ICON, toStored } from "./names";
+import { FALLBACK_ICON, NO_ICON, hasIcon, toStored } from "./names";
 import { parseIconValue } from "./resolve";
 import { searchIcons } from "./search";
 import { loadIconTags } from "./tags";
@@ -17,7 +17,9 @@ const MAX_RESULTS = 200;
  * over all lucide icons (names + lucide's English tags, as on lucide.dev) and a
  * grid of results. With no query it shows the icons the blocks used to offer.
  * `value` is the stored value (legacy keys are read through `scope`);
- * `onChange` always receives the stored `"lucide:<name>"` form.
+ * `onChange` receives the stored `"lucide:<name>"` form, or `NO_ICON` when
+ * `allowNone` and the editor clears the icon (by clicking the selected one
+ * again, or "Elimină").
  */
 export function IconPicker({
   value,
@@ -25,19 +27,24 @@ export function IconPicker({
   onChange,
   label = "Iconiță",
   disabled = false,
+  allowNone = true,
 }: {
   value: unknown;
   scope: IconScope;
   onChange: (next: string) => void;
   label?: string;
   disabled?: boolean;
+  allowNone?: boolean;
 }) {
   // The icon set loads on demand (see `use-icon-registry.ts`); until then the
   // selection is read by shape alone, which is all the grid needs to mark it.
   const registry = useIconRegistry();
-  const current = registry
-    ? registry.resolveIconName(value, scope)
-    : (parseIconValue(value, scope) ?? FALLBACK_ICON);
+  const current =
+    allowNone && !hasIcon(value)
+      ? null
+      : registry
+        ? registry.resolveIconName(value, scope)
+        : (parseIconValue(value, scope) ?? FALLBACK_ICON);
   const [query, setQuery] = useState("");
   const [tags, setTags] = useState<Record<string, string[]> | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -56,7 +63,7 @@ export function IconPicker({
 
   const matches = useMemo(() => {
     if (!query.trim()) {
-      return RECOMMENDED_ICONS.includes(current)
+      return current === null || RECOMMENDED_ICONS.includes(current)
         ? RECOMMENDED_ICONS
         : [current, ...RECOMMENDED_ICONS];
     }
@@ -64,7 +71,7 @@ export function IconPicker({
   }, [query, tags, current]);
 
   const shown = matches.slice(0, MAX_RESULTS);
-  const focusIndex = Math.max(shown.indexOf(current), 0);
+  const focusIndex = current === null ? 0 : Math.max(shown.indexOf(current), 0);
 
   const onGridKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const buttons = Array.from(
@@ -121,7 +128,20 @@ export function IconPicker({
               : `${matches.length} ${matches.length === 1 ? "rezultat" : "rezultate"}`
           : "Recomandate"}
         <span className="float-right">
-          Selectat: <span className="font-semibold text-[#1c1c81]">{current}</span>
+          Selectat:{" "}
+          <span className="font-semibold text-[#1c1c81]">
+            {current ?? "niciuna"}
+          </span>
+          {allowNone && current !== null ? (
+            <button
+              type="button"
+              onClick={() => onChange(NO_ICON)}
+              disabled={disabled}
+              className="ml-2 font-semibold text-[#b91c1c] hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5656e5] rounded disabled:cursor-not-allowed"
+            >
+              Elimină
+            </button>
+          ) : null}
         </span>
       </p>
 
@@ -153,7 +173,9 @@ export function IconPicker({
                 title={name}
                 tabIndex={index === focusIndex ? 0 : -1}
                 disabled={disabled}
-                onClick={() => onChange(toStored(name))}
+                onClick={() =>
+                  onChange(selected && allowNone ? NO_ICON : toStored(name))
+                }
                 className={`flex h-11 items-center justify-center rounded-xl border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5656e5] disabled:cursor-not-allowed ${
                   selected
                     ? "border-[#5656e5] bg-[#eef1fd] text-[#5656e5]"

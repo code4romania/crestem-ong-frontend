@@ -11,6 +11,17 @@
  */
 export const ICON_PREFIX = "lucide:";
 
+/**
+ * Stored when the editor deliberately cleared the icon. Distinct from a
+ * missing key (an old block, which gets the block's default) and from junk
+ * (which falls back): blocks render no icon at all for it.
+ */
+export const NO_ICON = "";
+
+export function hasIcon(value: unknown): boolean {
+  return value !== NO_ICON;
+}
+
 /** Rendered when a stored value can't be resolved to any icon. */
 export const FALLBACK_ICON = "circle-question-mark";
 

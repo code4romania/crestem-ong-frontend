@@ -1,6 +1,6 @@
 import { createElement, type CSSProperties } from "react";
 import type { IconScope } from "./legacy";
-import { FALLBACK_ICON } from "./names";
+import { FALLBACK_ICON, hasIcon } from "./names";
 import { getIconComponent, resolveIconName } from "./registry";
 
 /**
@@ -8,6 +8,7 @@ import { getIconComponent, resolveIconName } from "./registry";
  * Resolves the value itself rather than trusting parsed data: children of
  * Section / Columns blocks and the builder canvas render raw block JSON.
  * No hooks and no `"use client"`, so public pages get inline SVG and no JS.
+ * Renders nothing for a cleared icon (`NO_ICON`).
  */
 export function LucideIcon({
   value,
@@ -25,6 +26,7 @@ export function LucideIcon({
   className?: string;
   style?: CSSProperties;
 }) {
+  if (!hasIcon(value)) return null;
   const name = resolveIconName(value, scope, fallback);
   const Icon = getIconComponent(name) ?? getIconComponent(FALLBACK_ICON)!;
   // `createElement`, not JSX: `Icon` is a static lucide component looked up by
