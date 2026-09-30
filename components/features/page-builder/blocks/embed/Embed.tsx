@@ -1,4 +1,5 @@
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, SquareArrowOutUpRight } from "lucide-react";
+import { ThirdPartyFrame } from "../shared/ThirdPartyFrame";
 import type { EmbedData } from "./schema";
 
 const ASPECT_CLASS: Record<EmbedData["raport"], string> = {
@@ -11,7 +12,9 @@ const ASPECT_CLASS: Record<EmbedData["raport"], string> = {
  * "Embed" — an external URL shown in a responsive <iframe>, with an eyebrow
  * label and an "open in new tab" link for sites that block framing. Pure (no
  * hooks, no `"use client"`) so it renders on the public page unchanged once a
- * backend feeds it the same shape.
+ * backend feeds it the same shape; the click-to-load gate that keeps the third
+ * party (and its cookies) off the page until asked for lives in
+ * `ThirdPartyFrame`.
  */
 export function Embed({ data }: { data: EmbedData }) {
   const { titlu, url, raport } = data;
@@ -35,13 +38,13 @@ export function Embed({ data }: { data: EmbedData }) {
         <div
           className={`overflow-hidden rounded-2xl border border-[#e2e8f0] bg-[#f8fafc] ${ASPECT_CLASS[raport]}`}
         >
-          <iframe
+          <ThirdPartyFrame
             src={url}
             title={titlu || host || "Conținut încorporat"}
-            loading="lazy"
+            actionLabel="Încarcă conținutul"
+            notice={`Conținutul se încarcă de la ${host || "un site extern"}, care poate seta cookies.`}
+            icon={<SquareArrowOutUpRight size={22} />}
             allowFullScreen
-            referrerPolicy="no-referrer-when-downgrade"
-            className="h-full w-full border-0"
           />
         </div>
         <a

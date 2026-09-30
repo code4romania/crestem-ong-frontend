@@ -1,8 +1,9 @@
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, MapPin } from "lucide-react";
 import { SocialIcon } from "@/components/ui/SocialIcon";
 import { socialName } from "@/lib/api/footer-types";
 import { LucideIcon } from "@/components/ui/icons/LucideIcon";
 import { hasIcon } from "@/components/ui/icons/names";
+import { ThirdPartyFrame } from "../shared/ThirdPartyFrame";
 import { ContactForm } from "./ContactForm";
 import { mapEmbedUrl, mapLinkUrl } from "./map-url";
 import type { ContactData } from "./schema";
@@ -92,13 +93,15 @@ export function Contact({ data }: { data: ContactData }) {
                     {data.mapTitle}
                   </h3>
                 )}
-                <div className="relative mt-3 overflow-hidden rounded-xl border border-slate-200">
-                  <iframe
+                <div className="relative mt-3 h-56 overflow-hidden rounded-xl border border-slate-200">
+                  {/* Click-to-load: Google Maps poate seta cookies, deci nu
+                      se încarcă nimic de la Google până nu cere vizitatorul. */}
+                  <ThirdPartyFrame
                     src={embed}
                     title={data.mapAddress}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="h-56 w-full border-0"
+                    actionLabel="Afișează harta"
+                    notice="Harta se încarcă de la Google Maps, care poate seta cookies."
+                    icon={<MapPin size={22} />}
                   />
                   <a
                     href={link}
