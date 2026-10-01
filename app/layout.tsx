@@ -27,6 +27,8 @@ const interTight = Inter_Tight({
 });
 
 export const metadata: Metadata = {
+  // Link previews need absolute image URLs; Next builds them from this base.
+  metadataBase: new URL("https://crestem.ong"),
   title: "Crestem ONG",
   description:
     "Crestem este platforma care reunește resurse, instrumente juridice, programe de accelerare și o comunitate vibrantă pentru toți cei care construiesc schimbarea în România.",
