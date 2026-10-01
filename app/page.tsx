@@ -3,10 +3,11 @@ import { notFound } from "next/navigation";
 import { getPublicPage } from "@/lib/api/pages";
 import { BlockRenderer } from "@/components/features/pages/BlockRenderer";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPublicPage("/");
-  return { title: page ? `${page.titlu} - Crestem ONG` : "Crestem ONG" };
-}
+// The landing page's CMS title is an admin label ("Homepage"), so it stays out
+// of the tab and search title; search engines rewrite generic titles like that.
+export const metadata: Metadata = {
+  title: "Creștem.ONG – platformă pentru dezvoltarea ONG-urilor",
+};
 
 export default async function Home() {
   // The landing page is an ordinary page row that answers at `/`, so it reads
