@@ -47,6 +47,8 @@ export function TermsCheckbox({ registration, checked, error }: TermsCheckboxPro
           Prin crearea contului, confirm că am citit și sunt de acord cu{" "}
           <Link
             href="/termeni-si-conditii"
+            target="_blank"
+            rel="noopener noreferrer"
             className="underline font-medium"
             style={{ color: "#007d58" }}
           >
@@ -55,6 +57,8 @@ export function TermsCheckbox({ registration, checked, error }: TermsCheckboxPro
           și{" "}
           <Link
             href="/politica-de-confidentialitate"
+            target="_blank"
+            rel="noopener noreferrer"
             className="underline font-medium"
             style={{ color: "#007d58" }}
           >
