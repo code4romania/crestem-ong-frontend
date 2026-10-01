@@ -19,7 +19,15 @@ import {
   isDashboardSegment,
   stripDashboardSegment,
 } from "@/lib/dashboard-routes";
-import { isMaintenanceMode, maintenanceAction } from "@/lib/maintenance";
+import {
+  MAINTENANCE_BYPASS_COOKIE,
+  MAINTENANCE_BYPASS_PARAM,
+  bypassTokenMatches,
+  isMaintenanceMode,
+  maintenanceAction,
+  maintenanceBypassCookieOptions,
+} from "@/lib/maintenance";
+import type { MaintenanceBypass } from "@/lib/maintenance";
 
 function mergedCookieHeader(request: NextRequest, overrides: Record<string, string>) {
   const cookies = new Map(request.cookies.getAll().map((c) => [c.name, c.value]));
@@ -125,8 +133,36 @@ function needsSessionHandling(request: NextRequest) {
   return isDashboardRequest(request) || (path.startsWith("/api/") && !path.startsWith("/api/auth/"));
 }
 
+/** A valid token in the URL wins, so a fresh link always re-issues the cookie. */
+function maintenanceBypass(request: NextRequest): MaintenanceBypass {
+  if (bypassTokenMatches(request.nextUrl.searchParams.get(MAINTENANCE_BYPASS_PARAM) ?? undefined)) {
+    return "requested";
+  }
+  if (bypassTokenMatches(request.cookies.get(MAINTENANCE_BYPASS_COOKIE)?.value)) {
+    return "granted";
+  }
+  return "none";
+}
+
 export async function proxy(request: NextRequest) {
-  const maintenance = maintenanceAction(request.nextUrl.pathname, isMaintenanceMode());
+  const maintenance = maintenanceAction(
+    request.nextUrl.pathname,
+    isMaintenanceMode(),
+    maintenanceBypass(request),
+  );
+  if (maintenance.type === "grant-bypass") {
+    // Drop the token from the address bar so it does not linger in history
+    // or get copied along with the link.
+    const target = request.nextUrl.clone();
+    target.searchParams.delete(MAINTENANCE_BYPASS_PARAM);
+    const response = NextResponse.redirect(target);
+    response.cookies.set(
+      MAINTENANCE_BYPASS_COOKIE,
+      request.nextUrl.searchParams.get(MAINTENANCE_BYPASS_PARAM)!,
+      maintenanceBypassCookieOptions,
+    );
+    return response;
+  }
   if (maintenance.type === "redirect") {
     return NextResponse.redirect(new URL(maintenance.to, request.url));
   }
