@@ -64,7 +64,12 @@ export async function createFdscUserAction(
     });
   } catch (err) {
     const parsed = parseApiError(err, "Nu am putut crea utilizatorul.");
-    return { error: parsed.message || undefined, fieldErrors: parsed.fieldErrors };
+    // Field errors alone leave `message` empty; the modal scrolls, so the field
+    // in question can be out of view — the alert says where to look.
+    return {
+      error: parsed.message || "Unele câmpuri nu sunt completate corect. Verifică mesajele de sub câmpuri.",
+      fieldErrors: parsed.fieldErrors,
+    };
   }
 
   revalidateDashboardPath("/dashboard/fdsc/utilizatori");

@@ -216,6 +216,7 @@ export function AddFdscUserModal({ dimensions, onClose }: { dimensions: Dimensio
                   dimensions={dimensions}
                   value={mentorFields}
                   onChange={setMentorFields}
+                  errors={fieldErrors}
                 />
               )}
 

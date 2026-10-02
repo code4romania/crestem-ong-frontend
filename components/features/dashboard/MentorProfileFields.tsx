@@ -21,16 +21,26 @@ export interface MentorProfileFieldsValue {
   avatarRemoved: boolean;
 }
 
+/** Backend validation messages for the fields this component renders. */
+export type MentorProfileFieldErrors = Partial<Record<"bio" | "avatar" | "dimensiuni" | "ariiDeExpertiza", string>>;
+
+function FieldError({ message }: { message?: string | null }) {
+  if (!message) return null;
+  return <p className="mt-1.5 text-xs" style={{ color: "#b91c1c" }}>{message}</p>;
+}
+
 export function MentorProfileFields({
   dimensions,
   value,
   onChange,
   existingAvatarUrl,
+  errors = {},
 }: {
   dimensions: Dimension[];
   value: MentorProfileFieldsValue;
   onChange: (value: MentorProfileFieldsValue) => void;
   existingAvatarUrl?: string | null;
+  errors?: MentorProfileFieldErrors;
 }) {
   const [avatarError, setAvatarError] = useState<string | null>(null);
   const [isDraggingAvatar, setIsDraggingAvatar] = useState(false);
@@ -146,7 +156,7 @@ export function MentorProfileFields({
             </button>
           )}
         </div>
-        {avatarError && <p className="mt-1.5 text-xs" style={{ color: "#b91c1c" }}>{avatarError}</p>}
+        <FieldError message={avatarError ?? errors.avatar} />
       </div>
 
       <div>
@@ -157,6 +167,7 @@ export function MentorProfileFields({
           value={value.bio}
           onChange={(bio) => onChange({ ...value, bio })}
         />
+        <FieldError message={errors.bio} />
       </div>
 
       <div>
@@ -183,6 +194,7 @@ export function MentorProfileFields({
             );
           })}
         </div>
+        <FieldError message={errors.dimensiuni} />
       </div>
 
       <div>
@@ -197,6 +209,7 @@ export function MentorProfileFields({
           onChange={(e) => onChange({ ...value, ariiDeExpertiza: e.target.value })}
           placeholder="separate prin virgulă"
         />
+        <FieldError message={errors.ariiDeExpertiza} />
       </div>
     </>
   );

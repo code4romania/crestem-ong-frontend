@@ -131,7 +131,7 @@ export function AddMentorModal({ dimensions, onClose }: { dimensions: Dimension[
             )}
           </div>
 
-          <MentorProfileFields dimensions={dimensions} value={mentorFields} onChange={setMentorFields} />
+          <MentorProfileFields dimensions={dimensions} value={mentorFields} onChange={setMentorFields} errors={fieldErrors} />
 
           <p className="text-xs text-muted-foreground">
             Utilizatorul va primi o invitație pe email pentru a-și activa contul.
