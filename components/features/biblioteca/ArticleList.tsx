@@ -26,6 +26,7 @@ import type {
 import { AUDIENCE_LABEL, VISIBILITY_AUDIENCES } from "@/lib/api/pages-types";
 import type { LibraryCategory } from "@/lib/api/library-categories-types";
 import { useDebouncedCallback } from "@/lib/hooks/useDebouncedCallback";
+import { formatDate } from "@/lib/utils/date";
 
 type Pagination = ArticleListResult["meta"]["pagination"];
 
@@ -37,9 +38,6 @@ interface Filters {
 }
 
 const SEARCH_DEBOUNCE_MS = 400;
-
-const formatDate = (value: string | null) =>
-  value ? new Date(value).toLocaleDateString("ro-RO") : "—";
 
 export function ArticleList({
   articles,

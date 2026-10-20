@@ -1,13 +1,6 @@
 import Link from "next/link";
 import type { OngOverview } from "@/lib/api/ongs";
-
-function formatDate(iso: string) {
-  return new Intl.DateTimeFormat("ro-RO", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(iso));
-}
+import { formatLongDate } from "@/lib/utils/date";
 
 function StatCard({
   label,
@@ -159,7 +152,7 @@ export function OrgOverviewStats({
         <ProgramsCard programs={programs} />
         <StatCard
           label="Data finalizare evaluare"
-          value={lastFinalizedDate ? formatDate(lastFinalizedDate) : "—"}
+          value={lastFinalizedDate ? formatLongDate(lastFinalizedDate) : "—"}
         />
       </div>
     </div>

@@ -1,12 +1,7 @@
 import Link from "next/link";
 import { CheckCircle2, Clock, AlertCircle, XCircle } from "lucide-react";
 import type { OngEvaluationListItem } from "@/lib/api/evaluations";
-
-function formatDate(iso: string | null) {
-  if (!iso) return "—";
-  const [year, month, day] = iso.slice(0, 10).split("-");
-  return `${day}.${month}.${year}`;
-}
+import { formatDate } from "@/lib/utils/date";
 
 const STATUS_LABELS: Record<string, string> = {
   neinceput: "Neînceput",

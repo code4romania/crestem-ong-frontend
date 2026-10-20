@@ -3,12 +3,7 @@ import type { Dimension } from "@/lib/api/dimensions";
 import { DimensionsBreakdown } from "@/components/features/evaluari/DimensionsBreakdown";
 import { EvaluationRespondentsTable } from "./EvaluationRespondentsTable";
 import { collectComments } from "./evaluation-comments";
-
-function formatDate(iso: string) {
-  if (!iso) return "—";
-  const [year, month, day] = iso.slice(0, 10).split("-");
-  return `${day}.${month}.${year}`;
-}
+import { formatDate } from "@/lib/utils/date";
 
 /**
  * `anonymous` withholds who answered what: arguments lose their author and the

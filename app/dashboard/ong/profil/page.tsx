@@ -9,14 +9,7 @@ import { OngProfileHeaderActions } from "@/components/features/organizatii/OngPr
 import { ProfileActionsMenu } from "@/components/features/dashboard/ProfileActionsMenu";
 import { ProfileActivitySections } from "@/components/features/dashboard/ProfileActivitySections";
 import { ProfileChangeLogSection } from "@/components/features/dashboard/ProfileChangeLogSection";
-
-function formatJoinDate(iso: string) {
-  return new Intl.DateTimeFormat("ro-RO", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(iso));
-}
+import { formatLongDate } from "@/lib/utils/date";
 
 export default async function OngProfilPage() {
   // The contact person on /ongs/me is the logged-in admin's own account, so the
@@ -198,7 +191,7 @@ export default async function OngProfilPage() {
               Membru din
             </dt>
             <dd className="font-semibold" style={{ color: "#1c1c81" }}>
-              {user ? formatJoinDate(user.createdAt) : "—"}
+              {user ? formatLongDate(user.createdAt) : "—"}
             </dd>
           </div>
         </dl>

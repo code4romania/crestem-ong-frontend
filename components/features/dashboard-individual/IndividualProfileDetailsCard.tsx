@@ -5,10 +5,7 @@ import { Pencil } from "lucide-react";
 import { userDisplayName } from "@/lib/api/auth";
 import type { IndividualProfile } from "@/lib/api/individual-profile";
 import { EditIndividualProfileModal } from "./EditIndividualProfileModal";
-
-function formatJoinDate(iso: string) {
-  return new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "long", year: "numeric" }).format(new Date(iso));
-}
+import { formatLongDate } from "@/lib/utils/date";
 
 export function IndividualProfileDetailsCard({ profile }: { profile: IndividualProfile }) {
   const [editing, setEditing] = useState(false);
@@ -50,7 +47,7 @@ export function IndividualProfileDetailsCard({ profile }: { profile: IndividualP
                 <>
                   Membru din{" "}
                   <span className="font-semibold" style={{ color: "#1c1c81" }}>
-                    {formatJoinDate(profile.createdAt)}
+                    {formatLongDate(profile.createdAt)}
                   </span>
                 </>
               )}

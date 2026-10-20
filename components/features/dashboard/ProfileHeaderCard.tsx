@@ -1,7 +1,4 @@
-
-function formatJoinDate(iso: string) {
-  return new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "long", year: "numeric" }).format(new Date(iso));
-}
+import { formatLongDate } from "@/lib/utils/date";
 
 export function ProfileHeaderCard({
   nume,
@@ -40,7 +37,7 @@ export function ProfileHeaderCard({
             <p className="text-xs mt-1 text-muted-foreground">
               Membru din{" "}
               <span className="font-semibold" style={{ color: "#1c1c81" }}>
-                {formatJoinDate(createdAt)}
+                {formatLongDate(createdAt)}
               </span>
             </p>
           </div>

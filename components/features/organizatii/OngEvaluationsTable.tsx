@@ -1,22 +1,15 @@
 import Link from "next/link";
 import type { OngEvaluation } from "@/lib/api/ongs";
-
-function formatDate(iso: string) {
-  return new Intl.DateTimeFormat("ro-RO", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(iso));
-}
+import { formatLongDate } from "@/lib/utils/date";
 
 function completionPeriod(evaluation: OngEvaluation) {
   const phase = evaluation.phases?.[0];
   if (phase)
-    return `${formatDate(phase.startDate)} – ${formatDate(phase.endDate)}`;
+    return `${formatLongDate(phase.startDate)} – ${formatLongDate(phase.endDate)}`;
   if (evaluation.finished && evaluation.finishedAt) {
-    return `${formatDate(evaluation.createdAt)} – ${formatDate(evaluation.finishedAt)}`;
+    return `${formatLongDate(evaluation.createdAt)} – ${formatLongDate(evaluation.finishedAt)}`;
   }
-  return `${formatDate(evaluation.createdAt)} – prezent`;
+  return `${formatLongDate(evaluation.createdAt)} – prezent`;
 }
 
 export function OngEvaluationsTable({

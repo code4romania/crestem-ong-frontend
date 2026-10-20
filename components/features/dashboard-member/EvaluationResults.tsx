@@ -4,17 +4,18 @@ import type { Dimension } from "@/lib/api/dimensions";
 import type { EvaluationDetail } from "@/lib/api/evaluations";
 import { DimensionsBreakdown, type SelectedAnswers } from "@/components/features/evaluari/DimensionsBreakdown";
 import { collectComments } from "@/components/features/organizatii/evaluation-comments";
+import { toBucharestDay } from "@/lib/utils/date";
 
 const MONTHS_RO = ["ian", "feb", "mar", "apr", "mai", "iun", "iul", "aug", "sep", "oct", "noi", "dec"];
 
 function formatShortDate(iso: string) {
-  const [year, month, day] = iso.slice(0, 10).split("-").map(Number);
+  const [year, month, day] = (toBucharestDay(iso) ?? "").split("-").map(Number);
   return `${day} ${MONTHS_RO[month - 1]} ${year}`;
 }
 
 function formatPeriod(startIso: string, endIso: string) {
-  const [startYear, startMonth, startDay] = startIso.slice(0, 10).split("-").map(Number);
-  const [endYear, endMonth, endDay] = endIso.slice(0, 10).split("-").map(Number);
+  const [startYear, startMonth, startDay] = (toBucharestDay(startIso) ?? "").split("-").map(Number);
+  const [endYear, endMonth, endDay] = (toBucharestDay(endIso) ?? "").split("-").map(Number);
   if (startYear === endYear && startMonth === endMonth) {
     return `${startDay}–${endDay} ${MONTHS_RO[startMonth - 1]} ${startYear}`;
   }
