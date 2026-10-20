@@ -19,8 +19,9 @@ const COL_CLASS: Record<BibliotecaCategoriiData["coloane"], string> = {
  * builder's client canvas. The categories arrive pre-resolved in
  * `categoriiRezolvate`.
  *
- * It renders the same `CategoryCard` as `/biblioteca` itself, so the two views
- * of the same data cannot drift apart.
+ * It renders the `CategoryCard` the category and article pages share, so every
+ * view of the same data stays consistent. `/biblioteca` is itself a CMS page
+ * carrying this block now — there is no hardcoded landing route left.
  */
 export function BibliotecaCategorii({ data }: { data: BibliotecaCategoriiData }) {
   const categorii = data.categoriiRezolvate ?? [];
@@ -32,7 +33,7 @@ export function BibliotecaCategorii({ data }: { data: BibliotecaCategoriiData })
 
   return (
     <section className="relative overflow-hidden">
-      <div className="relative mx-auto max-w-7xl px-6 py-20">
+      <div className="relative mx-auto max-w-7xl px-6 py-10">
         {data.titlu ? (
           <div className="mx-auto mb-12 max-w-2xl text-center">
             <h2
@@ -41,7 +42,7 @@ export function BibliotecaCategorii({ data }: { data: BibliotecaCategoriiData })
                 fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
                 fontWeight: 800,
                 lineHeight: 1.15,
-                color: "#162040",
+                color: "#1c1c81",
               }}
             >
               {data.titlu}

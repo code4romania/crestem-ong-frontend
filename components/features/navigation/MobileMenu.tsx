@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, User } from "lucide-react";
 import { LinkPendingIndicator } from "@/components/ui/LinkPendingIndicator";
+import { RefreshableLink } from "@/components/ui/RefreshableLink";
 import type { MenuItem } from "@/lib/api/menus";
 import type { NavUser } from "./types";
 
@@ -61,7 +61,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                   {expanded && (
                     <div className="pl-4 flex flex-col gap-0.5">
                       {item.children.map((child) => (child.url ? (
-                        <Link
+                        <RefreshableLink
                           key={`${child.label}-${child.url}`}
                           href={child.url}
                           onClick={closeIfSamePage(child.url)}
@@ -69,7 +69,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
                         >
                           {child.label}
                           <LinkPendingIndicator />
-                        </Link>
+                        </RefreshableLink>
                       ) : null))}
                     </div>
                   )}
@@ -80,7 +80,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
             if (!item.url) return null;
             const isActive = pathname === item.url;
             return (
-              <Link
+              <RefreshableLink
                 key={item.label}
                 href={item.url}
                 onClick={closeIfSamePage(item.url)}
@@ -88,7 +88,7 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
               >
                 {item.label}
                 <LinkPendingIndicator />
-              </Link>
+              </RefreshableLink>
             );
           })}
 
@@ -97,41 +97,44 @@ export function MobileMenu({ user, items }: { user: NavUser | null; items: MenuI
               <>
                 <p
                   className="flex items-center gap-1.5 px-3 text-sm font-medium truncate"
-                  style={{ color: "#162040" }}
+                  style={{ color: "#1c1c81" }}
                 >
                   <User size={16} className="shrink-0" />
                   {user.nume}
                 </p>
-                <Link
+                {/* A plain anchor for the same reason as in `Navbar`: the
+                    dashboard must be entered with a real page load, so Pirsch
+                    re-runs its one-time `data-exclude` check there. The page
+                    load closes this menu on its own, so `closeIfSamePage` goes
+                    with it. */}
+                <a
                   href={user.dashboardHref}
-                  onClick={closeIfSamePage(user.dashboardHref)}
                   className="flex items-center justify-center gap-2 py-3 text-center rounded-lg text-sm font-semibold text-white"
-                  style={{ background: "#2dbe8f" }}
+                  style={{ background: "#00d495" }}
                 >
                   Mergi la dashboard
-                  <LinkPendingIndicator />
-                </Link>
+                </a>
               </>
             ) : (
               <>
-                <Link
+                <RefreshableLink
                   href="/autentificare"
                   onClick={closeIfSamePage("/autentificare")}
                   className="flex items-center justify-center gap-2 py-3 text-center rounded-lg text-sm font-medium transition-colors hover:bg-muted"
-                  style={{ color: "#162040", border: "1.5px solid #e2e8f0" }}
+                  style={{ color: "#1c1c81", border: "1.5px solid #e2e8f0" }}
                 >
                   Intră în cont
                   <LinkPendingIndicator />
-                </Link>
-                <Link
+                </RefreshableLink>
+                <RefreshableLink
                   href="/inregistrare"
                   onClick={closeIfSamePage("/inregistrare")}
                   className="flex items-center justify-center gap-2 py-3 text-center rounded-lg text-sm font-semibold text-white"
-                  style={{ background: "#2dbe8f" }}
+                  style={{ background: "#00d495" }}
                 >
                   Înregistrează-te
                   <LinkPendingIndicator />
-                </Link>
+                </RefreshableLink>
               </>
             )}
           </div>

@@ -40,7 +40,7 @@ export default async function MentorIntalniriPage({ searchParams }: PageProps) {
 
   return (
     <div>
-      <h1 className="text-2xl font-heading font-extrabold mb-1" style={{ color: "#162040" }}>
+      <h1 className="text-2xl font-heading font-extrabold mb-1" style={{ color: "#1c1c81" }}>
         Întâlniri
       </h1>
       <p className="text-sm text-muted-foreground mb-6">Cont persoană resursă</p>
@@ -48,7 +48,7 @@ export default async function MentorIntalniriPage({ searchParams }: PageProps) {
       {nextMeeting && <NextMeetingBanner meeting={nextMeeting} primaryLabel={nextMeeting.ong?.name ?? "—"} />}
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-        <h2 className="font-heading font-bold text-lg" style={{ color: "#162040" }}>
+        <h2 className="font-heading font-bold text-lg" style={{ color: "#1c1c81" }}>
           Toate întâlnirile
         </h2>
         <AddMentorMeetingModal ongs={ongs} dimensions={dimensions} />

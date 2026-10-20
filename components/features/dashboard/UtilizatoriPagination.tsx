@@ -3,16 +3,22 @@ import type { UsersPagination } from "@/lib/api/users";
 
 export function UtilizatoriPagination({
   pagination,
-  search,
-  role,
-  ong,
-  status,
+  search = "",
+  role = "",
+  ong = "",
+  status = "",
+  basePath = "/dashboard/utilizatori",
+  label = "Paginare utilizatori",
 }: {
   pagination: UsersPagination;
-  search: string;
-  role: string;
-  ong: string;
-  status: string;
+  search?: string;
+  role?: string;
+  ong?: string;
+  status?: string;
+  /** Ruta paginii care randează componenta — implicit ecranul de utilizatori. */
+  basePath?: string;
+  /** `aria-label`-ul navigației — implicit cel al ecranului de utilizatori. */
+  label?: string;
 }) {
   const { page, pageCount } = pagination;
   if (pageCount <= 1) return null;
@@ -25,13 +31,13 @@ export function UtilizatoriPagination({
     if (status) params.set("status", status);
     if (targetPage > 1) params.set("page", String(targetPage));
     const qs = params.toString();
-    return `/dashboard/utilizatori${qs ? `?${qs}` : ""}`;
+    return `${basePath}${qs ? `?${qs}` : ""}`;
   }
 
   const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
 
   return (
-    <nav aria-label="Paginare utilizatori" className="flex items-center justify-center gap-1 mt-6">
+    <nav aria-label={label} className="flex items-center justify-center gap-1 mt-6">
       <PageLink href={hrefFor(Math.max(1, page - 1))} disabled={page === 1}>
         Anterior
       </PageLink>
@@ -43,7 +49,7 @@ export function UtilizatoriPagination({
           className="px-3 py-2 rounded-lg text-sm border font-medium min-w-[2.5rem] text-center"
           style={
             p === page
-              ? { background: "#162040", color: "white", borderColor: "#162040" }
+              ? { background: "#1c1c81", color: "white", borderColor: "#1c1c81" }
               : { borderColor: "#e2e8f0", color: "#475569" }
           }
         >
@@ -60,7 +66,7 @@ export function UtilizatoriPagination({
 function PageLink({ href, disabled, children }: { href: string; disabled: boolean; children: React.ReactNode }) {
   if (disabled) {
     return (
-      <span aria-disabled="true" className="px-3 py-2 rounded-lg text-sm border border-border opacity-40" style={{ color: "#94a3b8" }}>
+      <span aria-disabled="true" className="px-3 py-2 rounded-lg text-sm border border-border opacity-40" style={{ color: "#5b6779" }}>
         {children}
       </span>
     );

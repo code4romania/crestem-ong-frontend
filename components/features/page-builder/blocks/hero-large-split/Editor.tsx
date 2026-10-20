@@ -9,12 +9,13 @@ import { usePageImageUpload } from "../../upload";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { HeroLargeSplitData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 export function HeroLargeSplitEditor({
   value,
@@ -53,7 +54,7 @@ export function HeroLargeSplitEditor({
 
       <div>
         <label htmlFor="hls-titlu" className={labelClass}>
-          Titlu <span className="text-[#ef4444]">*</span>
+          Titlu
         </label>
         <input
           id="hls-titlu"
@@ -67,16 +68,14 @@ export function HeroLargeSplitEditor({
       </div>
 
       <div>
-        <label htmlFor="hls-subtitlu" className={labelClass}>
+        <span className={labelClass}>
           Subtitlu (opțional)
-        </label>
-        <textarea
-          id="hls-subtitlu"
-          rows={3}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.subtitlu}
-          onChange={(e) => set({ subtitlu: e.target.value })}
-          placeholder="Instrumente, resurse și sprijin pentru organizații care construiesc comunități mai puternice."
+          onChange={(html) => set({ subtitlu: html })}
+          ariaLabel="Subtitlu"
+          compact
         />
       </div>
 
@@ -99,14 +98,14 @@ export function HeroLargeSplitEditor({
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isUploading}
-                  className="text-sm font-semibold text-[#2563eb] hover:opacity-80 disabled:opacity-60"
+                  className="text-sm font-semibold text-[#5656e5] hover:opacity-80 disabled:opacity-60"
                 >
                   {isUploading ? "Se încarcă..." : "Schimbă imaginea"}
                 </button>
                 <button
                   type="button"
                   onClick={() => set({ image: null })}
-                  className="text-sm font-semibold text-[#ef4444] hover:opacity-80"
+                  className="text-sm font-semibold text-[#b91c1c] hover:opacity-80"
                 >
                   Elimină imaginea
                 </button>
@@ -118,7 +117,7 @@ export function HeroLargeSplitEditor({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040] disabled:opacity-60"
+            className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81] disabled:opacity-60"
           >
             {isUploading ? (
               <Loader2 size={20} className="animate-spin" />
@@ -138,7 +137,7 @@ export function HeroLargeSplitEditor({
         <button
           type="button"
           onClick={() => setPickerOpen(true)}
-          className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+          className="mt-2 text-xs font-semibold text-[#5656e5] hover:opacity-80"
         >
           Alege din bibliotecă
         </button>

@@ -21,7 +21,7 @@ export default async function OrganizatieRapoartePage({
     <div>
       <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
         <div>
-          <h2 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+          <h2 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
             Arhivă rapoarte
           </h2>
           <p className="text-sm text-muted-foreground">

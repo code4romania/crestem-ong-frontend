@@ -34,12 +34,12 @@ export function EvaluationReview({
         type="button"
         onClick={() => lastDimensionKey && onEditDimension(lastDimensionKey)}
         className="inline-flex items-center gap-1.5 text-sm font-medium mb-6 hover:underline"
-        style={{ color: "#94a3b8" }}
+        style={{ color: "#5b6779" }}
       >
         <ArrowLeft size={14} /> Înapoi la ultima dimensiune
       </button>
 
-      <h1 className="text-2xl font-heading font-extrabold mb-3" style={{ color: "#162040" }}>
+      <h1 className="text-2xl font-heading font-extrabold mb-3" style={{ color: "#1c1c81" }}>
         Verifică răspunsurile tale
       </h1>
       <p className="text-sm mb-6" style={{ color: "#475569" }}>
@@ -57,21 +57,21 @@ export function EvaluationReview({
               <div className="px-5 py-4 flex items-center gap-3 border-b border-border">
                 <span
                   className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white shrink-0"
-                  style={{ background: "#162040" }}
+                  style={{ background: "#1c1c81" }}
                 >
                   {letter}
                 </span>
-                <span className="font-semibold" style={{ color: "#162040" }}>
+                <span className="font-semibold" style={{ color: "#1c1c81" }}>
                   {dimension.name}
                 </span>
-                <span className="text-sm font-semibold" style={{ color: "#2dbe8f" }}>
+                <span className="text-sm font-semibold" style={{ color: "#007d58" }}>
                   {answeredCount}/{dimension.quiz.length} completate
                 </span>
                 <button
                   type="button"
                   onClick={() => onEditDimension(dimension.key)}
                   className="ml-auto text-sm font-semibold hover:underline"
-                  style={{ color: "#2dbe8f" }}
+                  style={{ color: "#007d58" }}
                 >
                   Modifică →
                 </button>
@@ -85,15 +85,15 @@ export function EvaluationReview({
                     className={`px-5 py-4 ${questionIndex > 0 ? "border-t border-border" : ""}`}
                   >
                     <p className="text-sm mb-2 flex gap-2" style={{ color: "#334155" }}>
-                      <span style={{ color: "#94a3b8" }}>{questionIndex + 1}.</span> {question.question}
+                      <span style={{ color: "#5b6779" }}>{questionIndex + 1}.</span> {question.question}
                     </p>
                     {answer?.answerLabel ? (
                       <div
                         className="flex items-start gap-2 px-3 py-2 rounded-xl"
-                        style={{ background: "#f0faf6" }}
+                        style={{ background: "#e5f9e5" }}
                       >
-                        <CheckCircle2 size={15} className="mt-0.5 shrink-0" style={{ color: "#2dbe8f" }} />
-                        <span className="text-sm font-semibold" style={{ color: "#162040" }}>
+                        <CheckCircle2 size={15} className="mt-0.5 shrink-0" style={{ color: "#007d58" }} />
+                        <span className="text-sm font-semibold" style={{ color: "#1c1c81" }}>
                           {answer.answerLabel}
                         </span>
                       </div>
@@ -102,7 +102,7 @@ export function EvaluationReview({
                         className="px-3 py-2 rounded-xl"
                         style={{ background: "#f8fafc" }}
                       >
-                        <span className="text-sm font-medium" style={{ color: "#94a3b8" }}>
+                        <span className="text-sm font-medium" style={{ color: "#5b6779" }}>
                           Fără răspuns
                         </span>
                       </div>
@@ -116,7 +116,7 @@ export function EvaluationReview({
       </div>
 
       {error && (
-        <p className="mb-4 text-sm" style={{ color: "#ef4444" }}>
+        <p className="mb-4 text-sm" style={{ color: "#b91c1c" }}>
           {error}
         </p>
       )}
@@ -134,8 +134,8 @@ export function EvaluationReview({
           type="button"
           disabled={saving}
           onClick={onFinalize}
-          className="inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-60"
-          style={{ background: "#2dbe8f", boxShadow: "0 4px 16px rgba(45,190,143,0.3)" }}
+          className="inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity disabled:opacity-60"
+          style={{ background: "#00d495", boxShadow: "0 4px 16px rgba(0,212,149,0.3)" }}
         >
           {saving ? "Se finalizează..." : "Finalizează evaluarea"}
         </button>

@@ -50,15 +50,15 @@ export function EvaluationResults({
 
   return (
     <div>
-      <Link href={backHref} className="inline-flex items-center gap-1.5 text-sm font-medium mb-6" style={{ color: "#94a3b8" }}>
+      <Link href={backHref} className="inline-flex items-center gap-1.5 text-sm font-medium mb-6" style={{ color: "#5b6779" }}>
         <ArrowLeft size={14} /> Înapoi la evaluările mele
       </Link>
 
-      <h1 className="text-3xl font-heading font-extrabold mb-1" style={{ color: "#162040" }}>
+      <h1 className="text-[#5b6779]xl font-heading font-extrabold mb-1" style={{ color: "#1c1c81" }}>
         {evaluation.report?.name ?? "Evaluare"}
       </h1>
       {programName && (
-        <p className="text-sm font-semibold mb-6" style={{ color: "#2dbe8f" }}>
+        <p className="text-sm font-semibold mb-6" style={{ color: "#007d58" }}>
           Program: {programName}
         </p>
       )}
@@ -66,7 +66,7 @@ export function EvaluationResults({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div className="bg-white rounded-xl border border-border p-5">
           <p className="text-xs mb-2 text-muted-foreground">Perioadă</p>
-          <p className="text-3xl font-extrabold font-heading" style={{ color: "#162040" }}>
+          <p className="text-[#5b6779]xl font-extrabold font-heading" style={{ color: "#1c1c81" }}>
             {phase
               ? formatPeriod(phase.startDate, phase.endDate)
               : evaluation.report
@@ -80,13 +80,13 @@ export function EvaluationResults({
         </div>
         <div className="bg-white rounded-xl border border-border p-5">
           <p className="text-xs mb-2 text-muted-foreground">Completat la</p>
-          <p className="text-3xl font-extrabold font-heading" style={{ color: "#162040" }}>
+          <p className="text-[#5b6779]xl font-extrabold font-heading" style={{ color: "#1c1c81" }}>
             {evaluation.completedAt ? formatShortDate(evaluation.completedAt) : "—"}
           </p>
         </div>
         <div className="bg-white rounded-xl border border-border p-5">
           <p className="text-xs mb-2 text-muted-foreground">Scorul meu</p>
-          <p className="text-3xl font-extrabold font-heading" style={{ color: "#162040" }}>
+          <p className="text-[#5b6779]xl font-extrabold font-heading" style={{ color: "#1c1c81" }}>
             {evaluation.scores.overall != null ? `${evaluation.scores.overall}%` : "—"}
           </p>
         </div>

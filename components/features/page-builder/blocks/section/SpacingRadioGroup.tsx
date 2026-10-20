@@ -40,8 +40,8 @@ export function SpacingRadioGroup({
               key={option.value}
               className={
                 selected
-                  ? "flex cursor-pointer items-center rounded-xl border border-[#2563eb] bg-[#eff6ff] px-4 py-2.5 text-sm font-medium text-[#2563eb] transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#2563eb]/30"
-                  : "flex cursor-pointer items-center rounded-xl border border-border bg-white px-4 py-2.5 text-sm font-medium text-[#162040] transition-colors hover:border-[#cbd5e1] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#2563eb]/30"
+                  ? "flex cursor-pointer items-center rounded-xl border border-[#5656e5] bg-[#dcfafb] px-4 py-2.5 text-sm font-medium text-[#5656e5] transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#5656e5]/30"
+                  : "flex cursor-pointer items-center rounded-xl border border-border bg-white px-4 py-2.5 text-sm font-medium text-[#1c1c81] transition-colors hover:border-[#cbd5e1] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#5656e5]/30"
               }
             >
               <input

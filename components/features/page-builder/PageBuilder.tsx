@@ -29,6 +29,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { toast } from "sonner";
 import { ModalPortal } from "@/components/ui/ModalPortal";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { AddBlockModal } from "./AddBlockModal";
@@ -182,6 +183,7 @@ export function PageBuilder({
   pages = [],
   currentPageId = null,
   currentPath = "",
+  minBlocks = 0,
 
   categories = [],
 }: {
@@ -201,7 +203,12 @@ export function PageBuilder({
   currentPageId?: string | null;
   /** That page's path as it will be after saving. */
   currentPath?: string;
-
+  /**
+   * The number of top-level blocks the page may not go below. The homepage
+   * passes 1: the backend refuses an empty landing page, and withholding the
+   * last delete button is how the editor learns that before hitting the error.
+   */
+  minBlocks?: number;
 
   /** The library taxonomy, so `biblioteca-categorii` previews on the canvas. */
   categories?: LibraryCategory[];
@@ -310,9 +317,9 @@ export function PageBuilder({
     setDraftErrors({});
   };
 
-  const handleSubmitDraft = () => {
+  const handleSubmitDraft = (value: unknown) => {
     if (!draftDefinition || !draftType) return;
-    const result = draftDefinition.parse(draftData);
+    const result = draftDefinition.parse(value);
     if (!result.success) {
       setDraftErrors(result.errors);
       return;
@@ -365,7 +372,16 @@ export function PageBuilder({
     });
   };
   const deleteBlock = (id: string) => {
-    setBlocks((current) => current.filter((b) => b.id !== id));
+    setBlocks((current) => {
+      // The floor holds wherever the delete is triggered from — the card's
+      // button is hidden at the minimum, but the confirm dialog can still be
+      // open from a block that was deletable a moment ago.
+      if (current.length <= minBlocks) {
+        toast.error("Pagina de start are nevoie de cel puțin un bloc.");
+        return current;
+      }
+      return current.filter((b) => b.id !== id);
+    });
   };
 
   // --- container child ops (Section: one list; Columns: one list per column) ---
@@ -442,6 +458,7 @@ export function PageBuilder({
                   onDuplicate: () => duplicateBlock(block.id),
                   onMove: (dir) => moveBlock(block.id, dir),
                   onDelete: () => deleteBlock(block.id),
+                  canDelete: blocks.length > minBlocks,
                   canMoveUp: index > 0,
                   canMoveDown: index < blocks.length - 1,
                   onAddChild: () =>
@@ -475,6 +492,7 @@ export function PageBuilder({
                   onDuplicate: () => duplicateBlock(block.id),
                   onMove: (dir) => moveBlock(block.id, dir),
                   onDelete: () => deleteBlock(block.id),
+                  canDelete: blocks.length > minBlocks,
                   canMoveUp: index > 0,
                   canMoveDown: index < blocks.length - 1,
                   onAddChild: (columnIndex) =>
@@ -505,7 +523,7 @@ export function PageBuilder({
 
     const { Renderer } = definition;
     const cardBtn =
-      "rounded-md p-1 text-[#64748b] transition-colors hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent";
+      "rounded-md p-1 text-[#5b6779] transition-colors hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent";
 
     return (
       <div className="group relative">
@@ -516,7 +534,7 @@ export function PageBuilder({
             {...dragHandle.attributes}
             {...(dragHandle.listeners ?? {})}
             aria-label="Trage pentru reordonare"
-            className="absolute left-3 top-3 z-10 cursor-grab touch-none rounded-md bg-white/90 p-1 text-[#94a3b8] opacity-0 shadow-sm transition-opacity hover:text-[#64748b] group-hover:opacity-100"
+            className="absolute left-3 top-3 z-10 cursor-grab touch-none rounded-md bg-white/90 p-1 text-[#5b6779] opacity-0 shadow-sm transition-opacity hover:text-[#5b6779] group-hover:opacity-100"
           >
             <GripVertical size={16} aria-hidden="true" />
           </button>
@@ -560,14 +578,16 @@ export function PageBuilder({
             >
               <ChevronDown size={15} />
             </button>
-            <button
-              type="button"
-              onClick={() => deleteBlock(block.id)}
-              aria-label="Șterge blocul"
-              className="rounded-md p-1 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
-            >
-              <Trash2 size={15} />
-            </button>
+            {blocks.length > minBlocks && (
+              <button
+                type="button"
+                onClick={() => deleteBlock(block.id)}
+                aria-label="Șterge blocul"
+                className="rounded-md p-1 text-[#b91c1c] transition-colors hover:bg-[#fef2f2]"
+              >
+                <Trash2 size={15} />
+              </button>
+            )}
           </span>
         ) : null}
         <div
@@ -578,7 +598,11 @@ export function PageBuilder({
           }
         >
           <Renderer
-            data={resolveBlockCategories(resolveBlockLinks(block.data, pages), categories, block.type)}
+            data={resolveBlockCategories(
+              resolveBlockLinks(block.data, pages),
+              categories,
+              block.type,
+            )}
           />
         </div>
       </div>
@@ -586,18 +610,18 @@ export function PageBuilder({
   };
 
   return (
-    <PageOptionsProvider value={{ pages, currentPageId, currentPath, categories }}>
+    <PageOptionsProvider
+      value={{ pages, currentPageId, currentPath, categories }}
+    >
       <div className="mx-auto max-w-6xl">
-        <div className="mb-6 flex items-center justify-between gap-4">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+            <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
               {title}
             </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {description}
-            </p>
+            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
           </div>
-          <div className="flex shrink-0 items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3 sm:shrink-0">
             <button
               type="button"
               onClick={() => setPreview(true)}
@@ -610,8 +634,8 @@ export function PageBuilder({
             <button
               type="button"
               onClick={openPickerTop}
-              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-              style={{ background: "#2dbe8f" }}
+              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:brightness-90"
+              style={{ background: "#00d495" }}
             >
               <Plus size={16} />
               Adaugă bloc
@@ -678,7 +702,7 @@ export function PageBuilder({
           <ModalPortal>
             <div className="fixed inset-0 z-50 flex flex-col bg-white">
               <div className="flex shrink-0 items-center justify-between gap-4 border-b border-border px-6 py-3">
-                <span className="text-sm font-semibold text-[#162040]">
+                <span className="text-sm font-semibold text-[#1c1c81]">
                   Previzualizare
                 </span>
                 <button

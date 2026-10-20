@@ -1,5 +1,6 @@
 import { ApiError } from "./client";
 import { serverApiFetch } from "./server";
+import { sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize.server";
 import type { PublicCategory, PublicArticleListResult } from "./biblioteca-public-types";
 import type { ArticleDetail } from "./articles-types";
 
@@ -22,9 +23,14 @@ async function readPublic<T>(path: string): Promise<T> {
   }
 }
 
+/**
+ * `descriere` is rich text; sanitised here on the way out, mirroring
+ * `getMentorProfile`, so every reader of this list — including rows saved
+ * before this field carried HTML — gets safe markup.
+ */
 export async function listPublicCategories(): Promise<PublicCategory[]> {
   const { data } = await readPublic<{ data: PublicCategory[] }>("/api/public/library-categories");
-  return data;
+  return data.map((category) => ({ ...category, descriere: sanitizeRichText(category.descriere) }));
 }
 
 /**

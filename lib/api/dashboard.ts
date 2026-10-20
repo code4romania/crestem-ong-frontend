@@ -74,6 +74,10 @@ export interface MentorDashboard {
     endDate: string;
     programStatus: string;
   }[];
+  mentoredOngs: {
+    ong: { documentId: string; name: string };
+    program: { documentId: string; name: string };
+  }[];
 }
 
 export function getMentorDashboard() {

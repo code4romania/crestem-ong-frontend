@@ -26,20 +26,20 @@ export function ProfileHeaderCard({
         <div className="flex items-center gap-4">
           <div
             className="w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold shrink-0"
-            style={{ background: "#2dbe8f" }}
+            style={{ background: "#00d495" }}
           >
             {initials}
           </div>
           <div>
-            <p className="font-heading font-bold text-lg" style={{ color: "#162040" }}>
+            <p className="font-heading font-bold text-lg" style={{ color: "#1c1c81" }}>
               {nume}
             </p>
-            <p className="text-sm mt-0.5" style={{ color: "#64748b" }}>
+            <p className="text-sm mt-0.5" style={{ color: "#5b6779" }}>
               {email}
             </p>
             <p className="text-xs mt-1 text-muted-foreground">
               Membru din{" "}
-              <span className="font-semibold" style={{ color: "#162040" }}>
+              <span className="font-semibold" style={{ color: "#1c1c81" }}>
                 {formatJoinDate(createdAt)}
               </span>
             </p>

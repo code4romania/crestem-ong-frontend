@@ -6,16 +6,25 @@ import { ProfileHeaderCard } from "@/components/features/dashboard/ProfileHeader
 import { ProfileActivitySections } from "@/components/features/dashboard/ProfileActivitySections";
 import { ProfileActionsMenu } from "@/components/features/dashboard/ProfileActionsMenu";
 import { OngMembershipCard } from "@/components/features/dashboard-member/OngMembershipCard";
+import { IncomingAdminTransferCard } from "@/components/features/dashboard-member/IncomingAdminTransferCard";
+import { getIncomingAdminTransfer } from "@/lib/api/admin-transfer";
 
 export default async function MemberProfilePage() {
-  const user = await getCurrentUser();
-  const { data: ongs } = await serverApiFetch<{ data: MyOng[] }>("/api/me/ongs");
+  const [user, { data: ongs }, incomingTransfer] = await Promise.all([
+    getCurrentUser(),
+    serverApiFetch<{ data: MyOng[] }>("/api/me/ongs"),
+    // Optional: the profile still renders if this lookup fails.
+    getIncomingAdminTransfer().catch(() => null),
+  ]);
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+          <h1
+            className="text-2xl font-heading font-extrabold"
+            style={{ color: "#1c1c81" }}
+          >
             Profilul meu
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -25,11 +34,19 @@ export default async function MemberProfilePage() {
         <ProfileActionsMenu />
       </div>
 
-      <ProfileHeaderCard nume={userDisplayName(user!)} email={user!.email} createdAt={user!.createdAt} />
+      {incomingTransfer && <IncomingAdminTransferCard transfer={incomingTransfer} />}
+
+      <ProfileHeaderCard
+        nume={userDisplayName(user!)}
+        email={user!.email}
+        createdAt={user!.createdAt}
+      />
 
       {ongs.length === 0 ? (
         <div className="bg-white rounded-xl border border-border p-8 text-center mb-6">
-          <p className="text-sm text-muted-foreground">Nu faci parte din nicio organizație încă.</p>
+          <p className="text-sm text-muted-foreground">
+            Nu faci parte din nicio organizație încă.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">

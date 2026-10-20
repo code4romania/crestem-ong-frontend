@@ -4,7 +4,7 @@ import { resolveMediaUrl, safeSegment } from "@/lib/api/media-download";
 /** Public endpoint guardrails — a crafted body can only ever hit the media host. */
 const MAX_FILES = 50;
 /** Per file; matches the client upload guard `MAX_DOCUMENT_BYTES`. */
-const MAX_FILE_BYTES = 25 * 1024 * 1024;
+const MAX_FILE_BYTES = 10.5 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 200 * 1024 * 1024;
 const FETCH_TIMEOUT_MS = 15_000;
 
@@ -55,7 +55,8 @@ export async function POST(request: Request) {
   }
 
   const files = (body.files ?? []).filter(
-    (f): f is ReqFile => Boolean(f) && typeof f.url === "string" && f.url !== "",
+    (f): f is ReqFile =>
+      Boolean(f) && typeof f.url === "string" && f.url !== "",
   );
   if (files.length === 0) {
     return Response.json(
@@ -99,7 +100,10 @@ export async function POST(request: Request) {
         continue;
       }
       const bytes = new Uint8Array(await res.arrayBuffer());
-      if (bytes.byteLength > MAX_FILE_BYTES || total + bytes.byteLength > MAX_TOTAL_BYTES) {
+      if (
+        bytes.byteLength > MAX_FILE_BYTES ||
+        total + bytes.byteLength > MAX_TOTAL_BYTES
+      ) {
         failed += 1;
         continue;
       }
@@ -130,9 +134,15 @@ export async function POST(request: Request) {
   archiveBody.set(archive);
 
   const zipName = safeSegment(body.zipName ?? "", "documente");
+  // Header values must be Latin-1 (ByteString) — the Response constructor
+  // throws on a raw diacritic like "ț"/"ă" (outside Latin-1), which is common
+  // in a Romanian page title. Keep an ASCII fallback for `filename` and carry
+  // the real name via the RFC 6266 `filename*` extended parameter.
+
+  const asciiName = zipName.replace(/[^\x20-\x7E]/g, "_") || "documente";
   const headers: Record<string, string> = {
     "Content-Type": "application/zip",
-    "Content-Disposition": `attachment; filename="${zipName}.zip"`,
+    "Content-Disposition": `attachment; filename="${asciiName}.zip"; filename*=UTF-8''${encodeURIComponent(zipName)}.zip`,
     "Content-Length": String(archiveBody.byteLength),
   };
   if (failed > 0) headers["X-Zip-Failed"] = String(failed);

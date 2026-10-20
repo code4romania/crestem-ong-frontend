@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { IMAGE_RATIOS } from "../shared/image-ratio";
 
 /**
  * One image in the gallery. `id` / `url` / `name` come from
@@ -28,6 +29,11 @@ export const gallerySchema = z
     // Text spec says 1-4 (the screenshot only shows 2-4); following the spec.
     // Column count for grid/masonry; slides-per-view for the carousel.
     coloane: z.enum(["1", "2", "3", "4"]).default("3"),
+    /**
+     * Tile ratio for grid and carousel; see `blocks/shared/image-ratio.ts`.
+     * Masonry always shows images whole, so it ignores this.
+     */
+    raport: z.enum(IMAGE_RATIOS).default("4:3"),
     lightbox: z.boolean().default(true),
   })
   .refine((d) => d.imagini.length > 0, {
@@ -48,5 +54,6 @@ export const GALLERY_DEFAULTS: GalleryData = {
   imagini: [],
   stil: "grid",
   coloane: "3",
+  raport: "4:3",
   lightbox: true,
 };

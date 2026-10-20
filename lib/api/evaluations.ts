@@ -22,6 +22,8 @@ export interface MyOng {
   /** The member's own function in this organization. Null for memberships created before roles existed. */
   rol: string | null;
   programs: MyOngProgram[];
+  /** The newest evaluation round this member still owes a response on, or null if none is open. */
+  pendingEvaluation: { documentId: string; status: EvaluationStatus } | null;
 }
 
 export interface EvaluationProgress {
@@ -132,7 +134,12 @@ export interface AdminEvaluationsPagination {
 }
 
 export interface AdminListParams {
-  /** Respondent address on the users tab; admin address or CUI on the rounds tab. */
+  /**
+   * One term against several columns. Both tabs match an email — the
+   * respondent's or the organization's administrator — and the fiscal code; the
+   * name it also matches is the respondent's on the users tab and the
+   * organization's on the rounds tab.
+   */
   search?: string;
   /** Organization documentIds. */
   ongs?: string[];

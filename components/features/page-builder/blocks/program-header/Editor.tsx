@@ -2,26 +2,28 @@
 
 import { useRef, useState, useTransition } from "react";
 import { ImagePlus, Loader2 } from "lucide-react";
-import { getMediaUrl } from "@/lib/api/client";
+import { getMediaUrl, errorMessage } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
-import { IconPicker } from "./IconPicker";
+import { IconPicker } from "@/components/ui/icons/IconPicker";
 import { ProgramSelect } from "./ProgramSelect";
 import { StatList } from "./StatList";
-import { SupporterList } from "./SupporterList";
+import { SupporterGroupList } from "./SupporterGroupList";
 import type { DirectoryProgram } from "@/lib/api/people";
 import type { BlockFieldErrors } from "../../types";
-import type { ProgramHeaderData } from "./schema";
+import { migrateProgramHeader, type ProgramHeaderData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 export function ProgramHeaderEditor({
-  value,
+  value: rawValue,
   onChange,
   errors,
 }: {
@@ -33,6 +35,10 @@ export function ProgramHeaderEditor({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // The drawer hands over raw stored data; blocks saved before supporter
+  // groups existed still carry the flat `sustinatori` list.
+  const value = migrateProgramHeader(rawValue) as ProgramHeaderData;
 
   const set = (patch: Partial<ProgramHeaderData>) =>
     onChange({ ...value, ...patch });
@@ -65,14 +71,17 @@ export function ProgramHeaderEditor({
     if (!file) return;
     setUploadError(null);
     startUpload(async () => {
-      const form = new FormData();
-      form.append("files", file);
-      const result = await uploadPageImageAction(form);
-      if (result.error || !result.image) {
-        setUploadError(result.error ?? "Nu am putut încărca imaginea.");
-        return;
+      try {
+        const [uploaded] = await uploadFilesDirect([file]);
+        const result = await uploadPageImageAction(uploaded);
+        if (result.error || !result.image) {
+          setUploadError(result.error ?? "Nu am putut încărca imaginea.");
+          return;
+        }
+        set({ imagine: result.image });
+      } catch (err) {
+        setUploadError(errorMessage(err, "Nu am putut încărca imaginea."));
       }
-      set({ imagine: result.image });
     });
   };
 
@@ -118,14 +127,14 @@ export function ProgramHeaderEditor({
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isUploading}
-                    className="text-sm font-semibold text-[#2563eb] hover:opacity-80 disabled:opacity-60"
+                    className="text-sm font-semibold text-[#5656e5] hover:opacity-80 disabled:opacity-60"
                   >
                     {isUploading ? "Se încarcă..." : "Schimbă imaginea"}
                   </button>
                   <button
                     type="button"
                     onClick={() => set({ imagine: null })}
-                    className="text-sm font-semibold text-[#ef4444] hover:opacity-80"
+                    className="text-sm font-semibold text-[#b91c1c] hover:opacity-80"
                   >
                     Elimină imaginea
                   </button>
@@ -137,7 +146,7 @@ export function ProgramHeaderEditor({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040] disabled:opacity-60"
+              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81] disabled:opacity-60"
             >
               {isUploading ? (
                 <Loader2 size={20} className="animate-spin" />
@@ -160,7 +169,7 @@ export function ProgramHeaderEditor({
           <button
             type="button"
             onClick={() => setPickerOpen(true)}
-            className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+            className="mt-2 text-xs font-semibold text-[#5656e5] hover:opacity-80"
           >
             Alege din bibliotecă
           </button>
@@ -182,16 +191,17 @@ export function ProgramHeaderEditor({
         </div>
       ) : (
         <IconPicker
+          scope="program-header"
           value={value.icon}
           onChange={(icon) => set({ icon })}
-          ariaLabel="Iconiță program"
+          label="Iconiță program"
         />
       )}
 
       {usesImage && value.imagine ? (
         <div>
           <label htmlFor="ph-imagine-alt" className={labelClass}>
-            Text alternativ imagine <span className="text-[#ef4444]">*</span>
+            Text alternativ imagine <span className="text-[#b91c1c]">*</span>
           </label>
           <input
             id="ph-imagine-alt"
@@ -206,7 +216,7 @@ export function ProgramHeaderEditor({
 
       <div>
         <label htmlFor="ph-titlu" className={labelClass}>
-          Titlu <span className="text-[#ef4444]">*</span>
+          Titlu
         </label>
         <input
           id="ph-titlu"
@@ -220,36 +230,21 @@ export function ProgramHeaderEditor({
       </div>
 
       <div>
-        <label htmlFor="ph-subtitlu" className={labelClass}>
+        <span className={labelClass}>
           Subtitlu (opțional)
-        </label>
-        <textarea
-          id="ph-subtitlu"
-          rows={2}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.subtitlu}
-          onChange={(e) => set({ subtitlu: e.target.value })}
-          placeholder="12 săptămâni care îți transformă organizația"
+          onChange={(html) => set({ subtitlu: html })}
+          ariaLabel="Subtitlu"
+          compact
         />
       </div>
 
-      <div>
-        <label htmlFor="ph-sustinut-de" className={labelClass}>
-          Etichetă susținători
-        </label>
-        <input
-          id="ph-sustinut-de"
-          className={inputClass}
-          value={value.sustinutDeTitlu}
-          onChange={(e) => set({ sustinutDeTitlu: e.target.value })}
-          placeholder="Susținut de:"
-        />
-      </div>
-
-      <SupporterList
-        value={value.sustinatori}
-        onChange={(sustinatori) => set({ sustinatori })}
-        error={errors.sustinatori}
+      <SupporterGroupList
+        value={value.grupuri}
+        onChange={(grupuri) => set({ grupuri })}
+        error={errors.grupuri}
       />
 
       <StatList

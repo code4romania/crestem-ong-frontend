@@ -11,7 +11,7 @@ interface CourseRow {
 }
 
 const STATUS_STYLES: Record<CourseStatus, { background: string; color: string }> = {
-  Finalizat: { background: "#f0faf6", color: "#16a34a" },
+  Finalizat: { background: "#e5f9e5", color: "#15803d" },
   "În progres": { background: "#fff7ed", color: "#c2410c" },
 };
 
@@ -21,13 +21,13 @@ export function OrgCoursesCard() {
   return (
     <div className="bg-white rounded-2xl border border-border p-6">
       <div className="flex items-center justify-between mb-5">
-        <h2 className="flex items-center gap-2 text-base font-heading font-extrabold" style={{ color: "#162040" }}>
+        <h2 className="flex items-center gap-2 text-base font-heading font-extrabold" style={{ color: "#1c1c81" }}>
           <GraduationCap size={18} />
           Cursuri parcurse
         </h2>
         <span
           className="px-2.5 py-0.5 rounded-full text-xs font-semibold"
-          style={{ background: "#f0faf6", color: "#2dbe8f" }}
+          style={{ background: "#e5f9e5", color: "#007d58" }}
         >
           {rows.length}
         </span>
@@ -37,7 +37,7 @@ export function OrgCoursesCard() {
         <table className="w-full text-sm">
           {rows.length > 0 && (
             <thead>
-              <tr className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#94a3b8" }}>
+              <tr className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#5b6779" }}>
                 <th className="text-left pb-3 pr-4 font-semibold">Titlu curs</th>
                 <th className="text-left pb-3 pr-4 font-semibold">Durată</th>
                 <th className="text-left pb-3 pr-4 font-semibold">Status</th>
@@ -69,7 +69,7 @@ export function OrgCoursesCard() {
                     </span>
                   </td>
                   <td className="py-3 pr-4 text-muted-foreground">{row.finishedAt ?? "—"}</td>
-                  <td className="py-3 font-semibold" style={{ color: "#2dbe8f" }}>
+                  <td className="py-3 font-semibold" style={{ color: "#007d58" }}>
                     {row.totalStudents} (Vezi listă)
                   </td>
                 </tr>

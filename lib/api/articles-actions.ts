@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getApiErrorMessage } from "./client";
 import { revalidateDashboardPath } from "./revalidate";
 import { getArticle } from "./articles";
+import { sanitizeBlocks } from "./page-blocks-sanitize";
 import { serverApiFetch } from "./server";
 import { getCurrentUser } from "./session-server";
 import { isFdscStaff } from "@/lib/roles";
@@ -20,9 +21,15 @@ export interface ArticleInput {
   tip: string;
   vizibilitate: VisibilityAudience[];
   blocuri: PageBlock[];
+  articoleRelationate: string[];
 }
 
 const FORBIDDEN = "Nu ai permisiunea necesară pentru această acțiune.";
+
+/** Same boundary as `pages-actions`: block HTML is cleaned server-side. */
+function withCleanBlocks(input: ArticleInput): ArticleInput {
+  return { ...input, blocuri: sanitizeBlocks(input.blocuri) };
+}
 
 /**
  * A Server Action is an addressable endpoint, so the staff check lives here as
@@ -55,7 +62,7 @@ export async function createArticleAction(
   try {
     const { data } = await serverApiFetch<{ data: { documentId: string; cale: string | null } }>(
       "/api/articles",
-      { method: "POST", body: JSON.stringify(input) },
+      { method: "POST", body: JSON.stringify(withCleanBlocks(input)) },
     );
     revalidateArticle(data.cale);
     return { documentId: data.documentId };
@@ -76,7 +83,7 @@ export async function updateArticleAction(
   try {
     const { data } = await serverApiFetch<{ data: { cale: string | null } }>(
       `/api/articles/${documentId}`,
-      { method: "PUT", body: JSON.stringify(input) },
+      { method: "PUT", body: JSON.stringify(withCleanBlocks(input)) },
     );
     cale = data.cale;
   } catch (err) {

@@ -1,25 +1,29 @@
 "use client";
 
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { IMAGE_RATIO_OPTIONS } from "../shared/image-ratio";
 import { BackgroundPicker } from "./BackgroundPicker";
 import { CardList } from "./CardList";
-import type { BlockFieldErrors } from "../../types";
+import type { BlockEditorHandle, BlockFieldErrors } from "../../types";
 import type { FeatureCardsData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 export function FeatureCardsEditor({
   value,
   onChange,
   errors,
+  bindHandle,
 }: {
   value: FeatureCardsData;
   onChange: (next: FeatureCardsData) => void;
   errors: BlockFieldErrors;
+  bindHandle?: (handle: BlockEditorHandle | null) => void;
 }) {
   const set = (patch: Partial<FeatureCardsData>) =>
     onChange({ ...value, ...patch });
@@ -46,16 +50,14 @@ export function FeatureCardsEditor({
       <div>
         {/* Stored as `descriere` for backwards compatibility with pages saved
             before this became the display-size subtitle. */}
-        <label htmlFor="fc-descriere" className={labelClass}>
+        <span className={labelClass}>
           Subtitlu
-        </label>
-        <textarea
-          id="fc-descriere"
-          rows={2}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.descriere}
-          onChange={(e) => set({ descriere: e.target.value })}
-          placeholder="ex. Valorile noastre"
+          onChange={(html) => set({ descriere: html })}
+          ariaLabel="Subtitlu"
+          compact
         />
       </div>
 
@@ -82,10 +84,34 @@ export function FeatureCardsEditor({
         />
       </div>
 
+      <div>
+        <span className={labelClass}>Raport imagine</span>
+        <SegmentedControl
+          ariaLabel="Raport imagine"
+          value={value.raport ?? "16:9"}
+          onChange={(raport) => set({ raport })}
+          options={IMAGE_RATIO_OPTIONS}
+        />
+        <p className="mt-1.5 text-xs text-[#5b6779]">
+          Se aplică imaginilor din toate cardurile. „Original” afișează imaginea
+          întreagă, fără decupare.
+        </p>
+      </div>
+
       <CardList
         value={value.carduri}
         onChange={(carduri) => set({ carduri })}
         error={errors.carduri}
+        bindHandle={
+          bindHandle &&
+          ((cardListHandle) =>
+            bindHandle(
+              cardListHandle && {
+                flush: () => ({ ...value, carduri: cardListHandle.flush() }),
+                hasUnsavedNestedDraft: cardListHandle.hasUnsavedNestedDraft,
+              },
+            ))
+        }
       />
     </div>
   );

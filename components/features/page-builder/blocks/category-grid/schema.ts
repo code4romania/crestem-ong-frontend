@@ -1,29 +1,8 @@
 import { z } from "zod";
-
-/**
- * Fixed icon palette for a category card. Stored as a string key (not a
- * component reference) so the schema stays serialisable and the renderer stays
- * pure; `icons.ts` maps the key back to a `lucide-react` icon at render time.
- */
-export const CATEGORY_ICON_KEYS = [
-  "folder",
-  "settings",
-  "scale",
-  "message",
-  "trending",
-  "users",
-  "award",
-  "book",
-  "globe",
-  "heart",
-  "briefcase",
-  "calendar",
-] as const;
-
-export type CategoryIconKey = (typeof CATEGORY_ICON_KEYS)[number];
+import { iconSchema } from "@/components/ui/icons/schema";
 
 const categorySchema = z.object({
-  icon: z.enum(CATEGORY_ICON_KEYS).default("folder"),
+  icon: iconSchema("category", "folder"),
   titlu: z.string().trim().default(""),
   descriere: z.string().trim().default(""),
   /** Resource count rendered as a pill; `null` hides it. */
@@ -39,10 +18,6 @@ export const categoryGridSchema = z
     titlu: z.string().trim().default(""),
     coloane: z.enum(["1", "2", "3", "4"]).default("3"),
     categorii: z.array(categorySchema).default([]),
-  })
-  .refine((d) => d.categorii.every((c) => c.titlu), {
-    path: ["categorii"],
-    message: "Fiecare categorie are nevoie de un titlu",
   });
 
 export type CategoryGridData = z.infer<typeof categoryGridSchema>;
@@ -60,7 +35,7 @@ export const CATEGORY_GRID_DEFAULTS: CategoryGridData = {
 };
 
 export const EMPTY_CATEGORY: Category = {
-  icon: "folder",
+  icon: "lucide:folder",
   titlu: "",
   descriere: "",
   numarResurse: null,

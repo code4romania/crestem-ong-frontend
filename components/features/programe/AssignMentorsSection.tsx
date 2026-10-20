@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { Plus, Search, Trash2, Users, X } from "lucide-react";
+import { toast } from "sonner";
 import { assignMentorAction, removeMentorAction } from "@/lib/api/programs-actions";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { DeletedAccountBadge } from "@/components/ui/DeletedAccountBadge";
@@ -42,7 +43,11 @@ export function AssignMentorsSection({
     setError(null);
     startTransition(async () => {
       const result = await assignMentorAction(programId, documentId);
-      if (result.error) setError(result.error);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      toast.success("Persoana resursă a fost alocată.");
     });
   };
 
@@ -56,6 +61,7 @@ export function AssignMentorsSection({
         return;
       }
       setPendingRemove(null);
+      toast.success("Persoana resursă a fost eliminată din program.");
     });
   };
 
@@ -63,7 +69,7 @@ export function AssignMentorsSection({
     <div className="bg-white rounded-xl border border-border overflow-hidden">
       <div className="px-6 py-5 border-b border-border flex items-center justify-between gap-4">
         <div>
-          <h2 className="font-bold font-heading" style={{ fontSize: "1.0625rem", color: "#162040" }}>
+          <h2 className="font-bold font-heading" style={{ fontSize: "1.0625rem", color: "#1c1c81" }}>
             Alocă persoane resursă în acest program
           </h2>
           <p className="text-sm mt-0.5 text-muted-foreground">
@@ -78,7 +84,7 @@ export function AssignMentorsSection({
               setSearch("");
             }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 shrink-0"
-            style={{ background: adding ? "#475569" : "#2563eb" }}
+            style={{ background: adding ? "#475569" : "#5656e5" }}
           >
             {adding ? <X size={14} /> : <Plus size={14} />} {adding ? "Închide" : "Adaugă persoană resursă"}
           </button>
@@ -86,7 +92,7 @@ export function AssignMentorsSection({
       </div>
 
       {error && (
-        <p className="px-6 py-3 text-xs border-b border-border" style={{ color: "#ef4444" }}>
+        <p className="px-6 py-3 text-xs border-b border-border" style={{ color: "#b91c1c" }}>
           {error}
         </p>
       )}
@@ -95,14 +101,14 @@ export function AssignMentorsSection({
         <div style={{ borderBottom: "1px solid #e2e8f0" }}>
           <div className="px-6 py-3 border-b border-border">
             <div className="relative">
-              <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#94a3b8" }} />
+              <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#5b6779" }} />
               <input
                 autoFocus
                 type="text"
                 placeholder="Caută persoane resursă..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:border-accent transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:border-accent-strong transition-colors"
               />
             </div>
           </div>
@@ -121,13 +127,13 @@ export function AssignMentorsSection({
                   className="w-full flex items-center gap-3 px-6 py-3 text-left hover:bg-blue-50 transition-colors disabled:opacity-60"
                 >
                   <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "#e2e8f0" }}>
-                    <Users size={13} style={{ color: "#94a3b8" }} />
+                    <Users size={13} style={{ color: "#5b6779" }} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-slate-600 truncate">{mentor.nume}</p>
                     <p className="text-xs text-muted-foreground truncate">{mentor.email}</p>
                   </div>
-                  <Plus size={13} className="flex-shrink-0" style={{ color: "#2563eb" }} />
+                  <Plus size={13} className="flex-shrink-0" style={{ color: "#5656e5" }} />
                 </button>
               ))
             )}
@@ -151,13 +157,13 @@ export function AssignMentorsSection({
               <div className="flex items-center gap-3 min-w-0">
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{ background: mentor.isDeleted ? "#f1f5f9" : "#eff6ff" }}
+                  style={{ background: mentor.isDeleted ? "#f1f5f9" : "#dcfafb" }}
                 >
-                  <Users size={14} style={{ color: mentor.isDeleted ? "#94a3b8" : "#2563eb" }} />
+                  <Users size={14} style={{ color: mentor.isDeleted ? "#5b6779" : "#5656e5" }} />
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="font-medium text-sm truncate" style={{ color: "#162040" }}>{mentor.nume}</p>
+                    <p className="font-medium text-sm truncate" style={{ color: "#1c1c81" }}>{mentor.nume}</p>
                     {mentor.isDeleted && <DeletedAccountBadge />}
                   </div>
                   {mentor.email && (
@@ -178,7 +184,7 @@ export function AssignMentorsSection({
                   }}
                   aria-label={`Elimină ${mentor.nume}`}
                   className="p-1.5 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-60 shrink-0"
-                  style={{ color: "#94a3b8" }}
+                  style={{ color: "#5b6779" }}
                 >
                   <Trash2 size={14} />
                 </button>

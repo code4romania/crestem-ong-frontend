@@ -16,6 +16,15 @@ export interface ArticleTaxonomyRef {
   slug: string;
 }
 
+/** The card shape for one entry in an article's related-articles relation. */
+export interface RelatedArticleRef {
+  documentId: string;
+  titlu: string;
+  cale: string | null;
+  etichete: string[];
+  tip: string;
+}
+
 export interface ArticleSummary {
   documentId: string;
   titlu: string;
@@ -42,6 +51,7 @@ export interface ArticleSummary {
 
 export interface ArticleDetail extends ArticleSummary {
   blocuri: PageBlock[];
+  articoleRelationate: RelatedArticleRef[];
 }
 
 export interface ArticleListResult {

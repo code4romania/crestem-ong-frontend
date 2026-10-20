@@ -1,57 +1,19 @@
 import { z } from "zod";
+import { iconSchema } from "@/components/ui/icons/schema";
 import { CTA_DEFAULTS, ctaHasTarget, ctaSchema } from "../shared/cta";
-import { sanitizeRichText, hasRichText } from "../../rich-text/sanitize";
-
-/**
- * Fixed icon palette for a Callout. Stored as a string key (not a component
- * reference) so the schema stays serialisable and the renderer stays pure — it
- * maps the key back to a `lucide-react` icon at render time. Same approach as
- * `feature-cards/icons.ts`.
- */
-export const CALLOUT_ICON_KEYS = [
-  "megaphone",
-  "sparkles",
-  "rocket",
-  "star",
-  "heart",
-  "hand-heart",
-  "info",
-  "bell",
-  "gift",
-  "party",
-  "flag",
-  "zap",
-  "check",
-  "alert",
-  "thumbs-up",
-  "users",
-  "calendar",
-  "mail",
-  "message",
-  "book",
-  "graduation",
-  "target",
-  "trophy",
-  "lightbulb",
-  "shield",
-  "globe",
-] as const;
-
-export type CalloutIconKey = (typeof CALLOUT_ICON_KEYS)[number];
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 export const calloutSchema = z
   .object({
-    icon: z.enum(CALLOUT_ICON_KEYS).default("megaphone"),
+    icon: iconSchema("callout", "megaphone"),
     afiseazaIcon: z.boolean().default(true),
     titlu: z.string().trim().default(""),
     /**
-     * HTML produced by the shared TipTap editor. Sanitised on the way in so
-     * stored data is always within the editor's allowlist, regardless of source.
+     * HTML produced by the shared TipTap editor. Sanitised server-side on the
+     * way to the backend (`sanitizeBlocks`), not here: this schema also runs in
+     * the editor, and DOMPurify must stay out of the client bundle.
      */
-    text: z
-      .string()
-      .default("")
-      .transform((html) => sanitizeRichText(html)),
+    text: z.string().default(""),
     primaryCta: ctaSchema.default(CTA_DEFAULTS),
     secondaryCta: ctaSchema.default(CTA_DEFAULTS),
     aliniere: z.enum(["stanga", "centru", "dreapta"]).default("centru"),
@@ -77,7 +39,7 @@ export type CalloutData = z.infer<typeof calloutSchema>;
  * when the admin clicks "Adaugă blocul".
  */
 export const CALLOUT_DEFAULTS: CalloutData = {
-  icon: "megaphone",
+  icon: "lucide:megaphone",
   afiseazaIcon: true,
   titlu: "",
   text: "",

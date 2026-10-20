@@ -18,14 +18,14 @@ export function formatSize(sizeKb: number | null): string | null {
 }
 
 const BADGE_TONE: Record<string, string> = {
-  PDF: "bg-[#ef4444]",
-  DOC: "bg-[#2563eb]",
-  DOCX: "bg-[#2563eb]",
-  XLS: "bg-[#16a34a]",
-  XLSX: "bg-[#16a34a]",
-  CSV: "bg-[#16a34a]",
-  PPT: "bg-[#ea580c]",
-  PPTX: "bg-[#ea580c]",
+  PDF: "bg-[#dc2626]",
+  DOC: "bg-[#5656e5]",
+  DOCX: "bg-[#5656e5]",
+  XLS: "bg-[#15803d]",
+  XLSX: "bg-[#15803d]",
+  CSV: "bg-[#15803d]",
+  PPT: "bg-[#c2410c]",
+  PPTX: "bg-[#c2410c]",
   TXT: "bg-[#64748b]",
 };
 

@@ -11,6 +11,7 @@ import {
   refreshCookieOptions,
   roleCookieOptions,
 } from "@/lib/api/session-cookies";
+import { loginPathFor } from "@/lib/return-to";
 import {
   DASHBOARD_ROOT,
   addDashboardSegment,
@@ -18,6 +19,15 @@ import {
   isDashboardSegment,
   stripDashboardSegment,
 } from "@/lib/dashboard-routes";
+import {
+  MAINTENANCE_BYPASS_COOKIE,
+  MAINTENANCE_BYPASS_PARAM,
+  bypassTokenMatches,
+  isMaintenanceMode,
+  maintenanceAction,
+  maintenanceBypassCookieOptions,
+} from "@/lib/maintenance";
+import type { MaintenanceBypass } from "@/lib/maintenance";
 
 function mergedCookieHeader(request: NextRequest, overrides: Record<string, string>) {
   const cookies = new Map(request.cookies.getAll().map((c) => [c.name, c.value]));
@@ -49,7 +59,12 @@ function isDashboardRequest(request: NextRequest) {
 }
 
 function redirectToLogin(request: NextRequest) {
-  const response = NextResponse.redirect(new URL("/autentificare", request.url));
+  // The page they asked for travels along, so signing in returns them to it
+  // rather than to their role's landing page — an evaluation invitation links
+  // straight to the respondent's wizard, and dropping the destination here
+  // would strand them one click short of it.
+  const target = loginPathFor(request.nextUrl.pathname + request.nextUrl.search);
+  const response = NextResponse.redirect(new URL(target, request.url));
   response.cookies.delete(SESSION_COOKIE);
   response.cookies.delete(REFRESH_COOKIE);
   response.cookies.delete(ROLE_COOKIE);
@@ -112,7 +127,56 @@ async function routeDashboard(
   return response;
 }
 
+/** The paths the session/dashboard handling below has always covered. */
+function needsSessionHandling(request: NextRequest) {
+  const path = request.nextUrl.pathname;
+  return isDashboardRequest(request) || (path.startsWith("/api/") && !path.startsWith("/api/auth/"));
+}
+
+/** A valid token in the URL wins, so a fresh link always re-issues the cookie. */
+function maintenanceBypass(request: NextRequest): MaintenanceBypass {
+  if (bypassTokenMatches(request.nextUrl.searchParams.get(MAINTENANCE_BYPASS_PARAM) ?? undefined)) {
+    return "requested";
+  }
+  if (bypassTokenMatches(request.cookies.get(MAINTENANCE_BYPASS_COOKIE)?.value)) {
+    return "granted";
+  }
+  return "none";
+}
+
 export async function proxy(request: NextRequest) {
+  const maintenance = maintenanceAction(
+    request.nextUrl.pathname,
+    isMaintenanceMode(),
+    maintenanceBypass(request),
+  );
+  if (maintenance.type === "grant-bypass") {
+    // Drop the token from the address bar so it does not linger in history
+    // or get copied along with the link.
+    const target = request.nextUrl.clone();
+    target.searchParams.delete(MAINTENANCE_BYPASS_PARAM);
+    const response = NextResponse.redirect(target);
+    response.cookies.set(
+      MAINTENANCE_BYPASS_COOKIE,
+      request.nextUrl.searchParams.get(MAINTENANCE_BYPASS_PARAM)!,
+      maintenanceBypassCookieOptions,
+    );
+    return response;
+  }
+  if (maintenance.type === "redirect") {
+    return NextResponse.redirect(new URL(maintenance.to, request.url));
+  }
+  if (maintenance.type === "unavailable") {
+    return NextResponse.json(
+      { error: "Platforma este în mentenanță." },
+      { status: 503, headers: { "Retry-After": "3600" } },
+    );
+  }
+
+  // The matcher is wide so maintenance mode can reach every page; everything
+  // else keeps its old scope.
+  if (!needsSessionHandling(request)) return NextResponse.next();
+
   const jwt = request.cookies.get(SESSION_COOKIE)?.value;
   if (jwt && !isJwtExpired(jwt)) {
     return routeDashboard(request, jwt);
@@ -154,5 +218,7 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/api/((?!auth/).*)"],
+  // Every route except Next's own assets and files with an extension (the
+  // logo, favicon, images), which the maintenance page itself needs to load.
+  matcher: ["/((?!_next/static|_next/image|.*\\.\\w+$).*)"],
 };

@@ -1,30 +1,46 @@
 import Link from "next/link";
-import { ArrowLeft, FileText, Tag } from "lucide-react";
+import { ArrowLeft, ChevronRight, FileText, Tag } from "lucide-react";
 import type { ArticleDetail } from "@/lib/api/articles-types";
-import { formatArticleDate } from "./format";
 import { tipBadgeColors } from "./tip-badge";
 
 /**
  * The article page's header, read straight from the article record — unlike
  * the free-text `article-header` page-builder block, this cannot drift from
- * the real title, type, category, date and tags.
+ * the real title, type, category and tags.
  */
 export function PublicArticleHeader({ article }: { article: ArticleDetail }) {
-  const publicata = formatArticleDate(article.dataPublicarii);
   const tint = article.tip ? tipBadgeColors(article.tip) : null;
-  const categoryHref = article.categorie ? `/biblioteca/${article.categorie.slug}` : "/biblioteca";
+  const crumbs = [
+    { label: "Bibliotecă", href: "/biblioteca" },
+    ...(article.categorie ? [{ label: article.categorie.nume, href: `/biblioteca/${article.categorie.slug}` }] : []),
+    ...(article.categorie && article.subcategorie
+      ? [
+          {
+            label: article.subcategorie.nume,
+            href: `/biblioteca/${article.categorie.slug}?subcategorie=${encodeURIComponent(article.subcategorie.slug)}`,
+          },
+        ]
+      : []),
+  ];
 
   return (
-    <section className="relative overflow-hidden" style={{ background: "#162040" }}>
+    <section className="relative overflow-hidden" style={{ background: "#1c1c81" }}>
       <div className="mx-auto w-full max-w-4xl px-6 py-16">
-        <Link
-          href={categoryHref}
-          className="mb-6 inline-flex w-fit items-center gap-2 text-sm transition-opacity hover:opacity-80"
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-6 flex w-fit flex-wrap items-center gap-x-2 gap-y-1 text-sm"
           style={{ color: "rgba(255,255,255,0.72)" }}
         >
           <ArrowLeft size={16} className="shrink-0" />
-          {article.categorie ? `Înapoi la ${article.categorie.nume}` : "Înapoi la Bibliotecă"}
-        </Link>
+          {crumbs.map((crumb, index) => (
+            <span key={crumb.href} className="inline-flex items-center gap-x-2">
+              {index > 0 ? <ChevronRight size={14} className="shrink-0 opacity-60" /> : null}
+              <Link href={crumb.href} className="transition-opacity hover:opacity-80">
+                {crumb.label}
+              </Link>
+            </span>
+          ))}
+        </nav>
 
         <div className="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2">
           {article.tip && tint ? (
@@ -38,10 +54,6 @@ export function PublicArticleHeader({ article }: { article: ArticleDetail }) {
           ) : null}
           <p className="text-sm" style={{ color: "rgba(255,255,255,0.72)" }}>
             {article.categorie?.nume}
-            {article.categorie && publicata ? " · " : ""}
-            {publicata ? (
-              <time dateTime={article.dataPublicarii ?? undefined}>{publicata}</time>
-            ) : null}
           </p>
         </div>
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Send } from "lucide-react";
@@ -28,6 +29,7 @@ export function ResendInvitationButton({ id, nume }: { id: number; nume: string 
         return;
       }
       setSent(true);
+      toast.success("Invitația a fost retrimisă.");
       router.refresh();
     });
   };
@@ -45,8 +47,8 @@ export function ResendInvitationButton({ id, nume }: { id: number; nume: string 
         {isPending ? "Se trimite..." : "Retrimite invitația"}
       </button>
       <p aria-live="polite" className="mt-1 text-[11px]">
-        {sent && <span style={{ color: "#16a34a" }}>Invitație retrimisă.</span>}
-        {error && <span style={{ color: "#ef4444" }}>{error}</span>}
+        {sent && <span style={{ color: "#15803d" }}>Invitație retrimisă.</span>}
+        {error && <span style={{ color: "#b91c1c" }}>{error}</span>}
       </p>
     </div>
   );

@@ -21,7 +21,7 @@ export function JoinRequestMessageModal({
             <h2
               id="join-request-message-title"
               className="font-heading font-extrabold text-lg"
-              style={{ color: "#162040" }}
+              style={{ color: "#1c1c81" }}
             >
               Mesaj
             </h2>

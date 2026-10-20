@@ -1,22 +1,28 @@
 "use client";
 
+import { errorMessage, getMediaUrl } from "@/lib/api/client";
 import { useRef, useState, useTransition } from "react";
-import { Film, Loader2 } from "lucide-react";
+import { Film, ImageIcon, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
-import { uploadPageVideoAction } from "@/lib/api/page-blocks-actions";
+import {
+  uploadPageImageAction,
+  uploadPageVideoAction,
+} from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL } from "../../upload";
 import type { BlockFieldErrors } from "../../types";
 import type { VideoData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
-const hintClass = "mt-1 text-xs text-[#94a3b8]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
+const hintClass = "mt-1 text-xs text-[#5b6779]";
 
 const URL_PLACEHOLDER: Record<VideoData["sursaTip"], string> = {
   youtube: "https://www.youtube.com/watch?v=...",
@@ -37,6 +43,10 @@ export function VideoEditor({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isPosterUploading, startPosterUpload] = useTransition();
+  const [posterError, setPosterError] = useState<string | null>(null);
+  const [posterPickerOpen, setPosterPickerOpen] = useState(false);
+  const posterInputRef = useRef<HTMLInputElement>(null);
 
   const set = (patch: Partial<VideoData>) => onChange({ ...value, ...patch });
 
@@ -52,10 +62,9 @@ export function VideoEditor({
       return;
     }
     startUpload(async () => {
-      const form = new FormData();
-      form.append("files", file);
       try {
-        const result = await uploadPageVideoAction(form);
+        const [uploaded] = await uploadFilesDirect([file]);
+        const result = await uploadPageVideoAction(uploaded);
         if (result.error || !result.video) {
           const message =
             result.error ?? "Nu am putut încărca fișierul video.";
@@ -64,9 +73,40 @@ export function VideoEditor({
           return;
         }
         set({ fisier: result.video });
-      } catch {
-        const message = "Nu am putut încărca fișierul video.";
+      } catch (err) {
+        const message =
+          errorMessage(err, "Nu am putut încărca fișierul video.");
         setUploadError(message);
+        toast.error(message);
+      }
+    });
+  };
+
+  const handlePoster = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    setPosterError(null);
+    if (file.size > MAX_UPLOAD_BYTES) {
+      const message = `Fișierul depășește limita de ${MAX_UPLOAD_LABEL}. Alege un fișier mai mic.`;
+      setPosterError(message);
+      toast.error(message);
+      return;
+    }
+    startPosterUpload(async () => {
+      try {
+        const [uploaded] = await uploadFilesDirect([file]);
+        const result = await uploadPageImageAction(uploaded);
+        if (result.error || !result.image) {
+          const message = result.error ?? "Nu am putut încărca imaginea.";
+          setPosterError(message);
+          toast.error(message);
+          return;
+        }
+        set({ poster: result.image });
+      } catch (err) {
+        const message = errorMessage(err, "Nu am putut încărca imaginea.");
+        setPosterError(message);
         toast.error(message);
       }
     });
@@ -107,14 +147,14 @@ export function VideoEditor({
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isUploading}
-                  className="text-sm font-semibold text-[#2563eb] hover:opacity-80 disabled:opacity-60"
+                  className="text-sm font-semibold text-[#5656e5] hover:opacity-80 disabled:opacity-60"
                 >
                   {isUploading ? "Se încarcă..." : "Schimbă"}
                 </button>
                 <button
                   type="button"
                   onClick={() => set({ fisier: null })}
-                  className="text-sm font-semibold text-[#ef4444] hover:opacity-80"
+                  className="text-sm font-semibold text-[#b91c1c] hover:opacity-80"
                 >
                   Elimină
                 </button>
@@ -125,7 +165,7 @@ export function VideoEditor({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040] disabled:opacity-60"
+              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81] disabled:opacity-60"
             >
               {isUploading ? (
                 <Loader2 size={20} className="animate-spin" />
@@ -147,7 +187,7 @@ export function VideoEditor({
           <button
             type="button"
             onClick={() => setPickerOpen(true)}
-            className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+            className="mt-2 text-xs font-semibold text-[#5656e5] hover:opacity-80"
           >
             Alege din bibliotecă
           </button>
@@ -187,7 +227,7 @@ export function VideoEditor({
         <div>
           <label htmlFor="video-sursa-url" className={labelClass}>
             Link {value.sursaTip === "youtube" ? "YouTube" : "Vimeo"}{" "}
-            <span className="text-[#ef4444]">*</span>
+            <span className="text-[#b91c1c]">*</span>
           </label>
           <input
             id="video-sursa-url"
@@ -198,6 +238,88 @@ export function VideoEditor({
             aria-invalid={Boolean(errors.sursaUrl)}
           />
           {errors.sursaUrl && <p className={errorClass}>{errors.sursaUrl}</p>}
+
+          <span className={`${labelClass} mt-4`}>Imagine poster</span>
+          {value.poster ? (
+            <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-white px-4 py-3">
+              <span className="flex min-w-0 items-center gap-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={getMediaUrl(value.poster.url)}
+                  alt=""
+                  className="h-10 w-16 shrink-0 rounded-lg object-cover"
+                />
+                <span className="truncate text-sm text-[#475569]">
+                  {value.poster.name || "imagine"}
+                </span>
+              </span>
+              <span className="flex shrink-0 items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => posterInputRef.current?.click()}
+                  disabled={isPosterUploading}
+                  className="text-sm font-semibold text-[#5656e5] hover:opacity-80 disabled:opacity-60"
+                >
+                  {isPosterUploading ? "Se încarcă..." : "Schimbă"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => set({ poster: null })}
+                  className="text-sm font-semibold text-[#b91c1c] hover:opacity-80"
+                >
+                  Elimină
+                </button>
+              </span>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => posterInputRef.current?.click()}
+              disabled={isPosterUploading}
+              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81] disabled:opacity-60"
+            >
+              {isPosterUploading ? (
+                <Loader2 size={20} className="animate-spin" />
+              ) : (
+                <ImageIcon size={20} />
+              )}
+              {isPosterUploading ? "Se încarcă..." : "Selectează o imagine"}
+            </button>
+          )}
+          <input
+            ref={posterInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handlePoster}
+          />
+          {posterError && <p className={errorClass}>{posterError}</p>}
+
+          <button
+            type="button"
+            onClick={() => setPosterPickerOpen(true)}
+            className="mt-2 text-xs font-semibold text-[#5656e5] hover:opacity-80"
+          >
+            Alege din bibliotecă
+          </button>
+          <MediaLibraryPicker
+            open={posterPickerOpen}
+            multiple={false}
+            accept="image"
+            onClose={() => setPosterPickerOpen(false)}
+            onPick={([file]) => {
+              set({
+                poster: { id: file.id, url: file.url, name: file.name },
+              });
+              setPosterPickerOpen(false);
+            }}
+          />
+          <p className={hintClass}>
+            Afișată înainte ca vizitatorul să apese play. Player-ul{" "}
+            {value.sursaTip === "youtube" ? "YouTube" : "Vimeo"} se încarcă
+            abia la click, ca să nu se scrie cookies fără acordul lui. Fără
+            poster se afișează un fundal simplu cu buton de redare.
+          </p>
         </div>
       )}
 
@@ -228,16 +350,14 @@ export function VideoEditor({
       </div>
 
       <div>
-        <label htmlFor="video-descriere" className={labelClass}>
+        <span className={labelClass}>
           Descriere
-        </label>
-        <textarea
-          id="video-descriere"
-          rows={3}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.descriere}
-          onChange={(e) => set({ descriere: e.target.value })}
-          placeholder="Context scurt afișat deasupra player-ului"
+          onChange={(html) => set({ descriere: html })}
+          ariaLabel="Descriere"
+          compact
         />
       </div>
 
@@ -292,6 +412,7 @@ export function VideoEditor({
           options={[
             { value: "16:9", label: "16:9" },
             { value: "4:3", label: "4:3" },
+            { value: "9:16", label: "9:16" },
             { value: "original", label: "Original" },
           ]}
         />
@@ -321,7 +442,7 @@ export function VideoEditor({
               key={key}
               className="flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3"
             >
-              <span className="text-sm font-semibold text-[#162040]">
+              <span className="text-sm font-semibold text-[#1c1c81]">
                 {label}
               </span>
               <Toggle
@@ -334,7 +455,13 @@ export function VideoEditor({
           );
         })}
         {errors.controale && <p className={errorClass}>{errors.controale}</p>}
-        {value.autoplay && !value.mut && (
+        {value.autoplay && value.sursaTip !== "fisier" && (
+          <p className={hintClass}>
+            Nu se aplică la YouTube/Vimeo: player-ul pornește la click, iar
+            asta e chiar ce ține cookies-urile în afara paginii până atunci.
+          </p>
+        )}
+        {value.autoplay && value.sursaTip === "fisier" && !value.mut && (
           <p className={hintClass}>
             Browserele pornesc autoplay doar dacă video-ul e și „Mut” — va fi
             redat fără sunet.

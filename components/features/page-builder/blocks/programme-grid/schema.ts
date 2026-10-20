@@ -1,28 +1,7 @@
 import { z } from "zod";
+import { iconSchema } from "@/components/ui/icons/schema";
 import { ctaHasTarget } from "../shared/cta";
-
-/**
- * Fixed icon palette for a programme card — same set as Feature Cards. Stored as
- * a string key (not a component reference) so the schema stays serialisable and
- * the renderer stays pure; `icons.ts` maps the key back to a `lucide-react`
- * icon at render time.
- */
-export const PROGRAMME_ICON_KEYS = [
-  "book",
-  "users",
-  "award",
-  "globe",
-  "graduation",
-  "library",
-  "layers",
-  "file",
-  "zap",
-  "calendar",
-  "chart",
-  "check",
-] as const;
-
-export type ProgrammeIconKey = (typeof PROGRAMME_ICON_KEYS)[number];
+import { IMAGE_RATIOS_WITH_IMPLICIT } from "../shared/image-ratio";
 
 /** Uploaded media, same shape the Hero blocks store from `uploadPageImageAction`. */
 const imageSchema = z
@@ -33,7 +12,7 @@ const imageSchema = z
 const programSchema = z.object({
   imagine: imageSchema,
   imagineAlt: z.string().trim().default(""),
-  icon: z.enum(PROGRAMME_ICON_KEYS).default("layers"),
+  icon: iconSchema("programme", "layers"),
   titlu: z.string().trim().default(""),
   subtitlu: z.string().trim().default(""),
   descriere: z.string().trim().default(""),
@@ -49,11 +28,9 @@ export const programmeGridSchema = z
   .object({
     titlu: z.string().trim().default(""),
     coloane: z.enum(["1", "2", "3", "4"]).default("2"),
+    /** Card image ratio; see `blocks/shared/image-ratio.ts`. */
+    raport: z.enum(IMAGE_RATIOS_WITH_IMPLICIT).default("implicit"),
     programe: z.array(programSchema).default([]),
-  })
-  .refine((d) => d.programe.every((p) => p.titlu), {
-    path: ["programe"],
-    message: "Fiecare program are nevoie de un titlu",
   })
   .refine((d) => d.programe.every((p) => !p.imagine || p.imagineAlt.length > 0), {
     path: ["programe"],
@@ -79,13 +56,14 @@ export type ProgramImage = z.infer<typeof imageSchema>;
 export const PROGRAMME_GRID_DEFAULTS: ProgrammeGridData = {
   titlu: "",
   coloane: "2",
+  raport: "implicit",
   programe: [],
 };
 
 export const EMPTY_PROGRAM: Program = {
   imagine: null,
   imagineAlt: "",
-  icon: "layers",
+  icon: "lucide:layers",
   titlu: "",
   subtitlu: "",
   descriere: "",

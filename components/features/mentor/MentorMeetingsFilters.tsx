@@ -33,10 +33,17 @@ export function MentorMeetingsFilters({
   const searchParams = useSearchParams();
 
   const programs = Array.from(
-    new Map(ongs.flatMap((ong) => ong.programs).map((program) => [program.documentId, program])).values(),
+    new Map(
+      ongs
+        .flatMap((ong) => ong.programs)
+        .map((program) => [program.documentId, program]),
+    ).values(),
   );
 
-  function navigate(key: "ong" | "program" | "status" | "format", value: string) {
+  function navigate(
+    key: "ong" | "program" | "status" | "format",
+    value: string,
+  ) {
     const params = new URLSearchParams(searchParams.toString());
     if (value) {
       params.set(key, value);
@@ -49,7 +56,7 @@ export function MentorMeetingsFilters({
 
   return (
     <div className="flex flex-col sm:flex-row gap-3 mb-4">
-      <div className="relative">
+      <div className="relative w-full sm:w-auto">
         <label htmlFor="mentor-meetings-ong" className="sr-only">
           Filtrează după ONG
         </label>
@@ -57,7 +64,7 @@ export function MentorMeetingsFilters({
           id="mentor-meetings-ong"
           defaultValue={initialOng}
           onChange={(e) => navigate("ong", e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
         >
           <option value="">Toate organizațiile</option>
           {ongs.map((ong) => (
@@ -71,7 +78,7 @@ export function MentorMeetingsFilters({
           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
         />
       </div>
-      <div className="relative">
+      <div className="relative w-full sm:w-auto">
         <label htmlFor="mentor-meetings-program" className="sr-only">
           Filtrează după program
         </label>
@@ -79,7 +86,7 @@ export function MentorMeetingsFilters({
           id="mentor-meetings-program"
           defaultValue={initialProgram}
           onChange={(e) => navigate("program", e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
         >
           <option value="">Toate programele</option>
           {programs.map((program) => (
@@ -93,7 +100,7 @@ export function MentorMeetingsFilters({
           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
         />
       </div>
-      <div className="relative">
+      <div className="relative w-full sm:w-auto">
         <label htmlFor="mentor-meetings-status" className="sr-only">
           Filtrează după status
         </label>
@@ -101,7 +108,7 @@ export function MentorMeetingsFilters({
           id="mentor-meetings-status"
           defaultValue={initialStatus}
           onChange={(e) => navigate("status", e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
         >
           <option value="">Toate statusurile</option>
           {STATUS_OPTIONS.map((option) => (
@@ -115,7 +122,7 @@ export function MentorMeetingsFilters({
           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
         />
       </div>
-      <div className="relative">
+      <div className="relative w-full sm:w-auto">
         <label htmlFor="mentor-meetings-format" className="sr-only">
           Filtrează după format
         </label>
@@ -123,7 +130,7 @@ export function MentorMeetingsFilters({
           id="mentor-meetings-format"
           defaultValue={initialFormat}
           onChange={(e) => navigate("format", e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
         >
           <option value="">Toate formatele</option>
           {FORMAT_OPTIONS.map((option) => (

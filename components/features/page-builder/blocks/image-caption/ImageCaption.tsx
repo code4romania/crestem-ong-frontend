@@ -1,5 +1,7 @@
 import { getMediaUrl } from "@/lib/api/client";
 import type { ImageCaptionData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 const WIDTH_CLASS: Record<ImageCaptionData["latime"], string> = {
   compacta: "max-w-3xs",
@@ -45,8 +47,8 @@ export function ImageCaption({ data }: { data: ImageCaptionData }) {
   if (!image) {
     return (
       <section>
-        <div className="mx-auto max-w-3xl px-6 py-16">
-          <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#94a3b8]">
+        <div className="mx-auto max-w-3xl px-6 py-8">
+          <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#5b6779]">
             Adaugă o imagine.
           </div>
         </div>
@@ -59,11 +61,11 @@ export function ImageCaption({ data }: { data: ImageCaptionData }) {
   const aspectClass = raport === "original" ? null : ASPECT_CLASS[raport];
 
   const credit = [creditFoto, sursa].filter(Boolean).join(" · ");
-  const hasCaption = Boolean(legenda || credit);
+  const hasCaption = hasRichText(legenda) || Boolean(credit);
 
   return (
     <section>
-      <div className="px-6 py-16">
+      <div className="px-6 py-8">
         <figure className={`${WIDTH_CLASS[latime]} ${ALIGN_CLASS[aliniere]}`}>
           {aspectClass ? (
             <div className={`overflow-hidden ${rounded} ${aspectClass}`}>
@@ -81,9 +83,9 @@ export function ImageCaption({ data }: { data: ImageCaptionData }) {
 
           {hasCaption && (
             <figcaption className="mt-3 text-sm text-[#475569]">
-              {legenda && <span className="block">{legenda}</span>}
+              <RichTextContent html={legenda} />
               {credit && (
-                <span className="mt-1 block text-xs text-[#94a3b8]">
+                <span className="mt-1 block text-xs text-[#5b6779]">
                   {credit}
                 </span>
               )}

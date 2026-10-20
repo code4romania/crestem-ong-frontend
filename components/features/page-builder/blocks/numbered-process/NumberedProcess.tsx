@@ -1,4 +1,5 @@
 import type { NumberedProcessData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 /**
  * "Structure – Numbered Process" — an optional heading over a vertical list of
@@ -11,15 +12,15 @@ export function NumberedProcess({ data }: { data: NumberedProcessData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-3xl px-6 py-16">
+      <div className="mx-auto max-w-3xl px-6 py-8">
         {titlu ? (
           <h2
-            className="font-heading mb-10 wrap-break-word"
+            className="font-heading mb-10 text-center wrap-break-word"
             style={{
               fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
               fontWeight: 800,
               lineHeight: 1.2,
-              color: "#162040",
+              color: "#1c1c81",
             }}
           >
             {titlu}
@@ -39,20 +40,18 @@ export function NumberedProcess({ data }: { data: NumberedProcessData }) {
                 <span
                   aria-hidden="true"
                   className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
-                  style={{ background: "#162040" }}
+                  style={{ background: "#1c1c81" }}
                 >
                   {index + 1}
                 </span>
                 <div className="pt-0.5">
-                  <p className="font-semibold text-[#162040] wrap-break-word">
-                    <span className="sr-only">Pasul {index + 1}: </span>
-                    {pas.titlu}
-                  </p>
-                  {pas.text ? (
-                    <p className="mt-1.5 text-sm text-[#475569] wrap-break-word">
-                      {pas.text}
+                  {pas.titlu ? (
+                    <p className="font-semibold text-[#1c1c81] wrap-break-word">
+                      <span className="sr-only">Pasul {index + 1}: </span>
+                      {pas.titlu}
                     </p>
                   ) : null}
+                  <RichTextContent html={pas.text} className={`${pas.titlu ? "mt-1.5" : ""} text-[15px] leading-relaxed text-[#475569] wrap-break-word`} />
                 </div>
               </li>
             ))}

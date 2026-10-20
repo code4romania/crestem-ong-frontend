@@ -1,14 +1,10 @@
 import Link from "next/link";
-import { ChevronRight, type LucideIcon } from "lucide-react";
-import { CATEGORY_ICONS } from "@/components/features/page-builder/blocks/category-grid/icons";
-
-/**
- * Indexed by a plain string on purpose: a category can carry an icon key this
- * build does not know — saved by a newer one, or edited by hand — and the card
- * should fall back rather than fail to compile against a closed union it cannot
- * guarantee at runtime.
- */
-const ICONS: Record<string, LucideIcon> = CATEGORY_ICONS;
+import { ChevronRight } from "lucide-react";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { resolveIconName } from "@/components/ui/icons/registry";
+import { hasRichText } from "@/components/features/page-builder/rich-text/has-rich-text";
+import { RICH_TEXT_PROSE } from "@/components/features/page-builder/rich-text/prose";
+import { categoryTint } from "./category-tint";
 
 /**
  * Only the fields the card actually paints, rather than a whole `PublicCategory`.
@@ -20,32 +16,18 @@ export interface CategoryCardData {
   nume: string;
   slug: string;
   descriere: string;
-  /** A key from the twelve-icon palette; anything unknown falls back to `folder`. */
+  /** Stored icon value (`lucide:<name>` or a legacy key); unknown → `folder`. */
   icon: string;
   numarArticole: number;
 }
 
-/** One accent per icon, so a category's mark and its tint are one decision. */
-const ICON_TINT: Record<string, { bg: string; fg: string }> = {
-  folder: { bg: "#eff6ff", fg: "#2563eb" },
-  settings: { bg: "#eff6ff", fg: "#2563eb" },
-  scale: { bg: "#fef2f2", fg: "#dc2626" },
-  message: { bg: "#ecfdf5", fg: "#059669" },
-  trending: { bg: "#fffbeb", fg: "#d97706" },
-  users: { bg: "#f5f3ff", fg: "#7c3aed" },
-  award: { bg: "#ecfdf5", fg: "#059669" },
-  book: { bg: "#eff6ff", fg: "#2563eb" },
-  globe: { bg: "#ecfeff", fg: "#0891b2" },
-  heart: { bg: "#fdf2f8", fg: "#db2777" },
-  briefcase: { bg: "#f8fafc", fg: "#475569" },
-  calendar: { bg: "#fffbeb", fg: "#d97706" },
-};
-
 const resourceLabel = (count: number) => `${count} ${count === 1 ? "resursă" : "resurse"}`;
 
 export function CategoryCard({ category }: { category: CategoryCardData }) {
-  const Icon = ICONS[category.icon] ?? CATEGORY_ICONS.folder;
-  const tint = ICON_TINT[category.icon] ?? ICON_TINT.folder;
+  // Resolved once for the tint; `LucideIcon` resolves the same way. Unknown
+  // values (saved by a newer build, or hand-edited) fall back to `folder`.
+  const iconName = resolveIconName(category.icon, "library", "folder");
+  const tint = categoryTint(iconName);
 
   return (
     <Link
@@ -58,16 +40,17 @@ export function CategoryCard({ category }: { category: CategoryCardData }) {
         className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl"
         style={{ background: tint.bg, color: tint.fg }}
       >
-        <Icon size={20} />
+        <LucideIcon value={category.icon} scope="library" fallback="folder" size={20} />
       </span>
 
-      <h2 className="font-heading text-lg font-bold text-[#162040] wrap-break-word">
+      <h2 className="font-heading text-lg font-bold text-[#1c1c81] wrap-break-word">
         {category.nume}
       </h2>
-      {category.descriere ? (
-        <p className="mt-2 text-sm leading-relaxed text-[#475569] wrap-break-word">
-          {category.descriere}
-        </p>
+      {category.descriere && hasRichText(category.descriere) ? (
+        <div
+          className={`mt-2 wrap-break-word line-clamp-5 ${RICH_TEXT_PROSE}`}
+          dangerouslySetInnerHTML={{ __html: category.descriere }}
+        />
       ) : null}
 
       {/* `mt-auto` absorbs the leftover height, so the count and the link sit on
@@ -78,7 +61,7 @@ export function CategoryCard({ category }: { category: CategoryCardData }) {
         <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs text-[#475569]">
           {resourceLabel(category.numarArticole)}
         </span>
-        <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#2dbe8f]">
+        <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#007d58]">
           Vezi resurse <ChevronRight size={15} />
         </span>
       </div>

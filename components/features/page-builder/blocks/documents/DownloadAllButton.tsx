@@ -1,5 +1,6 @@
 "use client";
 
+import { errorMessage } from "@/lib/api/client";
 import { useState } from "react";
 import { Download, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -33,7 +34,7 @@ export function DownloadAllButton({
         const data = (await res.json().catch(() => null)) as {
           message?: string;
         } | null;
-        throw new Error(data?.message ?? "Nu am putut genera arhiva.");
+        throw new Error(errorMessage(data?.message, "Nu am putut genera arhiva."));
       }
 
       const blob = await res.blob();
@@ -58,7 +59,7 @@ export function DownloadAllButton({
       }
     } catch (err) {
       toast.error(
-        err instanceof Error ? err.message : "Nu am putut genera arhiva.",
+        errorMessage(err, "Nu am putut genera arhiva."),
       );
     } finally {
       setBusy(false);

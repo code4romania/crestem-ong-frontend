@@ -2,21 +2,21 @@ import { getMediaUrl } from "@/lib/api/client";
 import { BLOCK_REGISTRY } from "../../registry";
 import type { SectionData } from "./schema";
 
-const NAVY_BG = "#162040";
+const NAVY_BG = "#1c1c81";
 
 /** Full literal classes so the Tailwind scanner picks them up. */
 const PT_CLASS: Record<SectionData["spatiereSus"], string> = {
-  mica: "pt-8",
-  standard: "pt-16",
-  mare: "pt-24",
-  "foarte-mare": "pt-36",
+  mica: "pt-4",
+  standard: "pt-8",
+  mare: "pt-12",
+  "foarte-mare": "pt-18",
 };
 
 const PB_CLASS: Record<SectionData["spatiereJos"], string> = {
-  mica: "pb-8",
-  standard: "pb-16",
-  mare: "pb-24",
-  "foarte-mare": "pb-36",
+  mica: "pb-4",
+  standard: "pb-8",
+  mare: "pb-12",
+  "foarte-mare": "pb-18",
 };
 
 const WIDTH_CLASS: Record<SectionData["latimeContinut"], string> = {
@@ -83,7 +83,7 @@ export function SectionBlock({ data }: { data: SectionData }) {
 
       {blocuri.length > 0 ? (
         <div
-          className={`relative flex flex-col gap-8 ${
+          className={`relative flex flex-col gap-4 ${
             skipTopPad ? "" : PT_CLASS[spatiereSus]
           } ${skipBottomPad ? "" : PB_CLASS[spatiereJos]}`}
         >

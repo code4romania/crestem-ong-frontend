@@ -40,7 +40,11 @@ export async function POST(request: Request) {
     }
     return response;
   } catch (err) {
-    const message = err instanceof ApiError ? err.message : "Nu am putut finaliza autentificarea. Încearcă din nou.";
+    const raw = err instanceof ApiError ? err.message : "Nu am putut finaliza autentificarea. Încearcă din nou.";
+    // Strapi's users-permissions plugin answers a bad email or password in
+    // English, and the message reaches the login form as-is.
+    const message =
+      raw.trim() === "Invalid identifier or password" ? "Email sau parolă incorecte." : raw;
     const status = err instanceof ApiError ? err.status : 500;
     return NextResponse.json({ message }, { status: status || 500 });
   }

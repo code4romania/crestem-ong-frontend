@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import {
   ContentEditorShell,
@@ -14,22 +15,30 @@ import {
   setArticlePublishedAction,
   updateArticleAction,
 } from "@/lib/api/articles-actions";
-import type { ArticleDetail } from "@/lib/api/articles-types";
+import type { ArticleDetail, RelatedArticleRef } from "@/lib/api/articles-types";
 import type { LibraryCategory } from "@/lib/api/library-categories-types";
 import type { PageOption } from "@/lib/api/pages-types";
+import { RelatedArticlesField } from "./RelatedArticlesField";
+import { SubcategorySelect } from "./SubcategorySelect";
 import { TagsField } from "./TagsField";
+
+// Mirrors the backend's `rezumatBase` cap in article validation.
+const REZUMAT_MAX_LENGTH = 400;
 
 export function ArticleForm({
   article,
   categories,
   tagSuggestions,
   pages = [],
+  relatedCandidates = [],
 }: {
   article: ArticleDetail | null;
   categories: LibraryCategory[];
   tagSuggestions: string[];
   /** The site's pages, so a button inside the article can point at one. */
   pages?: PageOption[];
+  /** The top-10 tag-matched candidates for this article; empty on the create screen. */
+  relatedCandidates?: RelatedArticleRef[];
 }) {
   const router = useRouter();
 
@@ -44,6 +53,9 @@ export function ArticleForm({
   const [tip, setTip] = useState(article?.tip ?? "");
   const [etichete, setEtichete] = useState<string[]>(article?.etichete ?? []);
   const [subcategorie, setSubcategorie] = useState(article?.subcategorie?.documentId ?? "");
+  const [articoleRelationate, setArticoleRelationate] = useState<string[]>(
+    article?.articoleRelationate?.map((r) => r.documentId) ?? [],
+  );
   /**
    * The status the select is asking for, which is not necessarily the status
    * the article currently has — it is applied on save, exactly as on the Pagini
@@ -105,6 +117,7 @@ export function ArticleForm({
       tip: tip.trim(),
       vizibilitate: shell.vizibilitate,
       blocuri: shell.blocuri,
+      articoleRelationate,
     };
 
     const wantPublished = asDraft ? false : publicat;
@@ -160,11 +173,23 @@ export function ArticleForm({
     });
   };
 
+  /**
+   * A saved pick can drop out of the ranked top-10 (e.g. the article's tags
+   * changed) without being unselected — it must stay visible and checkable
+   * even though it's no longer among `relatedCandidates`.
+   */
+  const mergedCandidates = [
+    ...relatedCandidates,
+    ...(article?.articoleRelationate ?? []).filter(
+      (existing) => !relatedCandidates.some((c) => c.documentId === existing.documentId),
+    ),
+  ];
+
   return (
     <div className="mx-auto max-w-6xl">
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+          <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
             {article ? "Editează articolul" : "Articol nou"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -191,7 +216,7 @@ export function ArticleForm({
         }
         slugHint={
           previewCale ? (
-            <span className="mt-1.5 block font-mono text-xs text-[#94a3b8]">{previewCale}</span>
+            <span className="mt-1.5 block font-mono text-xs text-[#5b6779]">{previewCale}</span>
           ) : null
         }
         extraFields={
@@ -206,11 +231,25 @@ export function ArticleForm({
               <textarea
                 id="articol-rezumat"
                 value={rezumat}
-                onChange={(event) => setRezumat(event.target.value)}
+                onChange={(event) =>
+                  setRezumat(event.target.value.slice(0, REZUMAT_MAX_LENGTH))
+                }
                 rows={2}
+                maxLength={REZUMAT_MAX_LENGTH}
                 placeholder="Scurtă descriere, afișată în listă și pe carduri"
                 className={inputClass}
               />
+              <p
+                className={`mt-1 text-right text-xs ${
+                  rezumat.length >= REZUMAT_MAX_LENGTH ? "text-red-600" : "text-muted-foreground"
+                }`}
+                aria-live="polite"
+              >
+                {rezumat.length}/{REZUMAT_MAX_LENGTH}
+                {rezumat.length >= REZUMAT_MAX_LENGTH
+                  ? " — ai atins limita maximă de caractere"
+                  : ""}
+              </p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
@@ -221,23 +260,7 @@ export function ArticleForm({
                 >
                   Subcategorie
                 </label>
-                <select
-                  id="articol-subcategorie"
-                  value={subcategorie}
-                  onChange={(event) => setSubcategorie(event.target.value)}
-                  className={inputClass}
-                >
-                  <option value="">Alege o subcategorie…</option>
-                  {groups.map((category) => (
-                    <optgroup key={category.documentId} label={category.nume}>
-                      {category.copii.map((child) => (
-                        <option key={child.documentId} value={child.documentId}>
-                          {child.nume}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
+                <SubcategorySelect groups={groups} value={subcategorie} onChange={setSubcategorie} />
               </div>
 
               <div>
@@ -285,37 +308,74 @@ export function ArticleForm({
               >
                 Status
               </label>
-              <select
-                id="article-status"
-                value={publicat ? "publicat" : "schita"}
-                onChange={(event) => setPublicat(event.target.value === "publicat")}
-                className={inputClass}
-              >
-                <option value="schita">Schiță</option>
-                <option value="publicat">Publicat</option>
-              </select>
+              <div className="relative">
+                <select
+                  id="article-status"
+                  value={publicat ? "publicat" : "schita"}
+                  onChange={(event) => setPublicat(event.target.value === "publicat")}
+                  className={`${inputClass} appearance-none pr-10`}
+                >
+                  <option value="schita">Schiță</option>
+                  <option value="publicat">Publicat</option>
+                </select>
+                <ChevronDown
+                  size={16}
+                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
+              </div>
               <p className="mt-1.5 text-xs text-muted-foreground">
                 O schiță nu apare pe site. Statusul se aplică la salvare.
               </p>
             </div>
           </div>
         }
-        extraActions={
-          /* The draft shortcut only makes sense while creating: an existing
-             article already has a status, and the select above is where it
-             changes. Matches the Pagini wizard. */
-          !article ? (
-            <button
-              type="button"
-              onClick={() => save(true)}
-              disabled={pending}
-              className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
-            >
-              Salvează ca draft
-            </button>
-          ) : null
-        }
+        hideActions
       />
+
+      {article ? (
+        <div className="mt-8 rounded-xl border border-border bg-white p-6">
+          <RelatedArticlesField
+            candidates={mergedCandidates}
+            value={articoleRelationate}
+            onChange={setArticoleRelationate}
+          />
+        </div>
+      ) : null}
+
+      {/* Owned here, not by `ContentEditorShell` (see its `hideActions` prop),
+          so the buttons stay the last thing on the page, after the
+          related-articles box, instead of appearing above it. */}
+      <div className="mt-6 flex justify-end gap-3">
+        <button
+          type="button"
+          onClick={() => router.push("/dashboard/biblioteca")}
+          disabled={pending}
+          className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
+        >
+          Anulează
+        </button>
+        {/* The draft shortcut only makes sense while creating: an existing
+            article already has a status, and the select above is where it
+            changes. Matches the Pagini wizard. */}
+        {!article ? (
+          <button
+            type="button"
+            onClick={() => save(true)}
+            disabled={pending}
+            className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
+          >
+            Salvează ca draft
+          </button>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => save()}
+          disabled={pending}
+          className="rounded-xl bg-[#00d495] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:brightness-90 disabled:opacity-60"
+        >
+          {pending ? "Se salvează…" : article ? "Salvează modificările" : "Creează articolul"}
+        </button>
+      </div>
     </div>
   );
 }

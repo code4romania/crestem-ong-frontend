@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronDown, Search } from "lucide-react";
 import { ROLE_OPTIONS } from "@/lib/roles";
+import { useDebouncedCallback } from "@/lib/hooks/useDebouncedCallback";
 
 interface OngOption {
   documentId: string;
@@ -37,13 +38,6 @@ export function UtilizatoriFilters({
   const [role, setRole] = useState(initialRole);
   const [ong, setOng] = useState(initialOng);
   const [status, setStatus] = useState(initialStatus);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, []);
 
   // Any filter change navigates back to page 1 — otherwise a match found by a new
   // search/filter could land on a page number that no longer exists for the new results.
@@ -57,32 +51,36 @@ export function UtilizatoriFilters({
     router.replace(qs ? `${pathname}?${qs}` : pathname);
   }
 
+  const { debounced: debouncedNavigate, cancel: cancelNavigate } = useDebouncedCallback(
+    navigate,
+    SEARCH_DEBOUNCE_MS,
+  );
+
   function handleSearchChange(value: string) {
     setSearch(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => navigate({ search: value, role, ong, status }), SEARCH_DEBOUNCE_MS);
+    debouncedNavigate({ search: value, role, ong, status });
   }
 
   function handleRoleChange(value: string) {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    cancelNavigate();
     setRole(value);
     navigate({ search, role: value, ong, status });
   }
 
   function handleOngChange(value: string) {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    cancelNavigate();
     setOng(value);
     navigate({ search, role, ong: value, status });
   }
 
   function handleStatusChange(value: string) {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    cancelNavigate();
     setStatus(value);
     navigate({ search, role, ong, status: value });
   }
 
   return (
-    <div className="flex flex-col sm:flex-row gap-3 mb-6">
+    <div className="flex flex-col lg:flex-row lg:items-start gap-3 mb-6">
       <div className="relative flex-1">
         <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
         <label htmlFor="utilizatori-search" className="sr-only">
@@ -96,7 +94,7 @@ export function UtilizatoriFilters({
           className="w-full pl-10 pr-3.5 py-2.5 rounded-full border border-border text-sm"
         />
       </div>
-      <div className="relative">
+      <div className="relative lg:w-48">
         <label htmlFor="utilizatori-role" className="sr-only">
           Filtrează după rol
         </label>
@@ -104,7 +102,7 @@ export function UtilizatoriFilters({
           id="utilizatori-role"
           value={role}
           onChange={(e) => handleRoleChange(e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
         >
           <option value="">Toate rolurile</option>
           {ROLE_OPTIONS.map((option) => (
@@ -118,7 +116,7 @@ export function UtilizatoriFilters({
           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
         />
       </div>
-      <div className="relative">
+      <div className="relative lg:w-48">
         <label htmlFor="utilizatori-ong" className="sr-only">
           Filtrează după organizație
         </label>
@@ -126,7 +124,7 @@ export function UtilizatoriFilters({
           id="utilizatori-ong"
           value={ong}
           onChange={(e) => handleOngChange(e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
         >
           <option value="">Toate organizațiile</option>
           {ongs.map((option) => (
@@ -140,7 +138,7 @@ export function UtilizatoriFilters({
           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
         />
       </div>
-      <div className="relative">
+      <div className="relative lg:w-48">
         <label htmlFor="utilizatori-status" className="sr-only">
           Filtrează după status
         </label>
@@ -148,7 +146,7 @@ export function UtilizatoriFilters({
           id="utilizatori-status"
           value={status}
           onChange={(e) => handleStatusChange(e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
         >
           <option value="">Toate statusurile</option>
           {STATUS_OPTIONS.map((option) => (

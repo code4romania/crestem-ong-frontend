@@ -1,9 +1,15 @@
 import { serverApiFetch } from "@/lib/api/server";
-import { findActiveReport, findCurrentProgramRound, getProgramOverviewStats } from "@/lib/api/reports";
-import type { ReportsCurrent } from "@/lib/api/reports";
+import {
+  findActiveReport,
+  findCurrentProgramRound,
+  getIndependentStartLock,
+  getProgramOverviewStats,
+} from "@/lib/api/reports";
+import type { OngMember, ReportsCurrent } from "@/lib/api/reports";
 import type { AssignedMentor } from "@/lib/api/programs";
 import { EvaluationTabs } from "@/components/features/overview/EvaluationTabs";
 import { OverviewSections } from "@/components/features/overview/OverviewSections";
+import { NoActiveEvaluationBanner } from "@/components/features/dashboard-ong/NoActiveEvaluationBanner";
 
 const BASE_PATH = "/dashboard/evaluari";
 
@@ -21,6 +27,10 @@ export default async function OngEvaluariOverviewPage() {
 
   const stats = round ? getProgramOverviewStats(round) : null;
   const activeReport = findActiveReport(currentRes.data.programRounds, currentRes.data.standaloneReports);
+  // Only needed by the start-evaluation modal, which is offered only when nothing is in progress.
+  const ongMembers: OngMember[] = activeReport
+    ? []
+    : (await serverApiFetch<{ data: OngMember[] }>("/api/ongs/members")).data;
 
   return (
     <div>
@@ -32,6 +42,16 @@ export default async function OngEvaluariOverviewPage() {
         }
         comparisonHref={`${BASE_PATH}/comparatie`}
       />
+
+      {!activeReport && (
+        <NoActiveEvaluationBanner
+          ongMembers={ongMembers}
+          lock={getIndependentStartLock(
+            currentRes.data.programRounds,
+            currentRes.data.standaloneReports,
+          )}
+        />
+      )}
 
       <OverviewSections
         round={round}

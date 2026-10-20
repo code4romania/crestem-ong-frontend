@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
+import { imageRatioClass, type ImageRatio } from "../shared/image-ratio";
 import { useGalleryLightbox } from "./useGalleryLightbox";
 import type { GalleryData, GalleryImage } from "./schema";
 
@@ -23,10 +24,12 @@ const SLIDE_BASIS: Record<GalleryData["coloane"], string> = {
 export function GalleryCarousel({
   images,
   coloane,
+  raport,
   lightbox = false,
 }: {
   images: GalleryImage[];
   coloane: GalleryData["coloane"];
+  raport: ImageRatio;
   lightbox?: boolean;
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start" });
@@ -59,7 +62,7 @@ export function GalleryCarousel({
               <img
                 src={getMediaUrl(image.url)}
                 alt={image.alt}
-                className="aspect-[4/3] w-full rounded-xl object-cover"
+                className={`w-full rounded-xl ${imageRatioClass(raport)}`}
               />
             );
             return (
@@ -98,7 +101,7 @@ export function GalleryCarousel({
             type="button"
             onClick={() => emblaApi?.scrollPrev()}
             aria-label="Imaginea anterioară"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#475569] shadow-sm ring-1 ring-border transition-colors hover:text-[#162040]"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#475569] shadow-sm ring-1 ring-border transition-colors hover:text-[#1c1c81]"
           >
             <ChevronLeft size={18} />
           </button>
@@ -112,7 +115,7 @@ export function GalleryCarousel({
                 aria-current={index === selected}
                 className={`h-2 rounded-full transition-all ${
                   index === selected
-                    ? "w-6 bg-[#2dbe8f]"
+                    ? "w-6 bg-[#00d495]"
                     : "w-2 bg-slate-300 hover:bg-slate-400"
                 }`}
               />
@@ -122,7 +125,7 @@ export function GalleryCarousel({
             type="button"
             onClick={() => emblaApi?.scrollNext()}
             aria-label="Imaginea următoare"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#475569] shadow-sm ring-1 ring-border transition-colors hover:text-[#162040]"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#475569] shadow-sm ring-1 ring-border transition-colors hover:text-[#1c1c81]"
           >
             <ChevronRight size={18} />
           </button>

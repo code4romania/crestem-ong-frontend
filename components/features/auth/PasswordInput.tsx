@@ -23,7 +23,7 @@ export function PasswordInput({ className, ref, ...props }: PasswordInputProps) 
         type="button"
         onClick={() => setVisible((v) => !v)}
         className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors hover:text-foreground"
-        style={{ color: "#94a3b8" }}
+        style={{ color: "#5b6779" }}
         aria-label={visible ? "Ascunde parola" : "Arată parola"}
       >
         {visible ? <EyeOff size={16} /> : <Eye size={16} />}

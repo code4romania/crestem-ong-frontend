@@ -36,8 +36,14 @@ export function getDashboardPathForRole(roleType?: string | null): string | null
  * (login, registration) have nothing to offer someone who is already signed in.
  * Call it straight from a Server Component body — it raises Next's redirect
  * signal, so it must not be wrapped in a try/catch.
+ *
+ * `returnTo` is the page the visitor was turned away from, already checked by
+ * `safeReturnTo`. Someone whose session is still good — a second click on the
+ * same invitation, say — belongs there rather than on their landing page.
  */
-export async function redirectAuthenticatedToDashboard(): Promise<void> {
+export async function redirectAuthenticatedToDashboard(
+  returnTo?: string | null,
+): Promise<void> {
   let dashboard: string | null = null;
   try {
     const user = await getCurrentUser();
@@ -45,5 +51,7 @@ export async function redirectAuthenticatedToDashboard(): Promise<void> {
   } catch {
     // Backend unreachable — render the auth page instead of failing the request.
   }
-  if (dashboard) redirect(dashboard);
+  // Only for a session that checked out: `returnTo` alone would bounce a signed
+  // out visitor back to the page that sent them here, and round again.
+  if (dashboard) redirect(returnTo ?? dashboard);
 }

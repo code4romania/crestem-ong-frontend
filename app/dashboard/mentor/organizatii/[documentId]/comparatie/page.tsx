@@ -23,7 +23,7 @@ export default async function MentorOrganizatieComparatiePage({
   return (
     <div>
       <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
-        <h2 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+        <h2 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
           Comparație evaluări
         </h2>
         <div className="flex items-center gap-3 print:hidden">

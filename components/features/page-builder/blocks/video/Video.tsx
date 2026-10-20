@@ -1,57 +1,39 @@
 import { getMediaUrl } from "@/lib/api/client";
-import { parseVideoId, type VideoData } from "./schema";
+import { getEmbedSrc } from "./embed-src";
+import { VideoFacade } from "./VideoFacade";
+import { type VideoData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 const WIDTH_CLASS: Record<VideoData["latime"], string> = {
-  compacta: "max-w-2xl",
-  standard: "max-w-3xl",
-  lata: "max-w-5xl",
+  compacta: "max-w-3xl",
+  standard: "max-w-5xl",
+  lata: "max-w-7xl",
   full: "max-w-none",
 };
 
-const ASPECT_CLASS: Record<"16:9" | "4:3", string> = {
+const ASPECT_CLASS: Record<"16:9" | "4:3" | "9:16", string> = {
   "16:9": "aspect-video",
   "4:3": "aspect-[4/3]",
+  // Capped and centred: at the block's full width a vertical frame would be
+  // several screens tall. Width is also tied to viewport height (75svh × 9/16)
+  // so the whole frame stays on screen on short laptop displays.
+  "9:16": "mx-auto aspect-[9/16] w-full max-w-[min(24rem,calc(75svh*9/16))]",
 };
-
-/** YouTube/Vimeo embed URL with the player options folded into the query. */
-function getEmbedSrc(data: VideoData): string | null {
-  if (data.sursaTip === "fisier") return null;
-  const id = parseVideoId(data.sursaTip, data.sursaUrl);
-  if (!id) return null;
-
-  const muted = data.mut || data.autoplay;
-  const params = new URLSearchParams();
-
-  if (data.sursaTip === "youtube") {
-    params.set("rel", "0");
-    if (data.autoplay) params.set("autoplay", "1");
-    if (muted) params.set("mute", "1");
-    if (!data.controale) params.set("controls", "0");
-    if (data.loop) {
-      params.set("loop", "1");
-      params.set("playlist", id);
-    }
-    return `https://www.youtube.com/embed/${id}?${params.toString()}`;
-  }
-
-  if (data.autoplay) params.set("autoplay", "1");
-  if (muted) params.set("muted", "1");
-  if (!data.controale) params.set("controls", "0");
-  if (data.loop) params.set("loop", "1");
-  return `https://player.vimeo.com/video/${id}?${params.toString()}`;
-}
 
 /**
  * "Material video" — a YouTube/Vimeo embed or an uploaded/linked video file,
  * with optional heading, description and caption. Pure (no hooks, no
  * `"use client"`) so it renders on the public page unchanged once a backend
- * feeds it the same shape.
+ * feeds it the same shape; the click-to-play gate around third-party embeds
+ * is the one client part, and it lives in `VideoFacade`.
  */
 export function Video({ data }: { data: VideoData }) {
   const {
     sursaTip,
     sursaUrl,
     fisier,
+    poster,
     altText,
     titlu,
     descriere,
@@ -76,28 +58,24 @@ export function Video({ data }: { data: VideoData }) {
 
   return (
     <section>
-      <div className={`mx-auto px-6 py-16 ${WIDTH_CLASS[latime]}`}>
+      <div className={`mx-auto px-6 py-8 ${WIDTH_CLASS[latime]}`}>
         {titlu && (
-          <h2 className="text-2xl font-bold text-[#162040]">{titlu}</h2>
+          <h2 className="text-2xl font-bold text-[#1c1c81]">{titlu}</h2>
         )}
-        {descriere && (
-          <p className="mt-2 text-sm text-[#475569]">{descriere}</p>
-        )}
+        <RichTextContent html={descriere} className="mt-2 text-sm text-[#475569]" />
 
-        <figure className={titlu || descriere ? "mt-6" : ""}>
+        <figure className={titlu || hasRichText(descriere) ? "mt-6" : ""}>
           {embedSrc ? (
             <div
               className={`overflow-hidden rounded-2xl bg-black ${
                 aspectClass ?? "aspect-video"
               }`}
             >
-              <iframe
+              <VideoFacade
                 src={embedSrc}
+                provider={sursaTip === "vimeo" ? "vimeo" : "youtube"}
+                posterUrl={poster ? getMediaUrl(poster.url) : null}
                 title={iframeTitle}
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full border-0"
               />
             </div>
           ) : fileSrc ? (
@@ -121,7 +99,7 @@ export function Video({ data }: { data: VideoData }) {
               />
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#94a3b8]">
+            <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#5b6779]">
               Adaugă o sursă video.
             </div>
           )}
@@ -129,10 +107,10 @@ export function Video({ data }: { data: VideoData }) {
           {hasCaption && (
             <figcaption className="mt-3">
               {legenda && (
-                <span className="block text-sm text-[#64748b]">{legenda}</span>
+                <span className="block text-sm text-[#5b6779]">{legenda}</span>
               )}
               {credit && (
-                <span className="block text-xs text-[#94a3b8]">{credit}</span>
+                <span className="block text-xs text-[#5b6779]">{credit}</span>
               )}
             </figcaption>
           )}

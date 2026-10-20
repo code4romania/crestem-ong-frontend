@@ -1,8 +1,14 @@
 import Link from "next/link";
 import { Calendar, ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
-import { PROGRAMME_ICONS } from "./icons";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { hasIcon } from "@/components/ui/icons/names";
+import {
+  imageRatioClass,
+  type ImageRatioWithImplicit,
+} from "../shared/image-ratio";
 import type { Program, ProgrammeGridData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const COL_CLASS: Record<ProgrammeGridData["coloane"], string> = {
   "1": "sm:grid-cols-1 lg:grid-cols-1",
@@ -11,32 +17,47 @@ const COL_CLASS: Record<ProgrammeGridData["coloane"], string> = {
   "4": "sm:grid-cols-2 lg:grid-cols-4",
 };
 
-function ProgramCard({ program }: { program: Program }) {
-  const Icon = PROGRAMME_ICONS[program.icon];
+function ProgramCard({
+  program,
+  raport,
+}: {
+  program: Program;
+  raport: ImageRatioWithImplicit;
+}) {
   const hasCta = Boolean(program.href && program.ctaLabel);
 
   return (
-    <div className="flex min-w-0 flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-border">
+    // Two rows of the parent grid (image, body) via subgrid, so cards in the
+    // same row line up even when "original" images have different heights.
+    <div className="row-span-2 grid min-w-0 grid-rows-subgrid gap-0 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-border">
       {program.imagine ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
           src={getMediaUrl(program.imagine.url)}
           alt={program.imagineAlt || program.titlu}
-          className="block h-44 w-full object-cover"
+          className={`block w-full self-center ${
+            raport === "implicit" ? "h-44 object-cover" : imageRatioClass(raport)
+          }`}
         />
       ) : null}
 
-      <div className="flex min-w-0 flex-1 flex-col p-6">
+      <div
+        className={`flex min-w-0 flex-col p-6 ${program.imagine ? "" : "row-span-2"}`}
+      >
         <div className="flex items-center gap-3">
-          <span
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-            style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
-          >
-            <Icon size={18} />
-          </span>
-          <h3 className="min-w-0 text-lg font-semibold text-[#162040] wrap-break-word">
-            {program.titlu}
-          </h3>
+          {hasIcon(program.icon) ? (
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+              style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
+            >
+              <LucideIcon value={program.icon} scope="programme" size={18} />
+            </span>
+          ) : null}
+          {program.titlu ? (
+            <h3 className="min-w-0 text-lg font-semibold text-[#1c1c81] wrap-break-word">
+              {program.titlu}
+            </h3>
+          ) : null}
         </div>
 
         {program.subtitlu ? (
@@ -45,16 +66,12 @@ function ProgramCard({ program }: { program: Program }) {
           </p>
         ) : null}
 
-        {program.descriere ? (
-          <p className="mt-3 text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3">
-            {program.descriere}
-          </p>
-        ) : null}
+        <RichTextContent html={program.descriere} className="mt-3 text-sm leading-relaxed text-[#475569] wrap-break-word line-clamp-3" />
 
         {program.perioada || hasCta ? (
           <div className="mt-auto flex flex-col gap-4 pt-4">
             {program.perioada ? (
-              <p className="flex items-center gap-1.5 text-xs text-[#64748b] wrap-break-word">
+              <p className="flex items-center gap-1.5 text-xs text-[#5b6779] wrap-break-word">
                 <Calendar size={14} className="shrink-0" />
                 Perioadă: {program.perioada}
               </p>
@@ -64,7 +81,7 @@ function ProgramCard({ program }: { program: Program }) {
               <Link
                 href={program.href}
                 className="flex w-full items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 wrap-break-word"
-                style={{ background: "#162040" }}
+                style={{ background: "#1c1c81" }}
               >
                 {program.ctaLabel} <ChevronRight size={16} className="shrink-0" />
               </Link>
@@ -86,7 +103,7 @@ function ProgramCard({ program }: { program: Program }) {
 export function ProgrammeGrid({ data }: { data: ProgrammeGridData }) {
   return (
     <section className="relative overflow-hidden">
-      <div className="relative mx-auto max-w-7xl px-6 py-20">
+      <div className="relative mx-auto max-w-7xl px-6 py-10">
         {data.titlu ? (
           <div className="mx-auto mb-12 max-w-2xl text-center">
             <h2
@@ -95,7 +112,7 @@ export function ProgrammeGrid({ data }: { data: ProgrammeGridData }) {
                 fontSize: "clamp(2rem, 4vw, 2.75rem)",
                 fontWeight: 800,
                 lineHeight: 1.15,
-                color: "#162040",
+                color: "#1c1c81",
               }}
             >
               {data.titlu}
@@ -106,7 +123,11 @@ export function ProgrammeGrid({ data }: { data: ProgrammeGridData }) {
         {data.programe.length > 0 ? (
           <div className={`grid grid-cols-1 gap-6 ${COL_CLASS[data.coloane]}`}>
             {data.programe.map((program, index) => (
-              <ProgramCard key={index} program={program} />
+              <ProgramCard
+                key={index}
+                program={program}
+                raport={data.raport ?? "implicit"}
+              />
             ))}
           </div>
         ) : (

@@ -21,10 +21,10 @@ const FORMAT_LABELS: Record<OngMeeting["format"], string> = {
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>
+      <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5b6779" }}>
         {label}
       </p>
-      <div className="text-sm" style={{ color: "#162040" }}>
+      <div className="text-sm" style={{ color: "#1c1c81" }}>
         {children}
       </div>
     </div>
@@ -55,7 +55,7 @@ export function MeetingDetailsModal({
           <h2
             id="meeting-details-title"
             className="font-heading font-extrabold text-lg"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             Detalii întâlnire
           </h2>
@@ -86,7 +86,7 @@ export function MeetingDetailsModal({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline"
-                style={{ color: "#2563eb" }}
+                style={{ color: "#5656e5" }}
               >
                 {meeting.linkIntalnire}
               </a>
@@ -102,7 +102,7 @@ export function MeetingDetailsModal({
                   <span
                     key={name}
                     className="px-2.5 py-1 rounded-full text-xs font-medium"
-                    style={{ background: "#f0faf6", color: "#162040" }}
+                    style={{ background: "#e5f9e5", color: "#1c1c81" }}
                   >
                     {name}
                   </span>
@@ -120,7 +120,7 @@ export function MeetingDetailsModal({
               type="button"
               onClick={onEdit}
               className="px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-              style={{ background: "#162040" }}
+              style={{ background: "#1c1c81" }}
             >
               Editează
             </button>

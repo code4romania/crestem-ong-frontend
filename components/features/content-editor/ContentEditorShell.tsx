@@ -10,7 +10,7 @@ import { VisibilityField } from "@/components/features/pages/VisibilityField";
 import { slugify } from "./slugify";
 
 export const inputClass =
-  "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#2dbe8f] focus:outline-none";
+  "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#007d58] focus:outline-none";
 
 export interface ContentEditorValue {
   titlu: string;
@@ -33,6 +33,9 @@ export function ContentEditorShell({
   extraFields,
   extraActions,
   slugHint,
+  lockSlug = false,
+  lockVisibility = false,
+  minBlocks = 0,
   builderTitle,
   builderDescription,
   saveLabel,
@@ -44,6 +47,7 @@ export function ContentEditorShell({
   currentPageId = null,
   currentPath = "",
   categories = [],
+  hideActions = false,
 }: {
   value: ContentEditorValue;
   /**
@@ -60,6 +64,15 @@ export function ContentEditorShell({
   extraActions?: ReactNode;
   /** Rendered under the slug input — the article's derived path, say. */
   slugHint?: ReactNode;
+  /**
+   * Keeps the slug as stored. The homepage uses it: its address is the site
+   * root whatever the slug says, and the backend refuses a change anyway.
+   */
+  lockSlug?: boolean;
+  /** Same, for the audience list — the landing page is public, always. */
+  lockVisibility?: boolean;
+  /** Forwarded to `PageBuilder`: the floor on the block count. */
+  minBlocks?: number;
   /**
    * The block canvas heading. Forwarded to `PageBuilder`, which owns that
    * heading — the shell used to print a second one of its own above it, so an
@@ -83,10 +96,24 @@ export function ContentEditorShell({
   currentPath?: string;
   /** Forwarded to `PageBuilder` so `biblioteca-categorii` previews on the canvas. */
   categories?: LibraryCategory[];
+  /**
+   * Skips this shell's own Cancel/Save bar. For a wrapping editor that has
+   * more of its own content after this shell (the article's related-articles
+   * picker, say), which owns rendering that same bar itself so the buttons
+   * stay the last thing on the page instead of appearing above that content.
+   */
+  hideActions?: boolean;
 }) {
   const [slugTouched, setSlugTouched] = useState(hasExistingRecord);
 
   const changeTitlu = (titlu: string) => {
+    // A locked slug does not follow anything: renaming the homepage must not
+    // rewrite a field the backend will then refuse.
+    if (lockSlug) {
+      onChange({ ...value, titlu });
+      return;
+    }
+
     // The slug follows the title until the editor writes one by hand; after
     // that it is theirs, and a rename must not silently break existing links.
     onChange({ ...value, titlu, slug: slugTouched ? value.slug : slugify(titlu) });
@@ -114,11 +141,15 @@ export function ContentEditorShell({
             <input
               id="page-slug"
               value={value.slug}
+              readOnly={lockSlug}
               onChange={(event) => {
+                if (lockSlug) return;
                 setSlugTouched(true);
                 onChange({ ...value, slug: event.target.value });
               }}
-              className={inputClass}
+              className={
+                lockSlug ? `${inputClass} bg-slate-50 text-muted-foreground` : inputClass
+              }
             />
             {slugHint}
           </div>
@@ -127,6 +158,7 @@ export function ContentEditorShell({
 
         <VisibilityField
           value={value.vizibilitate}
+          disabled={lockVisibility}
           onChange={(vizibilitate) => onChange({ ...value, vizibilitate })}
         />
       </div>
@@ -143,28 +175,31 @@ export function ContentEditorShell({
           currentPageId={currentPageId}
           currentPath={currentPath}
           categories={categories}
+          minBlocks={minBlocks}
         />
       </RenderModeProvider>
 
-      <div className="mt-6 flex justify-end gap-3">
-        <button
-          type="button"
-          onClick={onCancel}
-          disabled={pending}
-          className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
-        >
-          Anulează
-        </button>
-        {extraActions}
-        <button
-          type="button"
-          onClick={onSave}
-          disabled={pending}
-          className="rounded-xl bg-[#2dbe8f] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-        >
-          {saveLabel}
-        </button>
-      </div>
+      {hideActions ? null : (
+        <div className="mt-6 flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={pending}
+            className="rounded-xl border border-border px-6 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50 disabled:opacity-60"
+          >
+            Anulează
+          </button>
+          {extraActions}
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={pending}
+            className="rounded-xl bg-[#00d495] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:brightness-90 disabled:opacity-60"
+          >
+            {saveLabel}
+          </button>
+        </div>
+      )}
     </>
   );
 }

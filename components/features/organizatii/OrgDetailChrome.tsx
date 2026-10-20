@@ -79,14 +79,14 @@ export function OrgDetailChrome({
       <Link
         href={backHref}
         className="inline-flex items-center gap-1.5 text-sm font-medium mb-6 print:hidden"
-        style={{ color: "#94a3b8" }}
+        style={{ color: "#5b6779" }}
       >
         <ArrowLeft size={14} /> {backLabel}
       </Link>
 
       <OrgHeaderCard ong={ong} />
 
-      <div className="mb-6 flex items-center gap-6 border-b border-border print:hidden">
+      <div className="mb-6 flex items-center gap-6 overflow-x-auto border-b border-border print:hidden">
         {tabs.map((tab) => {
           const isActive = tab.key === activeTab.key;
           return (
@@ -95,13 +95,13 @@ export function OrgDetailChrome({
               href={tab.href}
               className={
                 isActive
-                  ? "pb-3 text-sm font-semibold border-b-2"
-                  : "pb-3 text-sm font-medium hover:text-slate-700 transition-colors"
+                  ? "shrink-0 whitespace-nowrap pb-3 text-sm font-semibold border-b-2"
+                  : "shrink-0 whitespace-nowrap pb-3 text-sm font-medium hover:text-slate-700 transition-colors"
               }
               style={
                 isActive
-                  ? { color: "#2dbe8f", borderColor: "#2dbe8f" }
-                  : { color: "#64748b" }
+                  ? { color: "#007d58", borderColor: "#007d58" }
+                  : { color: "#5b6779" }
               }
             >
               {tab.label}

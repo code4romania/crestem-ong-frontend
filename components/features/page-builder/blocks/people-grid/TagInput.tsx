@@ -4,7 +4,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
 
 /**
  * "Taguri" editor for a person card: type a label and press Enter (or comma) to
@@ -37,14 +37,14 @@ export function TagInput({
           {value.map((tag, index) => (
             <li
               key={index}
-              className="inline-flex items-center gap-1 rounded-full bg-[#eef1fd] py-1 pl-2.5 pr-1 text-sm text-[#2563eb]"
+              className="inline-flex items-center gap-1 rounded-full bg-[#eef1fd] py-1 pl-2.5 pr-1 text-sm text-[#5656e5]"
             >
               <span className="wrap-break-word">{tag}</span>
               <button
                 type="button"
                 onClick={() => removeAt(index)}
                 aria-label={`Elimină tagul ${tag}`}
-                className="rounded-full p-0.5 text-[#2563eb] transition-colors hover:bg-[#dbe4fd]"
+                className="rounded-full p-0.5 text-[#5656e5] transition-colors hover:bg-[#dbe4fd]"
               >
                 <X size={14} />
               </button>

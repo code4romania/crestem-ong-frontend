@@ -14,9 +14,9 @@ import type { ImageTextData } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
-const optionalHint = "ml-1.5 font-normal normal-case text-[#94a3b8]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
+const optionalHint = "ml-1.5 font-normal normal-case text-[#5b6779]";
 
 export function ImageTextEditor({
   value,
@@ -59,14 +59,14 @@ export function ImageTextEditor({
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isUploading}
-                  className="text-sm font-semibold text-[#2563eb] hover:opacity-80 disabled:opacity-60"
+                  className="text-sm font-semibold text-[#5656e5] hover:opacity-80 disabled:opacity-60"
                 >
                   {isUploading ? "Se încarcă..." : "Schimbă imaginea"}
                 </button>
                 <button
                   type="button"
                   onClick={() => set({ image: null })}
-                  className="text-sm font-semibold text-[#ef4444] hover:opacity-80"
+                  className="text-sm font-semibold text-[#b91c1c] hover:opacity-80"
                 >
                   Elimină imaginea
                 </button>
@@ -78,7 +78,7 @@ export function ImageTextEditor({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040] disabled:opacity-60"
+            className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81] disabled:opacity-60"
           >
             {isUploading ? (
               <Loader2 size={20} className="animate-spin" />
@@ -98,7 +98,7 @@ export function ImageTextEditor({
         <button
           type="button"
           onClick={() => setPickerOpen(true)}
-          className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+          className="mt-2 text-xs font-semibold text-[#5656e5] hover:opacity-80"
         >
           Alege din bibliotecă
         </button>
@@ -164,7 +164,7 @@ export function ImageTextEditor({
 
       <div>
         <span className={labelClass}>
-          Text <span className="text-[#ef4444]">*</span>
+          Text <span className="text-[#b91c1c]">*</span>
         </span>
         <RichTextField
           value={value.text}
@@ -201,7 +201,7 @@ export function ImageTextEditor({
           ]}
         />
         {value.aliniere === "centru" && (
-          <p className="mt-1 text-xs text-[#94a3b8]">
+          <p className="mt-1 text-xs text-[#5b6779]">
             Se aplică doar când imaginea e la stânga sau la dreapta.
           </p>
         )}

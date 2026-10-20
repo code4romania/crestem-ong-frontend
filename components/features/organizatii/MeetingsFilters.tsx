@@ -43,7 +43,10 @@ export function MeetingsFilters({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  function navigate(key: "mentor" | "program" | "status" | "format", value: string) {
+  function navigate(
+    key: "mentor" | "program" | "status" | "format",
+    value: string,
+  ) {
     const params = new URLSearchParams(searchParams.toString());
     if (value) {
       params.set(key, value);
@@ -56,7 +59,7 @@ export function MeetingsFilters({
 
   return (
     <div className="flex flex-col sm:flex-row gap-3 mb-4">
-      <div className="relative">
+      <div className="relative w-full sm:w-auto">
         <label htmlFor="meetings-mentor" className="sr-only">
           Filtrează după persoană resursă
         </label>
@@ -64,7 +67,7 @@ export function MeetingsFilters({
           id="meetings-mentor"
           defaultValue={initialMentor}
           onChange={(e) => navigate("mentor", e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
         >
           <option value="">Toate persoanele resursă</option>
           {mentors.map((mentor) => (
@@ -78,7 +81,7 @@ export function MeetingsFilters({
           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
         />
       </div>
-      <div className="relative">
+      <div className="relative w-full sm:w-auto">
         <label htmlFor="meetings-program" className="sr-only">
           Filtrează după program
         </label>
@@ -86,7 +89,7 @@ export function MeetingsFilters({
           id="meetings-program"
           defaultValue={initialProgram}
           onChange={(e) => navigate("program", e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
         >
           <option value="">Toate programele</option>
           {programs.map((program) => (
@@ -100,7 +103,7 @@ export function MeetingsFilters({
           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
         />
       </div>
-      <div className="relative">
+      <div className="relative w-full sm:w-auto">
         <label htmlFor="meetings-status" className="sr-only">
           Filtrează după status
         </label>
@@ -108,7 +111,7 @@ export function MeetingsFilters({
           id="meetings-status"
           defaultValue={initialStatus}
           onChange={(e) => navigate("status", e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
         >
           <option value="">Toate statusurile</option>
           {STATUS_OPTIONS.map((option) => (
@@ -122,7 +125,7 @@ export function MeetingsFilters({
           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
         />
       </div>
-      <div className="relative">
+      <div className="relative w-full sm:w-auto">
         <label htmlFor="meetings-format" className="sr-only">
           Filtrează după format
         </label>
@@ -130,7 +133,7 @@ export function MeetingsFilters({
           id="meetings-format"
           defaultValue={initialFormat}
           onChange={(e) => navigate("format", e.target.value)}
-          className="appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
+          className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
         >
           <option value="">Toate formatele</option>
           {FORMAT_OPTIONS.map((option) => (

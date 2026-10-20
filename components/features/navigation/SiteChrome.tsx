@@ -5,6 +5,7 @@ import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import type { NavUser } from "./types";
 import { PageTransition } from "@/components/ui/PageTransition";
+import { CookieNotice } from "@/components/features/cookie-notice/CookieNotice";
 import type { FooterContent } from "@/lib/api/footer-types";
 import type { MenuItem } from "@/lib/api/menus";
 
@@ -23,8 +24,11 @@ export function SiteChrome({
 }) {
   const pathname = usePathname();
   const isDashboard = pathname?.startsWith("/dashboard") ?? false;
+  // The maintenance page stands alone: nav and footer links would lead into a
+  // site that is down.
+  const isMaintenance = pathname === "/mentenanta";
 
-  if (isDashboard) {
+  if (isDashboard || isMaintenance) {
     return <>{children}</>;
   }
 
@@ -35,6 +39,7 @@ export function SiteChrome({
         <PageTransition>{children}</PageTransition>
       </main>
       <Footer content={footerContent} items={footerItems} />
+      <CookieNotice />
     </>
   );
 }

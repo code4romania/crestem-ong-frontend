@@ -1,27 +1,7 @@
 import { z } from "zod";
+import { iconSchema } from "@/components/ui/icons/schema";
 import { ctaHasTarget } from "../shared/cta";
-
-/**
- * Fixed icon palette for a feature card. Stored as a string key (not a component
- * reference) so the schema stays serialisable and the renderer stays pure — it
- * maps the key back to a `lucide-react` icon at render time.
- */
-export const FEATURE_ICON_KEYS = [
-  "book",
-  "users",
-  "award",
-  "globe",
-  "graduation",
-  "library",
-  "layers",
-  "file",
-  "zap",
-  "calendar",
-  "chart",
-  "check",
-] as const;
-
-export type FeatureIconKey = (typeof FEATURE_ICON_KEYS)[number];
+import { IMAGE_RATIOS } from "../shared/image-ratio";
 
 /** A file uploaded via `uploadPageImageAction` — same shape as the `image` block. */
 const iconImageSchema = z.object({
@@ -32,10 +12,10 @@ const iconImageSchema = z.object({
 
 const cardSchema = z.object({
   /**
-   * Preset key from the site's icon collection. Always present; used as the
+   * Lucide icon (see `components/ui/icons`). Always present; used as the
    * fallback when `iconImage` is not set.
    */
-  icon: z.enum(FEATURE_ICON_KEYS).default("layers"),
+  icon: iconSchema("feature", "layers"),
   /**
    * Optional custom image uploaded for this card. When set it replaces the
    * preset `icon` in the same chip; clearing it returns the card to preset mode.
@@ -58,11 +38,9 @@ export const featureCardsSchema = z
     descriere: z.string().trim().default(""),
     coloane: z.enum(["1", "2", "3", "4"]).default("3"),
     background: z.enum(["default", "light", "accent"]).default("default"),
+    /** Card image ratio; see `blocks/shared/image-ratio.ts`. */
+    raport: z.enum(IMAGE_RATIOS).default("16:9"),
     carduri: z.array(cardSchema).default([]),
-  })
-  .refine((d) => d.carduri.every((c) => c.titlu), {
-    path: ["carduri"],
-    message: "Fiecare card are nevoie de un titlu",
   })
   .refine((d) => d.carduri.every((c) => ctaHasTarget(c) === Boolean(c.ctaLabel)), {
     path: ["carduri"],
@@ -74,18 +52,19 @@ export type FeatureCard = z.infer<typeof cardSchema>;
 
 /**
  * Plain literal, not `schema.parse({})` — the `.refine` chain makes that throw.
- * The section title is optional; only each card needs its own title.
+ * The section title and the card titles are optional.
  */
 export const FEATURE_CARDS_DEFAULTS: FeatureCardsData = {
   titluSectiune: "",
   descriere: "",
   coloane: "3",
   background: "default",
+  raport: "16:9",
   carduri: [],
 };
 
 export const EMPTY_CARD: FeatureCard = {
-  icon: "layers",
+  icon: "lucide:layers",
   iconImage: null,
   titlu: "",
   descriere: "",

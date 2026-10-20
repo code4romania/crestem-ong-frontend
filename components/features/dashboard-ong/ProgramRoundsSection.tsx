@@ -64,8 +64,8 @@ function formatDateLong(iso: string) {
 
 // Phase accents cycle so consecutive phases stay visually distinct.
 const PHASE_ACCENTS = [
-  { solid: "#2563eb", bg: "#eff6ff", color: "#2563eb" },
-  { solid: "#16a34a", bg: "#f0fdf4", color: "#16a34a" },
+  { solid: "#5656e5", bg: "#dcfafb", color: "#5656e5" },
+  { solid: "#15803d", bg: "#f0fdf4", color: "#15803d" },
   { solid: "#9333ea", bg: "#faf5ff", color: "#9333ea" },
 ];
 
@@ -76,10 +76,10 @@ function StatusBadge({
 }) {
   const map: Record<string, { bg: string; color: string }> = {
     Viitor: { bg: "#fffbeb", color: "#92400e" },
-    Activ: { bg: "#eff6ff", color: "#2563eb" },
-    Finalizat: { bg: "#f0fdf4", color: "#16a34a" },
-    "În desfășurare": { bg: "#eff6ff", color: "#2563eb" },
-    Neînceput: { bg: "#f8fafc", color: "#94a3b8" },
+    Activ: { bg: "#dcfafb", color: "#5656e5" },
+    Finalizat: { bg: "#f0fdf4", color: "#15803d" },
+    "În desfășurare": { bg: "#dcfafb", color: "#5656e5" },
+    Neînceput: { bg: "#f8fafc", color: "#5b6779" },
   };
   const cfg = map[status] ?? map.Neînceput;
   return (
@@ -156,7 +156,7 @@ export function ProgramRoundsSection({
                 <div className="flex items-center gap-3 mb-1 flex-wrap">
                   <span
                     className="font-semibold text-sm font-heading"
-                    style={{ color: "#162040" }}
+                    style={{ color: "#1c1c81" }}
                   >
                     {program.name}
                   </span>
@@ -167,21 +167,21 @@ export function ProgramRoundsSection({
                 <div className="flex items-center gap-5 flex-wrap">
                   <span
                     className="flex items-center gap-1.5 text-xs"
-                    style={{ color: "#94a3b8" }}
+                    style={{ color: "#5b6779" }}
                   >
                     <Calendar size={12} /> {formatDate(program.startDate)} –{" "}
                     {formatDate(program.endDate)}
                   </span>
                   <span
                     className="flex items-center gap-1.5 text-xs"
-                    style={{ color: "#94a3b8" }}
+                    style={{ color: "#5b6779" }}
                   >
                     <Building2 size={12} /> {program.ongsCount}{" "}
                     {program.ongsCount === 1 ? "ONG" : "ONG-uri"}
                   </span>
                   <span
                     className="flex items-center gap-1.5 text-xs"
-                    style={{ color: "#94a3b8" }}
+                    style={{ color: "#5b6779" }}
                   >
                     <Users size={12} /> {mentors.length}{" "}
                     {mentors.length === 1
@@ -196,8 +196,8 @@ export function ProgramRoundsSection({
                     type="button"
                     disabled={blockedByOtherActive}
                     onClick={() => setStartingProgramId(program.documentId)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:opacity-90"
-                    style={{ background: "#2dbe8f" }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:brightness-90"
+                    style={{ background: "#00d495" }}
                     title={
                       blockedByOtherActive
                         ? "Ai deja o evaluare în desfășurare"
@@ -217,8 +217,8 @@ export function ProgramRoundsSection({
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors"
                   style={{
                     color: isExpanded ? "#fff" : "#475569",
-                    background: isExpanded ? "#162040" : "transparent",
-                    borderColor: isExpanded ? "#162040" : "#e2e8f0",
+                    background: isExpanded ? "#1c1c81" : "transparent",
+                    borderColor: isExpanded ? "#1c1c81" : "#e2e8f0",
                   }}
                 >
                   <ExternalLink size={12} /> {isExpanded ? "Închide" : "Vezi"}
@@ -228,12 +228,12 @@ export function ProgramRoundsSection({
 
             {blockedByOtherActive && (
               <div className="px-5 pb-4 -mt-2">
-                <p className="text-xs" style={{ color: "#94a3b8" }}>
+                <p className="text-xs" style={{ color: "#5b6779" }}>
                   Ai o evaluare activă în desfășurare —{" "}
                   <Link
                     href={`/dashboard/evaluari/${activeReport!.documentId}`}
                     className="font-semibold hover:underline"
-                    style={{ color: "#2dbe8f" }}
+                    style={{ color: "#007d58" }}
                   >
                     vezi evaluarea
                   </Link>
@@ -249,7 +249,7 @@ export function ProgramRoundsSection({
                 <div>
                   <p
                     className="text-xs font-semibold uppercase tracking-wider mb-3"
-                    style={{ color: "#94a3b8" }}
+                    style={{ color: "#5b6779" }}
                   >
                     Persoane resursă alocate
                   </p>
@@ -270,8 +270,8 @@ export function ProgramRoundsSection({
                             className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
                             style={{
                               background: mentor.isDeleted
-                                ? "#94a3b8"
-                                : "#162040",
+                                ? "#5b6779"
+                                : "#1c1c81",
                             }}
                           >
                             {mentor.nume
@@ -287,7 +287,7 @@ export function ProgramRoundsSection({
                             <div className="flex items-center gap-2">
                               <p
                                 className="text-sm font-semibold font-heading"
-                                style={{ color: "#162040" }}
+                                style={{ color: "#1c1c81" }}
                               >
                                 {mentor.nume}
                               </p>
@@ -296,7 +296,7 @@ export function ProgramRoundsSection({
                             {mentor.mentorJobTitle && (
                               <p
                                 className="text-xs"
-                                style={{ color: "#2dbe8f" }}
+                                style={{ color: "#007d58" }}
                               >
                                 {mentor.mentorJobTitle}
                               </p>
@@ -311,7 +311,7 @@ export function ProgramRoundsSection({
                 <div>
                   <p
                     className="text-xs font-semibold uppercase tracking-wider mb-3"
-                    style={{ color: "#94a3b8" }}
+                    style={{ color: "#5b6779" }}
                   >
                     Fazele programului
                   </p>
@@ -337,13 +337,13 @@ export function ProgramRoundsSection({
                             </span>
                             <span
                               className="flex-1 min-w-0 text-sm font-medium truncate"
-                              style={{ color: "#162040" }}
+                              style={{ color: "#1c1c81" }}
                             >
                               {phase.title}
                             </span>
                             <span
                               className="flex items-center gap-1.5 text-xs flex-shrink-0"
-                              style={{ color: "#94a3b8" }}
+                              style={{ color: "#5b6779" }}
                             >
                               <Calendar size={12} />{" "}
                               {formatDateLong(phase.startDate)} —{" "}
@@ -368,7 +368,7 @@ export function ProgramRoundsSection({
                 <div>
                   <p
                     className="text-xs font-semibold uppercase tracking-wider mb-3"
-                    style={{ color: "#94a3b8" }}
+                    style={{ color: "#5b6779" }}
                   >
                     Evaluări asociate programului
                   </p>
@@ -391,7 +391,7 @@ export function ProgramRoundsSection({
                             <th
                               key={h}
                               className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                              style={{ color: "#94a3b8" }}
+                              style={{ color: "#5b6779" }}
                             >
                               {h}
                             </th>
@@ -418,13 +418,13 @@ export function ProgramRoundsSection({
                               >
                                 <td
                                   className="px-5 py-3 font-medium"
-                                  style={{ color: "#162040" }}
+                                  style={{ color: "#1c1c81" }}
                                 >
                                   {phase.report?.name ?? phase.title}
                                 </td>
                                 <td
                                   className="px-5 py-3"
-                                  style={{ color: "#64748b" }}
+                                  style={{ color: "#5b6779" }}
                                 >
                                   {formatDate(phase.startDate)} –{" "}
                                   {formatDate(phase.endDate)}
@@ -434,8 +434,8 @@ export function ProgramRoundsSection({
                                   style={{
                                     color:
                                       phase.score != null
-                                        ? "#162040"
-                                        : "#94a3b8",
+                                        ? "#1c1c81"
+                                        : "#5b6779",
                                   }}
                                 >
                                   {phase.score != null
@@ -450,7 +450,7 @@ export function ProgramRoundsSection({
                                     <Link
                                       href={`/dashboard/evaluari/${phase.report.documentId}`}
                                       className="text-xs font-semibold hover:underline"
-                                      style={{ color: "#2dbe8f" }}
+                                      style={{ color: "#007d58" }}
                                     >
                                       {status === "Finalizat"
                                         ? "Vezi rezultatele →"
@@ -463,8 +463,8 @@ export function ProgramRoundsSection({
                                       onClick={() =>
                                         setStartingProgramId(program.documentId)
                                       }
-                                      className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:opacity-90"
-                                      style={{ background: "#2dbe8f" }}
+                                      className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:brightness-90"
+                                      style={{ background: "#00d495" }}
                                       title={
                                         activeReport
                                           ? "Ai deja o evaluare în desfășurare"
@@ -487,7 +487,7 @@ export function ProgramRoundsSection({
                 <div>
                   <p
                     className="text-xs font-semibold uppercase tracking-wider mb-3"
-                    style={{ color: "#94a3b8" }}
+                    style={{ color: "#5b6779" }}
                   >
                     Rapoarte disponibile (FDSC)
                   </p>
@@ -510,7 +510,7 @@ export function ProgramRoundsSection({
                             <th
                               key={h}
                               className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                              style={{ color: "#94a3b8" }}
+                              style={{ color: "#5b6779" }}
                             >
                               {h}
                             </th>
@@ -548,7 +548,7 @@ export function ProgramRoundsSection({
                                 <td className="px-5 py-3">
                                   <span
                                     className="inline-flex items-center gap-2.5 font-medium"
-                                    style={{ color: "#162040" }}
+                                    style={{ color: "#1c1c81" }}
                                   >
                                     <span
                                       className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[9px] font-bold"
@@ -564,19 +564,19 @@ export function ProgramRoundsSection({
                                 </td>
                                 <td
                                   className="px-5 py-3"
-                                  style={{ color: "#64748b" }}
+                                  style={{ color: "#5b6779" }}
                                 >
                                   {report.evaluation?.name ?? "—"}
                                 </td>
                                 <td
                                   className="px-5 py-3"
-                                  style={{ color: "#64748b" }}
+                                  style={{ color: "#5b6779" }}
                                 >
                                   {report.evaluation?.program?.name ?? "—"}
                                 </td>
                                 <td
                                   className="px-5 py-3 whitespace-nowrap"
-                                  style={{ color: "#64748b" }}
+                                  style={{ color: "#5b6779" }}
                                 >
                                   {formatLongDate(report.uploadedAt)}
                                 </td>
@@ -606,7 +606,7 @@ export function ProgramRoundsSection({
                                       </a>
                                     </div>
                                   ) : (
-                                    <span style={{ color: "#94a3b8" }}>—</span>
+                                    <span style={{ color: "#5b6779" }}>—</span>
                                   )}
                                 </td>
                               </tr>

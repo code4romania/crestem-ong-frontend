@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { hasIcon } from "@/components/ui/icons/names";
 import { RICH_TEXT_PROSE_INVERSE } from "../../rich-text/prose";
-import { sanitizeRichText, hasRichText } from "../../rich-text/sanitize";
-import { CALLOUT_ICONS } from "./icons";
+import { hasRichText } from "../../rich-text/has-rich-text";
 import type { CalloutData } from "./schema";
 
-const NAVY_BG = "#162040";
+const NAVY_BG = "#1c1c81";
 
 const COLUMN_ALIGN: Record<CalloutData["aliniere"], string> = {
   stanga: "items-start text-left",
@@ -25,29 +26,30 @@ const CTA_JUSTIFY: Record<CalloutData["aliniere"], string> = {
  * hooks, no `"use client"`) so it renders on the public page unchanged once a
  * backend feeds it the same shape.
  *
- * `text` is sanitised again here, right before the raw-HTML sink, in case the
- * data reached this component without passing through the block schema.
+ * `text` arrives sanitised: the page/article Server Actions run `sanitizeBlocks`
+ * before it ever reaches the backend. Sanitising here too would drag DOMPurify —
+ * and with it jsdom — into the client bundle, since the editor imports this
+ * renderer through the block registry.
  */
 export function Callout({ data }: { data: CalloutData }) {
-  const { icon, afiseazaIcon, titlu, primaryCta, secondaryCta, aliniere } = data;
-  const text = sanitizeRichText(data.text);
-
-  const Icon = CALLOUT_ICONS[icon];
-  const showIcon = afiseazaIcon && Boolean(Icon);
+  const { icon, afiseazaIcon, titlu, text, primaryCta, secondaryCta, aliniere } = data;
+  const showIcon = afiseazaIcon && hasIcon(icon);
   const hasPrimary = Boolean(primaryCta.label && primaryCta.href);
   const hasSecondary = Boolean(secondaryCta.label && secondaryCta.href);
 
   return (
     <section>
-      <div className="mx-auto max-w-7xl px-6 py-16">
+      {/* Capped to the same column as the rich-text blocks around it, so the
+          card reads as part of the page's copy rather than a full-width banner. */}
+      <div className="mx-auto max-w-4xl px-6 py-8">
         <div
           className="relative overflow-hidden rounded-3xl px-8 py-14 shadow-xl sm:px-14"
           style={{ background: NAVY_BG }}
         >
           <div className={`relative flex flex-col ${COLUMN_ALIGN[aliniere]}`}>
             {showIcon ? (
-              <span className="mb-6 inline-flex rounded-2xl bg-white/10 p-3.5 text-[#2dbe8f]">
-                <Icon size={32} aria-hidden />
+              <span className="mb-6 inline-flex rounded-2xl bg-white/10 p-3.5 text-[#00d495]">
+                <LucideIcon value={icon} scope="callout" size={32} />
               </span>
             ) : null}
 
@@ -79,10 +81,10 @@ export function Callout({ data }: { data: CalloutData }) {
                 {hasPrimary ? (
                   <Link
                     href={primaryCta.href}
-                    className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:opacity-90"
+                    className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:brightness-90"
                     style={{
-                      background: "#2dbe8f",
-                      boxShadow: "0 4px 24px rgba(45,190,143,0.35)",
+                      background: "#00d495",
+                      boxShadow: "0 4px 24px rgba(0,212,149,0.35)",
                     }}
                   >
                     {primaryCta.label} <ArrowRight size={18} />

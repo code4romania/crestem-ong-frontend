@@ -21,10 +21,6 @@ export const documentsSchema = z
     subtitlu: z.string().trim().default(""),
     documente: z.array(documentFileSchema).default([]),
   })
-  .refine((d) => d.titlu.length > 0, {
-    path: ["titlu"],
-    message: "Titlul este obligatoriu",
-  })
   .refine((d) => d.documente.length > 0 && d.documente.every((f) => f.url), {
     path: ["documente"],
     message: "Adaugă cel puțin un document",
@@ -34,8 +30,8 @@ export type DocumentsData = z.infer<typeof documentsSchema>;
 
 /**
  * Plain literal, not `schema.parse({})` — the `.refine` chain makes that throw.
- * Empty `titlu` and `documente: []` are intentionally invalid so a blank draft
- * can't pass validation when the admin clicks "Adaugă blocul".
+ * `documente: []` is intentionally invalid so a blank draft can't pass
+ * validation when the admin clicks "Adaugă blocul". The title is optional.
  */
 export const DOCUMENTS_DEFAULTS: DocumentsData = {
   titlu: "",

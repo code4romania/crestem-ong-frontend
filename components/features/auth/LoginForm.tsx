@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { loginSession } from "@/lib/api/session";
 import { getApiErrorMessage } from "@/lib/api/client";
@@ -25,10 +24,9 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm";
 
-export function LoginForm() {
-  const router = useRouter();
+export function LoginForm({ returnTo }: { returnTo?: string | null }) {
   const [apiError, setApiError] = useState<string | null>(null);
   const {
     register,
@@ -43,27 +41,36 @@ export function LoginForm() {
     setApiError(null);
     try {
       const { user, isFirstLogin } = await loginSession(data);
+      // Someone the proxy sent here from a protected page goes back to it — an
+      // evaluation invitation is the common case. It takes precedence over the
+      // role's landing page, and with it over the first-login prompt below: the
+      // page they asked for is what they came to see. Already checked by
+      // `safeReturnTo` on the server, so it is a dashboard path, not a URL.
       const destination =
-        isFdscStaff(user.role?.type)
+        returnTo ??
+        (isFdscStaff(user.role?.type)
           ? "/dashboard/programe"
-          : user.role?.type === "ngo-admin"
-            ? "/dashboard/evaluari"
-            : user.role?.type === "ngo-member"
-              ? "/dashboard"
-              : user.role?.type === "individual"
-                ? "/dashboard"
-                : user.role?.type === "mentor"
-                  ? "/dashboard/mesaje"
-                  : "/";
+          : user.role?.type === "ngo-admin" ||
+              user.role?.type === "ngo-member" ||
+              user.role?.type === "individual"
+            ? "/dashboard"
+            : user.role?.type === "mentor"
+              ? "/dashboard/mesaje"
+              : "/");
       // The first-login flag lives only in the login response — by the time any
       // page renders, firstLoginAt is already stamped — so it travels to the
       // dashboard as a query param that the prompt strips once it is answered.
-      router.push(
-        isFirstLogin && user.role?.type === "ngo-admin"
+      //
+      // A real page load rather than `router.push`: the destination is almost
+      // always the dashboard, and Pirsch only evaluates `data-exclude` when its
+      // script boots, so a client-side transition would have it counting the
+      // dashboard for the rest of the session. The reload also replaces the
+      // `router.refresh()` this used to need.
+      window.location.assign(
+        !returnTo && isFirstLogin && user.role?.type === "ngo-admin"
           ? `${destination}?${FIRST_LOGIN_PARAM}=1`
           : destination,
       );
-      router.refresh();
     } catch (err) {
       setApiError(getApiErrorMessage(err, "Nu am putut finaliza autentificarea. Încearcă din nou."));
     }
@@ -79,7 +86,7 @@ export function LoginForm() {
         <div
           role="alert"
           className="flex items-start gap-2.5 rounded-xl p-4 text-sm"
-          style={{ background: "#fff5f5", border: "1.5px solid #fca5a5", color: "#ef4444" }}
+          style={{ background: "#fff5f5", border: "1.5px solid #fca5a5", color: "#b91c1c" }}
         >
           <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
           {apiError}
@@ -99,7 +106,7 @@ export function LoginForm() {
           {...register("identifier")}
         />
         {errors.identifier && (
-          <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+          <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
             {errors.identifier.message}
           </p>
         )}
@@ -113,7 +120,7 @@ export function LoginForm() {
           <Link
             href="/parola-uitata"
             className="text-xs font-semibold transition-opacity hover:opacity-75"
-            style={{ color: "#2dbe8f" }}
+            style={{ color: "#007d58" }}
           >
             Ai uitat parola?
           </Link>
@@ -126,7 +133,7 @@ export function LoginForm() {
           {...register("password")}
         />
         {errors.password && (
-          <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+          <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
             {errors.password.message}
           </p>
         )}
@@ -135,8 +142,8 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white transition-all hover:opacity-90 disabled:opacity-60"
-        style={{ background: "#2dbe8f", boxShadow: "0 4px 16px rgba(45,190,143,0.3)" }}
+        className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white transition-all hover:brightness-90 disabled:opacity-60"
+        style={{ background: "#00d495", boxShadow: "0 4px 16px rgba(0,212,149,0.3)" }}
       >
         {isSubmitting && <Loader2 size={18} className="animate-spin" />}
         Autentifică-te

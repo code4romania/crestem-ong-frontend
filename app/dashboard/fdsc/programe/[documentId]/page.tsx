@@ -47,13 +47,13 @@ export default async function ProgramDetailPage({
       <Link
         href="/dashboard/programe"
         className="inline-flex items-center gap-1.5 text-sm font-medium mb-6"
-        style={{ color: "#94a3b8" }}
+        style={{ color: "#5b6779" }}
       >
         <ArrowLeft size={14} /> Înapoi la programe
       </Link>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+        <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
           {finished ? "Programul" : "Gestionează programul"}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">{program.data.name}</p>
@@ -71,7 +71,7 @@ export default async function ProgramDetailPage({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {stats.map((stat) => (
           <div key={stat.label} className="bg-white rounded-xl border border-border p-5 flex flex-col h-full">
-            <p className="text-3xl font-extrabold font-heading mb-1" style={{ color: "#162040" }}>
+            <p className="text-[#5b6779]xl font-extrabold font-heading mb-1" style={{ color: "#1c1c81" }}>
               {stat.value}
             </p>
             <p className="text-xs text-muted-foreground mt-auto">{stat.label}</p>

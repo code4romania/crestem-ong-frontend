@@ -13,20 +13,44 @@ export type SelectedAnswers = Record<
   Pick<EvaluationAnswer, "answer" | "answerLabel">
 >;
 
+function optionRange(question: DimensionQuestion) {
+  const values = (question.options ?? []).map((option) => option.value);
+  return values.length
+    ? { min: Math.min(...values), max: Math.max(...values) }
+    : { min: 1, max: 5 };
+}
+
+/**
+ * A dimension's score in points ("17/25"), shown under its percentage. The
+ * percentage runs from the lowest possible total, not from zero, so points are
+ * recovered from it the same way: min + score × (max − min). On an aggregate
+ * report that makes them the respondents' average, hence the one decimal.
+ */
+function dimensionPoints(dimension: Dimension, score: number | null) {
+  if (score == null || !dimension.quiz?.length) return null;
+  const ranges = dimension.quiz.map(optionRange);
+  const min = ranges.reduce((sum, range) => sum + range.min, 0);
+  const max = ranges.reduce((sum, range) => sum + range.max, 0);
+  const points = Math.round((min + (score / 100) * (max - min)) * 10) / 10;
+  return `${points}/${max}`;
+}
+
 /**
  * The option a single respondent picked for one sub-indicator, shown in the
  * expanded details. FDSC staff and the resource person open a member's own matrix
  * to read these; the chip alone only carries the score, not which answer it came from.
  */
 function SelectedAnswer({
+  question,
   entry,
 }: {
+  question: DimensionQuestion;
   entry: Pick<EvaluationAnswer, "answer" | "answerLabel"> | undefined;
 }) {
   if (!entry || entry.answer == null) {
     return (
       <div className="mt-1.5 px-3 py-2 rounded-xl" style={{ background: "#f8fafc" }}>
-        <span className="text-xs font-medium" style={{ color: "#94a3b8" }}>
+        <span className="text-xs font-medium" style={{ color: "#5b6779" }}>
           Fără răspuns
         </span>
       </div>
@@ -35,11 +59,13 @@ function SelectedAnswer({
   return (
     <div
       className="mt-1.5 flex items-start gap-2 px-3 py-2 rounded-xl"
-      style={{ background: "#f0faf6" }}
+      style={{ background: "#e5f9e5" }}
     >
-      <CheckCircle2 size={14} className="mt-0.5 shrink-0" style={{ color: "#2dbe8f" }} />
-      <span className="text-xs" style={{ color: "#162040" }}>
-        <span className="font-bold">{entry.answer}</span>
+      <CheckCircle2 size={14} className="mt-0.5 shrink-0" style={{ color: "#007d58" }} />
+      <span className="text-xs" style={{ color: "#1c1c81" }}>
+        <span className="font-bold">
+          {entry.answer}/{optionRange(question).max}
+        </span>
         {entry.answerLabel ? (
           <span className="font-medium"> · {entry.answerLabel}</span>
         ) : null}
@@ -104,28 +130,36 @@ function DimensionCard({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const hasDetails = Boolean(answers) || comments.length > 0;
+  const points = dimensionPoints(dimension, score);
 
   return (
     <div className="py-4 border-b border-border last:border-0">
       <div className="flex items-center gap-3">
         {score != null ? (
-          <CheckCircle2 size={16} className="flex-shrink-0" style={{ color: "#2dbe8f" }} />
+          <CheckCircle2 size={16} className="flex-shrink-0" style={{ color: "#007d58" }} />
         ) : (
           <Circle size={16} className="flex-shrink-0" style={{ color: "#cbd5e1" }} />
         )}
-        <span className="flex-1 text-sm font-semibold" style={{ color: "#162040" }}>
+        <span className="flex-1 text-sm font-semibold" style={{ color: "#1c1c81" }}>
           {dimension.name}
         </span>
         <div className="flex items-center gap-2 flex-shrink-0">
           <ScoreBar score={score} width="w-28" height="h-2" />
-          <span className="text-sm font-bold w-12 text-right" style={{ color: dimensionColor(score) }}>
-            {score != null ? `${score}%` : "—"}
-          </span>
+          <div className="w-14 flex flex-col items-center leading-tight">
+            <span className="text-sm font-bold" style={{ color: dimensionColor(score) }}>
+              {score != null ? `${score}%` : "—"}
+            </span>
+            {points && (
+              <span className="text-[11px] font-semibold whitespace-nowrap" style={{ color: dimensionColor(score) }}>
+                {points}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
       {dimension.description && (
-        <p className="ml-7 mt-1 text-xs" style={{ color: "#94a3b8" }}>
+        <p className="ml-7 mt-1 text-xs" style={{ color: "#5b6779" }}>
           {dimension.description}
         </p>
       )}
@@ -138,9 +172,9 @@ function DimensionCard({
 
       <div className="ml-7 mt-2 space-y-1">
         {(dimension.quiz ?? []).map((question) => (
-          <p key={question.id} className="text-xs" style={{ color: "#64748b" }}>
+          <p key={question.id} className="text-xs" style={{ color: "#5b6779" }}>
             {question.tag && (
-              <span className="font-semibold" style={{ color: "#94a3b8" }}>
+              <span className="font-semibold" style={{ color: "#5b6779" }}>
                 {question.tag}
                 {" · "}
               </span>
@@ -156,7 +190,7 @@ function DimensionCard({
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
           className="ml-7 mt-3 inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
-          style={{ color: "#64748b" }}
+          style={{ color: "#5b6779" }}
         >
           <MessageSquare size={13} />
           Detalii{comments.length > 0 ? ` (${comments.length} ${comments.length === 1 ? "comentariu" : "comentarii"})` : ""}
@@ -175,14 +209,14 @@ function DimensionCard({
               {(dimension.quiz ?? []).map((question) => (
                 <div key={question.id}>
                   {question.tag && (
-                    <p className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#94a3b8" }}>
+                    <p className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#5b6779" }}>
                       {question.tag}
                     </p>
                   )}
-                  <p className="text-xs" style={{ color: "#64748b" }}>
+                  <p className="text-xs" style={{ color: "#5b6779" }}>
                     {question.question}
                   </p>
-                  <SelectedAnswer entry={answers[question.id]} />
+                  <SelectedAnswer question={question} entry={answers[question.id]} />
                 </div>
               ))}
             </div>
@@ -197,7 +231,7 @@ function DimensionCard({
                   style={{ background: "#f8fafc", border: "1px solid #e2e8f0", color: "#334155" }}
                 >
                   {comment.author && (
-                    <p className="font-semibold mb-1" style={{ color: "#162040" }}>
+                    <p className="font-semibold mb-1" style={{ color: "#1c1c81" }}>
                       {comment.author}
                     </p>
                   )}
@@ -241,7 +275,7 @@ export function DimensionsBreakdown({
 }) {
   return (
     <div className="bg-white rounded-xl border border-border p-6 mb-8">
-      <h2 className="font-bold text-base mb-5" style={{ color: "#162040" }}>
+      <h2 className="font-bold text-base mb-5" style={{ color: "#1c1c81" }}>
         Dimensiuni evaluate
       </h2>
       <div className="space-y-0">

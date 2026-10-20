@@ -7,8 +7,8 @@ type Background = HeroIntroData["background"];
 /** Small preview swatch shown inside each card. */
 const SWATCH_STYLE: Record<Background, React.CSSProperties> = {
   default: { background: "#ffffff", border: "1px solid #e2e8f0" },
-  light: { background: "#eefaf4", border: "1px solid rgba(45,190,143,0.45)" },
-  accent: { background: "#162040" },
+  light: { background: "#eefaf4", border: "1px solid rgba(0,212,149,0.45)" },
+  accent: { background: "#1c1c81" },
 };
 
 const OPTIONS: { value: Background; label: string }[] = [
@@ -42,7 +42,7 @@ export function BackgroundPicker({
             onClick={() => onChange(option.value)}
             className={`flex flex-col items-center gap-3 rounded-2xl border-2 px-4 py-4 transition-colors ${
               selected
-                ? "border-[#2563eb] bg-[#eef1fd]"
+                ? "border-[#5656e5] bg-[#eef1fd]"
                 : "border-slate-200 bg-white hover:border-slate-300"
             }`}
           >
@@ -52,7 +52,7 @@ export function BackgroundPicker({
             />
             <span
               className={`text-sm font-semibold ${
-                selected ? "text-[#162040]" : "text-[#475569]"
+                selected ? "text-[#1c1c81]" : "text-[#475569]"
               }`}
             >
               {option.label}

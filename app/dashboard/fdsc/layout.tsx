@@ -32,7 +32,7 @@ export default async function FdscDashboardLayout({
         showUserManagement={user.role?.type === "super-admin"}
       />
       <main
-        className="flex-1 overflow-y-auto p-8 print:p-0 print:overflow-visible"
+        className="flex-1 overflow-y-auto p-4 pt-20 lg:p-8 print:p-0 print:overflow-visible"
         style={{ background: "#f8fafc" }}
       >
         <PageTransition>{children}</PageTransition>

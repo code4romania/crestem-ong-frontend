@@ -125,7 +125,7 @@ function PeopleCollectionSkeleton({
 }) {
   return (
     <section>
-      <div className="mx-auto max-w-7xl px-6 py-20">
+      <div className="mx-auto max-w-7xl px-6 py-10">
         {data.supratitlu || data.titlu ? (
           <div className="mx-auto mb-12 flex max-w-sm flex-col items-center gap-3">
             {data.supratitlu ? (

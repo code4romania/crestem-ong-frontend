@@ -15,7 +15,7 @@ export const articleHeaderSchema = z.object({
   categorie: z.string().trim().default(""),
   /** Free text, so it can read "10 Ian 2024" without a date picker's format. */
   data: z.string().trim().default(""),
-  titlu: z.string().trim().min(1, "Titlul este obligatoriu"),
+  titlu: z.string().trim().default(""),
   etichete: z.array(z.string().trim().min(1)).default([]),
   background: z.enum(["default", "light", "accent"]).default("accent"),
 });
@@ -24,8 +24,6 @@ export type ArticleHeaderData = z.infer<typeof articleHeaderSchema>;
 
 /**
  * Plain literal rather than `schema.parse({})`, matching the other blocks.
- * `titlu: ""` is intentionally invalid so a blank header cannot pass validation
- * when the admin clicks "Adaugă blocul".
  */
 export const ARTICLE_HEADER_DEFAULTS: ArticleHeaderData = {
   eticheta: "",

@@ -97,6 +97,7 @@ export interface ActivateAccountPayload {
   token: string;
   password: string;
   confirmedPassword: string;
+  acordTermeniSiConditii: boolean;
 }
 
 export function activateAccount(payload: ActivateAccountPayload) {

@@ -30,17 +30,17 @@ export function CustomHtmlPlaceholder({
 
   return (
     <div className="flex items-start gap-3 px-6 py-8">
-      <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#f8fafc] text-[#64748b]">
+      <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#f8fafc] text-[#5b6779]">
         <Code2 size={18} aria-hidden />
       </span>
       <div className="min-w-0">
-        <p className="font-semibold text-[#162040]">
+        <p className="font-semibold text-[#1c1c81]">
           {data.eticheta.trim() || "Cod HTML"}
         </p>
-        <p className="mt-1 text-sm text-[#64748b]">
+        <p className="mt-1 text-sm text-[#5b6779]">
           {detalii.length > 0 ? detalii.join(" · ") : "Bloc gol"}
         </p>
-        <p className="mt-2 text-xs text-[#94a3b8]">
+        <p className="mt-2 text-xs text-[#5b6779]">
           Se randează doar pe pagina publică — stilurile și scripturile lipite
           ar acoperi editorul.
         </p>

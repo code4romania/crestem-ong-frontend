@@ -41,6 +41,22 @@ export async function addReportMembersAction(
   return {};
 }
 
+export async function removeReportMemberAction(
+  reportId: string,
+  evaluationId: string,
+): Promise<{ error?: string }> {
+  try {
+    await serverApiFetch(`/api/reports/${reportId}/members/${evaluationId}`, {
+      method: "DELETE",
+    });
+  } catch (err) {
+    return { error: getApiErrorMessage(err, "Nu am putut elimina membrul.") };
+  }
+
+  revalidateDashboardPath(`/dashboard/ong/evaluari/${reportId}`);
+  return {};
+}
+
 export async function finishReportAction(reportId: string): Promise<{ error?: string }> {
   try {
     await serverApiFetch(`/api/reports/${reportId}/finish`, { method: "POST" });

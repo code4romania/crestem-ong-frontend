@@ -54,7 +54,7 @@ export function OverviewMentorCard({
           <p className="text-sm font-semibold font-heading text-primary truncate">{mentor.nume}</p>
           {mentor.isDeleted && <DeletedAccountBadge className="mt-1 inline-block" />}
           {mentor.mentorJobTitle && (
-            <p className="text-sm text-accent truncate">{mentor.mentorJobTitle}</p>
+            <p className="text-sm text-accent-strong truncate">{mentor.mentorJobTitle}</p>
           )}
           {mentor.mentorOrganization && (
             <p className="text-sm text-muted-foreground truncate">{mentor.mentorOrganization}</p>

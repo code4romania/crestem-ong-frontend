@@ -8,12 +8,12 @@
 export const RICH_TEXT_PROSE = [
   "text-[15px] leading-relaxed text-[#475569]",
   "[&_p]:my-3 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0",
-  "[&_h2]:mt-8 [&_h2]:mb-3 [&_h2:first-child]:mt-0 [&_h2]:font-heading [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:leading-snug [&_h2]:text-[#162040]",
-  "[&_h3]:mt-6 [&_h3]:mb-2 [&_h3:first-child]:mt-0 [&_h3]:font-heading [&_h3]:text-lg [&_h3]:font-bold [&_h3]:leading-snug [&_h3]:text-[#162040]",
+  "[&_h2]:mt-8 [&_h2]:mb-3 [&_h2:first-child]:mt-0 [&_h2]:font-heading [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:leading-snug [&_h2]:text-[#1c1c81]",
+  "[&_h3]:mt-6 [&_h3]:mb-2 [&_h3:first-child]:mt-0 [&_h3]:font-heading [&_h3]:text-lg [&_h3]:font-bold [&_h3]:leading-snug [&_h3]:text-[#1c1c81]",
   "[&_ul]:my-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:pl-6",
   "[&_li]:my-1 [&_li]:marker:text-[#94a3b8]",
-  "[&_strong]:font-semibold [&_strong]:text-[#162040]",
-  "[&_a]:text-[#2563eb] [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-[#1d4ed8]",
+  "[&_strong]:font-semibold [&_strong]:text-[#1c1c81]",
+  "[&_a]:text-[#5656e5] [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-[#1d4ed8]",
 ].join(" ");
 
 /**
@@ -29,4 +29,29 @@ export const RICH_TEXT_PROSE_INVERSE = [
   "[&_li]:my-1 [&_li]:marker:text-white/40",
   "[&_strong]:font-semibold [&_strong]:text-white",
   "[&_a]:text-[#7ff0c9] [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-white",
+].join(" ");
+
+/**
+ * Image styling for footer rich text, on top of the shared prose classes. Lives
+ * here rather than next to `sanitizeFooterRichText` so the footer — a client
+ * component — can import it without reaching a module that loads DOMPurify.
+ */
+export const FOOTER_IMAGE_PROSE =
+  "[&_img]:my-3 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg";
+
+/**
+ * Structure-only typography for rich text dropped into a slot that already sets
+ * its own size and colour (hero subtitles, card descriptions, captions): block
+ * spacing, lists, bold and links, with colour and size inherited from the
+ * wrapper so each renderer keeps its existing look.
+ */
+export const RICH_TEXT_PROSE_INHERIT = [
+  "[&_p]:my-3 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0",
+  "[&_h2]:mt-6 [&_h2]:mb-2 [&_h2:first-child]:mt-0 [&_h2]:font-heading [&_h2]:text-[1.35em] [&_h2]:font-bold [&_h2]:leading-snug",
+  "[&_h3]:mt-5 [&_h3]:mb-2 [&_h3:first-child]:mt-0 [&_h3]:font-heading [&_h3]:text-[1.15em] [&_h3]:font-bold [&_h3]:leading-snug",
+  "[&_ul]:my-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:pl-6",
+  "[&_ul:first-child]:mt-0 [&_ul:last-child]:mb-0 [&_ol:first-child]:mt-0 [&_ol:last-child]:mb-0",
+  "[&_li]:my-1 [&_li]:marker:opacity-60",
+  "[&_strong]:font-semibold",
+  "[&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:opacity-80",
 ].join(" ");

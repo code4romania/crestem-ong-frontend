@@ -6,7 +6,7 @@ export default async function MentorProgramelePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-heading font-extrabold mb-1" style={{ color: "#162040" }}>
+      <h1 className="text-2xl font-heading font-extrabold mb-1" style={{ color: "#1c1c81" }}>
         Programele mele
       </h1>
       <p className="text-sm text-muted-foreground mb-6">Cont persoană resursă — Crestem.ONG</p>

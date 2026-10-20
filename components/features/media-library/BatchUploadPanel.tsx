@@ -14,7 +14,7 @@ import { AssetDetailPanel } from "./AssetDetailPanel";
 import type { MediaAssetDetail, MediaTag } from "@/lib/api/media-library-types";
 
 const inputClass =
-  "w-full px-3 py-2 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
+  "w-full px-3 py-2 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
 
 function tagIdsOf(asset: MediaAssetDetail): number[] {
   return asset.etichete.map((e) => e.id);
@@ -151,7 +151,7 @@ export function BatchUploadPanel({
             <div className="min-w-0">
               <h2
                 id="batch-upload-title"
-                className="font-heading text-lg font-extrabold text-[#162040]"
+                className="font-heading text-lg font-extrabold text-[#1c1c81]"
               >
                 {items.length} fișiere adăugate
               </h2>
@@ -172,7 +172,7 @@ export function BatchUploadPanel({
 
           {/* Apply-to-all */}
           <div className="flex flex-col gap-3 border-b border-border px-6 py-4">
-            <span className="font-heading text-sm font-semibold text-[#162040]">
+            <span className="font-heading text-sm font-semibold text-[#1c1c81]">
               Aplică etichete tuturor
             </span>
             {tagList.length > 0 ? (
@@ -185,7 +185,7 @@ export function BatchUploadPanel({
                     onClick={() => toggleBulkTag(tag.id)}
                     className={`rounded-full px-3 py-1 text-xs transition-colors ${
                       bulkTagIds.has(tag.id)
-                        ? "bg-[#2dbe8f] text-white"
+                        ? "bg-[#00d495] text-white"
                         : "bg-slate-100 text-[#475569]"
                     }`}
                   >
@@ -194,7 +194,7 @@ export function BatchUploadPanel({
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-[#94a3b8]">Nicio etichetă definită încă.</p>
+              <p className="text-xs text-[#5b6779]">Nicio etichetă definită încă.</p>
             )}
             <div className="flex items-center gap-2">
               <input
@@ -223,7 +223,7 @@ export function BatchUploadPanel({
               type="button"
               onClick={applyToAll}
               disabled={busy || bulkTagIds.size === 0}
-              className="self-start rounded-xl bg-[#2dbe8f] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+              className="self-start rounded-xl bg-[#00d495] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:brightness-90 disabled:opacity-60"
             >
               {applyPending ? "Se aplică…" : "Aplică tuturor"}
             </button>
@@ -252,7 +252,7 @@ export function BatchUploadPanel({
                           className="h-full w-full object-cover transition-opacity group-hover:opacity-90"
                         />
                       ) : asset.tip === "video" ? (
-                        <Film size={22} className="text-[#94a3b8]" />
+                        <Film size={22} className="text-[#5b6779]" />
                       ) : (
                         <FileTypeBadge
                           ext={asset.fisier.ext}
@@ -261,7 +261,7 @@ export function BatchUploadPanel({
                         />
                       )}
                     </div>
-                    <span className="block truncate px-2 pt-2 text-xs font-semibold text-[#162040]">
+                    <span className="block truncate px-2 pt-2 text-xs font-semibold text-[#1c1c81]">
                       {asset.titlu}
                     </span>
                   </button>
@@ -275,7 +275,7 @@ export function BatchUploadPanel({
                         disabled={busy}
                         className={`rounded-full px-2 py-0.5 text-[11px] transition-colors disabled:opacity-60 ${
                           assigned.has(tag.id)
-                            ? "bg-[#2dbe8f] text-white"
+                            ? "bg-[#00d495] text-white"
                             : "bg-slate-100 text-[#475569]"
                         }`}
                       >
@@ -292,7 +292,7 @@ export function BatchUploadPanel({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl bg-[#2dbe8f] px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              className="rounded-xl bg-[#00d495] px-5 py-2 text-sm font-semibold text-white transition-opacity hover:brightness-90"
             >
               Gata
             </button>

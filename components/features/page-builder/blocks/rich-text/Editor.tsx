@@ -8,8 +8,8 @@ import type { RichTextData } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 export function RichTextEditor({
   value,
@@ -39,7 +39,7 @@ export function RichTextEditor({
 
       <div>
         <span className={labelClass}>
-          Conținut <span className="text-[#ef4444]">*</span>
+          Conținut <span className="text-[#b91c1c]">*</span>
         </span>
         <RichTextField
           value={value.continut}

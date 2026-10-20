@@ -9,9 +9,12 @@ import {
 export function VisibilityField({
   value,
   onChange,
+  disabled = false,
 }: {
   value: VisibilityAudience[];
   onChange: (next: VisibilityAudience[]) => void;
+  /** The landing page is public and stays public, so its boxes are inert. */
+  disabled?: boolean;
 }) {
   const toggle = (audience: VisibilityAudience) => {
     onChange(
@@ -26,12 +29,13 @@ export function VisibilityField({
       <legend className="mb-1.5 text-xs font-semibold text-[#475569]">Vizibilitate</legend>
       <div className="grid gap-2 rounded-xl border border-border p-4 sm:grid-cols-3">
         {VISIBILITY_AUDIENCES.map((audience) => (
-          <label key={audience} className="flex items-center gap-2 text-sm text-[#162040]">
+          <label key={audience} className="flex items-center gap-2 text-sm text-[#1c1c81]">
             <input
               type="checkbox"
               checked={value.includes(audience)}
+              disabled={disabled}
               onChange={() => toggle(audience)}
-              className="h-4 w-4 rounded border-border accent-[#2dbe8f]"
+              className="h-4 w-4 rounded border-border accent-[#007d58]"
             />
             {AUDIENCE_LABEL[audience]}
           </label>

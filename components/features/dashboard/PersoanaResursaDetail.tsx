@@ -1,4 +1,4 @@
-import { Mail, Calendar, Layers } from "lucide-react";
+import { Mail, Calendar, Layers, Building2 } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import { userDisplayName } from "@/lib/api/auth";
 import type { AdminUser } from "@/lib/api/users";
@@ -6,6 +6,8 @@ import type { Dimension } from "@/lib/api/dimensions";
 import { formatShortDate } from "@/lib/utils/date";
 import { avatarColorFor } from "@/lib/utils/avatar";
 import { dimensionBadgeFor } from "@/lib/utils/dimension-badges";
+import { hasRichText } from "@/components/features/page-builder/rich-text/has-rich-text";
+import { RICH_TEXT_PROSE } from "@/components/features/page-builder/rich-text/prose";
 
 export function PersoanaResursaDetail({
   mentor,
@@ -39,27 +41,27 @@ export function PersoanaResursaDetail({
               {initials}
             </div>
           )}
-          <p className="mt-4 font-semibold text-lg" style={{ color: "#162040" }}>
+          <p className="mt-4 font-semibold text-lg" style={{ color: "#1c1c81" }}>
             {displayName}
           </p>
-          <p className="text-sm" style={{ color: "#64748b" }}>
+          <p className="text-sm" style={{ color: "#5b6779" }}>
             Persoană resursă
           </p>
 
           <div className="mt-4 pt-4 border-t border-border flex flex-col gap-2.5 text-left">
             <div className="flex items-center gap-2 text-sm" style={{ color: "#475569" }}>
-              <Mail size={15} className="shrink-0" style={{ color: "#94a3b8" }} />
+              <Mail size={15} className="shrink-0" style={{ color: "#5b6779" }} />
               <span className="truncate">{mentor.email}</span>
             </div>
             <div className="flex items-center gap-2 text-sm" style={{ color: "#475569" }}>
-              <Calendar size={15} className="shrink-0" style={{ color: "#94a3b8" }} />
+              <Calendar size={15} className="shrink-0" style={{ color: "#5b6779" }} />
               <span>Adăugat la {formatShortDate(mentor.createdAt)}</span>
             </div>
           </div>
         </div>
 
         <div className="bg-white rounded-xl border border-border p-6">
-          <p className="font-semibold" style={{ color: "#162040" }}>
+          <p className="font-semibold" style={{ color: "#1c1c81" }}>
             Programe alocate
           </p>
           {mentor.programs.length > 0 ? (
@@ -67,16 +69,35 @@ export function PersoanaResursaDetail({
               {mentor.programs.map((program) => (
                 <div
                   key={program.documentId}
-                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium"
-                  style={{ background: "#f8fafc", color: "#162040" }}
+                  className="px-3 py-2.5 rounded-lg text-sm"
+                  style={{ background: "#f8fafc" }}
                 >
-                  <Layers size={15} style={{ color: "#9333ea" }} />
-                  {program.name}
+                  <div
+                    className="flex items-center gap-2.5 font-medium"
+                    style={{ color: "#1c1c81" }}
+                  >
+                    <Layers size={15} style={{ color: "#9333ea" }} />
+                    {program.name}
+                  </div>
+                  {program.ongs.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-1.5 pl-[23px]">
+                      {program.ongs.map((ong) => (
+                        <span
+                          key={ong.documentId}
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium"
+                          style={{ background: "#f1f5f9", color: "#475569" }}
+                        >
+                          <Building2 size={11} style={{ color: "#5b6779" }} />
+                          {ong.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           ) : (
-            <p className="mt-3 text-sm" style={{ color: "#94a3b8" }}>
+            <p className="mt-3 text-sm" style={{ color: "#5b6779" }}>
               Nicio alocare de program.
             </p>
           )}
@@ -85,19 +106,26 @@ export function PersoanaResursaDetail({
 
       <div className="lg:col-span-2 flex flex-col gap-6">
         <div className="bg-white rounded-xl border border-border p-6">
-          <p className="font-semibold" style={{ color: "#162040" }}>
+          <p className="font-semibold" style={{ color: "#1c1c81" }}>
             Biografie
           </p>
-          <p className="mt-3 text-sm leading-relaxed" style={{ color: "#475569" }}>
-            {mentor.bio || "Nicio biografie adăugată."}
-          </p>
+          {mentor.bio && hasRichText(mentor.bio) ? (
+            <div
+              className={`mt-3 ${RICH_TEXT_PROSE}`}
+              dangerouslySetInnerHTML={{ __html: mentor.bio }}
+            />
+          ) : (
+            <p className="mt-3 text-sm leading-relaxed" style={{ color: "#475569" }}>
+              Nicio biografie adăugată.
+            </p>
+          )}
         </div>
 
         <div className="bg-white rounded-xl border border-border p-6">
-          <p className="font-semibold" style={{ color: "#162040" }}>
+          <p className="font-semibold" style={{ color: "#1c1c81" }}>
             Arii de expertiză
           </p>
-          <p className="mt-1 text-sm" style={{ color: "#94a3b8" }}>
+          <p className="mt-1 text-sm" style={{ color: "#5b6779" }}>
             Domeniile generale de competență ale persoanei resursă
           </p>
           {mentor.ariiDeExpertiza.length > 0 ? (
@@ -113,17 +141,17 @@ export function PersoanaResursaDetail({
               ))}
             </div>
           ) : (
-            <p className="mt-4 text-sm" style={{ color: "#94a3b8" }}>
+            <p className="mt-4 text-sm" style={{ color: "#5b6779" }}>
               Nicio arie de expertiză adăugată.
             </p>
           )}
         </div>
 
         <div className="bg-white rounded-xl border border-border p-6">
-          <p className="font-semibold" style={{ color: "#162040" }}>
+          <p className="font-semibold" style={{ color: "#1c1c81" }}>
             Specializare pe dimensiuni
           </p>
-          <p className="mt-1 text-sm" style={{ color: "#94a3b8" }}>
+          <p className="mt-1 text-sm" style={{ color: "#5b6779" }}>
             Dimensiunile matricei de evaluare organizațională acoperite
           </p>
           {mentor.dimensiuni.length > 0 ? (
@@ -146,7 +174,7 @@ export function PersoanaResursaDetail({
               })}
             </div>
           ) : (
-            <p className="mt-4 text-sm" style={{ color: "#94a3b8" }}>
+            <p className="mt-4 text-sm" style={{ color: "#5b6779" }}>
               Nicio dimensiune adăugată.
             </p>
           )}

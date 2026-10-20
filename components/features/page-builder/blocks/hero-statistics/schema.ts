@@ -10,7 +10,7 @@ const statSchema = z.object({
 export const heroStatisticsSchema = z
   .object({
     supratitlu: z.string().trim().default(""),
-    titlu: z.string().trim().min(1, "Titlul este obligatoriu"),
+    titlu: z.string().trim().default(""),
     subtitlu: z.string().trim().default(""),
     primaryCta: ctaSchema.default(CTA_DEFAULTS),
     secondaryCta: ctaSchema.default(CTA_DEFAULTS),
@@ -36,8 +36,6 @@ export type HeroStat = z.infer<typeof statSchema>;
 
 /**
  * Plain literal, not `schema.parse({})` — the `.refine` chain makes that throw.
- * `titlu: ""` is intentionally invalid so a blank draft can't pass validation
- * when the admin clicks "Adaugă blocul".
  */
 export const HERO_STATISTICS_DEFAULTS: HeroStatisticsData = {
   supratitlu: "",

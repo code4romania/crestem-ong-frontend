@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import { RICH_TEXT_PROSE } from "../../rich-text/prose";
-import { sanitizeRichText, hasRichText } from "../../rich-text/sanitize";
+import { hasRichText } from "../../rich-text/has-rich-text";
 import type { ImageTextData } from "./schema";
 
 /**
@@ -31,8 +31,10 @@ const GRID_COLS: Record<
  * `"use client"`) so it renders on the public page unchanged once a backend
  * feeds it the same shape.
  *
- * `text` is sanitised again here, right before the raw-HTML sink, in case the
- * data reached this component without passing through the block schema.
+ * `text` arrives sanitised: the page/article Server Actions run `sanitizeBlocks`
+ * before it ever reaches the backend. Sanitising here too would drag DOMPurify —
+ * and with it jsdom — into the client bundle, since the editor imports this
+ * renderer through the block registry.
  */
 export function ImageText({ data }: { data: ImageTextData }) {
   const {
@@ -45,18 +47,23 @@ export function ImageText({ data }: { data: ImageTextData }) {
     colturi,
     primaryCta,
     secondaryCta,
+    text,
   } = data;
-  const text = sanitizeRichText(data.text);
 
   const rounded = colturi === "default" ? "rounded-2xl" : "";
   const hasPrimary = Boolean(primaryCta.label && primaryCta.href);
   const hasSecondary = Boolean(secondaryCta.label && secondaryCta.href);
   const stacked = aliniere === "centru";
 
+  // Side by side, the copy is capped (like the hero's) rather than the whole
+  // block, so the image keeps the page's shared edges while lines stay a
+  // readable length. Stacked, it already sits in a max-w-3xl column.
   const textColumn = (
-    <div className="flex min-w-0 flex-col justify-center">
+    <div
+      className={`flex min-w-0 flex-col justify-center ${stacked ? "" : "max-w-xl"}`}
+    >
       {supratitlu ? (
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#2dbe8f] wrap-break-word">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#007d58] wrap-break-word">
           {supratitlu}
         </p>
       ) : null}
@@ -68,7 +75,7 @@ export function ImageText({ data }: { data: ImageTextData }) {
             fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
             fontWeight: 800,
             lineHeight: 1.2,
-            color: "#162040",
+            color: "#1c1c81",
           }}
         >
           {titlu}
@@ -87,10 +94,10 @@ export function ImageText({ data }: { data: ImageTextData }) {
           {hasPrimary ? (
             <Link
               href={primaryCta.href}
-              className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:brightness-90"
               style={{
-                background: "#2dbe8f",
-                boxShadow: "0 4px 24px rgba(45,190,143,0.35)",
+                background: "#00d495",
+                boxShadow: "0 4px 24px rgba(0,212,149,0.35)",
               }}
             >
               {primaryCta.label} <ArrowRight size={18} />
@@ -99,7 +106,7 @@ export function ImageText({ data }: { data: ImageTextData }) {
           {hasSecondary ? (
             <Link
               href={secondaryCta.href}
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3.5 font-semibold text-[#162040] transition-all hover:bg-slate-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3.5 font-semibold text-[#1c1c81] transition-all hover:bg-slate-50"
             >
               {secondaryCta.label} <ChevronRight size={18} />
             </Link>
@@ -112,7 +119,7 @@ export function ImageText({ data }: { data: ImageTextData }) {
   const imageColumn = image ? (
     <div
       className={`overflow-hidden ${rounded} ${
-        stacked ? "" : "min-h-[280px]"
+        stacked ? "" : "lg:min-h-[280px]"
       }`}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -120,19 +127,21 @@ export function ImageText({ data }: { data: ImageTextData }) {
         src={getMediaUrl(image.url)}
         alt={altText}
         className={
-          stacked ? "h-auto w-full" : "h-full w-full object-cover"
+          stacked
+            ? "h-auto w-full"
+            : "h-auto w-full object-cover lg:h-full"
         }
       />
     </div>
   ) : (
-    <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#94a3b8]">
+    <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-[#5b6779]">
       Adaugă o imagine.
     </div>
   );
 
   return (
     <section>
-      <div className="mx-auto max-w-6xl px-6 py-16">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         {stacked ? (
           <div className="mx-auto max-w-3xl">
             {imageColumn}

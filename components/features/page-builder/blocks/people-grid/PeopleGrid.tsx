@@ -1,6 +1,7 @@
 import { PeopleCards } from "./PeopleCards";
 import { PeopleGridDialog } from "./PeopleGridDialog";
 import type { PeopleGridData } from "./schema";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 /**
  * "People Grid" — a titled section with a responsive grid of authored people
@@ -13,11 +14,12 @@ import type { PeopleGridData } from "./schema";
  * server unchanged.
  */
 export function PeopleGrid({ data }: { data: PeopleGridData }) {
-  const expandable = data.persoane.some((person) => person.descriere);
+  const expandable = data.persoane.some((person) => hasRichText(person.descriere));
+  const raport = data.raport ?? "implicit";
 
   return (
     <section className="relative overflow-hidden">
-      <div className="relative mx-auto max-w-7xl px-6 py-20">
+      <div className="relative mx-auto max-w-7xl px-6 py-10">
         {data.titlu ? (
           <div className="mx-auto mb-12 max-w-2xl text-center">
             <h2
@@ -26,7 +28,7 @@ export function PeopleGrid({ data }: { data: PeopleGridData }) {
                 fontSize: "clamp(2rem, 4vw, 2.75rem)",
                 fontWeight: 800,
                 lineHeight: 1.15,
-                color: "#162040",
+                color: "#1c1c81",
               }}
             >
               {data.titlu}
@@ -39,9 +41,17 @@ export function PeopleGrid({ data }: { data: PeopleGridData }) {
             Nicio persoană de afișat.
           </p>
         ) : expandable ? (
-          <PeopleGridDialog people={data.persoane} coloane={data.coloane} />
+          <PeopleGridDialog
+            people={data.persoane}
+            coloane={data.coloane}
+            raport={raport}
+          />
         ) : (
-          <PeopleCards people={data.persoane} coloane={data.coloane} />
+          <PeopleCards
+            people={data.persoane}
+            coloane={data.coloane}
+            raport={raport}
+          />
         )}
       </div>
     </section>

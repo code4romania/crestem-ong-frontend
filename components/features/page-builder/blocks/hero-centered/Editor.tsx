@@ -6,17 +6,19 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { Toggle } from "@/components/ui/Toggle";
 import { BackgroundPicker } from "./BackgroundPicker";
 import { MediaLibraryPicker } from "@/components/features/page-builder/MediaLibraryPicker";
-import { getMediaUrl } from "@/lib/api/client";
+import { getMediaUrl, errorMessage } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { HeroCenteredData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 export function HeroCenteredEditor({
   value,
@@ -40,14 +42,17 @@ export function HeroCenteredEditor({
     if (!file) return;
     setUploadError(null);
     startUpload(async () => {
-      const form = new FormData();
-      form.append("files", file);
-      const result = await uploadPageImageAction(form);
-      if (result.error || !result.image) {
-        setUploadError(result.error ?? "Nu am putut încărca imaginea.");
-        return;
+      try {
+        const [uploaded] = await uploadFilesDirect([file]);
+        const result = await uploadPageImageAction(uploaded);
+        if (result.error || !result.image) {
+          setUploadError(result.error ?? "Nu am putut încărca imaginea.");
+          return;
+        }
+        set({ image: result.image });
+      } catch (err) {
+        setUploadError(errorMessage(err, "Nu am putut încărca imaginea."));
       }
-      set({ image: result.image });
     });
   };
 
@@ -68,7 +73,7 @@ export function HeroCenteredEditor({
 
       <div>
         <label htmlFor="hc-titlu" className={labelClass}>
-          Titlu <span className="text-[#ef4444]">*</span>
+          Titlu
         </label>
         <input
           id="hc-titlu"
@@ -82,16 +87,14 @@ export function HeroCenteredEditor({
       </div>
 
       <div>
-        <label htmlFor="hc-subtitlu" className={labelClass}>
+        <span className={labelClass}>
           Subtitlu (opțional)
-        </label>
-        <textarea
-          id="hc-subtitlu"
-          rows={3}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.subtitlu}
-          onChange={(e) => set({ subtitlu: e.target.value })}
-          placeholder="Navighează prin întrebări și primești răspunsuri juridice clare, adaptate situației organizației tale — fără jargon legal."
+          onChange={(html) => set({ subtitlu: html })}
+          ariaLabel="Subtitlu"
+          compact
         />
       </div>
 
@@ -137,14 +140,14 @@ export function HeroCenteredEditor({
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isUploading}
-                    className="text-sm font-semibold text-[#2563eb] hover:opacity-80 disabled:opacity-60"
+                    className="text-sm font-semibold text-[#5656e5] hover:opacity-80 disabled:opacity-60"
                   >
                     {isUploading ? "Se încarcă..." : "Schimbă imaginea"}
                   </button>
                   <button
                     type="button"
                     onClick={() => set({ image: null })}
-                    className="text-sm font-semibold text-[#ef4444] hover:opacity-80"
+                    className="text-sm font-semibold text-[#b91c1c] hover:opacity-80"
                   >
                     Elimină imaginea
                   </button>
@@ -156,7 +159,7 @@ export function HeroCenteredEditor({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040] disabled:opacity-60"
+              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81] disabled:opacity-60"
             >
               {isUploading ? (
                 <Loader2 size={20} className="animate-spin" />
@@ -179,7 +182,7 @@ export function HeroCenteredEditor({
           <button
             type="button"
             onClick={() => setPickerOpen(true)}
-            className="mt-2 text-xs font-semibold text-[#2563eb] hover:opacity-80"
+            className="mt-2 text-xs font-semibold text-[#5656e5] hover:opacity-80"
           >
             Alege din bibliotecă
           </button>
@@ -196,10 +199,10 @@ export function HeroCenteredEditor({
 
           <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3">
             <span>
-              <span className="block text-sm font-semibold text-[#162040]">
+              <span className="block text-sm font-semibold text-[#1c1c81]">
                 Overlay pentru lizibilitate
               </span>
-              <span className="block text-xs text-[#94a3b8]">
+              <span className="block text-xs text-[#5b6779]">
                 Adaugă un strat semi-transparent pentru contrast
               </span>
             </span>

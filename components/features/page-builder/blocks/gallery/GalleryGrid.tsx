@@ -1,4 +1,5 @@
 import { getMediaUrl } from "@/lib/api/client";
+import { imageRatioClass, type ImageRatio } from "../shared/image-ratio";
 import type { GalleryData, GalleryImage } from "./schema";
 
 /**
@@ -25,11 +26,13 @@ const MASONRY_COLS: Record<GalleryData["coloane"], string> = {
 function Figure({
   image,
   masonry,
+  raport,
   onSelect,
   index,
 }: {
   image: GalleryImage;
   masonry: boolean;
+  raport: ImageRatio;
   onSelect?: (index: number) => void;
   index: number;
 }) {
@@ -41,7 +44,7 @@ function Figure({
       className={
         masonry
           ? "w-full rounded-xl"
-          : "aspect-[4/3] w-full rounded-xl object-cover"
+          : `w-full rounded-xl ${imageRatioClass(raport)}`
       }
     />
   );
@@ -75,11 +78,13 @@ export function GalleryGrid({
   images,
   stil,
   coloane,
+  raport,
   onSelect,
 }: {
   images: GalleryImage[];
   stil: "grid" | "masonry";
   coloane: GalleryData["coloane"];
+  raport: ImageRatio;
   onSelect?: (index: number) => void;
 }) {
   if (stil === "masonry") {
@@ -90,6 +95,7 @@ export function GalleryGrid({
             key={`${image.id}-${index}`}
             image={image}
             masonry
+            raport={raport}
             onSelect={onSelect}
             index={index}
           />
@@ -105,6 +111,7 @@ export function GalleryGrid({
           key={`${image.id}-${index}`}
           image={image}
           masonry={false}
+          raport={raport}
           onSelect={onSelect}
           index={index}
         />

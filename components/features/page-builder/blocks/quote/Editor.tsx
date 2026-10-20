@@ -3,12 +3,13 @@
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import type { BlockFieldErrors } from "../../types";
 import type { QuoteData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 export function QuoteEditor({
   value,
@@ -24,16 +25,15 @@ export function QuoteEditor({
   return (
     <div className="space-y-5">
       <div>
-        <label htmlFor="quote-citat" className={labelClass}>
-          Citat <span className="text-[#ef4444]">*</span>
-        </label>
-        <textarea
-          id="quote-citat"
-          rows={4}
-          className={`${inputClass} min-h-[104px] resize-y`}
+        <span className={labelClass}>
+          Citat <span className="text-[#b91c1c]">*</span>
+        </span>
+        <RichTextField
           value={value.citat}
-          onChange={(e) => set({ citat: e.target.value })}
-          placeholder="ex. Acceleratorul ne-a ajutat să trecem de la o organizație care funcționa din inerție la una care știe exact unde merge."
+          onChange={(html) => set({ citat: html })}
+          ariaLabel="Citat"
+          compact
+          invalid={Boolean(errors.citat)}
         />
         {errors.citat && <p className={errorClass}>{errors.citat}</p>}
       </div>

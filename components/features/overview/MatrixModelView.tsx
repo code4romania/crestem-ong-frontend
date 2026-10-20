@@ -43,24 +43,24 @@ export function MatrixModelView({ dimensions }: { dimensions: Dimension[] }) {
                 onClick={() => toggle(dimension.key)}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-slate-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2dbe8f]/40"
+                className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-slate-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#007d58]"
               >
                 <span
                   className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
-                  style={{ background: "#2dbe8f" }}
+                  style={{ background: "#00d495" }}
                 >
                   {letter}
                 </span>
-                <span className="flex-1 text-base font-heading font-extrabold" style={{ color: "#162040" }}>
+                <span className="flex-1 text-base font-heading font-extrabold" style={{ color: "#1c1c81" }}>
                   {dimension.name}
                 </span>
-                <span className="text-xs shrink-0" style={{ color: "#94a3b8" }}>
+                <span className="text-xs shrink-0" style={{ color: "#5b6779" }}>
                   {dimension.quiz.length} {dimension.quiz.length === 1 ? "întrebare" : "întrebări"}
                 </span>
                 <ChevronDown
                   size={16}
                   className="shrink-0 transition-transform"
-                  style={{ color: "#94a3b8", transform: isOpen ? "rotate(180deg)" : "none" }}
+                  style={{ color: "#5b6779", transform: isOpen ? "rotate(180deg)" : "none" }}
                 />
               </button>
             </h2>
@@ -72,12 +72,12 @@ export function MatrixModelView({ dimensions }: { dimensions: Dimension[] }) {
                     {question.tag && (
                       <p
                         className="text-xs font-bold uppercase tracking-wider mb-2"
-                        style={{ color: "#2dbe8f" }}
+                        style={{ color: "#007d58" }}
                       >
                         {question.tag}
                       </p>
                     )}
-                    <p className="text-sm font-semibold mb-4" style={{ color: "#162040" }}>
+                    <p className="text-sm font-semibold mb-4" style={{ color: "#1c1c81" }}>
                       Q{index + 1}. {question.question}
                     </p>
                     <ul className="space-y-1">
@@ -85,7 +85,7 @@ export function MatrixModelView({ dimensions }: { dimensions: Dimension[] }) {
                         <li key={option.value} className="flex items-start gap-3 px-3 py-2.5">
                           <span
                             className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold shrink-0"
-                            style={{ background: "#f1f5f9", color: "#64748b" }}
+                            style={{ background: "#f1f5f9", color: "#5b6779" }}
                           >
                             {option.value}
                           </span>

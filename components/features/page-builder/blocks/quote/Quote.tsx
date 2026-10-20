@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Quote as QuoteIcon } from "lucide-react";
 import type { QuoteData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const COLUMN_ALIGN: Record<QuoteData["aliniere"], string> = {
   stanga: "items-start text-left",
@@ -26,7 +27,7 @@ export function Quote({ data }: { data: QuoteData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-3xl px-6 py-16">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         <figure
           className={`flex flex-col ${COLUMN_ALIGN[aliniere]} ${
             evidentiat
@@ -36,14 +37,16 @@ export function Quote({ data }: { data: QuoteData }) {
         >
           <QuoteIcon
             size={evidentiat ? 40 : 34}
-            className="mb-4 shrink-0 text-[#2dbe8f]"
+            className="mb-4 shrink-0 text-[#007d58]"
             fill="currentColor"
             strokeWidth={0}
             aria-hidden
           />
 
-          <blockquote
-            className="wrap-break-word text-[#334155]"
+          <RichTextContent
+            as="blockquote"
+            html={citat}
+            className="max-w-3xl wrap-break-word text-[#334155]"
             style={{
               fontSize: evidentiat
                 ? "0.9375rem"
@@ -51,30 +54,28 @@ export function Quote({ data }: { data: QuoteData }) {
               lineHeight: 1.6,
               fontWeight: evidentiat ? 400 : 500,
             }}
-          >
-            {citat}
-          </blockquote>
+          />
 
           {hasCaption ? (
             <figcaption className="mt-5">
               {autor ? (
-                <span className="block font-semibold text-[#162040]">
+                <span className="block font-semibold text-[#1c1c81]">
                   {autor}
                 </span>
               ) : null}
               {meta ? (
-                <span className="block text-sm text-[#64748b]">{meta}</span>
+                <span className="block text-sm text-[#5b6779]">{meta}</span>
               ) : null}
               {sursa ? (
                 isUrl(sursa) ? (
                   <Link
                     href={sursa}
-                    className="mt-1 inline-block text-xs text-[#94a3b8] underline underline-offset-2 hover:text-[#64748b]"
+                    className="mt-1 inline-block text-xs text-[#5b6779] underline underline-offset-2 hover:text-[#5b6779]"
                   >
                     {sursa}
                   </Link>
                 ) : (
-                  <span className="mt-1 block text-xs text-[#94a3b8]">
+                  <span className="mt-1 block text-xs text-[#5b6779]">
                     {sursa}
                   </span>
                 )

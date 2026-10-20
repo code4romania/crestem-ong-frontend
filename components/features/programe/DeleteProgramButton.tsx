@@ -3,6 +3,7 @@
 
 import { useState, useTransition } from "react";
 import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { deleteProgramAction } from "@/lib/api/programs-actions";
 
@@ -26,6 +27,7 @@ export function DeleteProgramButton({
         return;
       }
       setOpen(false);
+      toast.success("Programul a fost șters.");
     });
   };
 

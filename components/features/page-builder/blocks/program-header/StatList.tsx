@@ -6,7 +6,7 @@ import { EMPTY_STAT, type ProgramHeaderStat } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
 
 /**
  * The dark bar's repeater: add / reorder / delete value+label pairs, both typed
@@ -41,7 +41,7 @@ export function StatList({
   return (
     <div>
       {value.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-[#94a3b8]">
+        <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-[#5b6779]">
           Nicio statistică adăugată încă.
         </p>
       ) : (
@@ -52,7 +52,7 @@ export function StatList({
               className="rounded-xl border border-border bg-slate-50/60 p-4"
             >
               <div className="mb-3 flex items-center justify-between gap-2">
-                <span className="truncate text-sm font-semibold text-[#162040]">
+                <span className="truncate text-sm font-semibold text-[#1c1c81]">
                   {stat.eticheta || "fără etichetă"}
                 </span>
                 <span className="flex shrink-0 items-center gap-1">
@@ -78,7 +78,7 @@ export function StatList({
                     type="button"
                     onClick={() => remove(index)}
                     aria-label="Elimină statistica"
-                    className="rounded-lg p-1.5 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
+                    className="rounded-lg p-1.5 text-[#b91c1c] transition-colors hover:bg-[#fef2f2]"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -110,12 +110,12 @@ export function StatList({
         </ul>
       )}
 
-      {error && <p className="mt-1 text-xs text-[#ef4444]">{error}</p>}
+      {error && <p className="mt-1 text-xs text-[#b91c1c]">{error}</p>}
 
       <button
         type="button"
         onClick={() => onChange([...value, { ...EMPTY_STAT }])}
-        className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-semibold text-[#475569] transition-colors hover:border-[#2dbe8f] hover:text-[#162040]"
+        className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-semibold text-[#475569] transition-colors hover:border-[#00d495] hover:text-[#1c1c81]"
       >
         <Plus size={16} /> Adaugă statistică
       </button>

@@ -4,12 +4,13 @@ import { useEffect, useMemo, useState } from "react";
 import type { ChangeEvent, DragEvent, MouseEvent } from "react";
 import { Upload, X } from "lucide-react";
 import type { Dimension } from "@/lib/api/dimensions";
+import { RichTextField } from "@/components/features/page-builder/rich-text/RichTextField";
 
 const ACCEPTED_AVATAR_TYPES = ["image/png", "image/jpeg", "image/webp"];
 const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm";
 
 export interface MentorProfileFieldsValue {
   bio: string;
@@ -20,16 +21,26 @@ export interface MentorProfileFieldsValue {
   avatarRemoved: boolean;
 }
 
+/** Backend validation messages for the fields this component renders. */
+export type MentorProfileFieldErrors = Partial<Record<"bio" | "avatar" | "dimensiuni" | "ariiDeExpertiza", string>>;
+
+function FieldError({ message }: { message?: string | null }) {
+  if (!message) return null;
+  return <p className="mt-1.5 text-xs" style={{ color: "#b91c1c" }}>{message}</p>;
+}
+
 export function MentorProfileFields({
   dimensions,
   value,
   onChange,
   existingAvatarUrl,
+  errors = {},
 }: {
   dimensions: Dimension[];
   value: MentorProfileFieldsValue;
   onChange: (value: MentorProfileFieldsValue) => void;
   existingAvatarUrl?: string | null;
+  errors?: MentorProfileFieldErrors;
 }) {
   const [avatarError, setAvatarError] = useState<string | null>(null);
   const [isDraggingAvatar, setIsDraggingAvatar] = useState(false);
@@ -108,7 +119,7 @@ export function MentorProfileFields({
             onDrop={handleAvatarDrop}
             className={`flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed px-4 py-6 text-center cursor-pointer transition-colors ${
               isDraggingAvatar
-                ? "border-[#2dbe8f] bg-[#2dbe8f]/5"
+                ? "border-[#00d495] bg-[#00d495]/5"
                 : "border-border bg-slate-50 hover:bg-slate-100"
             }`}
           >
@@ -122,7 +133,7 @@ export function MentorProfileFields({
             ) : (
               <Upload size={18} className="text-muted-foreground" />
             )}
-            <p className="text-xs font-medium" style={{ color: "#162040" }}>
+            <p className="text-xs font-medium" style={{ color: "#1c1c81" }}>
               {value.avatarFile ? value.avatarFile.name : "Trage și plasează o poză aici sau click pentru a încărca"}
             </p>
             <p className="text-xs text-muted-foreground">PNG, JPG sau WebP. Maxim 2MB.</p>
@@ -139,27 +150,24 @@ export function MentorProfileFields({
               type="button"
               onClick={handleRemoveAvatar}
               aria-label="Elimină poza"
-              className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-white border border-border text-muted-foreground hover:text-[#ef4444] hover:border-[#fca5a5] transition-colors"
+              className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-white border border-border text-muted-foreground hover:text-[#b91c1c] hover:border-[#fca5a5] transition-colors"
             >
               <X size={14} />
             </button>
           )}
         </div>
-        {avatarError && <p className="mt-1.5 text-xs" style={{ color: "#ef4444" }}>{avatarError}</p>}
+        <FieldError message={avatarError ?? errors.avatar} />
       </div>
 
       <div>
-        <label htmlFor="fdsc-user-bio" className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
+        <label className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
           Bio
         </label>
-        <textarea
-          id="fdsc-user-bio"
-          className={inputClass}
-          rows={3}
+        <RichTextField
           value={value.bio}
-          onChange={(e) => onChange({ ...value, bio: e.target.value })}
-          placeholder="Câteva rânduri despre experiența mentorului"
+          onChange={(bio) => onChange({ ...value, bio })}
         />
+        <FieldError message={errors.bio} />
       </div>
 
       <div>
@@ -177,7 +185,7 @@ export function MentorProfileFields({
                 className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors"
                 style={
                   selected
-                    ? { background: "#2dbe8f", borderColor: "#2dbe8f", color: "#fff" }
+                    ? { background: "#00d495", borderColor: "#00d495", color: "#ffffff" }
                     : { background: "#fff", borderColor: "#e2e8f0", color: "#475569" }
                 }
               >
@@ -186,6 +194,7 @@ export function MentorProfileFields({
             );
           })}
         </div>
+        <FieldError message={errors.dimensiuni} />
       </div>
 
       <div>
@@ -200,6 +209,7 @@ export function MentorProfileFields({
           onChange={(e) => onChange({ ...value, ariiDeExpertiza: e.target.value })}
           placeholder="separate prin virgulă"
         />
+        <FieldError message={errors.ariiDeExpertiza} />
       </div>
     </>
   );

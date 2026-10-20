@@ -11,12 +11,12 @@ export function OrgHeaderCard({ ong }: { ong: Ong }) {
       <div className="flex items-start gap-4">
         <div
           className="w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center text-xl font-bold text-white"
-          style={{ background: "#162040" }}
+          style={{ background: "#1c1c81" }}
         >
           {initials(ong.name)}
         </div>
         <div>
-          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#162040" }}>
+          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
             {ong.name}
           </h1>
           {ong.descriere && (
@@ -36,7 +36,7 @@ export function OrgHeaderCard({ ong }: { ong: Ong }) {
             <span
               key={program.documentId}
               className="px-2.5 py-1 rounded-full text-xs font-medium"
-              style={{ background: "#f0faf6", color: "#162040" }}
+              style={{ background: "#e5f9e5", color: "#1c1c81" }}
             >
               {program.name}
             </span>

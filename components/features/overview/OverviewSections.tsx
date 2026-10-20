@@ -78,8 +78,8 @@ export function OverviewSections({
                 <OverviewStatCard label="Număr de sesiuni de mentorat" value={0} />
               </>
             )}
-            {/* Same for e-learning: the courses module is not built yet. */}
-            <OverviewStatCard label="E-Learning" value="0 cursuri active" size="text" />
+            {/* E-learning: module not implemented yet, hidden until it ships. */}
+            {/* <OverviewStatCard label="E-Learning" value="0 cursuri active" size="text" /> */}
             <OverviewStatCard label="Program" value={round.program.name} size="text" />
             <OverviewStatCard
               label="Data finalizare evaluare"

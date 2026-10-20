@@ -1,6 +1,7 @@
 "use client";
 
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { IMAGE_RATIO_OPTIONS_WITH_IMPLICIT } from "../shared/image-ratio";
 import { PersonList } from "./PersonList";
 import type { BlockFieldErrors } from "../../types";
 import type { PeopleGridData } from "./schema";
@@ -8,7 +9,7 @@ import type { PeopleGridData } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
 
 export function PeopleGridEditor({
   value,
@@ -50,6 +51,20 @@ export function PeopleGridEditor({
             { value: "4", label: "4 col." },
           ]}
         />
+      </div>
+
+      <div>
+        <span className={labelClass}>Raport imagine</span>
+        <SegmentedControl
+          ariaLabel="Raport imagine"
+          value={value.raport ?? "implicit"}
+          onChange={(raport) => set({ raport })}
+          options={IMAGE_RATIO_OPTIONS_WITH_IMPLICIT}
+        />
+        <p className="mt-1.5 text-xs text-[#5b6779]">
+          Se aplică imaginilor din toate cardurile. „Original” afișează imaginea
+          întreagă, fără decupare.
+        </p>
       </div>
 
       <PersonList

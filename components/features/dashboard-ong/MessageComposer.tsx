@@ -39,14 +39,14 @@ export function MessageComposer({
         }}
         disabled={disabled || sending}
         placeholder="Scrie un mesaj..."
-        className="flex-1 px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] disabled:opacity-50"
+        className="flex-1 px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] disabled:opacity-50"
       />
       <button
         type="button"
         onClick={handleSend}
         disabled={disabled || sending || value.trim().length === 0}
-        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:opacity-90"
-        style={{ background: "#2dbe8f" }}
+        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:brightness-90"
+        style={{ background: "#00d495" }}
       >
         <Send size={14} /> Trimite
       </button>

@@ -10,6 +10,7 @@ import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import { registerIndividual } from "@/lib/api/auth";
 import { ApiError, isZodFlattenError } from "@/lib/api/client";
 import { PasswordInput } from "./PasswordInput";
+import { TermsCheckbox } from "./TermsCheckbox";
 import {
   PASSWORDS_MATCH_ERROR,
   confirmedPasswordSchema,
@@ -42,7 +43,7 @@ const EMPTY: RegisterIndividualFormValues = {
 };
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors bg-white text-sm disabled:opacity-60 disabled:cursor-not-allowed";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm disabled:opacity-60 disabled:cursor-not-allowed";
 
 function Field({
   label,
@@ -58,14 +59,14 @@ function Field({
   return (
     <div>
       <label className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
-        {label} {required && <span style={{ color: "#2dbe8f" }}>*</span>}
+        {label} {required && <span style={{ color: "#007d58" }}>*</span>}
         {!required && (
           <span className="font-normal text-muted-foreground ml-1">(opțional)</span>
         )}
       </label>
       {children}
       {error && (
-        <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>
+        <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>
           {error}
         </p>
       )}
@@ -135,29 +136,29 @@ export function RegisterIndividualForm() {
       <div className="bg-white rounded-2xl border border-border shadow-sm p-12 text-center">
         <div
           className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-          style={{ background: "rgba(45,190,143,0.12)" }}
+          style={{ background: "rgba(0,212,149,0.12)" }}
         >
-          <CheckCircle size={38} style={{ color: "#2dbe8f" }} />
+          <CheckCircle size={38} style={{ color: "#007d58" }} />
         </div>
-        <h2 className="mb-3 font-heading font-extrabold text-2xl" style={{ color: "#162040" }}>
+        <h2 className="mb-3 font-heading font-extrabold text-2xl" style={{ color: "#1c1c81" }}>
           Contul a fost creat cu succes!
         </h2>
         <p className="text-muted-foreground mb-8" style={{ maxWidth: 420, marginLeft: "auto", marginRight: "auto" }}>
           Te poți autentifica oricând folosind adresa{" "}
-          <strong style={{ color: "#162040" }}>{submittedEmail}</strong>.
+          <strong style={{ color: "#1c1c81" }}>{submittedEmail}</strong>.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Link
             href="/autentificare"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all hover:opacity-90"
-            style={{ background: "#162040" }}
+            style={{ background: "#1c1c81" }}
           >
             Autentifică-te
           </Link>
           <Link
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold border border-border transition-colors hover:bg-muted"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             Înapoi la pagina principală
           </Link>
@@ -176,7 +177,7 @@ export function RegisterIndividualForm() {
         <div
           role="alert"
           className="m-8 mb-0 flex items-start gap-2.5 rounded-xl p-4 text-sm"
-          style={{ background: "#fff5f5", border: "1.5px solid #fca5a5", color: "#ef4444" }}
+          style={{ background: "#fff5f5", border: "1.5px solid #fca5a5", color: "#b91c1c" }}
         >
           <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
           {apiError}
@@ -228,61 +229,11 @@ export function RegisterIndividualForm() {
           </Field>
         </div>
 
-        <div
-          className="mt-2 rounded-xl p-5"
-          style={{
-            background: errors.acordTermeniSiConditii ? "#fff5f5" : "#f8faff",
-            border: `1.5px solid ${errors.acordTermeniSiConditii ? "#fca5a5" : "#e2e8f0"}`,
-          }}
-        >
-          <label className="flex items-start gap-3 cursor-pointer select-none">
-            <div className="relative flex-shrink-0 mt-0.5">
-              <input
-                type="checkbox"
-                className="sr-only"
-                {...register("acordTermeniSiConditii")}
-              />
-              <div
-                className="w-5 h-5 rounded flex items-center justify-center transition-colors"
-                style={{
-                  background: acordTermeniSiConditii ? "#2dbe8f" : "white",
-                  border: `2px solid ${
-                    acordTermeniSiConditii
-                      ? "#2dbe8f"
-                      : errors.acordTermeniSiConditii
-                        ? "#f87171"
-                        : "#cbd5e1"
-                  }`,
-                }}
-              >
-                {acordTermeniSiConditii && (
-                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 12 12">
-                    <path
-                      d="M2 6l3 3 5-5"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
-              </div>
-            </div>
-            <span className="text-sm leading-relaxed" style={{ color: "#475569" }}>
-              Sunt de acord cu prelucrarea datelor cu caracter personal de către Crestem în
-              scopul creării și administrării contului, conform{" "}
-              <Link href="#" className="underline font-medium" style={{ color: "#2dbe8f" }}>
-                Politicii de confidențialitate
-              </Link>
-              . Datele nu vor fi partajate cu terțe părți și pot fi șterse oricând la cerere.
-            </span>
-          </label>
-          {errors.acordTermeniSiConditii && (
-            <p className="mt-2 text-xs ml-8" style={{ color: "#ef4444" }}>
-              {errors.acordTermeniSiConditii.message}
-            </p>
-          )}
-        </div>
+        <TermsCheckbox
+          registration={register("acordTermeniSiConditii")}
+          checked={acordTermeniSiConditii}
+          error={errors.acordTermeniSiConditii?.message}
+        />
       </div>
 
       <div
@@ -292,8 +243,8 @@ export function RegisterIndividualForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full sm:w-auto flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white transition-all hover:opacity-90 disabled:opacity-60"
-          style={{ background: "#2dbe8f", boxShadow: "0 4px 16px rgba(45,190,143,0.3)" }}
+          className="w-full sm:w-auto flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white transition-all hover:brightness-90 disabled:opacity-60"
+          style={{ background: "#00d495", boxShadow: "0 4px 16px rgba(0,212,149,0.3)" }}
         >
           {isSubmitting ? (
             <Loader2 size={18} className="animate-spin" />

@@ -21,7 +21,7 @@ export default async function PersoanaResursaPage({
       <Link
         href="/dashboard/persoane-resursa"
         className="inline-flex items-center gap-1.5 text-sm font-medium mb-6"
-        style={{ color: "#94a3b8" }}
+        style={{ color: "#5b6779" }}
       >
         <ArrowLeft size={14} /> Înapoi la persoane resursă
       </Link>

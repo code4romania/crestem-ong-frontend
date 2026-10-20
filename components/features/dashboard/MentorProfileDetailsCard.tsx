@@ -7,6 +7,8 @@ import { userDisplayName } from "@/lib/api/auth";
 import type { Dimension } from "@/lib/api/dimensions";
 import type { MentorProfile } from "@/lib/api/mentor-profile";
 import { EditMentorProfileModal } from "./EditMentorProfileModal";
+import { hasRichText } from "@/components/features/page-builder/rich-text/has-rich-text";
+import { RICH_TEXT_PROSE } from "@/components/features/page-builder/rich-text/prose";
 
 function formatJoinDate(iso: string) {
   return new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "long", year: "numeric" }).format(new Date(iso));
@@ -45,22 +47,22 @@ export function MentorProfileDetailsCard({
           ) : (
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold shrink-0"
-              style={{ background: "#2dbe8f" }}
+              style={{ background: "#00d495" }}
             >
               {initials}
             </div>
           )}
           <div>
-            <p className="font-heading font-bold text-lg" style={{ color: "#162040" }}>
+            <p className="font-heading font-bold text-lg" style={{ color: "#1c1c81" }}>
               {nume}
             </p>
-            <p className="text-sm mt-0.5" style={{ color: "#64748b" }}>
+            <p className="text-sm mt-0.5" style={{ color: "#5b6779" }}>
               {profile.email}
             </p>
             {profile.createdAt && (
               <p className="text-xs mt-1 text-muted-foreground">
                 Membru din{" "}
-                <span className="font-semibold" style={{ color: "#162040" }}>
+                <span className="font-semibold" style={{ color: "#1c1c81" }}>
                   {formatJoinDate(profile.createdAt)}
                 </span>
               </p>
@@ -71,7 +73,7 @@ export function MentorProfileDetailsCard({
           type="button"
           onClick={() => setEditing(true)}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors"
-          style={{ color: "#162040" }}
+          style={{ color: "#1c1c81" }}
         >
           <Pencil size={14} />
           Editează profilul
@@ -81,9 +83,16 @@ export function MentorProfileDetailsCard({
       <div className="space-y-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">Bio</p>
-          <p className="text-sm" style={{ color: "#334155" }}>
-            {profile.bio || "Nicio descriere adăugată încă."}
-          </p>
+          {profile.bio && hasRichText(profile.bio) ? (
+            <div
+              className={RICH_TEXT_PROSE}
+              dangerouslySetInnerHTML={{ __html: profile.bio }}
+            />
+          ) : (
+            <p className="text-sm" style={{ color: "#334155" }}>
+              Nicio descriere adăugată încă.
+            </p>
+          )}
         </div>
 
         <div>
@@ -96,7 +105,7 @@ export function MentorProfileDetailsCard({
                 <span
                   key={d.key}
                   className="px-3 py-1 rounded-full text-xs font-semibold"
-                  style={{ background: "#2dbe8f1a", color: "#0f7a5b" }}
+                  style={{ background: "#00d4951a", color: "#0f7a5b" }}
                 >
                   {d.name}
                 </span>

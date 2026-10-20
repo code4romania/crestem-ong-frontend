@@ -27,7 +27,7 @@ export function AssetCard({
       onClick={onClick}
       aria-pressed={selectable ? selected : undefined}
       className={`group relative flex flex-col overflow-hidden rounded-xl border text-left transition-colors ${
-        selected ? "border-[#2dbe8f] ring-2 ring-[#2dbe8f]/30" : "border-border hover:border-[#2dbe8f]"
+        selected ? "border-[#007d58] ring-2 ring-[#00d495]/30" : "border-border hover:border-[#00d495]"
       }`}
     >
       {selectable && (
@@ -35,7 +35,7 @@ export function AssetCard({
           aria-hidden="true"
           className={`absolute left-2 top-2 z-10 flex h-5 w-5 items-center justify-center rounded-md border ${
             selected
-              ? "border-[#2dbe8f] bg-[#2dbe8f] text-white"
+              ? "border-[#00d495] bg-[#00d495] text-white"
               : "border-white/80 bg-black/30 text-transparent"
           }`}
         >
@@ -57,7 +57,7 @@ export function AssetCard({
             <Film
               size={28}
               aria-hidden="true"
-              className="absolute inset-0 m-auto text-[#94a3b8]"
+              className="absolute inset-0 m-auto text-[#5b6779]"
             />
             {/* `#t=0.1` makes the browser seek ~0.1s in and paint that frame as
                 a still poster, no server-side thumbnail needed. */}
@@ -75,7 +75,7 @@ export function AssetCard({
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2 p-3">
-        <span className="truncate font-heading text-sm font-semibold text-[#162040]">
+        <span className="truncate font-heading text-sm font-semibold text-[#1c1c81]">
           {asset.titlu}
         </span>
         {chips.length > 0 && (
@@ -85,10 +85,10 @@ export function AssetCard({
                 {t.nume}
               </span>
             ))}
-            {overflow > 0 && <span className="text-[11px] text-[#94a3b8]">+{overflow}</span>}
+            {overflow > 0 && <span className="text-[11px] text-[#5b6779]">+{overflow}</span>}
           </span>
         )}
-        <span className="mt-auto text-[11px] text-[#94a3b8]">
+        <span className="mt-auto text-[11px] text-[#5b6779]">
           {asset.utilizariCount > 0
             ? `folosit pe ${pluralPagini(asset.utilizariCount)}`
             : "nefolosit"}

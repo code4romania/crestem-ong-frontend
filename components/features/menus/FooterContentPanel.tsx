@@ -3,14 +3,15 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { RichTextField } from "@/components/features/page-builder/rich-text/RichTextField";
-import { getMediaUrl } from "@/lib/api/client";
+import { getMediaUrl, errorMessage } from "@/lib/api/client";
 import { uploadPageImageAction } from "@/lib/api/page-blocks-actions";
+import { uploadFilesDirect } from "@/lib/api/upload-direct";
 import { updateFooterAction } from "@/lib/api/footer-actions";
 import { SOCIAL_LABEL, type FooterContent, type SocialLink } from "@/lib/api/footer-types";
 import { SocialLinksField, type EditableSocial } from "./SocialLinksField";
 
 const inputClass =
-  "w-full rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-[#2dbe8f] focus:outline-none";
+  "w-full rounded-lg border border-border bg-white px-3 py-2 text-sm focus:border-[#007d58] focus:outline-none";
 
 const newId = () => Math.random().toString(36).slice(2, 11);
 
@@ -49,15 +50,19 @@ export function FooterContentPanel({ footer }: { footer: FooterContent }) {
    * page builder uses; the editor stores the returned URL in the HTML.
    */
   const uploadImage = async (file: File): Promise<string | null> => {
-    const formData = new FormData();
-    formData.append("files", file);
-    const result = await uploadPageImageAction(formData);
+    try {
+      const [uploaded] = await uploadFilesDirect([file]);
+      const result = await uploadPageImageAction(uploaded);
 
-    if (result.error || !result.image) {
-      toast.error(result.error ?? "Nu am putut încărca imaginea.");
+      if (result.error || !result.image) {
+        toast.error(result.error ?? "Nu am putut încărca imaginea.");
+        return null;
+      }
+      return getMediaUrl(result.image.url);
+    } catch (err) {
+      toast.error(errorMessage(err, "Nu am putut încărca imaginea."));
       return null;
     }
-    return getMediaUrl(result.image.url);
   };
 
   const collectSocials = (): SocialLink[] | null => {
@@ -120,7 +125,7 @@ export function FooterContentPanel({ footer }: { footer: FooterContent }) {
   return (
     <div className="mb-6 overflow-hidden rounded-xl border border-border bg-white">
       <div className="border-b border-border px-5 py-4">
-        <h2 className="font-heading text-[1.0625rem] font-bold text-[#162040]">
+        <h2 className="font-heading text-[1.0625rem] font-bold text-[#1c1c81]">
           Conținutul footerului
         </h2>
         <p className="mt-0.5 text-xs text-muted-foreground">
@@ -165,7 +170,7 @@ export function FooterContentPanel({ footer }: { footer: FooterContent }) {
             type="button"
             onClick={save}
             disabled={pending}
-            className="rounded-xl bg-[#2dbe8f] px-5 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+            className="rounded-xl bg-[#00d495] px-5 py-2.5 text-sm font-semibold text-white transition-opacity hover:brightness-90 disabled:opacity-60"
           >
             {pending ? "Se salvează…" : "Salvează"}
           </button>

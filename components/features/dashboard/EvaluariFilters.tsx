@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { ChevronDown, Search } from "lucide-react";
-import { MEMBER_STATUS_LABELS } from "@/components/features/evaluari/evaluation-status";
+import { ChevronDown, Search, X } from "lucide-react";
 import { MultiSelectFilter } from "@/components/ui/MultiSelectFilter";
+import { useDebouncedCallback } from "@/lib/hooks/useDebouncedCallback";
+import { evaluariHref, hasActiveEvaluariFilters, statusOptionsForTab } from "./evaluari-query";
 
 const SEARCH_DEBOUNCE_MS = 400;
-
-const STATUS_ORDER = ["neinceput", "in_lucru", "completat", "nefinalizat"];
 
 /** Rounds outside every program are picked from the program filter itself. */
 const INDEPENDENT_OPTION = {
@@ -44,44 +43,40 @@ export function EvaluariFilters({
   const [ongs, setOngs] = useState(initialOngs);
   const [programs, setPrograms] = useState(initialPrograms);
   const [status, setStatus] = useState(initialStatus);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // The rounds tab lists rounds, the users tab the responses inside them, so the
   // filters offer whichever of those two actually has rows.
   const scope = tab === "organizatii" ? "reports" : "evaluations";
 
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, []);
-
   // Any filter change navigates back to page 1 — otherwise a match found by a new
   // search/filter could land on a page number that no longer exists for the new results.
   function navigate(next: FilterState) {
-    const params = new URLSearchParams();
-    params.set("tab", tab);
-    if (next.search) params.set("search", next.search);
-    if (next.ongs.length) params.set("ongs", next.ongs.join(","));
-    if (next.programs.length) params.set("programs", next.programs.join(","));
-    if (next.status) params.set("status", next.status);
-    router.replace(`${pathname}?${params.toString()}`);
+    router.replace(evaluariHref({ tab, ...next }, pathname));
   }
 
+  const { debounced: debouncedNavigate, cancel: cancelNavigate } = useDebouncedCallback(
+    navigate,
+    SEARCH_DEBOUNCE_MS,
+  );
+
   function change(patch: Partial<FilterState>) {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    cancelNavigate();
+    if (patch.search !== undefined) setSearch(patch.search);
     if (patch.ongs !== undefined) setOngs(patch.ongs);
     if (patch.programs !== undefined) setPrograms(patch.programs);
     if (patch.status !== undefined) setStatus(patch.status);
     navigate({ search, ongs, programs, status, ...patch });
   }
 
+  /** Clearing goes through `change`, so a half-typed search is cancelled too. */
+  function reset() {
+    change({ search: "", ongs: [], programs: [], status: "" });
+  }
+
+  const isFiltered = hasActiveEvaluariFilters({ search, ongs, programs, status });
+
   function handleSearchChange(value: string) {
     setSearch(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(
-      () => navigate({ search: value, ongs, programs, status }),
-      SEARCH_DEBOUNCE_MS,
-    );
+    debouncedNavigate({ search: value, ongs, programs, status });
   }
 
   return (
@@ -96,8 +91,18 @@ export function EvaluariFilters({
           placeholder={searchPlaceholder}
           value={search}
           onChange={(event) => handleSearchChange(event.target.value)}
-          className="w-full pl-10 pr-3.5 py-2.5 rounded-full border border-border text-sm"
+          className="w-full pl-10 pr-10 py-2.5 rounded-full border border-border text-sm"
         />
+        {search && (
+          <button
+            type="button"
+            onClick={() => change({ search: "" })}
+            aria-label="Golește căutarea"
+            className="absolute right-3 top-2.5 rounded-full p-1 text-slate-400 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+          >
+            <X size={14} />
+          </button>
+        )}
       </div>
 
       <div className="lg:w-56">
@@ -134,9 +139,9 @@ export function EvaluariFilters({
           className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white"
         >
           <option value="">Toate statusurile</option>
-          {STATUS_ORDER.map((key) => (
-            <option key={key} value={key}>
-              {MEMBER_STATUS_LABELS[key]}
+          {statusOptionsForTab(tab).map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
             </option>
           ))}
         </select>
@@ -145,6 +150,15 @@ export function EvaluariFilters({
           className="absolute right-3.5 top-3 text-slate-400 pointer-events-none"
         />
       </div>
+
+      <button
+        type="button"
+        onClick={reset}
+        disabled={!isFiltered}
+        className="shrink-0 px-4 py-2.5 rounded-full border border-border text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+      >
+        Resetează filtrele
+      </button>
     </div>
   );
 }

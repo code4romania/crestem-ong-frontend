@@ -87,7 +87,7 @@ export function ConversationThread({
       >
         <div
           className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-          style={{ background: archived ? "#94a3b8" : "#162040" }}
+          style={{ background: archived ? "#5b6779" : "#1c1c81" }}
         >
           {mentor ? initials(mentor.nume) : "?"}
         </div>
@@ -95,7 +95,7 @@ export function ConversationThread({
           <div className="flex items-center gap-2">
             <p
               className="text-sm font-semibold truncate"
-              style={{ color: archived ? "#64748b" : "#162040" }}
+              style={{ color: archived ? "#5b6779" : "#1c1c81" }}
             >
               {mentor?.nume ?? "Mentor"}
             </p>
@@ -111,7 +111,7 @@ export function ConversationThread({
         {loading ? (
           <p className="text-sm text-muted-foreground">Se încarcă...</p>
         ) : error && messages.length === 0 ? (
-          <p className="text-sm" style={{ color: "#ef4444" }}>
+          <p className="text-sm" style={{ color: "#b91c1c" }}>
             {error}
           </p>
         ) : messages.length === 0 ? (
@@ -123,7 +123,7 @@ export function ConversationThread({
         ) : (
           <>
             {error && (
-              <p className="text-xs" style={{ color: "#ef4444" }}>
+              <p className="text-xs" style={{ color: "#b91c1c" }}>
                 {error}
               </p>
             )}
@@ -133,14 +133,14 @@ export function ConversationThread({
                   className="max-w-[75%] rounded-2xl px-4 py-2.5"
                   style={
                     message.fromMe
-                      ? { background: "#162040", color: "white" }
-                      : { background: "#f1f5f9", color: "#162040" }
+                      ? { background: "#1c1c81", color: "white" }
+                      : { background: "#f1f5f9", color: "#1c1c81" }
                   }
                 >
                   <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
                   <p
                     className="text-[10px] mt-1"
-                    style={{ color: message.fromMe ? "rgba(255,255,255,0.6)" : "#94a3b8" }}
+                    style={{ color: message.fromMe ? "rgba(255,255,255,0.6)" : "#5b6779" }}
                   >
                     {formatTime(message.createdAt)}
                   </p>

@@ -37,6 +37,19 @@ export function isZodFlattenError(details: unknown): details is ZodFlattenError 
 }
 
 /**
+ * Strapi and the browser's `fetch` report generic failures in English ("Forbidden",
+ * "Failed to fetch", "Internal Server Error"…). Those must never reach a toast or
+ * an inline error, so they are swapped for the caller's Romanian fallback.
+ */
+const ENGLISH_DEFAULT_MESSAGE =
+  /^(forbidden|unauthorized|not found|bad request|internal server error|bad gateway|service unavailable|gateway timeout|payload too large|request entity too large|method not allowed|too many requests|conflict|failed to fetch|load failed|networkerror.*|the operation was aborted.*|fetch failed)\.?$/i;
+
+export function errorMessage(err: unknown, fallback: string): string {
+  const message = err instanceof Error ? err.message : typeof err === "string" ? err : "";
+  return message && !ENGLISH_DEFAULT_MESSAGE.test(message.trim()) ? message : fallback;
+}
+
+/**
  * Strapi validation errors carry the real reason (e.g. "Cel puțin o fază
  * trebuie să aibă evaluare") in `details.fieldErrors`/`formErrors`, while
  * `message` is often just a generic "Date invalide: ". Prefer the details.
@@ -56,7 +69,7 @@ export function getApiErrorMessage(err: unknown, fallback: string): string {
     if (messages.length > 0) return messages.join(" ");
   }
 
-  return err.message || fallback;
+  return errorMessage(err, fallback);
 }
 
 export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
@@ -116,7 +129,7 @@ export function parseApiError(err: unknown, fallback: string): ParsedApiError {
   // Only fall back to `error.message` when nothing landed on a field — Strapi's
   // top-level message is often just a generic "Date invalide: ".
   if (!formMessage && Object.keys(fieldErrors).length === 0) {
-    formMessage = err.message || fallback;
+    formMessage = errorMessage(err, fallback);
   }
 
   return { message: formMessage, fieldErrors };

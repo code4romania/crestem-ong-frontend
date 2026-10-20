@@ -1,37 +1,5 @@
 import { z } from "zod";
-
-/**
- * Fixed icon palette for a partner card. Stored as a string key (not a
- * component reference) so the schema stays serialisable and the renderer stays
- * pure — it maps the key back to a `lucide-react` icon at render time. Same
- * approach as `feature-cards/icons.ts`.
- */
-export const PARTNER_ICON_KEYS = [
-  "building",
-  "landmark",
-  "handshake",
-  "globe",
-  "users",
-  "award",
-  "briefcase",
-  "flag",
-  "shield",
-  "star",
-  "sparkles",
-  "target",
-  "book",
-  "graduation",
-  "leaf",
-  "heart",
-  "banknote",
-  "gift",
-  "network",
-  "trophy",
-  "lightbulb",
-  "compass",
-] as const;
-
-export type PartnerIconKey = (typeof PARTNER_ICON_KEYS)[number];
+import { iconSchema } from "@/components/ui/icons/schema";
 
 /** Uploaded media, same shape the Hero and People Grid blocks store. */
 const imageSchema = z
@@ -48,7 +16,7 @@ const partnerSchema = z.object({
    * away the other one.
    */
   sursaIcon: z.enum(["predefinita", "imagine"]).default("predefinita"),
-  icon: z.enum(PARTNER_ICON_KEYS).default("building"),
+  icon: iconSchema("partner-collection", "building"),
   imagine: imageSchema,
   imagineAlt: z.string().trim().default(""),
 });
@@ -100,7 +68,7 @@ export const EMPTY_PARTNER: Partner = {
   nume: "",
   subtitlu: "",
   sursaIcon: "predefinita",
-  icon: "building",
+  icon: "lucide:building-complex",
   imagine: null,
   imagineAlt: "",
 };

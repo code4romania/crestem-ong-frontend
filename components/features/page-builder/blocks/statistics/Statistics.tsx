@@ -1,11 +1,35 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import type { Stat, StatisticsData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
+import { hasRichText } from "../../rich-text/has-rich-text";
 
 const ALIGN_CLASS: Record<StatisticsData["aliniere"], string> = {
   stanga: "text-left",
   centru: "text-center",
   dreapta: "text-right",
+};
+
+/**
+ * Heading alignment. The description is width-capped, so it needs an auto
+ * margin to follow the text alignment. Full literal classes so the Tailwind
+ * scanner picks them up.
+ */
+const HEADER_ALIGN_CLASS: Record<StatisticsData["aliniereTitlu"], string> = {
+  stanga: "text-left",
+  centru: "text-center",
+  dreapta: "text-right",
+};
+const DESCRIPTION_ALIGN_CLASS: Record<StatisticsData["aliniereTitlu"], string> = {
+  stanga: "mr-auto",
+  centru: "mx-auto",
+  dreapta: "ml-auto",
+};
+
+const CTA_ALIGN_CLASS: Record<StatisticsData["aliniereButoane"], string> = {
+  stanga: "justify-start",
+  centru: "justify-center",
+  dreapta: "justify-end",
 };
 
 const COL_CLASS: Record<StatisticsData["coloane"], string> = {
@@ -19,7 +43,7 @@ function StatCell({ stat, className }: { stat: Stat; className: string }) {
   return (
     <div className={className}>
       <p
-        style={{ fontSize: "2rem", fontWeight: 800, color: "#162040" }}
+        style={{ fontSize: "2rem", fontWeight: 800, color: "#1c1c81" }}
         className="wrap-break-word"
       >
         {stat.valoare}
@@ -28,7 +52,7 @@ function StatCell({ stat, className }: { stat: Stat; className: string }) {
         {stat.eticheta}
       </p>
       {stat.descriere ? (
-        <p className="mt-1 text-xs text-[#94a3b8] wrap-break-word">
+        <p className="mt-1 text-xs text-[#5b6779] wrap-break-word">
           {stat.descriere}
         </p>
       ) : null}
@@ -49,15 +73,17 @@ export function Statistics({ data }: { data: StatisticsData }) {
     descriere,
     statistici,
     coloane,
+    aliniereTitlu,
     aliniere,
     separator,
+    aliniereButoane,
     primaryCta,
     secondaryCta,
   } = data;
 
   const hasPrimary = Boolean(primaryCta.label && primaryCta.href);
   const hasSecondary = Boolean(secondaryCta.label && secondaryCta.href);
-  const hasHeader = Boolean(subtitlu || titlu || descriere);
+  const hasHeader = Boolean(subtitlu || titlu) || hasRichText(descriere);
   const hasStats = statistici.length > 0;
 
   // Separator variant: a 1px grid gap over a slate ground shows through as
@@ -71,11 +97,11 @@ export function Statistics({ data }: { data: StatisticsData }) {
 
   return (
     <section>
-      <div className="mx-auto max-w-7xl px-6 py-16">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         {hasHeader ? (
-          <div className="mb-10">
+          <div className={`mb-10 ${HEADER_ALIGN_CLASS[aliniereTitlu]}`}>
             {subtitlu ? (
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#2dbe8f] wrap-break-word">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#007d58] wrap-break-word">
                 {subtitlu}
               </p>
             ) : null}
@@ -86,17 +112,16 @@ export function Statistics({ data }: { data: StatisticsData }) {
                   fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
                   fontWeight: 800,
                   lineHeight: 1.2,
-                  color: "#162040",
+                  color: "#1c1c81",
                 }}
               >
                 {titlu}
               </h2>
             ) : null}
-            {descriere ? (
-              <p className="mt-4 max-w-2xl text-[#475569] wrap-break-word">
-                {descriere}
-              </p>
-            ) : null}
+            <RichTextContent
+              html={descriere}
+              className={`mt-4 max-w-2xl text-[#475569] wrap-break-word ${DESCRIPTION_ALIGN_CLASS[aliniereTitlu]}`}
+            />
           </div>
         ) : null}
 
@@ -109,12 +134,14 @@ export function Statistics({ data }: { data: StatisticsData }) {
         ) : null}
 
         {hasPrimary || hasSecondary ? (
-          <div className="mt-10 flex flex-wrap gap-4">
+          <div
+            className={`mt-10 flex flex-wrap gap-4 ${CTA_ALIGN_CLASS[aliniereButoane]}`}
+          >
             {hasPrimary ? (
               <Link
                 href={primaryCta.href}
                 className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:opacity-90"
-                style={{ background: "#162040" }}
+                style={{ background: "#1c1c81" }}
               >
                 {primaryCta.label} <ArrowRight size={18} />
               </Link>
@@ -122,7 +149,7 @@ export function Statistics({ data }: { data: StatisticsData }) {
             {hasSecondary ? (
               <Link
                 href={secondaryCta.href}
-                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3.5 font-semibold text-[#162040] transition-all hover:bg-slate-50"
+                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3.5 font-semibold text-[#1c1c81] transition-all hover:bg-slate-50"
               >
                 {secondaryCta.label} <ChevronRight size={18} />
               </Link>

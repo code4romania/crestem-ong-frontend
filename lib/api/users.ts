@@ -1,4 +1,5 @@
 import { serverApiFetch } from "./server";
+import { sanitizeRichText } from "@/components/features/page-builder/rich-text/sanitize.server";
 import type { UserRoleType } from "@/lib/roles";
 
 export interface AdminUser {
@@ -14,7 +15,12 @@ export interface AdminUser {
   bio: string | null;
   dimensiuni: string[];
   ariiDeExpertiza: string[];
-  programs: { documentId: string; name: string }[];
+  programs: {
+    documentId: string;
+    name: string;
+    ongs: { documentId: string; name: string }[];
+  }[];
+  activationLink?: string;
 }
 
 export interface UsersPagination {
@@ -45,11 +51,20 @@ export function listUsers(params: ListUsersParams = {}) {
   if (params.page && params.page > 1) query.set("page", String(params.page));
 
   const qs = query.toString();
-  return serverApiFetch<{ data: AdminUser[]; meta: { pagination: UsersPagination } }>(
-    `/api/admin/users${qs ? `?${qs}` : ""}`,
-  );
+  return serverApiFetch<{
+    data: AdminUser[];
+    meta: { pagination: UsersPagination };
+  }>(`/api/admin/users${qs ? `?${qs}` : ""}`);
 }
 
-export function getUser(documentId: string) {
-  return serverApiFetch<{ data: AdminUser }>(`/api/admin/users/${documentId}`);
+/**
+ * `bio` is sanitised on the way out: the detail screen writes it to a raw-HTML
+ * sink, and rows stored before sanitising moved server-side may still carry
+ * markup the editor could never produce.
+ */
+export async function getUser(documentId: string) {
+  const { data } = await serverApiFetch<{ data: AdminUser }>(
+    `/api/admin/users/${documentId}`,
+  );
+  return { data: { ...data, bio: data.bio === null ? null : sanitizeRichText(data.bio) } };
 }

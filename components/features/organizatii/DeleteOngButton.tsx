@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { deleteOngAction } from "@/lib/api/ongs-actions";
 import { buildOngDeletionWarning } from "./ong-deletion-copy";
@@ -9,9 +10,12 @@ import { buildOngDeletionWarning } from "./ong-deletion-copy";
 export function DeleteOngButton({
   documentId,
   ongName,
+  onDeleted,
 }: {
   documentId: string;
   ongName: string;
+  /** Runs after a successful deletion, once the dialog is closed. */
+  onDeleted?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +30,8 @@ export function DeleteOngButton({
         return;
       }
       setOpen(false);
+      toast.success("Organizația a fost ștearsă.");
+      onDeleted?.();
     });
   };
 

@@ -11,9 +11,9 @@ import { MeetingDetailsModal } from "./MeetingDetailsModal";
 import { MeetingFormModal } from "./MeetingFormModal";
 
 const STATUS_BADGES: Record<OngMeeting["status"], { label: string; bg: string; color: string }> = {
-  programata: { label: "Programată", bg: "#eff6ff", color: "#2563eb" },
-  efectuata: { label: "Efectuată", bg: "#f0fdf4", color: "#16a34a" },
-  anulata: { label: "Anulată", bg: "#fef2f2", color: "#dc2626" },
+  programata: { label: "Programată", bg: "#dcfafb", color: "#5656e5" },
+  efectuata: { label: "Efectuată", bg: "#f0fdf4", color: "#15803d" },
+  anulata: { label: "Anulată", bg: "#fef2f2", color: "#b91c1c" },
 };
 
 const FORMAT_LABELS: Record<OngMeeting["format"], string> = {
@@ -80,7 +80,7 @@ export function MeetingsTable({
               <th
                 key={h}
                 className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider whitespace-nowrap"
-                style={{ color: "#94a3b8" }}
+                style={{ color: "#5b6779" }}
               >
                 {h}
               </th>
@@ -93,13 +93,13 @@ export function MeetingsTable({
             const fileUrl = meeting.report ? getMediaUrl(meeting.report.url) : null;
             return (
               <tr key={meeting.documentId} className="border-b border-border last:border-0">
-                <td className="px-5 py-3.5 font-semibold whitespace-nowrap" style={{ color: "#162040" }}>
+                <td className="px-5 py-3.5 font-semibold whitespace-nowrap" style={{ color: "#1c1c81" }}>
                   <span className={meeting.mentor?.isDeleted ? "opacity-60" : ""}>
                     {meeting.mentor?.nume ?? "—"}
                   </span>
                   {meeting.mentor?.isDeleted && <DeletedAccountBadge className="ml-2" />}
                 </td>
-                <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "#64748b" }}>
+                <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "#5b6779" }}>
                   {formatMeetingDateTime(meeting.dataOra)}
                 </td>
                 <td className="px-5 py-3.5 whitespace-nowrap">
@@ -118,7 +118,7 @@ export function MeetingsTable({
                     {statusBadge.label}
                   </span>
                 </td>
-                <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "#64748b" }}>
+                <td className="px-5 py-3.5 whitespace-nowrap" style={{ color: "#5b6779" }}>
                   {meeting.program?.name ?? "—"}
                 </td>
                 <td className="px-5 py-3.5 whitespace-nowrap">
@@ -134,7 +134,7 @@ export function MeetingsTable({
                       <Download size={13} /> Descarcă raport
                     </a>
                   ) : (
-                    <span style={{ color: "#94a3b8" }}>—</span>
+                    <span style={{ color: "#5b6779" }}>—</span>
                   )}
                 </td>
                 <td className="px-5 py-3.5 whitespace-nowrap">

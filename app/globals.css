@@ -3,14 +3,18 @@
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
-  --primary: #162040;
+  --primary: #1c1c81;
   --primary-foreground: #ffffff;
-  --secondary: #f0faf6;
-  --secondary-foreground: #162040;
+  --secondary: #e5f9e5;
+  --secondary-foreground: #1c1c81;
   --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #2dbe8f;
+  --muted-foreground: #5b6779;
+  --accent: #00d495;
   --accent-foreground: #ffffff;
+  /* Accent green dark enough for text and focus rings on light surfaces
+     (WCAG AA 4.5:1). Buttons keep the brand --accent fill with white text
+     by design decision, knowingly at 1.9:1. */
+  --accent-strong: #007d58;
   --border: #e2e8f0;
   --radius: 0.75rem;
 
@@ -34,7 +38,7 @@
   /* The headline number of a stat card. Distinct hues rather than semantic
      states — they separate adjacent counters at a glance. */
   --value-teal: #0f9d76;
-  --value-blue: #2563eb;
+  --value-blue: #5656e5;
   --value-violet: #7c3aed;
   --value-red: #dc2626;
   --value-orange: #ea580c;
@@ -50,10 +54,10 @@
   /* Program status badges ------------------------------------------------ */
   --status-upcoming: #fffbeb;
   --status-upcoming-foreground: #92400e;
-  --status-active: #eff6ff;
-  --status-active-foreground: #2563eb;
+  --status-active: #dcfafb;
+  --status-active-foreground: #5656e5;
   --status-finished: #f0fdf4;
-  --status-finished-foreground: #16a34a;
+  --status-finished-foreground: #15803d;
 }
 
 @theme inline {
@@ -67,6 +71,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-strong: var(--accent-strong);
   --color-border: var(--border);
 
   --color-surface-subtle: var(--surface-subtle);
@@ -100,14 +105,24 @@
   --color-status-finished-foreground: var(--status-finished-foreground);
 
   --radius-lg: var(--radius);
-  --font-sans: var(--font-inter);
-  --font-heading: var(--font-plus-jakarta-sans);
+  --font-sans: var(--font-inter-tight);
+  --font-heading: var(--font-inter-tight);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Even out multi-line headings so a wrap never strands a lone word (e.g. a
+   year) on the last line. In `base` so a utility can still override it. */
+@layer base {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
 }
 
 @media print {
@@ -156,6 +171,71 @@ body {
 
 @media print {
   .animate-page-enter {
+    animation: none;
+  }
+}
+
+/* Maintenance page ------------------------------------------------------- */
+
+@keyframes maintenance-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes maintenance-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, 30px) scale(1.1);
+  }
+}
+
+@keyframes maintenance-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Children fade up one after another: logo, heading, text. */
+.maintenance-stagger > * {
+  animation: maintenance-rise 600ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.maintenance-stagger > :nth-child(2) {
+  animation-delay: 120ms;
+}
+.maintenance-stagger > :nth-child(3) {
+  animation-delay: 240ms;
+}
+
+.maintenance-blob {
+  animation: maintenance-drift 14s ease-in-out infinite;
+}
+.maintenance-blob-alt {
+  animation-duration: 18s;
+  animation-direction: reverse;
+}
+
+/* Rings around the logo, turning in opposite directions. */
+.maintenance-orbit {
+  animation: maintenance-orbit 6s linear infinite;
+}
+.maintenance-orbit-reverse {
+  animation-duration: 9s;
+  animation-direction: reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maintenance-stagger > *,
+  .maintenance-blob,
+  .maintenance-orbit {
     animation: none;
   }
 }

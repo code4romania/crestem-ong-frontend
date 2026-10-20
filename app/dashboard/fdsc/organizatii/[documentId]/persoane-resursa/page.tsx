@@ -42,7 +42,7 @@ export default async function OrganizatiePersoaneResursaPage({ params, searchPar
 
   return (
     <div>
-      <h2 className="text-2xl font-heading font-extrabold mb-4" style={{ color: "#162040" }}>
+      <h2 className="text-2xl font-heading font-extrabold mb-4" style={{ color: "#1c1c81" }}>
         Persoane resursă
       </h2>
 
@@ -60,7 +60,7 @@ export default async function OrganizatiePersoaneResursaPage({ params, searchPar
         </div>
       )}
 
-      <h2 className="text-2xl font-heading font-extrabold mb-4" style={{ color: "#162040" }}>
+      <h2 className="text-2xl font-heading font-extrabold mb-4" style={{ color: "#1c1c81" }}>
         Toate întâlnirile
       </h2>
 

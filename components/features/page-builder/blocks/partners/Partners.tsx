@@ -1,5 +1,6 @@
 import { getMediaUrl } from "@/lib/api/client";
-import { FEATURE_ICONS } from "../feature-cards/icons";
+import { LucideIcon } from "@/components/ui/icons/LucideIcon";
+import { hasIcon } from "@/components/ui/icons/names";
 import type { Partner, PartnersData } from "./schema";
 
 const COL_CLASS: Record<PartnersData["coloane"], string> = {
@@ -12,7 +13,6 @@ const COL_CLASS: Record<PartnersData["coloane"], string> = {
 };
 
 function PartnerCard({ partner }: { partner: Partner }) {
-  const Icon = FEATURE_ICONS[partner.icon];
 
   return (
     <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-white p-4 shadow-sm">
@@ -25,16 +25,16 @@ function PartnerCard({ partner }: { partner: Partner }) {
             className="h-full w-full object-contain"
           />
         </span>
-      ) : (
+      ) : hasIcon(partner.icon) ? (
         <span
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-          style={{ background: "rgba(45,190,143,0.12)", color: "#2dbe8f" }}
+          style={{ background: "rgba(0,212,149,0.12)", color: "#007d58" }}
         >
-          <Icon size={20} />
+          <LucideIcon value={partner.icon} scope="feature" size={20} />
         </span>
-      )}
+      ) : null}
       <div className="min-w-0">
-        <p className="truncate text-sm font-bold text-[#162040]">
+        <p className="truncate text-sm font-bold text-[#1c1c81]">
           {partner.nume}
         </p>
         {partner.subtitlu ? (
@@ -55,11 +55,11 @@ export function Partners({ data }: { data: PartnersData }) {
 
   return (
     <section className="relative overflow-hidden bg-[#f5f7fb]">
-      <div className="relative mx-auto max-w-7xl px-6 py-16">
+      <div className="relative mx-auto max-w-7xl px-6 py-8">
         {titluSectiune || subtitluSectiune ? (
           <div className="mx-auto mb-10 max-w-2xl text-center">
             {titluSectiune ? (
-              <p className="text-sm font-bold uppercase tracking-[0.15em] text-[#64748b] wrap-break-word">
+              <p className="text-sm font-bold uppercase tracking-[0.15em] text-[#5b6779] wrap-break-word">
                 {titluSectiune}
               </p>
             ) : null}

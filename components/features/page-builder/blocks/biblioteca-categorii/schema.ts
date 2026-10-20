@@ -30,9 +30,9 @@ export const bibliotecaCategoriiSchema = z.object({
         slug: z.string(),
         descriere: z.string().default(""),
         /**
-         * A key from the twelve-icon palette. Kept as a plain string rather
+         * A stored icon value (legacy key or `lucide:<name>`). Kept as a plain string rather
          * than the enum so a category saved with a key this build does not
-         * know still parses — the card falls back to `folder` instead of the
+         * know still parses — `LucideIcon` falls back to `folder` instead of the
          * whole block vanishing.
          */
         icon: z.string().default("folder"),

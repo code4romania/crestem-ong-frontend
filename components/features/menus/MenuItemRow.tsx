@@ -49,13 +49,13 @@ export function MenuItemRow({
             {...listeners}
             disabled={disabled}
             aria-label={`Mută „${label}”`}
-            className="shrink-0 cursor-grab text-[#cbd5e1] hover:text-[#94a3b8] disabled:cursor-not-allowed"
+            className="shrink-0 cursor-grab text-[#cbd5e1] hover:text-[#5b6779] disabled:cursor-not-allowed"
           >
             <GripVertical size={14} />
           </button>
 
           <div className="min-w-0 flex-1">
-            <p className="truncate font-heading text-sm font-semibold text-[#162040]">{label}</p>
+            <p className="truncate font-heading text-sm font-semibold text-[#1c1c81]">{label}</p>
             {url ? (
               <p className="truncate text-xs text-muted-foreground">{url}</p>
             ) : (
@@ -67,7 +67,7 @@ export function MenuItemRow({
 
           <div className="flex shrink-0 items-center gap-1">
             {childCount > 0 && (
-              <span className="mr-1 inline-flex items-center text-xs font-semibold text-[#64748b]">
+              <span className="mr-1 inline-flex items-center text-xs font-semibold text-[#5b6779]">
                 <ChevronRight size={12} />
                 {childCount}
               </span>
@@ -78,7 +78,7 @@ export function MenuItemRow({
                 onClick={onAddChild}
                 disabled={disabled}
                 aria-label={`Adaugă sub-element în „${label}”`}
-                className="rounded p-1 text-[#94a3b8] transition-colors hover:bg-[#eff6ff] hover:text-[#2563eb] disabled:opacity-50"
+                className="rounded p-1 text-[#5b6779] transition-colors hover:bg-[#dcfafb] hover:text-[#5656e5] disabled:opacity-50"
               >
                 <Plus size={14} />
               </button>
@@ -88,7 +88,7 @@ export function MenuItemRow({
               onClick={onEdit}
               disabled={disabled}
               aria-label={`Editează „${label}”`}
-              className="rounded p-1 text-[#94a3b8] transition-colors hover:bg-slate-100 hover:text-[#475569] disabled:opacity-50"
+              className="rounded p-1 text-[#5b6779] transition-colors hover:bg-slate-100 hover:text-[#475569] disabled:opacity-50"
             >
               <Pencil size={14} />
             </button>
@@ -97,7 +97,7 @@ export function MenuItemRow({
               onClick={onDelete}
               disabled={disabled}
               aria-label={`Șterge „${label}”`}
-              className="rounded p-1 text-[#94a3b8] transition-colors hover:bg-red-50 hover:text-[#dc2626] disabled:opacity-50"
+              className="rounded p-1 text-[#5b6779] transition-colors hover:bg-red-50 hover:text-[#b91c1c] disabled:opacity-50"
             >
               <Trash2 size={14} />
             </button>

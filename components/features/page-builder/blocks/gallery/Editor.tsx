@@ -2,16 +2,18 @@
 
 import { useEffect, useRef } from "react";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { IMAGE_RATIO_OPTIONS } from "../shared/image-ratio";
 import { Toggle } from "@/components/ui/Toggle";
 import { GalleryImageList } from "./GalleryImageList";
 import type { BlockFieldErrors } from "../../types";
 import type { GalleryData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
-const optionalHint = "ml-1.5 font-normal normal-case text-[#94a3b8]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
+const optionalHint = "ml-1.5 font-normal normal-case text-[#5b6779]";
 
 export function GalleryEditor({
   value,
@@ -48,16 +50,14 @@ export function GalleryEditor({
       </div>
 
       <div>
-        <label htmlFor="gallery-descriere" className={labelClass}>
+        <span className={labelClass}>
           Descriere<span className={optionalHint}>(opțional)</span>
-        </label>
-        <textarea
-          id="gallery-descriere"
-          rows={3}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.descriere}
-          onChange={(e) => set({ descriere: e.target.value })}
-          placeholder="Câteva momente din activitățile desfășurate împreună cu organizațiile participante."
+          onChange={(html) => set({ descriere: html })}
+          ariaLabel="Descriere"
+          compact
         />
       </div>
 
@@ -95,16 +95,33 @@ export function GalleryEditor({
           ]}
         />
         {value.stil === "carusel" && (
-          <p className="mt-1 text-xs text-[#94a3b8]">
+          <p className="mt-1 text-xs text-[#5b6779]">
             Numărul de imagini vizibile simultan în carusel.
           </p>
         )}
       </div>
 
+      {/* Masonry always shows images whole, so the ratio only applies to the
+          grid and carousel styles. */}
+      {value.stil !== "masonry" && (
+        <div>
+          <span className={labelClass}>Raport imagine</span>
+          <SegmentedControl
+            ariaLabel="Raport imagine"
+            value={value.raport ?? "4:3"}
+            onChange={(raport) => set({ raport })}
+            options={IMAGE_RATIO_OPTIONS}
+          />
+          <p className="mt-1.5 text-xs text-[#5b6779]">
+            „Original” afișează fiecare imagine întreagă, fără decupare.
+          </p>
+        </div>
+      )}
+
       <div className="flex items-center justify-between gap-4 rounded-xl border border-border p-4">
         <label
           htmlFor="gallery-lightbox"
-          className="text-sm font-medium text-[#162040]"
+          className="text-sm font-medium text-[#1c1c81]"
         >
           Deschide imaginile în lightbox
         </label>

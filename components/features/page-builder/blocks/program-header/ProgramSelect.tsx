@@ -8,7 +8,7 @@ import type { ProgramHeaderData } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const controlClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
 
 /**
  * Picks the programme this header stands for. The chosen programme's name is
@@ -83,13 +83,13 @@ export function ProgramSelect({
       </select>
 
       {!programs && !failed ? (
-        <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-[#94a3b8]">
+        <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-[#5b6779]">
           <Loader2 size={12} className="animate-spin" /> Se încarcă programele...
         </p>
       ) : null}
 
       {failed ? (
-        <p className="mt-1.5 text-xs text-[#ef4444]">
+        <p className="mt-1.5 text-xs text-[#b91c1c]">
           Nu am putut încărca lista de programe. Completează manual titlul și
           statisticile.
         </p>
@@ -99,7 +99,7 @@ export function ProgramSelect({
         <button
           type="button"
           onClick={() => onReimport(selected)}
-          className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563eb] hover:underline"
+          className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#5656e5] hover:underline"
         >
           <RefreshCw size={13} /> Reimportă titlul din program
         </button>

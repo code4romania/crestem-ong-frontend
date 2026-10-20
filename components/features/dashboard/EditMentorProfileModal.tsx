@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState, useTransition } from "react";
 import { Loader2, X } from "lucide-react";
 import { updateMentorProfileAction, uploadUserAvatarAction } from "@/lib/api/users-actions";
@@ -10,7 +11,7 @@ import { MentorProfileFields, type MentorProfileFieldsValue } from "./MentorProf
 import { ModalOverlay } from "@/components/ui/ModalOverlay";
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#2563eb]/30 focus:border-[#2563eb] transition-colors bg-white text-sm";
+  "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#5656e5]/30 focus:border-[#5656e5] transition-colors bg-white text-sm";
 
 const disabledInputClass =
   "w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-400 text-sm cursor-not-allowed";
@@ -32,6 +33,9 @@ export function EditMentorProfileModal({
     avatarFile: null,
     avatarRemoved: false,
   });
+  // Required on every save and never stored — it only gates the button.
+  const [dataConsent, setDataConsent] = useState(false);
+  const [consentError, setConsentError] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isPending, startTransition] = useTransition();
@@ -39,6 +43,11 @@ export function EditMentorProfileModal({
   const handleSubmit = () => {
     setError(null);
     setFieldErrors({});
+
+    if (!dataConsent) {
+      setConsentError(true);
+      return;
+    }
 
     startTransition(async () => {
       try {
@@ -63,7 +72,7 @@ export function EditMentorProfileModal({
 
         const result = await updateMentorProfileAction({
           nume,
-          bio: mentorFields.bio.trim(),
+          bio: mentorFields.bio,
           ...(avatarId !== undefined ? { avatar: avatarId } : {}),
           dimensiuni: mentorFields.selectedDimensions,
           ariiDeExpertiza: ariiParsed,
@@ -73,6 +82,7 @@ export function EditMentorProfileModal({
           setError(result.error ?? null);
           return;
         }
+        toast.success("Profilul a fost actualizat.");
         onClose();
       } catch {
         setError("A apărut o eroare neașteptată. Încearcă din nou.");
@@ -87,7 +97,7 @@ export function EditMentorProfileModal({
           <h2
             id="edit-mentor-profile-title"
             className="font-heading font-extrabold text-lg"
-            style={{ color: "#162040" }}
+            style={{ color: "#1c1c81" }}
           >
             Editează profilul
           </h2>
@@ -103,14 +113,14 @@ export function EditMentorProfileModal({
 
         <div className="px-6 py-5 space-y-4 overflow-y-auto">
           {error && (
-            <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#ef4444]">
+            <p role="alert" className="rounded-lg px-3 py-2 text-sm bg-[#fff5f5] border-[1.5px] border-[#fca5a5] text-[#b91c1c]">
               {error}
             </p>
           )}
 
           <div>
             <label htmlFor="edit-mentor-profile-nume" className="block text-sm font-semibold mb-1.5" style={{ color: "#334155" }}>
-              Nume complet <span style={{ color: "#2563eb" }}>*</span>
+              Nume complet <span style={{ color: "#5656e5" }}>*</span>
             </label>
             <input
               id="edit-mentor-profile-nume"
@@ -121,7 +131,7 @@ export function EditMentorProfileModal({
               placeholder="ex. Ion Popescu"
             />
             {fieldErrors.nume && (
-              <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>{fieldErrors.nume}</p>
+              <p className="mt-1 text-xs" style={{ color: "#b91c1c" }}>{fieldErrors.nume}</p>
             )}
           </div>
 
@@ -147,20 +157,60 @@ export function EditMentorProfileModal({
           />
         </div>
 
-        <div className="px-6 py-4 border-t border-border flex justify-end gap-3">
-          <button type="button" onClick={onClose} disabled={isPending} className="px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors disabled:opacity-50 text-[#475569]">
-            Anulează
-          </button>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={isPending || !nume.trim()}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-70"
-            style={{ background: "#2563eb" }}
+        <div className="px-6 py-4 border-t border-border space-y-4">
+          <div
+            className={`rounded-xl px-4 py-3 border-[1.5px] ${
+              consentError ? "bg-[#fff5f5] border-[#fca5a5]" : "bg-[#f8faff] border-[#e2e8f0]"
+            }`}
           >
-            {isPending && <Loader2 size={14} className="animate-spin" />}
-            {isPending ? "Se salvează..." : "Salvează"}
-          </button>
+            <div className="flex items-start gap-3">
+              <input
+                id="edit-mentor-profile-consent"
+                type="checkbox"
+                checked={dataConsent}
+                onChange={(e) => {
+                  setDataConsent(e.target.checked);
+                  if (e.target.checked) setConsentError(false);
+                }}
+                aria-invalid={consentError}
+                aria-describedby={consentError ? "edit-mentor-profile-consent-error" : undefined}
+                className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#5656e5]"
+              />
+              <label htmlFor="edit-mentor-profile-consent" className="text-sm cursor-pointer" style={{ color: "#334155" }}>
+                Sunt de acord cu prelucrarea datelor cu caracter personal conform{" "}
+                <a
+                  href="/politica-de-confidentialitate"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold underline hover:opacity-80"
+                  style={{ color: "#5656e5" }}
+                >
+                  politicii
+                </a>{" "}
+                privind colectarea datelor cu caracter personal
+              </label>
+            </div>
+            {consentError && (
+              <p id="edit-mentor-profile-consent-error" className="mt-2 ml-7 text-xs" style={{ color: "#b91c1c" }}>
+                Trebuie să fii de acord cu prelucrarea datelor pentru a salva profilul.
+              </p>
+            )}
+          </div>
+          <div className="flex justify-end gap-3">
+            <button type="button" onClick={onClose} disabled={isPending} className="px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors disabled:opacity-50 text-[#475569]">
+              Anulează
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={isPending || !nume.trim()}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-70"
+              style={{ background: "#5656e5" }}
+            >
+              {isPending && <Loader2 size={14} className="animate-spin" />}
+              {isPending ? "Se salvează..." : "Salvează"}
+            </button>
+          </div>
         </div>
       </div>
     </ModalOverlay>

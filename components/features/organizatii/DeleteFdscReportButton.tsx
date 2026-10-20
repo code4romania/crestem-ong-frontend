@@ -3,6 +3,7 @@
 
 import { useState, useTransition } from "react";
 import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { deleteFdscReportAction } from "@/lib/api/ongs-actions";
 
@@ -28,6 +29,7 @@ export function DeleteFdscReportButton({
         return;
       }
       setOpen(false);
+      toast.success("Raportul a fost șters.");
     });
   };
 

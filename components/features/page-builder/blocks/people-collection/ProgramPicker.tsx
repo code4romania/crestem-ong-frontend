@@ -34,13 +34,13 @@ export function ProgramPicker({
     <div>
       <span className={labelClass}>
         Program{" "}
-        <span className="font-normal normal-case tracking-normal text-[#94a3b8]">
+        <span className="font-normal normal-case tracking-normal text-[#5b6779]">
           (opțional){value.length > 0 ? ` · ${value.length} selectate` : ""}
         </span>
       </span>
 
       {programs.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border px-3 py-4 text-center text-sm text-[#94a3b8]">
+        <p className="rounded-xl border border-dashed border-border px-3 py-4 text-center text-sm text-[#5b6779]">
           Niciun program disponibil.
         </p>
       ) : (
@@ -60,7 +60,7 @@ export function ProgramPicker({
                 onChange={() => toggle(program.documentId)}
                 className="h-4 w-4 shrink-0 rounded border-border"
               />
-              <span className="min-w-0 text-sm font-medium text-[#162040] wrap-break-word">
+              <span className="min-w-0 text-sm font-medium text-[#1c1c81] wrap-break-word">
                 {program.name}
               </span>
             </label>
@@ -68,7 +68,7 @@ export function ProgramPicker({
         </div>
       )}
 
-      <p className="mt-1.5 text-xs text-[#94a3b8]">
+      <p className="mt-1.5 text-xs text-[#5b6779]">
         Dacă selectezi unul sau mai multe programe, apar doar persoanele asociate
         lor.
       </p>

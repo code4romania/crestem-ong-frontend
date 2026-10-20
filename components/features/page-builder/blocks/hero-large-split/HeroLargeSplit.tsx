@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, ChevronRight, Star } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import { getMediaUrl } from "@/lib/api/client";
 import type { HeroLargeSplitData } from "./schema";
+import { RichTextContent } from "../../rich-text/RichTextContent";
 
 const VERTICAL_ALIGN_CLASS: Record<HeroLargeSplitData["verticalAlign"], string> = {
   centru: "lg:items-center",
@@ -36,40 +37,38 @@ export function HeroLargeSplit({ data }: { data: HeroLargeSplitData }) {
         <div
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6 max-w-full wrap-break-word"
           style={{
-            background: "rgba(45,190,143,0.15)",
-            color: "#2dbe8f",
-            border: "1px solid rgba(45,190,143,0.3)",
+            background: "rgba(0,212,149,0.15)",
+            color: "#00d495",
+            border: "1px solid rgba(0,212,149,0.3)",
           }}
         >
-          <Star size={12} className="shrink-0" />
           {supratitlu}
         </div>
       ) : null}
-      <h1
-        className="mb-6 text-white font-heading wrap-break-word"
-        style={{ fontSize: "clamp(2.5rem, 5vw, 3.75rem)", fontWeight: 800, lineHeight: 1.1 }}
-      >
-        {titlu}
-      </h1>
-      {subtitlu ? (
-        <p
-          className="mb-8 leading-relaxed wrap-break-word"
-          style={{
-            fontSize: "1.125rem",
-            color: "rgba(255,255,255,0.72)",
-            maxWidth: "480px",
-          }}
+      {titlu ? (
+        <h1
+          className="mb-6 text-white font-heading wrap-break-word"
+          style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.25rem)", fontWeight: 800, lineHeight: 1.1 }}
         >
-          {subtitlu}
-        </p>
+          {titlu}
+        </h1>
       ) : null}
+      <RichTextContent
+        html={subtitlu}
+        className="mb-8 leading-relaxed wrap-break-word"
+        style={{
+          fontSize: "1.125rem",
+          color: "rgba(255,255,255,0.72)",
+          maxWidth: "480px",
+        }}
+      />
       {hasPrimary || hasSecondary ? (
         <div className="flex flex-wrap gap-4">
           {hasPrimary ? (
             <Link
               href={primaryCta.href}
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white transition-all hover:opacity-90 hover:-translate-y-0.5"
-              style={{ background: "#2dbe8f", boxShadow: "0 4px 24px rgba(45,190,143,0.35)" }}
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white transition-all hover:brightness-90 hover:-translate-y-0.5"
+              style={{ background: "#00d495", boxShadow: "0 4px 24px rgba(0,212,149,0.35)" }}
             >
               {primaryCta.label} <ArrowRight size={18} />
             </Link>
@@ -107,10 +106,10 @@ export function HeroLargeSplit({ data }: { data: HeroLargeSplitData }) {
   return (
     <section
       className="flex items-center relative overflow-hidden"
-      style={{ background: "#162040" }}
+      style={{ background: "#1c1c81" }}
     >
       <div
-        className={`relative max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 gap-16 items-center w-full ${
+        className={`relative max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 gap-16 items-center w-full ${
           image ? "lg:grid-cols-2" : ""
         } ${VERTICAL_ALIGN_CLASS[verticalAlign]}`}
       >

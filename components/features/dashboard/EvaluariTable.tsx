@@ -7,6 +7,7 @@ import {
   MEMBER_STATUS_LABELS,
 } from "@/components/features/evaluari/evaluation-status";
 import { formatDate } from "@/lib/utils/date";
+import { withEvaluariFrom } from "./evaluari-from";
 
 const COLUMNS = [
   "Organizație",
@@ -18,7 +19,14 @@ const COLUMNS = [
   "Acțiuni",
 ];
 
-export function EvaluariTable({ evaluations }: { evaluations: AdminEvaluationRow[] }) {
+export function EvaluariTable({
+  evaluations,
+  listHref,
+}: {
+  evaluations: AdminEvaluationRow[];
+  /** This list's own URL, so the opened evaluation can link back to it. */
+  listHref: string;
+}) {
   if (evaluations.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-border p-8 text-center">
@@ -37,7 +45,7 @@ export function EvaluariTable({ evaluations }: { evaluations: AdminEvaluationRow
                 <th
                   key={column}
                   className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider whitespace-nowrap"
-                  style={{ color: "#94a3b8" }}
+                  style={{ color: "#5b6779" }}
                 >
                   {column}
                 </th>
@@ -55,22 +63,25 @@ export function EvaluariTable({ evaluations }: { evaluations: AdminEvaluationRow
               // submitted, so an unfinished response has nothing to open.
               const href =
                 evaluation.ong && evaluation.report && evaluation.status === "completat"
-                  ? `/dashboard/organizatii/${evaluation.ong.documentId}/evaluari/${evaluation.report.documentId}/membru/${evaluation.documentId}`
+                  ? withEvaluariFrom(
+                      `/dashboard/organizatii/${evaluation.ong.documentId}/evaluari/${evaluation.report.documentId}/membru/${evaluation.documentId}`,
+                      listHref,
+                    )
                   : null;
               return (
                 <tr
                   key={evaluation.documentId}
                   className="border-b border-border last:border-0 hover:bg-slate-50 transition-colors"
                 >
-                  <td className="px-4 py-3.5 font-semibold" style={{ color: "#162040" }}>
+                  <td className="px-4 py-3.5 font-semibold" style={{ color: "#1c1c81" }}>
                     {evaluation.ong?.name ?? "—"}
                   </td>
                   <td className="px-4 py-3.5">
-                    <div className="font-medium" style={{ color: "#162040" }}>
+                    <div className="font-medium" style={{ color: "#1c1c81" }}>
                       {evaluation.user?.nume ?? "—"}
                     </div>
                     {evaluation.user?.email && (
-                      <div className="text-xs" style={{ color: "#94a3b8" }}>
+                      <div className="text-xs" style={{ color: "#5b6779" }}>
                         {evaluation.user.email}
                       </div>
                     )}
@@ -89,10 +100,10 @@ export function EvaluariTable({ evaluations }: { evaluations: AdminEvaluationRow
                       {MEMBER_STATUS_LABELS[evaluation.status] ?? evaluation.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3.5 font-semibold" style={{ color: "#162040" }}>
+                  <td className="px-4 py-3.5 font-semibold" style={{ color: "#1c1c81" }}>
                     {evaluation.score != null ? `${evaluation.score}%` : "—"}
                   </td>
-                  <td className="px-4 py-3.5 whitespace-nowrap" style={{ color: "#64748b" }}>
+                  <td className="px-4 py-3.5 whitespace-nowrap" style={{ color: "#5b6779" }}>
                     {formatDate(evaluation.completedAt)}
                   </td>
                   <td className="px-4 py-3.5 whitespace-nowrap">
@@ -100,7 +111,7 @@ export function EvaluariTable({ evaluations }: { evaluations: AdminEvaluationRow
                       <Link
                         href={href}
                         className="inline-flex items-center gap-1 text-xs font-semibold hover:underline"
-                        style={{ color: "#2dbe8f" }}
+                        style={{ color: "#007d58" }}
                       >
                         Vezi evaluarea <ArrowRight size={12} />
                       </Link>
@@ -110,7 +121,7 @@ export function EvaluariTable({ evaluations }: { evaluations: AdminEvaluationRow
                         disabled
                         title="Evaluarea nu este completată"
                         className="inline-flex items-center gap-1 text-xs font-semibold cursor-not-allowed opacity-50"
-                        style={{ color: "#94a3b8" }}
+                        style={{ color: "#5b6779" }}
                       >
                         Vezi evaluarea <ArrowRight size={12} />
                       </button>

@@ -34,7 +34,9 @@ export function MediaLibrary({
 }) {
   const router = useRouter();
   const [panelAsset, setPanelAsset] = useState<MediaAssetDetail | null>(null);
-  const [batchAssets, setBatchAssets] = useState<MediaAssetDetail[] | null>(null);
+  const [batchAssets, setBatchAssets] = useState<MediaAssetDetail[] | null>(
+    null,
+  );
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
   const [confirmingBulkDelete, setConfirmingBulkDelete] = useState(false);
@@ -107,7 +109,10 @@ export function MediaLibrary({
     },
   );
 
-  const buildQuery = (next: { search: string; tip: string; tagSlugs: string[] }, page = 1) => {
+  const buildQuery = (
+    next: { search: string; tip: string; tagSlugs: string[] },
+    page = 1,
+  ) => {
     const params = new URLSearchParams();
     if (next.search) params.set("search", next.search);
     if (next.tip) params.set("tip", next.tip);
@@ -117,7 +122,11 @@ export function MediaLibrary({
     return `${LIBRARY_PATH}${qs ? `?${qs}` : ""}`;
   };
 
-  const applyFilters = (next: { search: string; tip: string; tagSlugs: string[] }) => {
+  const applyFilters = (next: {
+    search: string;
+    tip: string;
+    tagSlugs: string[];
+  }) => {
     // Filter changes always reset to page 1.
     startNav(() => router.push(buildQuery(next)));
   };
@@ -132,9 +141,9 @@ export function MediaLibrary({
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+          <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
             Bibliotecă media
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -148,11 +157,13 @@ export function MediaLibrary({
           className="hidden"
           onChange={onFileInputChange}
         />
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
           {initial.data.length > 0 && (
             <button
               type="button"
-              onClick={() => (selectMode ? exitSelectMode() : setSelectMode(true))}
+              onClick={() =>
+                selectMode ? exitSelectMode() : setSelectMode(true)
+              }
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-[#475569] transition-colors hover:bg-slate-50"
             >
               {selectMode ? <X size={15} /> : <CheckSquare size={15} />}
@@ -163,7 +174,7 @@ export function MediaLibrary({
             type="button"
             onClick={open}
             disabled={isUploading}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#2dbe8f] px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#00d495] px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:brightness-90 disabled:opacity-60"
           >
             <Plus size={15} />
             {isUploading ? "Se încarcă…" : "Încarcă fișier"}
@@ -173,10 +184,10 @@ export function MediaLibrary({
 
       {selectMode && (
         <div className="mb-4 flex flex-wrap items-center gap-3 rounded-xl border border-border bg-slate-50 px-4 py-3">
-          <label className="flex items-center gap-2 text-sm font-semibold text-[#162040]">
+          <label className="flex items-center gap-2 text-sm font-semibold text-[#1c1c81]">
             <input
               type="checkbox"
-              className="h-4 w-4 rounded border-border accent-[#2dbe8f]"
+              className="h-4 w-4 rounded border-border accent-[#007d58]"
               checked={
                 initial.data.length > 0 && selected.size === initial.data.length
               }
@@ -196,8 +207,8 @@ export function MediaLibrary({
             />
             Selectează tot
           </label>
-          <span className="text-sm text-[#94a3b8]">·</span>
-          <span className="text-sm font-semibold text-[#162040]">
+          <span className="text-sm text-[#5b6779]">·</span>
+          <span className="text-sm font-semibold text-[#1c1c81]">
             {selected.size} selectate
           </span>
           <button
@@ -225,14 +236,18 @@ export function MediaLibrary({
 
       <div
         aria-busy={navPending || detailPending}
-        className={navPending ? "opacity-60 transition-opacity" : "transition-opacity"}
+        className={
+          navPending ? "opacity-60 transition-opacity" : "transition-opacity"
+        }
       >
         <AssetGrid
           assets={initial.data}
           selectable={selectMode}
           selectedIds={selectMode ? selected : undefined}
           onSelect={(card) =>
-            selectMode ? toggleSelect(card.documentId) : openDetail(card.documentId)
+            selectMode
+              ? toggleSelect(card.documentId)
+              : openDetail(card.documentId)
           }
           emptyLabel="Niciun fișier găsit. Încarcă primul fișier sau ajustează filtrele."
         />
@@ -250,7 +265,9 @@ export function MediaLibrary({
             Anterior
           </PagerLink>
           <PagerLink
-            href={hrefForPage(Math.min(pagination.pageCount, pagination.page + 1))}
+            href={hrefForPage(
+              Math.min(pagination.pageCount, pagination.page + 1),
+            )}
             disabled={pagination.page === pagination.pageCount}
           >
             Următor
@@ -319,7 +336,7 @@ function PagerLink({
       <span
         aria-disabled="true"
         className="rounded-lg border border-border px-3 py-2 text-sm opacity-40"
-        style={{ color: "#94a3b8" }}
+        style={{ color: "#5b6779" }}
       >
         {children}
       </span>

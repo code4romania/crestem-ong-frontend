@@ -6,7 +6,10 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, ChevronDown, ChevronUp, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { CATEGORY_ICONS } from "@/components/features/page-builder/blocks/category-grid/icons";
+import { IconPicker } from "@/components/ui/icons/IconPicker";
+import { LazyLucideIcon } from "@/components/ui/icons/LazyLucideIcon";
+import { RichTextField } from "@/components/features/page-builder/rich-text/RichTextField";
+import { hasRichText, richTextToPlainText } from "@/components/features/page-builder/rich-text/has-rich-text";
 import {
   createCategoryAction,
   deleteCategoryAction,
@@ -14,14 +17,41 @@ import {
 } from "@/lib/api/library-categories-actions";
 import type {
   LibraryCategory,
-  LibraryIconKey,
   LibrarySubcategory,
 } from "@/lib/api/library-categories-types";
 import { slugify } from "@/components/features/content-editor/slugify";
-import { CategoryIconPicker } from "./CategoryIconPicker";
 
 const inputClass =
-  "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#2dbe8f] focus:outline-none";
+  "w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm focus:border-[#007d58] focus:outline-none";
+
+/**
+ * Mirrors the backend's `descriereBase` cap in library-category validation —
+ * applied to the saved HTML string, same as the backend sees it, so markup
+ * counts against the budget along with the visible text.
+ */
+const DESCRIERE_MAX_LENGTH = 2500;
+
+function DescriereField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const overLimit = value.length > DESCRIERE_MAX_LENGTH;
+  return (
+    <div>
+      <RichTextField value={value} onChange={onChange} invalid={overLimit} />
+      <p
+        className={`mt-1 text-right text-xs ${overLimit ? "text-red-600" : "text-muted-foreground"}`}
+        aria-live="polite"
+      >
+        {value.length}/{DESCRIERE_MAX_LENGTH}
+        {overLimit ? " — ai depășit limita maximă de caractere (numărate din HTML-ul salvat)" : ""}
+      </p>
+    </div>
+  );
+}
 
 const articleLabel = (count: number) => `${count} ${count === 1 ? "articol" : "articole"}`;
 
@@ -82,7 +112,7 @@ function AddForm({
   const [slug, setSlug] = useState("");
   const [slugTouched, setSlugTouched] = useState(false);
   const [descriere, setDescriere] = useState("");
-  const [icon, setIcon] = useState<LibraryIconKey>("folder");
+  const [icon, setIcon] = useState<string>("lucide:folder");
   const [pending, startTransition] = useTransition();
 
   const setName = (value: string) => {
@@ -93,6 +123,10 @@ function AddForm({
   const submit = () => {
     if (!nume.trim() || !slug.trim()) {
       toast.error("Completează numele și slugul.");
+      return;
+    }
+    if (descriere.length > DESCRIERE_MAX_LENGTH) {
+      toast.error("Descrierea este prea lungă.");
       return;
     }
 
@@ -114,7 +148,7 @@ function AddForm({
       setNume("");
       setSlug("");
       setDescriere("");
-      setIcon("folder");
+      setIcon("lucide:folder");
       setSlugTouched(false);
       router.refresh();
     });
@@ -147,15 +181,8 @@ function AddForm({
           an option in that category's filter, so it needs neither. */}
       {isCategory ? (
         <>
-          <textarea
-            value={descriere}
-            onChange={(event) => setDescriere(event.target.value)}
-            rows={2}
-            placeholder="Scurtă descriere, afișată pe cardul din bibliotecă"
-            aria-label="Descriere"
-            className={inputClass}
-          />
-          <CategoryIconPicker value={icon} onChange={setIcon} />
+          <DescriereField value={descriere} onChange={setDescriere} />
+          <IconPicker value={icon} scope="library" onChange={setIcon} allowNone={false} />
         </>
       ) : null}
     </div>
@@ -175,12 +202,16 @@ function EditForm({
   const [nume, setNume] = useState(row.nume);
   const [slug, setSlug] = useState(row.slug);
   const [descriere, setDescriere] = useState(row.descriere);
-  const [icon, setIcon] = useState<LibraryIconKey>(row.icon);
+  const [icon, setIcon] = useState<string>(row.icon);
   const [pending, startTransition] = useTransition();
 
   const submit = () => {
     if (!nume.trim() || !slug.trim()) {
       toast.error("Completează numele și slugul.");
+      return;
+    }
+    if (isCategory && descriere.length > DESCRIERE_MAX_LENGTH) {
+      toast.error("Descrierea este prea lungă.");
       return;
     }
 
@@ -224,15 +255,8 @@ function EditForm({
       {/* Top level only — see the note in `AddForm`. */}
       {isCategory ? (
         <>
-          <textarea
-            value={descriere}
-            onChange={(event) => setDescriere(event.target.value)}
-            rows={2}
-            placeholder="Scurtă descriere, afișată pe cardul din bibliotecă"
-            aria-label="Descriere"
-            className={inputClass}
-          />
-          <CategoryIconPicker value={icon} onChange={setIcon} />
+          <DescriereField value={descriere} onChange={setDescriere} />
+          <IconPicker value={icon} scope="library" onChange={setIcon} allowNone={false} />
         </>
       ) : null}
       <div className="flex justify-end gap-2">
@@ -316,7 +340,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
       disabled={Boolean(blocked) || pending}
       title={blocked ?? `Șterge ${row.nume}`}
       aria-label={`Șterge ${row.nume}`}
-      className="rounded-lg p-1.5 text-[#94a3b8] transition-colors hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-[#94a3b8]"
+      className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-[#94a3b8]"
     >
       <Trash2 size={15} />
     </button>
@@ -329,7 +353,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
       disabled={pending}
       title={`Editează ${row.nume}`}
       aria-label={`Editează ${row.nume}`}
-      className="rounded-lg p-1.5 text-[#94a3b8] transition-colors hover:bg-slate-100 hover:text-[#162040] disabled:cursor-not-allowed disabled:opacity-40"
+      className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-slate-100 hover:text-[#1c1c81] disabled:cursor-not-allowed disabled:opacity-40"
     >
       <Pencil size={15} />
     </button>
@@ -339,14 +363,14 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
     <div>
       <Link
         href="/dashboard/biblioteca"
-        className="mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-[#162040]"
+        className="mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-[#1c1c81]"
       >
         <ArrowLeft size={15} />
         Înapoi la bibliotecă
       </Link>
 
       <div className="mb-6">
-        <h1 className="font-heading text-2xl font-extrabold text-[#162040]">
+        <h1 className="font-heading text-2xl font-extrabold text-[#1c1c81]">
           Gestionează categorii &amp; subcategorii
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -356,7 +380,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
       </div>
 
       <section className="mb-6 rounded-xl border border-border bg-white p-6">
-        <h2 className="mb-4 font-heading text-lg font-bold text-[#162040]">
+        <h2 className="mb-4 font-heading text-lg font-bold text-[#1c1c81]">
           Adaugă categorie nouă
         </h2>
         <AddForm
@@ -385,22 +409,17 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                 ) : (
                   <>
                     <div className="flex min-w-0 items-start gap-3">
-                      {(() => {
-                        const Icon = CATEGORY_ICONS[category.icon] ?? CATEGORY_ICONS.folder;
-                        return (
-                          <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-[#475569]">
-                            <Icon size={16} />
-                          </span>
-                        );
-                      })()}
+                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-[#475569]">
+                        <LazyLucideIcon value={category.icon} scope="library" fallback="folder" size={16} />
+                      </span>
                       <div className="min-w-0">
-                        <h3 className="font-heading text-base font-bold text-[#162040]">
+                        <h3 className="font-heading text-base font-bold text-[#1c1c81]">
                           {category.nume}
                         </h3>
-                        <code className="text-xs text-[#94a3b8]">{category.slug}</code>
-                        {category.descriere ? (
+                        <code className="text-xs text-[#5b6779]">{category.slug}</code>
+                        {category.descriere && hasRichText(category.descriere) ? (
                           <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-                            {category.descriere}
+                            {richTextToPlainText(category.descriere)}
                           </p>
                         ) : null}
                       </div>
@@ -410,7 +429,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                           still says what is inside it. */}
                       <span className="text-sm font-medium text-[#7c3aed]">
                         {articleLabel(category.numarArticole)}
-                        <span className="text-[#94a3b8]">
+                        <span className="text-[#5b6779]">
                           {" · "}
                           {subcategoryLabel(category.copii.length)}
                         </span>
@@ -438,7 +457,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                               : `Extinde ${category.nume}`
                           }
                           title={isExpanded(category) ? "Restrânge" : "Extinde"}
-                          className="rounded-lg p-1.5 text-[#94a3b8] transition-colors hover:bg-slate-100 hover:text-[#162040]"
+                          className="rounded-lg p-1.5 text-[#5b6779] transition-colors hover:bg-slate-100 hover:text-[#1c1c81]"
                         >
                           {isExpanded(category) ? (
                             <ChevronUp size={16} />
@@ -457,7 +476,7 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                 className="px-6 py-5"
                 hidden={!isExpanded(category)}
               >
-                <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#94a3b8]">
+                <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#5b6779]">
                   Subcategorii
                 </h4>
                 <AddForm
@@ -482,10 +501,10 @@ export function CategoryManager({ categories }: { categories: LibraryCategory[] 
                       ) : (
                         <>
                           <div className="min-w-0">
-                            <p className="font-heading text-sm font-semibold text-[#162040]">
+                            <p className="font-heading text-sm font-semibold text-[#1c1c81]">
                               {child.nume}
                             </p>
-                            <code className="text-xs text-[#94a3b8]">{child.slug}</code>
+                            <code className="text-xs text-[#5b6779]">{child.slug}</code>
                           </div>
                           <div className="flex items-center gap-3">
                             <span className="text-sm font-medium text-[#7c3aed]">

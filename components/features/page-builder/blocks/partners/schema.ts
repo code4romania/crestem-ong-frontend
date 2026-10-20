@@ -1,12 +1,5 @@
 import { z } from "zod";
-import { FEATURE_ICON_KEYS } from "../feature-cards/schema";
-
-/**
- * Partners reuse the site's shared icon collection — the same palette the
- * Feature Cards block exposes — so an admin picks from one consistent set.
- */
-export { FEATURE_ICON_KEYS as PARTNER_ICON_KEYS } from "../feature-cards/schema";
-export type { FeatureIconKey as PartnerIconKey } from "../feature-cards/schema";
+import { iconSchema } from "@/components/ui/icons/schema";
 
 /** A file uploaded via `uploadPageImageAction` — same shape as the `image` block. */
 const iconImageSchema = z.object({
@@ -17,10 +10,10 @@ const iconImageSchema = z.object({
 
 const partnerSchema = z.object({
   /**
-   * Preset key from the site's icon collection. Always present; used as the
+   * Lucide icon (see `components/ui/icons`). Always present; used as the
    * fallback when `iconImage` is not set.
    */
-  icon: z.enum(FEATURE_ICON_KEYS).default("layers"),
+  icon: iconSchema("feature", "layers"),
   /**
    * Optional custom logo uploaded for this partner. When set it replaces the
    * preset `icon` in the same chip; clearing it returns the card to preset mode.
@@ -60,7 +53,7 @@ export const PARTNERS_DEFAULTS: PartnersData = {
 };
 
 export const EMPTY_PARTNER: Partner = {
-  icon: "layers",
+  icon: "lucide:layers",
   iconImage: null,
   nume: "",
   subtitlu: "",

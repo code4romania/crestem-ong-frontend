@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { SocialIcon } from "@/components/ui/SocialIcon";
-import { RICH_TEXT_PROSE_INVERSE } from "@/components/features/page-builder/rich-text/prose";
-import { FOOTER_IMAGE_PROSE, sanitizeFooterRichText } from "@/lib/footer-rich-text";
+import {
+  FOOTER_IMAGE_PROSE,
+  RICH_TEXT_PROSE_INVERSE,
+} from "@/components/features/page-builder/rich-text/prose";
 import { socialName, type FooterContent } from "@/lib/api/footer-types";
 import type { MenuItem } from "@/lib/api/menus";
 
@@ -28,16 +30,16 @@ export function Footer({ content, items }: { content: FooterContent; items: Menu
   if (empty) return null;
 
   return (
-    <footer className="bg-[#101c30] text-white">
+    <footer className="bg-primary text-white">
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div>
             {content.description && (
               <div
                 className={`max-w-sm ${RICH_TEXT_PROSE_INVERSE} ${FOOTER_IMAGE_PROSE}`}
-                // Sanitised again at the sink: stored data can reach the
-                // renderer without passing back through the editor.
-                dangerouslySetInnerHTML={{ __html: sanitizeFooterRichText(content.description) }}
+                // Already sanitised by `getFooter` / `updateFooterAction`; this
+                // is a client component, so DOMPurify must not be reachable here.
+                dangerouslySetInnerHTML={{ __html: content.description }}
               />
             )}
 
@@ -61,12 +63,14 @@ export function Footer({ content, items }: { content: FooterContent; items: Menu
           </div>
 
           {columns.length > 0 && (
-            // Flex rather than a fixed 3-column grid: with two columns the grid
-            // left an empty third slot, pushing them off to one side. Here they
-            // stay centred whatever their number, and wrap when there are many.
-            <div className="flex flex-wrap justify-center gap-x-12 gap-y-8">
+            // auto-fit rather than a fixed 3-column grid: unused tracks collapse,
+            // so two columns don't leave an empty third slot pushing them off to
+            // one side. Unlike flex-wrap, grid justify-content centres the whole
+            // block at once, so a column that wraps to its own row still lines up
+            // under the same track instead of floating centred on its own line.
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,max-content))] justify-center gap-x-12 gap-y-8">
               {columns.map((column) => (
-                <div key={column.label} className="min-w-36">
+                <div key={column.label}>
                   <p className="font-heading text-sm font-bold text-white">{column.label}</p>
                   <ul className="mt-4 space-y-3">
                     {/* A link whose page was deleted has no address left; the
@@ -92,7 +96,7 @@ export function Footer({ content, items }: { content: FooterContent; items: Menu
 
         {content.copyright && (
           <div className="mt-12 border-t border-white/10 pt-6">
-            <p className="text-sm text-white/50">{content.copyright}</p>
+            <p className="text-sm text-white/60">{content.copyright}</p>
           </div>
         )}
       </div>

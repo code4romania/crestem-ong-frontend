@@ -9,7 +9,7 @@ import type { TestimonialsData } from "./schema";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors";
 
 export function TestimonialsEditor({
   value,
@@ -39,6 +39,20 @@ export function TestimonialsEditor({
       </div>
 
       <div>
+        <span className={labelClass}>Aliniere titlu</span>
+        <SegmentedControl
+          ariaLabel="Aliniere titlu"
+          value={value.aliniereTitlu}
+          onChange={(aliniereTitlu) => set({ aliniereTitlu })}
+          options={[
+            { value: "stanga", label: "Stânga" },
+            { value: "centru", label: "Centrat" },
+            { value: "dreapta", label: "Dreapta" },
+          ]}
+        />
+      </div>
+
+      <div>
         <span className={labelClass}>Mod de afișare</span>
         <SegmentedControl
           ariaLabel="Mod de afișare"
@@ -56,7 +70,7 @@ export function TestimonialsEditor({
           <div className="flex items-center justify-between gap-4">
             <label
               htmlFor="ts-autoplay"
-              className="text-sm font-medium text-[#162040]"
+              className="text-sm font-medium text-[#1c1c81]"
             >
               Auto-play
             </label>
@@ -70,7 +84,7 @@ export function TestimonialsEditor({
           <div className="flex items-center justify-between gap-4">
             <label
               htmlFor="ts-nav"
-              className="text-sm font-medium text-[#162040]"
+              className="text-sm font-medium text-[#1c1c81]"
             >
               Afișează navigarea
             </label>

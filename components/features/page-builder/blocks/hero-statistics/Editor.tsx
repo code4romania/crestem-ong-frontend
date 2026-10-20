@@ -6,12 +6,13 @@ import { StatList } from "./StatList";
 import { CtaTargetField } from "../shared/CtaTargetField";
 import type { BlockFieldErrors } from "../../types";
 import type { HeroStatisticsData } from "./schema";
+import { RichTextField } from "../../rich-text/RichTextField";
 
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-[#475569]";
 const inputClass =
-  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#2dbe8f]/30 focus:border-[#2dbe8f] transition-colors disabled:opacity-60";
-const errorClass = "mt-1 text-xs text-[#ef4444]";
+  "w-full px-4 py-2.5 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors disabled:opacity-60";
+const errorClass = "mt-1 text-xs text-[#b91c1c]";
 
 export function HeroStatisticsEditor({
   value,
@@ -42,7 +43,7 @@ export function HeroStatisticsEditor({
 
       <div>
         <label htmlFor="hs-titlu" className={labelClass}>
-          Titlu <span className="text-[#ef4444]">*</span>
+          Titlu
         </label>
         <input
           id="hs-titlu"
@@ -56,16 +57,14 @@ export function HeroStatisticsEditor({
       </div>
 
       <div>
-        <label htmlFor="hs-subtitlu" className={labelClass}>
+        <span className={labelClass}>
           Subtitlu (opțional)
-        </label>
-        <textarea
-          id="hs-subtitlu"
-          rows={3}
-          className={inputClass}
+        </span>
+        <RichTextField
           value={value.subtitlu}
-          onChange={(e) => set({ subtitlu: e.target.value })}
-          placeholder="Un diagnostic organizațional complet pe 10 dimensiuni-cheie, urmat de un plan de acțiune personalizat."
+          onChange={(html) => set({ subtitlu: html })}
+          ariaLabel="Subtitlu"
+          compact
         />
       </div>
 
@@ -137,7 +136,7 @@ export function HeroStatisticsEditor({
       </div>
 
       <div className="flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3">
-        <span className="text-sm font-semibold text-[#162040]">
+        <span className="text-sm font-semibold text-[#1c1c81]">
           Separator între statistici
         </span>
         <Toggle

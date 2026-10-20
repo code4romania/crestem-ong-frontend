@@ -18,7 +18,7 @@ function externalHref(url: string) {
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#94a3b8" }}>
+      <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5b6779" }}>
         {label}
       </p>
       <p className="text-sm" style={{ color: "#334155" }}>
@@ -34,12 +34,12 @@ export function OrgDetailsCard({ ong }: { ong: Ong }) {
       <div className="flex items-center gap-4 pb-5 mb-5 border-b border-border">
         <div
           className="w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center text-lg font-bold text-white"
-          style={{ background: "#162040" }}
+          style={{ background: "#1c1c81" }}
         >
           {initials(ong.name)}
         </div>
         <div>
-          <p className="text-lg font-heading font-extrabold" style={{ color: "#162040" }}>
+          <p className="text-lg font-heading font-extrabold" style={{ color: "#1c1c81" }}>
             {ong.name}
           </p>
           <p className="mt-0.5 text-sm text-muted-foreground">CUI: {ong.cui || "—"}</p>
@@ -57,7 +57,7 @@ export function OrgDetailsCard({ ong }: { ong: Ong }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:underline"
-                style={{ color: "#2dbe8f" }}
+                style={{ color: "#007d58" }}
               >
                 {ong.website}
               </a>
@@ -77,7 +77,7 @@ export function OrgDetailsCard({ ong }: { ong: Ong }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:underline"
-                style={{ color: "#2dbe8f" }}
+                style={{ color: "#007d58" }}
               >
                 {ong.socialMedia}
               </a>

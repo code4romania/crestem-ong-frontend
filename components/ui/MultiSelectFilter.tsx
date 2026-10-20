@@ -218,8 +218,8 @@ export function MultiSelectFilter({
                     className="flex h-4 w-4 shrink-0 items-center justify-center rounded border"
                     style={
                       isSelected
-                        ? { background: "#162040", borderColor: "#162040", color: "white" }
-                        : { borderColor: "#cbd5e1" }
+                        ? { background: "#1c1c81", borderColor: "#1c1c81", color: "white" }
+                        : { borderColor: "#5b6779" }
                     }
                   >
                     {isSelected && <Check size={11} />}

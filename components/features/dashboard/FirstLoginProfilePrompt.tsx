@@ -31,14 +31,14 @@ export function FirstLoginProfilePrompt() {
       <div className="bg-white rounded-2xl w-full max-w-md p-6">
         <h2
           id="first-login-prompt-title"
-          className="font-heading font-extrabold text-lg mb-2 text-[#162040]"
+          className="font-heading font-extrabold text-lg mb-2 text-[#1c1c81]"
         >
           Bine ai venit!
         </h2>
         <p className="text-sm text-muted-foreground mb-6">
           Profilul organizației tale mai are nevoie de câteva informații (adresă,
           domenii de activitate, descriere, website). Le poți completa acum din
-          pagina <span className="font-semibold text-[#162040]">Profilul meu</span> sau
+          pagina <span className="font-semibold text-[#1c1c81]">Profilul meu</span> sau
           mai târziu, oricând.
         </p>
         <div className="flex justify-end gap-3">
@@ -52,7 +52,7 @@ export function FirstLoginProfilePrompt() {
           <button
             type="button"
             onClick={() => router.replace(PROFILE_PATH)}
-            className="px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity bg-[#2dbe8f]"
+            className="px-4 py-2 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity bg-[#00d495]"
           >
             Completează profilul
           </button>

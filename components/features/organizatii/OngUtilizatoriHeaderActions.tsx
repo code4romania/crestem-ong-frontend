@@ -12,8 +12,8 @@ export function OngUtilizatoriHeaderActions() {
       <button
         type="button"
         onClick={() => setAdding(true)}
-        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-        style={{ background: "#2dbe8f" }}
+        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white hover:brightness-90 transition-opacity"
+        style={{ background: "#00d495" }}
       >
         <Plus size={16} />
         Adaugă utilizator

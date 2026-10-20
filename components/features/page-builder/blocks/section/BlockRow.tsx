@@ -89,15 +89,15 @@ export function BlockRow({
         {...attributes}
         {...listeners}
         aria-label="Trage pentru reordonare"
-        className="shrink-0 cursor-grab touch-none text-[#cbd5e1] transition-colors hover:text-[#94a3b8]"
+        className="shrink-0 cursor-grab touch-none text-[#cbd5e1] transition-colors hover:text-[#5b6779]"
       >
         <GripVertical size={16} aria-hidden="true" />
       </button>
-      <Icon size={16} className="shrink-0 text-[#64748b]" aria-hidden="true" />
+      <Icon size={16} className="shrink-0 text-[#5b6779]" aria-hidden="true" />
       <span className="min-w-0 flex-1">
-        <span className="block text-sm font-semibold text-[#162040]">{name}</span>
+        <span className="block text-sm font-semibold text-[#1c1c81]">{name}</span>
         {text ? (
-          <span className="mt-0.5 block truncate text-xs text-[#94a3b8]">
+          <span className="mt-0.5 block truncate text-xs text-[#5b6779]">
             {text}
           </span>
         ) : null}
@@ -106,7 +106,7 @@ export function BlockRow({
         <button
           type="button"
           onClick={onEdit}
-          className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold text-[#2563eb] transition-colors hover:bg-[#eff6ff]"
+          className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold text-[#5656e5] transition-colors hover:bg-[#dcfafb]"
         >
           <Pencil size={14} /> Editează
         </button>
@@ -140,7 +140,7 @@ export function BlockRow({
           type="button"
           onClick={onDelete}
           aria-label="Șterge blocul"
-          className="rounded-lg p-1.5 text-[#ef4444] transition-colors hover:bg-[#fef2f2]"
+          className="rounded-lg p-1.5 text-[#b91c1c] transition-colors hover:bg-[#fef2f2]"
         >
           <Trash2 size={15} />
         </button>
