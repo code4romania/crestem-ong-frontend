@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, Clock } from "lucide-react";
 import type { AdminReportRow } from "@/lib/api/evaluations";
 import { formatDate } from "@/lib/utils/date";
 import { withEvaluariFrom } from "./evaluari-from";
+import { DownloadEvaluationButton } from "@/components/features/organizatii/DownloadEvaluationButton";
 
 const COLUMNS = [
   "Organizație",
@@ -109,14 +110,20 @@ export function EvaluariOrganizatiiTable({
                     {formatDate(report.finishedAt)}
                   </td>
                   <td className="px-4 py-3.5 whitespace-nowrap">
-                    {href ? (
-                      <Link
-                        href={href}
-                        className="inline-flex items-center gap-1 text-xs font-semibold hover:underline"
-                        style={{ color: "#007d58" }}
-                      >
-                        Vezi evaluarea <ArrowRight size={12} />
-                      </Link>
+                    {href && report.ong ? (
+                      <div className="inline-flex items-center gap-4">
+                        <DownloadEvaluationButton
+                          ongDocumentId={report.ong.documentId}
+                          reportDocumentId={report.documentId}
+                        />
+                        <Link
+                          href={href}
+                          className="inline-flex items-center gap-1 text-xs font-semibold hover:underline"
+                          style={{ color: "#007d58" }}
+                        >
+                          Vezi evaluarea <ArrowRight size={12} />
+                        </Link>
+                      </div>
                     ) : (
                       <span className="text-xs text-muted-foreground">—</span>
                     )}
