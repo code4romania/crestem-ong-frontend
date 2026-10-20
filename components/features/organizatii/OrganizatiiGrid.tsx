@@ -6,6 +6,7 @@ import { ChevronDown, Search } from "lucide-react";
 import { fetchOngPage, type Ong, type OngListMeta } from "@/lib/api/ongs";
 import { OngCard } from "./OngCard";
 import { OngCardSkeleton } from "./OngCardSkeleton";
+import { DownloadButton } from "@/components/ui/DownloadButton";
 
 interface ProgramOption {
   documentId: string;
@@ -45,6 +46,13 @@ export function OrganizatiiGrid({
   const [search, setSearch] = useState("");
   const [judetFilter, setJudetFilter] = useState("");
   const [programFilter, setProgramFilter] = useState("");
+  // The filters the list on screen was last loaded with: the search applies
+  // after its debounce, and the export must match what is shown.
+  const [appliedFilters, setAppliedFilters] = useState({
+    search: "",
+    judet: "",
+    program: "",
+  });
   const [loadingPage, setLoadingPage] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -87,10 +95,11 @@ export function OrganizatiiGrid({
       filtersTouched.current = true;
       return;
     }
-    const timer = setTimeout(
-      () => load(1, { search, judet: judetFilter, program: programFilter }),
-      search ? SEARCH_DEBOUNCE_MS : 0,
-    );
+    const timer = setTimeout(() => {
+      const filters = { search, judet: judetFilter, program: programFilter };
+      setAppliedFilters(filters);
+      load(1, filters);
+    }, search ? SEARCH_DEBOUNCE_MS : 0);
     return () => clearTimeout(timer);
   }, [search, judetFilter, programFilter, load]);
 
@@ -128,14 +137,28 @@ export function OrganizatiiGrid({
   const appending = loadingPage !== null && loadingPage > 1;
   const hasMore = pagination.page < pagination.pageCount;
 
+  const exportQuery = new URLSearchParams(
+    Object.entries(appliedFilters).filter(([, value]) => value.trim()),
+  ).toString();
+  const exportHref = `/api/ongs/export${exportQuery ? `?${exportQuery}` : ""}`;
+
   return (
     <div>
-      <h1
-        className="text-2xl font-heading font-extrabold"
-        style={{ color: "#1c1c81" }}
-      >
-        Organizații NGO
-      </h1>
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <h1
+          className="text-2xl font-heading font-extrabold"
+          style={{ color: "#1c1c81" }}
+        >
+          Organizații NGO
+        </h1>
+        <DownloadButton
+          href={exportHref}
+          label="Descarcă lista"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-semibold text-white shrink-0 hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1c81]/40 focus-visible:ring-offset-2"
+          style={{ background: "#1c1c81" }}
+          iconSize={14}
+        />
+      </div>
       <p className="mt-1 mb-6 text-sm text-muted-foreground">
         Gestionează organizațiile înregistrate —{" "}
         <span className="font-semibold">{pagination.total} conturi</span> în
