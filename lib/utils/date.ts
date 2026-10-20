@@ -11,7 +11,7 @@ const bucharestDay = new Intl.DateTimeFormat("en-CA", {
 /**
  * The calendar day (`YYYY-MM-DD`) of a date or datetime, as seen in Bucharest.
  * Strapi sends datetimes in UTC, so slicing the string would show the previous
- * day for anything done after local midnight. Date-only values pass through.
+ * day for anything done after local midnight. Date-only values pass through
  */
 export function toBucharestDay(iso: string): string | null {
   if (DATE_ONLY.test(iso)) return iso;
