@@ -25,7 +25,7 @@ export default async function OrganizatieDetailPage({
         <MatrixModelButton dimensions={dimensionsRes} />
       </div>
 
-      <OngEvaluationsTable ongDocumentId={documentId} evaluations={evaluationsRes.data} />
+      <OngEvaluationsTable ongDocumentId={documentId} evaluations={evaluationsRes.data} canExport />
     </div>
   );
 }

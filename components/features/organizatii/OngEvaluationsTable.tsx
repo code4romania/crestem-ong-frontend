@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { OngEvaluation } from "@/lib/api/ongs";
 import { formatLongDate } from "@/lib/utils/date";
+import { DownloadEvaluationButton } from "./DownloadEvaluationButton";
 
 function completionPeriod(evaluation: OngEvaluation) {
   const phase = evaluation.phases?.[0];
@@ -12,12 +13,15 @@ function completionPeriod(evaluation: OngEvaluation) {
   return `${formatLongDate(evaluation.createdAt)} – prezent`;
 }
 
+/** `canExport` adds "Descarcă evaluarea", which only FDSC staff may use. */
 export function OngEvaluationsTable({
   ongDocumentId,
   evaluations,
+  canExport = false,
 }: {
   ongDocumentId: string;
   evaluations: OngEvaluation[];
+  canExport?: boolean;
 }) {
   if (!evaluations || evaluations.length === 0) {
     return (
@@ -109,15 +113,23 @@ export function OngEvaluationsTable({
                 </span>
               </td>
               <td className="px-5 py-3.5 text-right whitespace-nowrap">
-                <Link
-                  href={`/dashboard/organizatii/${ongDocumentId}/evaluari/${evaluation.documentId}`}
-                  className="text-xs font-semibold hover:underline"
-                  style={{ color: "#007d58" }}
-                >
-                  {evaluation.finished
-                    ? "Vezi rezultatele →"
-                    : "Vezi evaluarea →"}
-                </Link>
+                <div className="inline-flex items-center gap-4">
+                  {canExport && (
+                    <DownloadEvaluationButton
+                      ongDocumentId={ongDocumentId}
+                      reportDocumentId={evaluation.documentId}
+                    />
+                  )}
+                  <Link
+                    href={`/dashboard/organizatii/${ongDocumentId}/evaluari/${evaluation.documentId}`}
+                    className="text-xs font-semibold hover:underline"
+                    style={{ color: "#007d58" }}
+                  >
+                    {evaluation.finished
+                      ? "Vezi rezultatele →"
+                      : "Vezi evaluarea →"}
+                  </Link>
+                </div>
               </td>
             </tr>
           ))}
