@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Check, ChevronDown, Loader2, Search, X } from "lucide-react";
+import { Check, ChevronDown, Loader2, Search } from "lucide-react";
 
 export interface FilterOption {
   documentId: string;
@@ -24,7 +24,8 @@ const SEARCH_DEBOUNCE_MS = 350;
  * A filter that picks several organizations or programs. The list is long
  * enough that it loads a page at a time as the panel scrolls, and the labels of
  * the current selection travel with the first response so a chip keeps its name
- * even when a search no longer matches it.
+ * even when a search no longer matches it. The chips themselves are rendered by
+ * the caller, from `selected` and the names reported through `onNamesChange`.
  *
  * `extraOptions` are entries that exist only in the filter — "Independente" has
  * no row of its own to fetch.
@@ -37,6 +38,7 @@ export function MultiSelectFilter({
   selected,
   onChange,
   extraOptions = [],
+  onNamesChange,
 }: {
   kind: "ongs" | "programs";
   /** Which tab is asking: it decides which rounds the options are drawn from. */
@@ -46,6 +48,8 @@ export function MultiSelectFilter({
   selected: string[];
   onChange: (next: string[]) => void;
   extraOptions?: FilterOption[];
+  /** The labels known so far, keyed by documentId — the selection is shown by the caller. */
+  onNamesChange?: (names: Record<string, string>) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -93,6 +97,35 @@ export function MultiSelectFilter({
     },
     [kind, scope, selected],
   );
+
+  // A selection that arrives from the URL has no labels yet; fetch them up front
+  // so the active-filter chips show names before the panel is ever opened.
+  useEffect(() => {
+    if (!selected.some((documentId) => !(documentId in names))) return;
+    const query = new URLSearchParams({ scope, selected: selected.join(",") });
+    let cancelled = false;
+    fetch(`/api/filter-options/${kind}?${query.toString()}`)
+      .then((res) => (res.ok ? (res.json() as Promise<OptionsResponse>) : null))
+      .then((body) => {
+        if (cancelled || !body) return;
+        setNames((current) => ({
+          ...current,
+          ...Object.fromEntries(
+            (body.meta.selected ?? []).map((option) => [option.documentId, option.name]),
+          ),
+        }));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+    // Only on mount: later selections are picked from options that carry their names.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    onNamesChange?.(names);
+  }, [names, onNamesChange]);
 
   // Open loads the first page; typing reloads it debounced.
   useEffect(() => {
@@ -162,28 +195,6 @@ export function MultiSelectFilter({
         </span>
         <ChevronDown size={14} className="ml-auto text-slate-400" />
       </button>
-
-      {selected.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mt-2">
-          {selected.map((documentId) => (
-            <span
-              key={documentId}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs"
-              style={{ background: "#f1f5f9", color: "#475569" }}
-            >
-              {names[documentId] ?? documentId}
-              <button
-                type="button"
-                onClick={() => toggle(documentId)}
-                aria-label={`Elimină ${names[documentId] ?? documentId}`}
-                className="hover:text-slate-900"
-              >
-                <X size={11} />
-              </button>
-            </span>
-          ))}
-        </div>
-      )}
 
       {open && (
         <div
