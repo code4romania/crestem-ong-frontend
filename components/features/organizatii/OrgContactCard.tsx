@@ -1,13 +1,5 @@
 import type { Ong } from "@/lib/api/ongs";
-
-function formatDate(value: string | null | undefined) {
-  if (!value) return "—";
-  return new Intl.DateTimeFormat("ro-RO", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(value));
-}
+import { formatLongDate } from "@/lib/utils/date";
 
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
@@ -49,8 +41,8 @@ export function OrgContactCard({
         <Field label="Nume complet" value={admin?.nume ?? "—"} />
         <Field label="Email" value={admin?.email ?? "—"} />
         <Field label="Telefon" value={admin?.telefon ?? "—"} />
-        <Field label="Înregistrat la" value={formatDate(admin?.createdAt)} />
-        <Field label="Ultima autentificare" value={formatDate(admin?.lastLogin)} />
+        <Field label="Înregistrat la" value={formatLongDate(admin?.createdAt)} />
+        <Field label="Ultima autentificare" value={formatLongDate(admin?.lastLogin)} />
       </div>
       {children && <div className="mt-5">{children}</div>}
     </div>

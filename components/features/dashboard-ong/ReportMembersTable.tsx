@@ -11,12 +11,7 @@ import {
   MEMBER_STATUS_LABELS,
   MEMBER_TABLE_COLUMNS,
 } from "@/components/features/evaluari/evaluation-status";
-
-function formatDate(iso: string) {
-  if (!iso) return "—";
-  const [year, month, day] = iso.split("-");
-  return `${day}.${month}.${year}`;
-}
+import { formatDate } from "@/lib/utils/date";
 
 export function ReportMembersTable({
   reportId,
@@ -126,7 +121,7 @@ export function ReportMembersTable({
                       style={{ color: "#5b6779" }}
                     >
                       {entry.completedAt
-                        ? formatDate(entry.completedAt.slice(0, 10))
+                        ? formatDate(entry.completedAt)
                         : "—"}
                     </td>
                     <td className="px-5 py-3.5 text-center">

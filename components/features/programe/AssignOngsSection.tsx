@@ -33,6 +33,7 @@ function formatEvalPeriod(evaluation: OngEvaluation) {
   const start = new Date(evaluation.createdAt).toLocaleDateString("ro-RO", {
     month: "short",
     year: "numeric",
+    timeZone: "Europe/Bucharest",
   });
   if (!evaluation.finishedAt) {
     return `${start} – prezent`;
@@ -40,6 +41,7 @@ function formatEvalPeriod(evaluation: OngEvaluation) {
   const end = new Date(evaluation.finishedAt).toLocaleDateString("ro-RO", {
     month: "short",
     year: "numeric",
+    timeZone: "Europe/Bucharest",
   });
   return `${start} – ${end}`;
 }

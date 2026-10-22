@@ -7,6 +7,7 @@ import { PersoaneResursaFilters } from "@/components/features/dashboard/Persoane
 import { PersoaneResursaTable } from "@/components/features/dashboard/PersoaneResursaTable";
 import { PersoaneResursaPagination } from "@/components/features/dashboard/PersoaneResursaPagination";
 import { PersoaneResursaHeaderActions } from "@/components/features/dashboard/PersoaneResursaHeaderActions";
+import { DownloadButton } from "@/components/ui/DownloadButton";
 
 interface PageProps {
   searchParams: Promise<{ search?: string; program?: string; page?: string }>;
@@ -35,6 +36,9 @@ export default async function Page({ searchParams }: PageProps) {
   // `editor-fdsc` reads this screen but does not administer it: no adding, no
   // editing, no removing. Only the administrator gets the write actions.
   const canManage = user?.role?.type === "super-admin";
+  const exportQuery = new URLSearchParams(
+    Object.entries({ search, program }).filter(([, value]) => value),
+  ).toString();
 
   return (
     <div>
@@ -50,7 +54,17 @@ export default async function Page({ searchParams }: PageProps) {
             Toți mentorii și experții alocați programelor platformei Crestem.ONG
           </p>
         </div>
-        {canManage && <PersoaneResursaHeaderActions dimensions={dimensions} />}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Read-only, so the editor gets it too; follows the screen's filters. */}
+          <DownloadButton
+            href={`/api/admin/meetings/export${exportQuery ? `?${exportQuery}` : ""}`}
+            label="Descarcă jurnalul"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-border bg-white text-sm font-semibold hover:bg-slate-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1c81]/40 focus-visible:ring-offset-2"
+            style={{ color: "#1c1c81" }}
+            iconSize={16}
+          />
+          {canManage && <PersoaneResursaHeaderActions dimensions={dimensions} />}
+        </div>
       </div>
 
       <PersoaneResursaFilters

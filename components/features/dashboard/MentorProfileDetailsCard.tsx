@@ -9,10 +9,7 @@ import type { MentorProfile } from "@/lib/api/mentor-profile";
 import { EditMentorProfileModal } from "./EditMentorProfileModal";
 import { hasRichText } from "@/components/features/page-builder/rich-text/has-rich-text";
 import { RICH_TEXT_PROSE } from "@/components/features/page-builder/rich-text/prose";
-
-function formatJoinDate(iso: string) {
-  return new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "long", year: "numeric" }).format(new Date(iso));
-}
+import { formatLongDate } from "@/lib/utils/date";
 
 export function MentorProfileDetailsCard({
   profile,
@@ -63,7 +60,7 @@ export function MentorProfileDetailsCard({
               <p className="text-xs mt-1 text-muted-foreground">
                 Membru din{" "}
                 <span className="font-semibold" style={{ color: "#1c1c81" }}>
-                  {formatJoinDate(profile.createdAt)}
+                  {formatLongDate(profile.createdAt)}
                 </span>
               </p>
             )}

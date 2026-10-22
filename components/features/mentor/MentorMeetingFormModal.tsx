@@ -10,7 +10,7 @@ import type { MentorOng, OngMeeting } from "@/lib/api/meetings";
 const inputClass =
   "w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-[#00d495]/30 focus:border-[#007d58] transition-colors bg-white text-sm";
 
-const selectClass = `${inputClass} appearance-none pr-10`;
+const selectClass = `${inputClass} appearance-none pr-10 disabled:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60`;
 
 const toggleBase = "py-3 rounded-xl text-sm font-semibold transition-colors border";
 

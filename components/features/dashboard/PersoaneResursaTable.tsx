@@ -8,6 +8,7 @@ import type { AdminUser } from "@/lib/api/users";
 import { formatShortDate } from "@/lib/utils/date";
 import { avatarColorFor } from "@/lib/utils/avatar";
 import { DeletedAccountBadge } from "@/components/ui/DeletedAccountBadge";
+import { DownloadButton } from "@/components/ui/DownloadButton";
 
 export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
   if (mentors.length === 0) {
@@ -129,6 +130,13 @@ export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
                       <Eye size={14} />
                       Vezi
                     </Link>
+                    <DownloadButton
+                      href={`/api/admin/meetings/export?mentor=${encodeURIComponent(mentor.documentId)}`}
+                      label="Descarcă jurnalul"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-xs font-medium whitespace-nowrap hover:bg-slate-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1c81]/40"
+                      style={{ color: "#475569" }}
+                      iconSize={14}
+                    />
                   </div>
                 </td>
               </tr>

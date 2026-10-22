@@ -9,6 +9,7 @@ import { EvaluariTable } from "@/components/features/dashboard/EvaluariTable";
 import { EvaluariOrganizatiiTable } from "@/components/features/dashboard/EvaluariOrganizatiiTable";
 import { EvaluariPagination } from "@/components/features/dashboard/EvaluariPagination";
 import { EvaluariTabs, isEvaluariTab } from "@/components/features/dashboard/EvaluariTabs";
+import { DownloadButton } from "@/components/ui/DownloadButton";
 
 /** "Afișezi 1-20 din 137 evaluări" — the count stays visible on a single page too. */
 function rangeLabel({ page, pageSize, total }: AdminEvaluationsPagination) {
@@ -54,15 +55,37 @@ export default async function Page({ searchParams }: PageProps) {
       ? await listAdminReports(query)
       : await listAdminEvaluations(query);
 
+  // The same filters the rounds grid is showing, minus the page: the file holds them all.
+  const exportQuery = new URLSearchParams(
+    Object.entries({
+      search,
+      ongs: ongs.join(","),
+      programs: programs.join(","),
+      status,
+    }).filter(([, value]) => value),
+  ).toString();
+
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
-          Evaluări
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Toate evaluările platformei, pe utilizatori și pe organizații
-        </p>
+      <div className="mb-6 flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
+            Evaluări
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Toate evaluările platformei, pe utilizatori și pe organizații
+          </p>
+        </div>
+        {/* Rounds only: a row of the users tab is one person's answers, not a round. */}
+        {tab === "organizatii" && (
+          <DownloadButton
+            href={`/api/admin/reports/export${exportQuery ? `?${exportQuery}` : ""}`}
+            label="Descarcă lista"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-semibold text-white shrink-0 hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1c81]/40 focus-visible:ring-offset-2"
+            style={{ background: "#1c1c81" }}
+            iconSize={14}
+          />
+        )}
       </div>
 
       <EvaluariTabs query={query} />

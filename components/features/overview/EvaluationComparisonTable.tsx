@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Plus, RotateCcw } from "lucide-react";
 import type { Dimension } from "@/lib/api/dimensions";
 import { dimensionColor, dimensionLabel, dimensionPillStyle } from "@/lib/api/dimension-colors";
+import { formatLongDate } from "@/lib/utils/date";
 
 const MAX_SELECTED = 5;
 const COLUMN_COLORS = ["#1c1c81", "#007d58", "#5656e5", "#c2410c", "#7c3aed"];
@@ -19,12 +20,6 @@ export interface ComparableEvaluation {
   createdAt: string;
   finishedAt: string | null;
   scores: { dimensions: Record<string, number | null>; overall: number | null };
-}
-
-function formatDate(iso: string) {
-  return new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "long", year: "numeric" }).format(
-    new Date(iso),
-  );
 }
 
 function evaluationDate(evaluation: ComparableEvaluation) {
@@ -131,7 +126,7 @@ export function EvaluationComparisonTable({
                       className="w-2 h-2 rounded-full shrink-0"
                       style={{ background: COLUMN_COLORS[index % COLUMN_COLORS.length] }}
                     />
-                    {formatDate(evaluationDate(evaluation))}
+                    {formatLongDate(evaluationDate(evaluation))}
                   </div>
                   <p
                     className="mt-1 text-2xl font-heading font-extrabold"
@@ -189,7 +184,7 @@ export function EvaluationComparisonTable({
                                 className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50 transition-colors"
                                 style={{ color: "#334155" }}
                               >
-                                {formatDate(evaluationDate(evaluation))}
+                                {formatLongDate(evaluationDate(evaluation))}
                                 {evaluation.scores.overall != null ? ` — ${evaluation.scores.overall}%` : ""}
                               </button>
                             ))}

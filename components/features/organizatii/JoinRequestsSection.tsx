@@ -12,6 +12,7 @@ const dateFormatter = new Intl.DateTimeFormat("ro-RO", {
   day: "numeric",
   month: "short",
   year: "numeric",
+  timeZone: "Europe/Bucharest",
 });
 
 /** Above this length the 2-line cell is likely truncated, so offer the full-text modal. */

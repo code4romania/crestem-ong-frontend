@@ -13,14 +13,9 @@ import { DimensionsBreakdown } from "@/components/features/evaluari/DimensionsBr
 import { ReportDetailActions } from "@/components/features/dashboard-ong/ReportDetailActions";
 import { ReportMembersTable } from "@/components/features/dashboard-ong/ReportMembersTable";
 import { SelfEvaluationBanner } from "@/components/features/dashboard-ong/SelfEvaluationBanner";
+import { formatDate } from "@/lib/utils/date";
 
 const BASE_PATH = "/dashboard/evaluari";
-
-function formatDate(iso: string) {
-  if (!iso) return "—";
-  const [year, month, day] = iso.slice(0, 10).split("-");
-  return `${day}.${month}.${year}`;
-}
 
 export default async function OngEvaluareDetailPage({
   params,

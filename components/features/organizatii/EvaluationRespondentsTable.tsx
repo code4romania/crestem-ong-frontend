@@ -16,12 +16,7 @@ import {
   respondentLabel,
 } from "./respondent-label";
 import { withEvaluariFrom } from "@/components/features/dashboard/evaluari-from";
-
-function formatDate(iso: string) {
-  if (!iso) return "—";
-  const [year, month, day] = iso.slice(0, 10).split("-");
-  return `${day}.${month}.${year}`;
-}
+import { formatDate } from "@/lib/utils/date";
 
 /**
  * Everyone invited to an evaluation, as FDSC staff and mentors see them. Mirrors

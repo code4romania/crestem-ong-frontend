@@ -15,6 +15,7 @@ import {
   type PageListResult,
   type PageSummary,
 } from "@/lib/api/pages-types";
+import { formatDate } from "@/lib/utils/date";
 
 type Pagination = PageListResult["meta"]["pagination"];
 
@@ -248,7 +249,7 @@ function PageRow({
           .join(", ")}
       </td>
       <td className="px-4 py-3.5 text-muted-foreground">
-        {new Date(page.actualizat).toLocaleDateString("ro-RO")}
+        {formatDate(page.actualizat)}
       </td>
       <td className="px-4 py-3.5">
         <div className="flex items-center gap-1.5">

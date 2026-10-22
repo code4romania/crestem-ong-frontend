@@ -9,12 +9,7 @@ import type {
 } from "@/lib/api/reports";
 import { StartIndependentEvaluationButton } from "@/components/features/dashboard-ong/StartIndependentEvaluationButton";
 import { EvaluationTabs } from "@/components/features/overview/EvaluationTabs";
-
-function formatDate(iso: string) {
-  if (!iso) return "—";
-  const [year, month, day] = iso.split("-");
-  return `${day}.${month}.${year}`;
-}
+import { formatDate } from "@/lib/utils/date";
 
 function reportStatus(report: ReportListItem) {
   if (report.finished)
@@ -116,7 +111,7 @@ export default async function OngEvaluariPage() {
                       >
                         {report.name}
                         <p className="text-xs font-normal text-muted-foreground mt-0.5">
-                          {formatDate(report.createdAt.slice(0, 10))}
+                          {formatDate(report.createdAt)}
                         </p>
                       </td>
                       <td className="px-4 py-3.5" style={{ color: "#475569" }}>
