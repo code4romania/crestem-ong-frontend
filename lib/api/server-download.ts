@@ -29,10 +29,14 @@ export async function proxyDownload(path: string): Promise<Response> {
 
   if (!upstream.ok || !upstream.body) {
     const data = (await upstream.json().catch(() => null)) as {
-      error?: { message?: string };
+      error?: { message?: string; details?: { reason?: string } };
     } | null;
     return NextResponse.json(
-      { message: data?.error?.message ?? "Nu am putut genera fișierul." },
+      {
+        message: data?.error?.message ?? "Nu am putut genera fișierul.",
+        // e.g. "empty": nothing to download, which the button shows as information.
+        reason: data?.error?.details?.reason,
+      },
       { status: upstream.status || 502 },
     );
   }

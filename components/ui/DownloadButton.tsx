@@ -7,6 +7,8 @@ import { errorMessage } from "@/lib/api/client";
 
 const FALLBACK_NAME = "export.xlsx";
 const FALLBACK_ERROR = "Nu am putut genera fișierul.";
+/** The backend's `details.reason` when an export has no rows. */
+const EMPTY_EXPORT = "empty";
 
 /** The backend sends an ASCII `filename="…"`, so a plain match is enough. */
 function fileNameOf(response: Response) {
@@ -42,7 +44,13 @@ export function DownloadButton({
       if (!res.ok) {
         const data = (await res.json().catch(() => null)) as {
           message?: string;
+          reason?: string;
         } | null;
+        // Nothing matched: information, not a failure.
+        if (data?.reason === EMPTY_EXPORT && data.message) {
+          toast.info(data.message);
+          return;
+        }
         throw new Error(errorMessage(data?.message, FALLBACK_ERROR));
       }
 

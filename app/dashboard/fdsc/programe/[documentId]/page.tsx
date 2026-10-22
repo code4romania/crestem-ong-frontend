@@ -7,6 +7,7 @@ import type { ActiveOng } from "@/lib/api/ongs";
 import type { ActiveMentor } from "@/lib/api/mentors";
 import { ProgramAssignments } from "@/components/features/programe/ProgramAssignments";
 import { isProgramFinished } from "@/lib/utils/program-status";
+import { DownloadButton } from "@/components/ui/DownloadButton";
 
 export default async function ProgramDetailPage({
   params,
@@ -33,8 +34,12 @@ export default async function ProgramDetailPage({
     },
     { value: programStats.inEvaluation, label: "În evaluare" },
     {
+      // Organizations whose rounds have all closed, not respondents.
       value: programStats.finalizedEvaluation,
-      label: programStats.finalizedEvaluation === 1 ? "Evaluare finalizată" : "Evaluări finalizate",
+      label:
+        programStats.finalizedEvaluation === 1
+          ? "ONG cu evaluare finalizată"
+          : "ONG-uri cu evaluare finalizată",
     },
     {
       value: programStats.mentorsCount,
@@ -52,11 +57,20 @@ export default async function ProgramDetailPage({
         <ArrowLeft size={14} /> Înapoi la programe
       </Link>
 
-      <div className="mb-6">
-        <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
-          {finished ? "Programul" : "Gestionează programul"}
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">{program.data.name}</p>
+      <div className="mb-6 flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
+            {finished ? "Programul" : "Gestionează programul"}
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">{program.data.name}</p>
+        </div>
+        <DownloadButton
+          href={`/api/programs/${encodeURIComponent(documentId)}/export`}
+          label="Descarcă evaluările"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-semibold text-white shrink-0 hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1c81]/40 focus-visible:ring-offset-2"
+          style={{ background: "#1c1c81" }}
+          iconSize={14}
+        />
       </div>
 
       {finished && (
