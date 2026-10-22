@@ -20,7 +20,10 @@ export async function PUT(
   const { documentId } = await params;
   const body = await request.text();
   try {
-    const data = await serverApiFetch(`/api/programs/${encodeURIComponent(documentId)}`, { method: "PUT", body });
+    const data = await serverApiFetch(
+      `/api/programs/${encodeURIComponent(documentId)}`,
+      { method: "PUT", body },
+    );
     return NextResponse.json(data);
   } catch (err) {
     return errorResponse(err);

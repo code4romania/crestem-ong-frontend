@@ -1,13 +1,10 @@
 import { requireFdscStaffRoute } from "@/lib/api/route-auth";
 import { proxyDownload } from "@/lib/api/server-download";
 
-<<<<<<< HEAD
 // Strapi builds the whole file before the first byte comes back; a full
 // export runs past the platform's default function timeout (504).
 export const maxDuration = 180;
 
-=======
->>>>>>> main
 /**
  * "Descarcă lista" on the "Evaluări per organizație" tab — every round the
  * tab's filters match, as an `.xlsx`. FDSC staff only, as on the backend.

@@ -9,10 +9,14 @@ export async function POST(request: Request) {
 
   const body = await request.text();
   try {
-    const data = await serverApiFetch("/api/programs", { method: "POST", body });
+    const data = await serverApiFetch("/api/programs", {
+      method: "POST",
+      body,
+    });
     return NextResponse.json(data);
   } catch (err) {
-    const message = err instanceof ApiError ? err.message : "A apărut o eroare.";
+    const message =
+      err instanceof ApiError ? err.message : "A apărut o eroare.";
     const status = err instanceof ApiError ? err.status : 500;
     const details = err instanceof ApiError ? err.details : undefined;
     return NextResponse.json({ message, details }, { status: status || 500 });
