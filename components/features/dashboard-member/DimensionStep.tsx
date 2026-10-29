@@ -220,7 +220,7 @@ export function DimensionStep({
         })}
       </div>
 
-      <div className="bg-white rounded-2xl border border-border p-5 mb-20">
+      <div className="bg-white rounded-2xl border border-border p-5 mb-4">
         <label htmlFor="dimension-comment" className="block text-sm font-semibold mb-3" style={{ color: "#1c1c81" }}>
           Te rugăm să argumentezi selecția făcută pentru indicatorul „{dimension.name}”
           <span style={{ color: "#b91c1c" }}> *</span>

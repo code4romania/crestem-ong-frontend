@@ -69,3 +69,36 @@ export async function finishReportAction(reportId: string): Promise<{ error?: st
   revalidateDashboardPath("/dashboard/ong/programe");
   return {};
 }
+
+/**
+ * "Închide evaluarea" from the FDSC side: the FDSC Admin closes an
+ * organization's round before its phase ends.
+ */
+export async function closeOngReportAction(
+  ongId: string,
+  reportId: string,
+): Promise<{ error?: string }> {
+  try {
+    await serverApiFetch(`/api/admin/reports/${reportId}/close`, { method: "POST" });
+  } catch (err) {
+    return { error: getApiErrorMessage(err, "Nu am putut închide evaluarea.") };
+  }
+
+  revalidateDashboardPath(`/dashboard/fdsc/organizatii/${ongId}`, "layout");
+  return {};
+}
+
+/** "Redeschide evaluarea": the FDSC Admin reopens a finished round. */
+export async function reopenOngReportAction(
+  ongId: string,
+  reportId: string,
+): Promise<{ error?: string }> {
+  try {
+    await serverApiFetch(`/api/admin/reports/${reportId}/reopen`, { method: "POST" });
+  } catch (err) {
+    return { error: getApiErrorMessage(err, "Nu am putut redeschide evaluarea.") };
+  }
+
+  revalidateDashboardPath(`/dashboard/fdsc/organizatii/${ongId}`, "layout");
+  return {};
+}

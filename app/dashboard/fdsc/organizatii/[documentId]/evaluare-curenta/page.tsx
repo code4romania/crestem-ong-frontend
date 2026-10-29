@@ -1,7 +1,9 @@
 import { serverApiFetch } from "@/lib/api/server";
+import { getCurrentUser } from "@/lib/api/session-server";
 import type { OngEvaluation, OngEvaluationDetail } from "@/lib/api/ongs";
 import type { Dimension } from "@/lib/api/dimensions";
 import { EvaluationDetailContent } from "@/components/features/organizatii/EvaluationDetailContent";
+import { AdminReportAction } from "@/components/features/organizatii/AdminReportAction";
 
 export default async function OrganizatieEvaluareCurentaPage({
   params,
@@ -10,9 +12,10 @@ export default async function OrganizatieEvaluareCurentaPage({
 }) {
   const { documentId } = await params;
 
-  const evaluationsRes = await serverApiFetch<{ data: OngEvaluation[] }>(
-    `/api/ongs/${documentId}/evaluations`,
-  );
+  const [evaluationsRes, user] = await Promise.all([
+    serverApiFetch<{ data: OngEvaluation[] }>(`/api/ongs/${documentId}/evaluations`),
+    getCurrentUser(),
+  ]);
 
   const current = (evaluationsRes.data ?? []).find((evaluation) => !evaluation.finished) ?? null;
 
@@ -25,10 +28,26 @@ export default async function OrganizatieEvaluareCurentaPage({
       ])
     : [null, null];
 
+  // Only the FDSC Admin closes a round early; the editor reads this page too.
+  const canClose = user?.role?.type === "super-admin";
+
   return (
     <div>
       {evaluationDetail && dimensions ? (
-        <EvaluationDetailContent evaluation={evaluationDetail.data} dimensions={dimensions} />
+        <EvaluationDetailContent
+          evaluation={evaluationDetail.data}
+          dimensions={dimensions}
+          actions={
+            canClose ? (
+              <AdminReportAction
+                mode="close"
+                ongId={documentId}
+                ongName={evaluationDetail.data.ong.name}
+                reportId={evaluationDetail.data.documentId}
+              />
+            ) : null
+          }
+        />
       ) : (
         <div className="bg-white rounded-xl border border-border p-8 text-center">
           <p className="text-sm text-muted-foreground">
