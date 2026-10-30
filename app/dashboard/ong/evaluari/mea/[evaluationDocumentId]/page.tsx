@@ -47,6 +47,7 @@ export default async function OngSelfEvaluationPage({
       dimensions={dimensionsRes}
       initialEvaluation={evaluation}
       backHref={BACK_HREF}
+      myEvaluationsHref="/dashboard/evaluari/overview"
     />
   );
 }

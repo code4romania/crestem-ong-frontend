@@ -54,6 +54,14 @@ export function errorMessage(err: unknown, fallback: string): string {
  * trebuie să aibă evaluare") in `details.fieldErrors`/`formErrors`, while
  * `message` is often just a generic "Date invalide: ". Prefer the details.
  */
+/** The backend's machine-readable `details.code`, e.g. `ROUND_CLOSED`. */
+export function getApiErrorCode(err: unknown): string | undefined {
+  if (!(err instanceof ApiError)) return undefined;
+  const details = err.details;
+  if (typeof details !== "object" || details === null || !("code" in details)) return undefined;
+  return typeof details.code === "string" ? details.code : undefined;
+}
+
 export function getApiErrorMessage(err: unknown, fallback: string): string {
   if (!(err instanceof ApiError)) return fallback;
 

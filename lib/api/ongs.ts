@@ -185,6 +185,8 @@ export interface OngEvaluationDetail {
   finished: boolean;
   finishedAt: string | null;
   closedBy: "manual" | "auto" | null;
+  /** Finished, and one of its phases still runs (or it has none): "Redeschide evaluarea" applies. */
+  reopenable: boolean;
   ong: { documentId: string; name: string };
   phases: {
     documentId: string;

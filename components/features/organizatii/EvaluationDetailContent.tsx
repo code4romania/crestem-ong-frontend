@@ -18,11 +18,14 @@ export function EvaluationDetailContent({
   dimensions,
   anonymous = false,
   from = null,
+  actions = null,
 }: {
   evaluation: OngEvaluationDetail;
   dimensions: Dimension[];
   anonymous?: boolean;
   from?: string | null;
+  /** Buttons shown on the title row, e.g. the FDSC Admin's "Închide evaluarea". */
+  actions?: React.ReactNode;
 }) {
   const phase = evaluation.phases?.[0] ?? null;
   const programName = phase?.program?.name ?? "Evaluare independentă";
@@ -51,13 +54,16 @@ export function EvaluationDetailContent({
 
   return (
     <>
-      <div className="mb-6">
-        <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
-          {evaluation.name}
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {programName} · {evaluation.finished ? "Finalizată" : "În desfășurare"}
-        </p>
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-heading font-extrabold" style={{ color: "#1c1c81" }}>
+            {evaluation.name}
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {programName} · {evaluation.finished ? "Finalizată" : "În desfășurare"}
+          </p>
+        </div>
+        {actions}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">

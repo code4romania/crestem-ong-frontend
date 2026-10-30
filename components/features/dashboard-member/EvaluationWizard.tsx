@@ -11,6 +11,7 @@ import { finalizeEvaluationAction, saveEvaluationDimensionAction } from "@/lib/a
 import { DimensionStep } from "./DimensionStep";
 import { EvaluationReview } from "./EvaluationReview";
 import { EvaluationResults } from "./EvaluationResults";
+import { RoundClosedModal } from "./RoundClosedModal";
 
 const INTRO_COPY =
   "Matricea de dezvoltare organizațională este ca o radiografie care arată nevoile, punctele tari și " +
@@ -58,20 +59,45 @@ const INTRO_CHECKLIST = [
   },
 ];
 
-export function EvaluationWizard({
-  ongDocumentId,
-  evaluationDocumentId,
-  dimensions,
-  initialEvaluation,
-  backHref: backHrefProp,
-}: {
+/** `details.code` the backend sends when a save hits a round that has closed. */
+const ROUND_CLOSED_CODE = "ROUND_CLOSED";
+
+type EvaluationWizardProps = {
   ongDocumentId?: string;
   evaluationDocumentId: string;
   dimensions: Dimension[];
   initialEvaluation: EvaluationDetail;
   /** Defaults to the ngo-member's own org page (needs ongDocumentId); the ngo-admin self-fill route overrides it directly. */
   backHref?: string;
-}) {
+  /** "Evaluările mele" for the role filling in: `/dashboard` for the ngo-member, overridden for the ngo-admin. */
+  myEvaluationsHref?: string;
+};
+
+/**
+ * The round can close while a respondent is still filling it in (the FDSC Admin
+ * closes it early, or its phase ends). The next save is then refused and the
+ * respondent is told so, then sent back to "Evaluările mele".
+ */
+export function EvaluationWizard({ myEvaluationsHref = "/dashboard", ...props }: EvaluationWizardProps) {
+  const router = useRouter();
+  const [roundClosed, setRoundClosed] = useState(false);
+
+  return (
+    <>
+      <EvaluationWizardSteps {...props} onRoundClosed={() => setRoundClosed(true)} />
+      {roundClosed && <RoundClosedModal onAcknowledge={() => router.push(myEvaluationsHref)} />}
+    </>
+  );
+}
+
+function EvaluationWizardSteps({
+  ongDocumentId,
+  evaluationDocumentId,
+  dimensions,
+  initialEvaluation,
+  backHref: backHrefProp,
+  onRoundClosed,
+}: Omit<EvaluationWizardProps, "myEvaluationsHref"> & { onRoundClosed: () => void }) {
   const router = useRouter();
   const [evaluation, setEvaluation] = useState(initialEvaluation);
   const [wasAlreadyComplete] = useState(initialEvaluation.completedAt != null);
@@ -101,6 +127,10 @@ export function EvaluationWizard({
         ...input,
       });
       setActiveAction(null);
+      if (result.code === ROUND_CLOSED_CODE) {
+        onRoundClosed();
+        return;
+      }
       if (result.error) {
         setError(result.error);
         return;
@@ -125,6 +155,10 @@ export function EvaluationWizard({
         ...input,
       });
       setActiveAction(null);
+      if (result.code === ROUND_CLOSED_CODE) {
+        onRoundClosed();
+        return;
+      }
       if (result.error) {
         setError(result.error);
         toast.error(result.error);
@@ -148,6 +182,10 @@ export function EvaluationWizard({
         ...input,
       });
       setActiveAction(null);
+      if (result.code === ROUND_CLOSED_CODE) {
+        onRoundClosed();
+        return;
+      }
       if (result.error) {
         setError(result.error);
         toast.error(result.error);
@@ -167,6 +205,10 @@ export function EvaluationWizard({
     startTransition(async () => {
       const result = await finalizeEvaluationAction(evaluationDocumentId);
       setActiveAction(null);
+      if (result.code === ROUND_CLOSED_CODE) {
+        onRoundClosed();
+        return;
+      }
       if (result.error) {
         setError(result.error);
         return;

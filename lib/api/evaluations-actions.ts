@@ -2,7 +2,7 @@
 
 import { revalidateDashboardPath } from "./revalidate";
 import { serverApiFetch } from "./server";
-import { getApiErrorMessage } from "./client";
+import { getApiErrorCode, getApiErrorMessage } from "./client";
 import type { EvaluationDetail } from "./evaluations";
 
 export interface SaveDimensionInput {
@@ -15,7 +15,7 @@ export interface SaveDimensionInput {
 export async function saveEvaluationDimensionAction(
   evaluationDocumentId: string,
   block: SaveDimensionInput,
-): Promise<{ data?: EvaluationDetail; error?: string }> {
+): Promise<{ data?: EvaluationDetail; error?: string; code?: string }> {
   try {
     const res = await serverApiFetch<{ data: EvaluationDetail }>(`/api/evaluations/${evaluationDocumentId}`, {
       method: "PUT",
@@ -24,13 +24,13 @@ export async function saveEvaluationDimensionAction(
     revalidateDashboardPath("/dashboard/user-ong", "layout");
     return { data: res.data };
   } catch (err) {
-    return { error: getApiErrorMessage(err, "Nu am putut salva răspunsurile.") };
+    return { error: getApiErrorMessage(err, "Nu am putut salva răspunsurile."), code: getApiErrorCode(err) };
   }
 }
 
 export async function finalizeEvaluationAction(
   evaluationDocumentId: string,
-): Promise<{ data?: EvaluationDetail; error?: string }> {
+): Promise<{ data?: EvaluationDetail; error?: string; code?: string }> {
   try {
     const res = await serverApiFetch<{ data: EvaluationDetail }>(
       `/api/evaluations/${evaluationDocumentId}/finish`,
@@ -39,6 +39,6 @@ export async function finalizeEvaluationAction(
     revalidateDashboardPath("/dashboard/user-ong", "layout");
     return { data: res.data };
   } catch (err) {
-    return { error: getApiErrorMessage(err, "Nu am putut finaliza evaluarea.") };
+    return { error: getApiErrorMessage(err, "Nu am putut finaliza evaluarea."), code: getApiErrorCode(err) };
   }
 }
