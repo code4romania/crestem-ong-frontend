@@ -127,6 +127,78 @@ export async function updateFdscUserAction(
   return {};
 }
 
+function revalidateMentorPages() {
+  revalidateDashboardPath("/dashboard/fdsc/utilizatori");
+  revalidateDashboardPath("/dashboard/fdsc/persoane-resursa");
+  revalidateDashboardPath("/dashboard/fdsc/persoane-resursa/[documentId]", "page");
+}
+
+export async function resendMentorInviteAction(documentId: string): Promise<{ error?: string }> {
+  const forbidden = await refuseNonAdministrator();
+  if (forbidden) return forbidden;
+
+  try {
+    const res = await serverApiFetch<{ message: string; emailSent: boolean }>(
+      `/api/admin/users/${documentId}/resend-invite`,
+      { method: "POST" },
+    );
+    if (!res.emailSent) return { error: res.message };
+  } catch (err) {
+    return { error: parseApiError(err, "Nu am putut retrimite invitația.").message || undefined };
+  }
+
+  revalidateMentorPages();
+  return {};
+}
+
+export async function changeMentorEmailAction(
+  documentId: string,
+  email: string,
+): Promise<{
+  error?: string;
+  fieldErrors?: Record<string, string>;
+  mode?: "invite-resent" | "confirmation-sent";
+}> {
+  const forbidden = await refuseNonAdministrator();
+  if (forbidden) return forbidden;
+
+  let res: { message: string; mode: "invite-resent" | "confirmation-sent"; emailSent: boolean };
+  try {
+    res = await serverApiFetch(`/api/admin/users/${documentId}/email`, {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  } catch (err) {
+    const parsed = parseApiError(err, "Nu am putut schimba adresa de email.");
+    return { error: parsed.message || undefined, fieldErrors: parsed.fieldErrors };
+  }
+
+  // The change is saved even when delivery fails, so refresh before reporting.
+  revalidateMentorPages();
+  if (!res.emailSent) return { error: res.message };
+  return { mode: res.mode };
+}
+
+export async function deleteMentorAction(
+  documentId: string,
+): Promise<{ error?: string; mode?: "deleted" | "anonymized" }> {
+  const forbidden = await refuseNonAdministrator();
+  if (forbidden) return forbidden;
+
+  let mode: "deleted" | "anonymized";
+  try {
+    ({ mode } = await serverApiFetch<{ message: string; mode: "deleted" | "anonymized" }>(
+      `/api/admin/users/${documentId}`,
+      { method: "DELETE" },
+    ));
+  } catch (err) {
+    return { error: parseApiError(err, "Nu am putut șterge contul.").message || undefined };
+  }
+
+  revalidateMentorPages();
+  return { mode };
+}
+
 export interface UpdateMentorProfileInput {
   nume: string;
   bio?: string;

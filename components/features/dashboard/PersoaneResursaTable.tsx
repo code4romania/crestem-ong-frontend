@@ -9,8 +9,15 @@ import { formatShortDate } from "@/lib/utils/date";
 import { avatarColorFor } from "@/lib/utils/avatar";
 import { DeletedAccountBadge } from "@/components/ui/DeletedAccountBadge";
 import { DownloadButton } from "@/components/ui/DownloadButton";
+import { MentorAdminActions } from "./MentorAdminActions";
 
-export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
+export function PersoaneResursaTable({
+  mentors,
+  canManage,
+}: {
+  mentors: AdminUser[];
+  canManage: boolean;
+}) {
   if (mentors.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-border p-8 text-center">
@@ -137,6 +144,7 @@ export function PersoaneResursaTable({ mentors }: { mentors: AdminUser[] }) {
                       style={{ color: "#475569" }}
                       iconSize={14}
                     />
+                    {canManage && <MentorAdminActions user={mentor} />}
                   </div>
                 </td>
               </tr>

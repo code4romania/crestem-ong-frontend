@@ -9,6 +9,7 @@ import type { Dimension } from "@/lib/api/dimensions";
 import { ROLE_BADGES } from "@/lib/roles";
 import { formatDate } from "@/lib/utils/date";
 import { EditFdscUserModal } from "./EditFdscUserModal";
+import { MentorAdminActions } from "./MentorAdminActions";
 
 const STATUS_BADGES: Record<AdminUser["accountStatus"], { label: string; bg: string; color: string }> = {
   active: { label: "Activ", bg: "#f0fdf4", color: "#15803d" },
@@ -138,6 +139,7 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
                         <Pencil size={16} />
                       </button>
                     )}
+                    {user.role?.type === "mentor" && <MentorAdminActions user={user} />}
                   </div>
                 </td>
               </tr>
