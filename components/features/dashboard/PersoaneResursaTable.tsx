@@ -1,15 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { Eye } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { getMediaUrl } from "@/lib/api/client";
 import { userDisplayName } from "@/lib/api/auth";
 import type { AdminUser } from "@/lib/api/users";
 import { formatShortDate } from "@/lib/utils/date";
 import { avatarColorFor } from "@/lib/utils/avatar";
 import { DeletedAccountBadge } from "@/components/ui/DeletedAccountBadge";
-import { DownloadButton } from "@/components/ui/DownloadButton";
-import { MentorAdminActions } from "./MentorAdminActions";
+import { AccountStatusBadge } from "./AccountStatusBadge";
+import { MentorRowMenu } from "./MentorRowMenu";
+
+const detailHref = (documentId: string) =>
+  `/dashboard/persoane-resursa/${documentId}`;
 
 export function PersoaneResursaTable({
   mentors,
@@ -18,6 +21,21 @@ export function PersoaneResursaTable({
   mentors: AdminUser[];
   canManage: boolean;
 }) {
+  const router = useRouter();
+
+  // The whole row opens the detail page; the name is the real link, for the
+  // keyboard, screen readers and opening in a new tab.
+  const openRow = (e: React.MouseEvent, href: string) => {
+    if ((e.target as HTMLElement).closest("a, button")) return;
+    // Selecting text (e.g. copying an email) is not a click on the row.
+    if (window.getSelection()?.toString()) return;
+    if (e.metaKey || e.ctrlKey) {
+      window.open(href, "_blank", "noopener");
+      return;
+    }
+    router.push(href);
+  };
+
   if (mentors.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-border p-8 text-center">
@@ -39,11 +57,16 @@ export function PersoaneResursaTable({
               "Persoană resursă",
               "Data adăugării",
               "Programe alocate",
+              "Status",
               "Acțiuni",
             ].map((h) => (
               <th
                 key={h}
-                className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider ${
+                  h === "Acțiuni" || h === "Data adăugării" || h === "Status"
+                    ? "text-center"
+                    : "text-left"
+                }`}
                 style={{ color: "#5b6779" }}
               >
                 {h}
@@ -55,10 +78,12 @@ export function PersoaneResursaTable({
           {mentors.map((mentor) => {
             const displayName = userDisplayName(mentor);
             const initials = displayName.slice(0, 2).toUpperCase();
+            const href = detailHref(mentor.documentId);
             return (
               <tr
                 key={mentor.documentId}
-                className={`border-b border-border last:border-0 hover:bg-slate-50 transition-colors ${
+                onClick={(e) => openRow(e, href)}
+                className={`border-b border-border last:border-0 hover:bg-slate-50 transition-colors cursor-pointer ${
                   mentor.accountStatus === "deleted" ? "opacity-60" : ""
                 }`}
               >
@@ -83,12 +108,13 @@ export function PersoaneResursaTable({
                     )}
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p
-                          className="font-semibold whitespace-normal wrap-break-word"
+                        <Link
+                          href={href}
+                          className="font-semibold whitespace-normal wrap-break-word hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1c81]/40"
                           style={{ color: "#1c1c81" }}
                         >
                           {displayName}
-                        </p>
+                        </Link>
                         {mentor.accountStatus === "deleted" && (
                           <DeletedAccountBadge />
                         )}
@@ -105,7 +131,7 @@ export function PersoaneResursaTable({
                   </div>
                 </td>
                 <td
-                  className="px-4 py-3.5 whitespace-nowrap"
+                  className="px-4 py-3.5 whitespace-nowrap text-center"
                   style={{ color: "#475569" }}
                 >
                   {formatShortDate(mentor.createdAt)}
@@ -127,24 +153,12 @@ export function PersoaneResursaTable({
                     <span style={{ color: "#5b6779" }}>—</span>
                   )}
                 </td>
+                <td className="px-4 py-3.5 text-center">
+                  <AccountStatusBadge status={mentor.accountStatus} />
+                </td>
                 <td className="px-4 py-3.5">
-                  <div className="flex items-center gap-2">
-                    <Link
-                      href={`/dashboard/persoane-resursa/${mentor.documentId}`}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-xs font-medium hover:bg-slate-50 transition-colors"
-                      style={{ color: "#475569" }}
-                    >
-                      <Eye size={14} />
-                      Vezi
-                    </Link>
-                    <DownloadButton
-                      href={`/api/admin/meetings/export?mentor=${encodeURIComponent(mentor.documentId)}`}
-                      label="Descarcă jurnalul"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-xs font-medium whitespace-nowrap hover:bg-slate-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1c81]/40"
-                      style={{ color: "#475569" }}
-                      iconSize={14}
-                    />
-                    {canManage && <MentorAdminActions user={mentor} />}
+                  <div className="flex items-center justify-center">
+                    <MentorRowMenu user={mentor} canManage={canManage} />
                   </div>
                 </td>
               </tr>

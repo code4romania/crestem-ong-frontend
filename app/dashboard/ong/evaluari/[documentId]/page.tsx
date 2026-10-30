@@ -235,6 +235,8 @@ export default async function OngEvaluareDetailPage({
         candidates={candidates}
         canAddMembers={!report.finished}
         canRemoveMembers={!report.finished}
+        canRemindMembers={!report.finished}
+        currentUserDocumentId={currentUser?.documentId ?? null}
       />
     </div>
   );
