@@ -113,7 +113,7 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
                 <td className="px-4 py-3.5">
                   {statusBadge ? (
                     <span
-                      className="inline-block px-2.5 py-1 rounded-full text-xs font-semibold text-center"
+                      className="inline-block px-2.5 py-1 rounded-full text-xs font-semibold text-center whitespace-nowrap"
                       style={{ background: statusBadge.bg, color: statusBadge.color }}
                     >
                       {statusBadge.label}
