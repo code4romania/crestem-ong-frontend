@@ -5,7 +5,7 @@ import type { ReportScores } from "./reports";
 import type { EvaluationDimensionBlock, EvaluationProgress } from "./evaluations";
 
 export type { OngListParams } from "./ong-list-query";
-export { ongListQuery } from "./ong-list-query";
+export { NO_PROGRAM, ongListQuery } from "./ong-list-query";
 
 export interface ActiveOng {
   documentId: string;
@@ -36,6 +36,8 @@ export interface Ong {
   domeniuSecundar: string | null;
   socialMedia: string | null;
   descriere: string | null;
+  /** When the organization signed up on the platform. */
+  createdAt?: string;
   memberCount: number;
   admin: {
     nume: string;

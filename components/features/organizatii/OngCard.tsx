@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Building2, ExternalLink, Globe, MapPin, Users } from "lucide-react";
 import { isRetras, type Ong } from "@/lib/api/ongs";
+import { formatDate } from "@/lib/utils/date";
 import { DeleteOngButton } from "./DeleteOngButton";
 
 export function OngCard({ ong, onDeleted }: { ong: Ong; onDeleted?: () => void }) {
@@ -92,11 +93,25 @@ export function OngCard({ ong, onDeleted }: { ong: Ong; onDeleted?: () => void }
         </div>
       )}
 
-      <div className="mt-4 pt-4 border-t border-border flex items-center justify-between gap-3">
-        <p className="text-sm text-muted-foreground truncate">
-          Admin:{" "}
-          <span style={{ color: "#334155" }}>{ong.admin?.nume ?? "—"}</span>
-        </p>
+      {/* Takes up the slack so the footer sits at the bottom of the card,
+          level with its row neighbour's whether or not either has programs. */}
+      <div className="grow min-h-4" aria-hidden />
+
+      <div className="pt-4 border-t border-border flex items-center justify-between gap-3">
+        <div className="min-w-0 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+          <p className="truncate min-w-0">
+            Admin:{" "}
+            <span style={{ color: "#334155" }}>{ong.admin?.nume ?? "—"}</span>
+          </p>
+          {ong.createdAt && (
+            <p className="shrink-0">
+              Înscris:{" "}
+              <span style={{ color: "#334155" }}>
+                {formatDate(ong.createdAt)}
+              </span>
+            </p>
+          )}
+        </div>
         <Link
           href={`/dashboard/organizatii/${ong.documentId}`}
           className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-semibold text-white shrink-0 hover:opacity-90 transition-opacity"

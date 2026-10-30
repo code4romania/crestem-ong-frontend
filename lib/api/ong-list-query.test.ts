@@ -28,4 +28,17 @@ describe("ongListQuery", () => {
       "search=a+%26+b",
     );
   });
+
+  it("carries the sign-up range", () => {
+    expect(
+      ongListQuery({
+        page: 1,
+        search: "",
+        judet: "",
+        program: "none",
+        inscrisDe: "2026-10-01",
+        inscrisPana: "2026-10-12",
+      }),
+    ).toBe("program=none&inscrisDe=2026-10-01&inscrisPana=2026-10-12");
+  });
 });
