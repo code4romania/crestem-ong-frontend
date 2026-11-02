@@ -2,7 +2,6 @@ import {
   ArrowLeftRight,
   Building2,
   Calendar,
-  ClipboardCheck,
   Flag,
   Layers,
   UserCheck,
@@ -20,7 +19,6 @@ export interface NotificationAppearance {
 
 const TEAL = "bg-[#f0fdfa] border-[#d5f5ec] text-[#0f9d76]";
 const AMBER = "bg-[#fefce8] border-[#fbf1c6] text-[#b45309]";
-const GREEN = "bg-[#f0fdf4] border-[#dcfce7] text-[#15803d]";
 const BLUE = "bg-[#eef2ff] border-[#e0e7ff] text-[#5656e5]";
 const PURPLE = "bg-[#faf5ff] border-[#f0e4fe] text-[#7c3aed]";
 
@@ -31,7 +29,6 @@ export const NOTIFICATION_APPEARANCE: Record<NotificationType, NotificationAppea
   "ong-added-to-program": { icon: Layers, tile: BLUE },
   "ong-registered": { icon: Building2, tile: TEAL },
   "admin-transfer": { icon: ArrowLeftRight, tile: AMBER },
-  "evaluation-completed": { icon: ClipboardCheck, tile: GREEN },
   "meeting-created": { icon: Calendar, tile: BLUE },
   "meeting-updated": { icon: Calendar, tile: BLUE },
   "meeting-cancelled": { icon: Calendar, tile: BLUE },
