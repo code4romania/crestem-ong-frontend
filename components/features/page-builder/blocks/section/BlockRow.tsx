@@ -79,7 +79,7 @@ export function BlockRow({
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`group/row flex items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 ${
+      className={`group/row flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-white px-4 py-3 ${
         isDragging ? "opacity-80 shadow-md" : ""
       }`}
     >
@@ -94,7 +94,10 @@ export function BlockRow({
         <GripVertical size={16} aria-hidden="true" />
       </button>
       <Icon size={16} className="shrink-0 text-[#5b6779]" aria-hidden="true" />
-      <span className="min-w-0 flex-1">
+      {/* Basis instead of flex-1's 0%: a narrow column (mobile, 3-col layout)
+          then wraps the action buttons onto their own line instead of
+          crushing the name or overflowing the column. */}
+      <span className="min-w-0 grow shrink basis-32">
         <span className="block text-sm font-semibold text-[#1c1c81]">{name}</span>
         {text ? (
           <span className="mt-0.5 block truncate text-xs text-[#5b6779]">
@@ -102,7 +105,7 @@ export function BlockRow({
           </span>
         ) : null}
       </span>
-      <span className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity focus-within:opacity-100 group-hover/row:opacity-100">
+      <span className="ml-auto flex shrink-0 items-center gap-1 opacity-0 transition-opacity focus-within:opacity-100 group-hover/row:opacity-100 pointer-coarse:opacity-100">
         <button
           type="button"
           onClick={onEdit}

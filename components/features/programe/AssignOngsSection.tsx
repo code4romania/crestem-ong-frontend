@@ -527,7 +527,7 @@ export function AssignOngsSection({
             const ongPhaseEvaluations = ong.phaseEvaluations ?? [];
             return (
               <div key={ong.documentId}>
-                <div className="flex items-center justify-between px-6 py-3.5 hover:bg-slate-50 transition-colors gap-3">
+                <div className="flex flex-col gap-3 px-6 py-3.5 hover:bg-slate-50 transition-colors sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#dcfafb" }}>
                       <Building2 size={14} style={{ color: "#5656e5" }} />
@@ -568,7 +568,7 @@ export function AssignOngsSection({
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex flex-wrap items-center gap-2 shrink-0">
                     <button
                       type="button"
                       onClick={() => {

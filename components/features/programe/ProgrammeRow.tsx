@@ -24,7 +24,7 @@ export function ProgrammeRow({ program }: { program: Program }) {
 
   return (
     <div className="bg-white rounded-xl border border-border px-5 py-4 hover:shadow-sm transition-shadow">
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-1 flex-wrap">
             <span className="font-semibold truncate" style={{ color: "#1c1c81" }}>
@@ -41,7 +41,7 @@ export function ProgrammeRow({ program }: { program: Program }) {
             {formatDate(program.startDate)} – {formatDate(program.endDate)}
           </div>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           {!finished && (
             <Link
               href={`/dashboard/programe/${program.documentId}/editeaza`}
