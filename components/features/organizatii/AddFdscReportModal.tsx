@@ -51,9 +51,18 @@ export function AddFdscReportModal({
   useEffect(() => {
     if (!program) return;
     let cancelled = false;
-    listOngEvaluations(ongDocumentId, program)
+    // No `program` param: on this endpoint it excludes evaluations already
+    // linked to the program (built for phase assignment). Here we need the
+    // opposite — only evaluations with a phase in the selected program.
+    listOngEvaluations(ongDocumentId)
       .then((res) => {
-        if (!cancelled) setEvaluations(res.data);
+        if (!cancelled) {
+          setEvaluations(
+            res.data.filter((ev) =>
+              ev.phases.some((phase) => phase.program?.documentId === program),
+            ),
+          );
+        }
       })
       .catch(() => {
         if (!cancelled) {
