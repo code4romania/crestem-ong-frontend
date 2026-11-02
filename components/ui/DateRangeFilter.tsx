@@ -54,6 +54,15 @@ const CALENDAR_STYLE = {
   "--rdp-day_button-width": "36px",
 } as CSSProperties;
 
+// Inline, not Tailwind: react-day-picker's stylesheet is unlayered, so its
+// `.rdp-selected { font-size: large }` would beat any layered utility class.
+// Days are pinned on both the cell and its button, and for the selected
+// modifier too, so a picked day never grows past its neighbours.
+const CAPTION_TEXT: CSSProperties = { fontSize: "medium", fontWeight: 600 };
+const DAY_TEXT: CSSProperties = { fontSize: "0.875rem", fontWeight: 600 };
+const CALENDAR_STYLES = { caption_label: CAPTION_TEXT, day: DAY_TEXT, day_button: DAY_TEXT };
+const CALENDAR_MODIFIER_STYLES = { selected: DAY_TEXT };
+
 /**
  * A pill that opens a calendar for picking a range of days, the way a booking
  * site does: the first click picks a day, the second one closes the range. The
@@ -122,9 +131,8 @@ export function DateRangeFilter({
         }`}
       >
         <CalendarDays size={14} className="text-slate-400 shrink-0" />
-        <span className={`truncate ${shown ? "" : "text-slate-500"}`}>
-          {shown ?? label}
-        </span>
+        {/* Same text as the neighbouring selects, whose "Toate …" option is not greyed. */}
+        <span className="truncate">{shown ?? label}</span>
       </button>
       {shown && (
         <button
@@ -155,6 +163,8 @@ export function DateRangeFilter({
             disabled={{ after: today }}
             endMonth={today}
             style={CALENDAR_STYLE}
+            styles={CALENDAR_STYLES}
+            modifiersStyles={CALENDAR_MODIFIER_STYLES}
           />
           <div className="mt-2 pt-3 border-t border-border flex items-center justify-between gap-3">
             <button
