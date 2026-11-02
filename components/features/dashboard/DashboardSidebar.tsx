@@ -28,12 +28,15 @@ import {
   Loader2,
   Globe,
   Scale,
+  Bell,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { LinkPendingIndicator } from "@/components/ui/LinkPendingIndicator";
 import { RefreshableLink } from "@/components/ui/RefreshableLink";
 import { logoutSession } from "@/lib/api/session";
+import { getUnreadCountAction } from "@/lib/api/notifications-actions";
+import { onNotificationsChanged } from "@/components/features/notifications/notifications-changed";
 
 export interface DashboardNavSection {
   label?: string;
@@ -43,14 +46,26 @@ export interface DashboardNavSection {
     icon: LucideIcon;
     /** Section the item stays highlighted across, when `href` opens a page inside it rather than its root. */
     activePath?: string;
+    /** Shows the unread-notifications count next to the label. */
+    notificationsBadge?: boolean;
   }[];
 }
 
 export const USER_MANAGEMENT_HREF = "/dashboard/utilizatori";
 
+const NOTIFICATIONS_ITEM: DashboardNavSection["items"][number] = {
+  href: "/dashboard/notificari",
+  label: "Notificări",
+  icon: Bell,
+  notificationsBadge: true,
+};
+
 const FDSC_NAV_SECTIONS: DashboardNavSection[] = [
   {
-    items: [{ href: "/dashboard", label: "Panou principal", icon: LayoutGrid }],
+    items: [
+      { href: "/dashboard", label: "Panou principal", icon: LayoutGrid },
+      NOTIFICATIONS_ITEM,
+    ],
   },
   {
     label: "CMS",
@@ -119,6 +134,7 @@ const ONG_NAV_SECTIONS: DashboardNavSection[] = [
   {
     items: [
       { href: "/dashboard", label: "Panou principal", icon: LayoutGrid },
+      NOTIFICATIONS_ITEM,
       { href: "/dashboard/profil", label: "Profilul meu", icon: User },
       {
         href: "/dashboard/evaluari/overview",
@@ -161,6 +177,7 @@ const MENTOR_NAV_SECTIONS: DashboardNavSection[] = [
   {
     items: [
       { href: "/dashboard", label: "Panou principal", icon: LayoutGrid },
+      NOTIFICATIONS_ITEM,
       { href: "/dashboard/profil", label: "Profilul meu", icon: User },
       { href: "/dashboard/programe", label: "Programele mele", icon: Layers },
       { href: "/dashboard/intalniri", label: "Întâlniri", icon: Calendar },
@@ -214,6 +231,30 @@ export function DashboardSidebar({
     .map((item) => item.activePath ?? item.href)
     .filter((path) => pathname === path || pathname.startsWith(`${path}/`))
     .sort((a, b) => b.length - a.length)[0];
+
+  // Unread notifications. Re-read on mount, on every navigation (the pathname
+  // changes) and when the notifications page reports it marked something read.
+  // Never polled. A failed read leaves the last known value, so a role without
+  // notifications (403) simply never shows a badge.
+  const hasNotifications = sections.some((section) =>
+    section.items.some((item) => item.notificationsBadge),
+  );
+  const [unreadCount, setUnreadCount] = useState(0);
+  useEffect(() => {
+    if (!hasNotifications) return;
+    let cancelled = false;
+    const refresh = () => {
+      getUnreadCountAction().then((count) => {
+        if (!cancelled && count !== null) setUnreadCount(count);
+      });
+    };
+    refresh();
+    const unsubscribe = onNotificationsChanged(refresh);
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
+  }, [hasNotifications, pathname]);
 
   const [loggingOut, setLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState<string | null>(null);
@@ -271,10 +312,22 @@ export function DashboardSidebar({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          aria-label="Deschide meniul"
-          className="-ml-2 rounded-lg p-2 text-[#334155] hover:bg-muted"
+          aria-label={
+            unreadCount === 0
+              ? "Deschide meniul"
+              : unreadCount === 1
+                ? "Deschide meniul, o notificare necitită"
+                : `Deschide meniul, ${unreadCount} notificări necitite`
+          }
+          className="relative -ml-2 rounded-lg p-2 text-[#334155] hover:bg-muted"
         >
           <Menu size={20} aria-hidden />
+          {unreadCount > 0 && (
+            <span
+              className="absolute right-1 top-1 h-[9px] w-[9px] rounded-full border-2 border-white bg-[#dc2626]"
+              aria-hidden
+            />
+          )}
         </button>
         <Logo variant="dark" height={24} />
         <span className="w-9" aria-hidden />
@@ -328,7 +381,12 @@ export function DashboardSidebar({
                           : { color: "#334155" }
                       }
                     >
-                      <NavItemContent icon={Icon} label={item.label} />
+                      <NavItemContent
+                        icon={Icon}
+                        label={item.label}
+                        badgeCount={item.notificationsBadge ? unreadCount : 0}
+                        active={active}
+                      />
                     </RefreshableLink>
                   );
                 })}
@@ -399,9 +457,13 @@ export function DashboardSidebar({
 function NavItemContent({
   icon: Icon,
   label,
+  badgeCount = 0,
+  active = false,
 }: {
   icon: LucideIcon;
   label: string;
+  badgeCount?: number;
+  active?: boolean;
 }) {
   const { pending } = useLinkStatus();
 
@@ -413,6 +475,20 @@ function NavItemContent({
         <Icon size={16} aria-hidden />
       )}
       {label}
+      {badgeCount > 0 && (
+        <span
+          className={`ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-bold ${
+            active ? "bg-white text-[#1c1c81]" : "bg-[#dc2626] text-white"
+          }`}
+        >
+          <span aria-hidden="true">{badgeCount > 99 ? "99+" : badgeCount}</span>
+          <span className="sr-only">
+            {badgeCount === 1
+              ? "1 notificare necitită"
+              : `${badgeCount} notificări necitite`}
+          </span>
+        </span>
+      )}
       {pending && <span className="sr-only">Se încarcă…</span>}
     </>
   );
