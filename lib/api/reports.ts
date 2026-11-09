@@ -162,7 +162,7 @@ export interface ReportScores {
 }
 
 export interface DimensionComment {
-  /** `null` when the payload withholds attribution, as the ONG admin's does. */
+  /** `null` when the view withholds attribution, as a respondent's own page does. */
   author: string | null;
   text: string;
 }
@@ -180,8 +180,9 @@ export interface ReportListItem {
   /**
    * Report-level averages, the same numbers `/api/reports/:documentId` returns.
    * They ride along on the list so the Comparație tab can chart every finished
-   * evaluation from one request. Dimensions with no complete respondent are
-   * `null`, and `overall` is `null` unless every dimension has a score.
+   * evaluation from one request. All `null` while the round is open; otherwise
+   * dimensions with no complete respondent are `null`, and `overall` is `null`
+   * unless every dimension has a score.
    */
   scores: ReportScores;
 }
@@ -197,13 +198,8 @@ export interface ReportDetail {
   phases: ReportPhaseInfo[];
   invitedCount: number;
   completedCount: number;
+  /** All `null` until the round closes. */
   scores: ReportScores;
-  /**
-   * Members' written arguments per dimension, keyed by dimension key. Always
-   * unattributed on this endpoint — the ONG admin sees what was said, not who
-   * said it.
-   */
-  comments: Record<string, DimensionComment[]>;
 }
 
 export interface ReportMember {

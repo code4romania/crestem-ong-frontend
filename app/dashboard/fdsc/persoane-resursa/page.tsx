@@ -73,7 +73,7 @@ export default async function Page({ searchParams }: PageProps) {
         initialProgram={program}
       />
 
-      <PersoaneResursaTable mentors={mentors} />
+      <PersoaneResursaTable mentors={mentors} canManage={canManage} />
 
       <PersoaneResursaPagination
         pagination={meta.pagination}

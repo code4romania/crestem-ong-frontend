@@ -57,6 +57,23 @@ export async function removeReportMemberAction(
   return {};
 }
 
+/** "Trimite reminder": re-mails the evaluation link. No rate limit. */
+export async function sendEvaluationReminderAction(
+  reportId: string,
+  evaluationId: string,
+): Promise<{ error?: string }> {
+  try {
+    await serverApiFetch(`/api/reports/${reportId}/members/${evaluationId}/remind`, {
+      method: "POST",
+    });
+  } catch (err) {
+    return { error: getApiErrorMessage(err, "Nu am putut trimite reminderul.") };
+  }
+
+  revalidateDashboardPath(`/dashboard/ong/evaluari/${reportId}`);
+  return {};
+}
+
 export async function finishReportAction(reportId: string): Promise<{ error?: string }> {
   try {
     await serverApiFetch(`/api/reports/${reportId}/finish`, { method: "POST" });

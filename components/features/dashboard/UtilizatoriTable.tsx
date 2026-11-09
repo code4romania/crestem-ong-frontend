@@ -9,12 +9,8 @@ import type { Dimension } from "@/lib/api/dimensions";
 import { ROLE_BADGES } from "@/lib/roles";
 import { formatDate } from "@/lib/utils/date";
 import { EditFdscUserModal } from "./EditFdscUserModal";
-
-const STATUS_BADGES: Record<AdminUser["accountStatus"], { label: string; bg: string; color: string }> = {
-  active: { label: "Activ", bg: "#f0fdf4", color: "#15803d" },
-  pending: { label: "În așteptare", bg: "#fffbeb", color: "#b45309" },
-  deleted: { label: "Șters", bg: "#fef2f2", color: "#b91c1c" },
-};
+import { MentorAdminActions } from "./MentorAdminActions";
+import { AccountStatusBadge } from "./AccountStatusBadge";
 
 // Mentors are not editable from user administration — they maintain their own
 // profile from the mentor dashboard. FDSC staff accounts stay editable here.
@@ -62,7 +58,6 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
             const displayName = userDisplayName(user);
             const initials = displayName.slice(0, 2).toUpperCase();
             const role = user.role ? (ROLE_BADGES[user.role.type] ?? null) : null;
-            const statusBadge = STATUS_BADGES[user.accountStatus] ?? null;
             const orgNames = user.ong.map((ong) => ong.name).join(", ");
             const canEdit = Boolean(user.role && EDITABLE_ROLES.includes(user.role.type));
             return (
@@ -111,16 +106,7 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
                   {orgNames || <span style={{ color: "#5b6779" }}>—</span>}
                 </td>
                 <td className="px-4 py-3.5">
-                  {statusBadge ? (
-                    <span
-                      className="inline-block px-2.5 py-1 rounded-full text-xs font-semibold text-center"
-                      style={{ background: statusBadge.bg, color: statusBadge.color }}
-                    >
-                      {statusBadge.label}
-                    </span>
-                  ) : (
-                    <span style={{ color: "#5b6779" }}>—</span>
-                  )}
+                  <AccountStatusBadge status={user.accountStatus} />
                 </td>
                 <td className="px-4 py-3.5" style={{ color: "#475569" }}>
                   {formatDate(user.lastLoginAt)}
@@ -138,6 +124,7 @@ export function UtilizatoriTable({ users, dimensions }: { users: AdminUser[]; di
                         <Pencil size={16} />
                       </button>
                     )}
+                    {user.role?.type === "mentor" && <MentorAdminActions user={user} />}
                   </div>
                 </td>
               </tr>

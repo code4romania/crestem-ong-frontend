@@ -33,11 +33,12 @@ export function StartEvaluationModal({
     });
   };
 
-  const handleSubmit = () => {
-    if (selected.size === 0) return;
+  // The backend always adds the admin as a respondent, so an empty list starts
+  // a round only they fill in.
+  const start = (members: string[]) => {
     setError(null);
     startTransition(async () => {
-      const result = await startEvaluationAction([...selected], program);
+      const result = await startEvaluationAction(members, program);
       if (result.error || !result.reportId) {
         setError(result.error ?? "Nu am putut porni evaluarea.");
         return;
@@ -57,7 +58,7 @@ export function StartEvaluationModal({
               Adaugă utilizatori la evaluare
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
-              Selectează membrii ONG-ului care nu au fost încă invitați.
+              Selectează membrii ONG-ului pe care vrei să-i inviți. Tu ești adăugat automat ca respondent.
             </p>
           </div>
           <button
@@ -74,18 +75,21 @@ export function StartEvaluationModal({
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {activeMembers.length === 0 ? (
             <div className="px-3 py-6 flex flex-col items-center gap-3 text-center">
-              <p className="text-sm text-muted-foreground">Organizația nu are membri activi de invitat.</p>
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  router.push("/dashboard/ong/utilizatori");
-                }}
-                className="px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:bg-slate-50 transition-colors"
-                style={{ color: "#1c1c81" }}
-              >
-                Invită utilizatori
-              </button>
+              <p className="text-sm text-muted-foreground">
+                Organizația nu are membri activi de invitat. Poți completa evaluarea singur sau{" "}
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    router.push("/dashboard/ong/utilizatori");
+                  }}
+                  className="font-semibold hover:underline focus-visible:underline"
+                  style={{ color: "#007d58" }}
+                >
+                  invită utilizatori
+                </button>
+                .
+              </p>
             </div>
           ) : (
             activeMembers.map((member) => {
@@ -135,12 +139,16 @@ export function StartEvaluationModal({
           </button>
           <button
             type="button"
-            onClick={handleSubmit}
-            disabled={isPending || selected.size === 0}
+            onClick={() => start([...selected])}
+            disabled={isPending}
             className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:brightness-90"
             style={{ background: "#00d495" }}
           >
-            {isPending ? "Se pornește..." : "Începe evaluarea"}
+            {isPending
+              ? "Se pornește..."
+              : selected.size === 0
+                ? "Începe și completează singur"
+                : `Începe evaluarea (${selected.size})`}
           </button>
         </div>
       </div>

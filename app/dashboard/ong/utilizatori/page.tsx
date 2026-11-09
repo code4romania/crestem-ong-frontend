@@ -127,7 +127,7 @@ export default async function UtilizatoriPage() {
                     </td>
                     <td className="px-4 py-3.5">
                       <span
-                        className="px-2.5 py-1 rounded-full text-xs font-semibold"
+                        className="inline-block px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap"
                         style={{ background: status.bg, color: status.color }}
                       >
                         {status.label}

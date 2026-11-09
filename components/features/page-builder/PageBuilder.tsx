@@ -534,7 +534,7 @@ export function PageBuilder({
             {...dragHandle.attributes}
             {...(dragHandle.listeners ?? {})}
             aria-label="Trage pentru reordonare"
-            className="absolute left-3 top-3 z-10 cursor-grab touch-none rounded-md bg-white/90 p-1 text-[#5b6779] opacity-0 shadow-sm transition-opacity hover:text-[#5b6779] group-hover:opacity-100"
+            className="absolute left-3 top-3 z-10 cursor-grab touch-none rounded-md bg-white/90 p-1 text-[#5b6779] opacity-0 shadow-sm transition-opacity hover:text-[#5b6779] group-hover:opacity-100 pointer-coarse:opacity-100"
           >
             <GripVertical size={16} aria-hidden="true" />
           </button>
@@ -543,7 +543,7 @@ export function PageBuilder({
         {/* Sections carry these actions in their own header; a plain block had
             none at all, so a block added by mistake could not be removed. */}
         {dragHandle ? (
-          <span className="absolute right-3 top-3 z-10 flex items-center gap-0.5 rounded-lg bg-white/95 p-1 opacity-0 shadow-sm transition-opacity group-hover:opacity-100">
+          <span className="absolute right-3 top-3 z-10 flex items-center gap-0.5 rounded-lg bg-white/95 p-1 opacity-0 shadow-sm transition-opacity group-hover:opacity-100 pointer-coarse:opacity-100">
             <button
               type="button"
               onClick={() => handleEditBlock(block.id, null)}

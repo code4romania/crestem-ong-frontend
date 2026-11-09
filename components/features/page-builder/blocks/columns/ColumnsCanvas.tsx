@@ -95,7 +95,7 @@ export function ColumnsCanvas({
 
   return (
     <div className="group rounded-2xl border border-border bg-slate-50/60">
-      <div className="flex items-center gap-3 rounded-t-2xl border-b border-border bg-slate-100/70 px-4 py-3">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-t-2xl border-b border-border bg-slate-100/70 px-4 py-3">
         <button
           type="button"
           ref={dragHandle?.setActivatorNodeRef}
@@ -110,7 +110,7 @@ export function ColumnsCanvas({
         <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-[#475569]">
           Columns
         </span>
-        <span className="truncate text-sm text-[#5b6779]">
+        <span className="min-w-0 truncate text-sm text-[#5b6779]">
           {columnsSummary(data)}
         </span>
         <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-[#475569] ring-1 ring-border">
@@ -118,7 +118,7 @@ export function ColumnsCanvas({
         </span>
 
         <span className="ml-auto flex shrink-0 items-center gap-1">
-          <span className="flex items-center gap-1 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+          <span className="flex items-center gap-1 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100 pointer-coarse:opacity-100">
             <button
               type="button"
               onClick={actions.onEdit}
@@ -177,14 +177,14 @@ export function ColumnsCanvas({
 
       {collapsed ? null : (
         <div
-          className={`grid gap-3 p-4 ${
+          className={`grid grid-cols-1 gap-3 p-4 ${
             count === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"
           }`}
         >
           {columns.map((column, columnIndex) => (
             <div
               key={columnIndex}
-              className="rounded-xl border border-dashed border-border p-3"
+              className="min-w-0 rounded-xl border border-dashed border-border p-3"
             >
               <p className="mb-2 text-center text-xs font-semibold uppercase tracking-wide text-[#5b6779]">
                 Coloana {columnIndex + 1}

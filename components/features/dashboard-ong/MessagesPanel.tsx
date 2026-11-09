@@ -8,9 +8,30 @@ import { ConversationThread } from "./ConversationThread";
 
 const POLL_INTERVAL_MS = 30000;
 
-export function MessagesPanel({ initialConversations }: { initialConversations: ConversationListItem[] }) {
+export function MessagesPanel({
+  initialConversations,
+  initialSelectedId,
+}: {
+  initialConversations: ConversationListItem[];
+  /** From `?conversatie=` (a message notification's link); falls back to the first conversation. */
+  initialSelectedId?: string;
+}) {
   const [conversations, setConversations] = useState(initialConversations);
-  const [selectedId, setSelectedId] = useState<string | null>(initialConversations[0]?.documentId ?? null);
+  const pickInitial = () =>
+    initialConversations.find((c) => c.documentId === initialSelectedId)?.documentId ??
+    initialConversations[0]?.documentId ??
+    null;
+  const [selectedId, setSelectedId] = useState<string | null>(pickInitial);
+
+  // A notification opened while this page is already mounted only changes the
+  // query string: the panel keeps its state, so follow the new target.
+  const [target, setTarget] = useState(initialSelectedId);
+  if (initialSelectedId !== target) {
+    setTarget(initialSelectedId);
+    if (initialSelectedId && conversations.some((c) => c.documentId === initialSelectedId)) {
+      setSelectedId(initialSelectedId);
+    }
+  }
 
   const refresh = async () => {
     const result = await getConversationsAction();

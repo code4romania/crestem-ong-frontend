@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, AlertCircle, Mail } from "lucide-react";
+import { Plus, AlertCircle } from "lucide-react";
 import { AddReportMembersModal } from "./AddReportMembersModal";
 import { RemoveReportMemberButton } from "./RemoveReportMemberButton";
+import { SendReminderButton } from "./SendReminderButton";
 import type { OngMember, ReportMember } from "@/lib/api/reports";
 import {
   MEMBER_STATUS_COLORS,
@@ -19,12 +20,16 @@ export function ReportMembersTable({
   candidates,
   canAddMembers,
   canRemoveMembers,
+  canRemindMembers,
+  currentUserDocumentId,
 }: {
   reportId: string;
   invited: ReportMember[];
   candidates: OngMember[];
   canAddMembers: boolean;
   canRemoveMembers: boolean;
+  canRemindMembers: boolean;
+  currentUserDocumentId: string | null;
 }) {
   const [adding, setAdding] = useState(false);
   const completedCount = invited.filter(
@@ -126,17 +131,17 @@ export function ReportMembersTable({
                     </td>
                     <td className="px-5 py-3.5 text-center">
                       <div className="flex items-center justify-center gap-2">
-                        {entry.status !== "completat" && (
-                          <button
-                            type="button"
-                            disabled
-                            title="Retrimiterea invitației nu este disponibilă încă"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-border opacity-40 cursor-not-allowed"
-                            style={{ color: "#475569" }}
-                          >
-                            <Mail size={11} /> Trimite reminder
-                          </button>
-                        )}
+                        {/* Never on the admin's own row, nor for an anonymized account. */}
+                        {canRemindMembers &&
+                          entry.status !== "completat" &&
+                          entry.user?.email &&
+                          entry.user.documentId !== currentUserDocumentId && (
+                            <SendReminderButton
+                              reportId={reportId}
+                              evaluationId={entry.documentId}
+                              nume={entry.user.nume}
+                            />
+                          )}
                         {canRemoveMembers && entry.status !== "completat" && (
                           <RemoveReportMemberButton
                             reportId={reportId}

@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, Clock } from "lucide-react";
 import type { AdminReportRow } from "@/lib/api/evaluations";
 import { formatDate } from "@/lib/utils/date";
 import { withEvaluariFrom } from "./evaluari-from";
+import { OngNameLink } from "./OngNameLink";
 import { DownloadEvaluationButton } from "@/components/features/organizatii/DownloadEvaluationButton";
 
 const COLUMNS = [
@@ -81,7 +82,7 @@ export function EvaluariOrganizatiiTable({
                 >
                   <td className="px-4 py-3.5">
                     <div className="font-semibold" style={{ color: "#1c1c81" }}>
-                      {report.ong?.name ?? "—"}
+                      {report.ong ? <OngNameLink ong={report.ong} /> : "—"}
                     </div>
                     <div className="text-xs" style={{ color: "#5b6779" }}>
                       {report.name}

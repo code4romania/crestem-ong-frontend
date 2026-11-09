@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { UsersPagination } from "@/lib/api/users";
+import { pageWindow } from "./EvaluariPagination";
 
 export function UtilizatoriPagination({
   pagination,
@@ -34,28 +35,32 @@ export function UtilizatoriPagination({
     return `${basePath}${qs ? `?${qs}` : ""}`;
   }
 
-  const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
-
   return (
-    <nav aria-label={label} className="flex items-center justify-center gap-1 mt-6">
+    <nav aria-label={label} className="flex items-center justify-center gap-1 mt-6 flex-wrap">
       <PageLink href={hrefFor(Math.max(1, page - 1))} disabled={page === 1}>
         Anterior
       </PageLink>
-      {pages.map((p) => (
-        <Link
-          key={p}
-          href={hrefFor(p)}
-          aria-current={p === page ? "page" : undefined}
-          className="px-3 py-2 rounded-lg text-sm border font-medium min-w-[2.5rem] text-center"
-          style={
-            p === page
-              ? { background: "#1c1c81", color: "white", borderColor: "#1c1c81" }
-              : { borderColor: "#e2e8f0", color: "#475569" }
-          }
-        >
-          {p}
-        </Link>
-      ))}
+      {pageWindow(page, pageCount).map((p, index) =>
+        typeof p === "number" ? (
+          <Link
+            key={p}
+            href={hrefFor(p)}
+            aria-current={p === page ? "page" : undefined}
+            className="px-3 py-2 rounded-lg text-sm border font-medium min-w-[2.5rem] text-center"
+            style={
+              p === page
+                ? { background: "#1c1c81", color: "white", borderColor: "#1c1c81" }
+                : { borderColor: "#e2e8f0", color: "#475569" }
+            }
+          >
+            {p}
+          </Link>
+        ) : (
+          <span key={`gap-${index}`} aria-hidden="true" className="px-2 text-sm" style={{ color: "#5b6779" }}>
+            …
+          </span>
+        ),
+      )}
       <PageLink href={hrefFor(Math.min(pageCount, page + 1))} disabled={page === pageCount}>
         Următor
       </PageLink>

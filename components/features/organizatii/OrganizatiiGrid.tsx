@@ -1,12 +1,22 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDown, Search } from "lucide-react";
-import { fetchOngPage, type Ong, type OngListMeta } from "@/lib/api/ongs";
+import {
+  fetchOngPage,
+  NO_PROGRAM,
+  type Ong,
+  type OngListMeta,
+} from "@/lib/api/ongs";
 import { OngCard } from "./OngCard";
 import { OngCardSkeleton } from "./OngCardSkeleton";
 import { DownloadButton } from "@/components/ui/DownloadButton";
+import {
+  DateRangeFilter,
+  EMPTY_DAY_RANGE,
+  type DayRange,
+} from "@/components/ui/DateRangeFilter";
 
 interface ProgramOption {
   documentId: string;
@@ -16,6 +26,14 @@ interface ProgramOption {
 const SEARCH_DEBOUNCE_MS = 300;
 /** How many placeholder cards stand in for a page being fetched. */
 const SKELETON_COUNT = 4;
+
+interface ListFilters {
+  search: string;
+  judet: string;
+  program: string;
+  inscrisDe: string;
+  inscrisPana: string;
+}
 
 /**
  * Appends a page, dropping any organization already on screen. Pages are cut by
@@ -46,12 +64,25 @@ export function OrganizatiiGrid({
   const [search, setSearch] = useState("");
   const [judetFilter, setJudetFilter] = useState("");
   const [programFilter, setProgramFilter] = useState("");
+  const [inscrisFilter, setInscrisFilter] = useState<DayRange>(EMPTY_DAY_RANGE);
+  const filters = useMemo<ListFilters>(
+    () => ({
+      search,
+      judet: judetFilter,
+      program: programFilter,
+      inscrisDe: inscrisFilter.from,
+      inscrisPana: inscrisFilter.to,
+    }),
+    [search, judetFilter, programFilter, inscrisFilter],
+  );
   // The filters the list on screen was last loaded with: the search applies
   // after its debounce, and the export must match what is shown.
-  const [appliedFilters, setAppliedFilters] = useState({
+  const [appliedFilters, setAppliedFilters] = useState<ListFilters>({
     search: "",
     judet: "",
     program: "",
+    inscrisDe: "",
+    inscrisPana: "",
   });
   const [loadingPage, setLoadingPage] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -62,10 +93,7 @@ export function OrganizatiiGrid({
   const requestIdRef = useRef(0);
 
   const load = useCallback(
-    async (
-      page: number,
-      filters: { search: string; judet: string; program: string },
-    ) => {
+    async (page: number, filters: ListFilters) => {
       const requestId = ++requestIdRef.current;
       setLoadingPage(page);
       setError(null);
@@ -96,12 +124,11 @@ export function OrganizatiiGrid({
       return;
     }
     const timer = setTimeout(() => {
-      const filters = { search, judet: judetFilter, program: programFilter };
       setAppliedFilters(filters);
       load(1, filters);
-    }, search ? SEARCH_DEBOUNCE_MS : 0);
+    }, filters.search ? SEARCH_DEBOUNCE_MS : 0);
     return () => clearTimeout(timer);
-  }, [search, judetFilter, programFilter, load]);
+  }, [filters, load]);
 
   // The next page arrives when the bottom of the grid scrolls into view.
   useEffect(() => {
@@ -110,27 +137,19 @@ export function OrganizatiiGrid({
     if (!sentinel || loadingPage !== null || error || page >= pageCount) return;
     const observer = new IntersectionObserver((entries) => {
       if (entries[0]?.isIntersecting) {
-        load(page + 1, { search, judet: judetFilter, program: programFilter });
+        load(page + 1, filters);
       }
     });
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [
-    pagination,
-    loadingPage,
-    error,
-    search,
-    judetFilter,
-    programFilter,
-    load,
-  ]);
+  }, [pagination, loadingPage, error, filters, load]);
 
   // The list lives in local state, so a server refresh alone would not reach
   // it: reload page one under the current filters, and refresh the route for
   // everything else the server renders.
   const handleDeleted = () => {
     router.refresh();
-    load(1, { search, judet: judetFilter, program: programFilter });
+    load(1, filters);
   };
 
   const reloading = loadingPage === 1;
@@ -165,8 +184,8 @@ export function OrganizatiiGrid({
         total
       </p>
 
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-6">
+        <div className="relative sm:flex-1 sm:min-w-56">
           <Search
             size={16}
             className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
@@ -178,13 +197,14 @@ export function OrganizatiiGrid({
             className="w-full pl-10 pr-3.5 py-2.5 rounded-full border border-border text-sm"
           />
         </div>
-        <div className="relative w-full sm:w-auto">
+        <div className="relative w-full sm:w-60">
           <select
             value={programFilter}
             onChange={(e) => setProgramFilter(e.target.value)}
-            className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
+            className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white truncate"
           >
             <option value="">Toate programele</option>
+            <option value={NO_PROGRAM}>Fără program</option>
             {programs.map((program) => (
               <option key={program.documentId} value={program.documentId}>
                 {program.name}
@@ -196,11 +216,11 @@ export function OrganizatiiGrid({
             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
           />
         </div>
-        <div className="relative w-full sm:w-auto">
+        <div className="relative w-full sm:w-60">
           <select
             value={judetFilter}
             onChange={(e) => setJudetFilter(e.target.value)}
-            className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white sm:w-auto"
+            className="w-full appearance-none pl-4 pr-9 py-2.5 rounded-full border border-border text-sm bg-white truncate"
           >
             <option value="">Toate județele</option>
             {judete.map((judet) => (
@@ -214,6 +234,12 @@ export function OrganizatiiGrid({
             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
           />
         </div>
+        <DateRangeFilter
+          label="Data înscrierii"
+          className="w-full sm:w-60"
+          value={inscrisFilter}
+          onChange={setInscrisFilter}
+        />
       </div>
 
       {reloading ? (
@@ -252,11 +278,7 @@ export function OrganizatiiGrid({
           <button
             type="button"
             onClick={() =>
-              load(error && ongs.length > 0 ? pagination.page + 1 : 1, {
-                search,
-                judet: judetFilter,
-                program: programFilter,
-              })
+              load(error && ongs.length > 0 ? pagination.page + 1 : 1, filters)
             }
             className="px-4 py-2 rounded-lg border border-border text-sm font-medium hover:bg-muted"
           >

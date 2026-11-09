@@ -19,21 +19,9 @@ function fileNameOf(response: Response) {
 /**
  * Fetches a generated file from one of our route handlers and saves it under
  * the name the backend chose, so a failure shows as a toast instead of a raw
- * JSON page. `href` is read on click, so it can follow live filters.
+ * JSON page. `href` is read on call, so it can follow live filters.
  */
-export function DownloadButton({
-  href,
-  label,
-  className,
-  style,
-  iconSize = 13,
-}: {
-  href: string;
-  label: string;
-  className?: string;
-  style?: React.CSSProperties;
-  iconSize?: number;
-}) {
+export function useFileDownload(href: string) {
   const [busy, setBusy] = useState(false);
 
   const download = async () => {
@@ -69,6 +57,24 @@ export function DownloadButton({
       setBusy(false);
     }
   };
+
+  return { busy, download };
+}
+
+export function DownloadButton({
+  href,
+  label,
+  className,
+  style,
+  iconSize = 13,
+}: {
+  href: string;
+  label: string;
+  className?: string;
+  style?: React.CSSProperties;
+  iconSize?: number;
+}) {
+  const { busy, download } = useFileDownload(href);
 
   return (
     <button

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { getConversationMessagesAction, sendMessageAction } from "@/lib/api/conversations-actions";
 import type { ConversationListItem, ConversationMessage } from "@/lib/api/conversations";
 import { MessageComposer } from "./MessageComposer";
+import { emitNotificationsChanged } from "@/components/features/notifications/notifications-changed";
 import { DeletedAccountBadge } from "@/components/ui/DeletedAccountBadge";
 
 const POLL_INTERVAL_MS = 30000;
@@ -36,6 +37,9 @@ export function ConversationThread({
 
   useEffect(() => {
     let cancelled = false;
+    // The first read marks this conversation's message notifications read on
+    // the backend; the sidebar badge re-counts once it has.
+    let announced = false;
 
     const load = async () => {
       const result = await getConversationMessagesAction(conversation.documentId);
@@ -43,6 +47,10 @@ export function ConversationThread({
       if (result.data) {
         setMessages(result.data);
         setError(null);
+        if (!announced) {
+          announced = true;
+          emitNotificationsChanged();
+        }
       } else {
         setError(result.error ?? "Nu am putut încărca mesajele.");
       }

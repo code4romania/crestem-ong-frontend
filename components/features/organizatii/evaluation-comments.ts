@@ -3,8 +3,8 @@ import type { DimensionComment } from "@/lib/api/reports";
 
 /**
  * Arguments grouped by dimension, attributed. FDSC staff and mentors are the
- * only readers of this payload, so respondents are named here — unlike the ONG
- * admin's report page, which the API serves unattributed.
+ * only readers of members' arguments, so respondents are named here; the ONG
+ * admin never receives them.
  *
  * Pass `attributed: false` on a single respondent's own page, where repeating
  * their name above every argument says nothing.

@@ -527,15 +527,24 @@ export function AssignOngsSection({
             const ongPhaseEvaluations = ong.phaseEvaluations ?? [];
             return (
               <div key={ong.documentId}>
-                <div className="flex items-center justify-between px-6 py-3.5 hover:bg-slate-50 transition-colors gap-3">
+                <div className="flex flex-col gap-3 px-6 py-3.5 hover:bg-slate-50 transition-colors sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#dcfafb" }}>
                       <Building2 size={14} style={{ color: "#5656e5" }} />
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="text-sm font-medium truncate min-w-0 flex-1" style={{ color: "#1c1c81" }}>
-                          {ong.name}
+                        <span className="min-w-0 flex-1">
+                          <a
+                            href={`/dashboard/organizatii/${ong.documentId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex max-w-full text-sm font-medium hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1c81]/40"
+                            style={{ color: "#1c1c81" }}
+                          >
+                            <span className="truncate">{ong.name}</span>
+                            <span className="sr-only"> (se deschide într-un tab nou)</span>
+                          </a>
                         </span>
                         {isRetras(ong) && (
                           <span className="shrink-0 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">
@@ -547,16 +556,19 @@ export function AssignOngsSection({
                         {ongMentors.length} {ongMentors.length === 1 ? "persoană resursă" : "persoane resursă"}
                       </span>
                       {ong.evaluation && (
-                        <span
-                          className="inline-block mt-0.5 text-xs px-2 py-0.5 rounded-full truncate max-w-full"
-                          style={{ background: "#dcfafb", color: "#5656e5" }}
+                        <a
+                          href={`/dashboard/organizatii/${ong.documentId}/evaluari/${ong.evaluation.documentId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block mt-0.5 text-xs px-2 py-0.5 rounded-full truncate max-w-full bg-[#dcfafb] text-[#5656e5] hover:bg-[#c3f1f3] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5656e5]/40"
                         >
                           Eval: {ong.evaluation.name}
-                        </span>
+                          <span className="sr-only"> (se deschide într-un tab nou)</span>
+                        </a>
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex flex-wrap items-center gap-2 shrink-0">
                     <button
                       type="button"
                       onClick={() => {
@@ -698,7 +710,19 @@ export function AssignOngsSection({
                                   {phaseEvaluation.phaseTitle}
                                 </p>
                                 <p className="text-xs text-muted-foreground truncate">
-                                  {phaseEvaluation.report ? phaseEvaluation.report.name : "Nicio evaluare asignată"}
+                                  {phaseEvaluation.report ? (
+                                    <a
+                                      href={`/dashboard/organizatii/${ong.documentId}/evaluari/${phaseEvaluation.report.documentId}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c1c81]/40"
+                                    >
+                                      {phaseEvaluation.report.name}
+                                      <span className="sr-only"> (se deschide într-un tab nou)</span>
+                                    </a>
+                                  ) : (
+                                    "Nicio evaluare asignată"
+                                  )}
                                 </p>
                               </div>
                               {!readOnly &&

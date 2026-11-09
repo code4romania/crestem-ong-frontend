@@ -8,6 +8,7 @@ import {
 } from "@/components/features/evaluari/evaluation-status";
 import { formatDate } from "@/lib/utils/date";
 import { withEvaluariFrom } from "./evaluari-from";
+import { OngNameLink } from "./OngNameLink";
 
 const COLUMNS = [
   "Organizație",
@@ -74,7 +75,7 @@ export function EvaluariTable({
                   className="border-b border-border last:border-0 hover:bg-slate-50 transition-colors"
                 >
                   <td className="px-4 py-3.5 font-semibold" style={{ color: "#1c1c81" }}>
-                    {evaluation.ong?.name ?? "—"}
+                    {evaluation.ong ? <OngNameLink ong={evaluation.ong} /> : "—"}
                   </td>
                   <td className="px-4 py-3.5">
                     <div className="font-medium" style={{ color: "#1c1c81" }}>

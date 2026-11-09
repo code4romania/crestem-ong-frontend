@@ -250,7 +250,7 @@ function DimensionCard({
  * The "Dimensiuni evaluate" panel: one card per dimension with its description,
  * sub-indicators as scored chips, and an overall score. Shared by the ONG admin
  * report page and the FDSC/mentor organization pages, which differ only in the
- * data they hand in — the ONG admin's `comments` never carry an author.
+ * data they hand in — the ONG admin's page passes no `comments` at all.
  *
  * `detailsOpen` expands every card's details on mount, for the single-respondent
  * page where the text a member wrote is the point of the page rather than an aside.
