@@ -2,7 +2,12 @@ import { getConversationsAction } from "@/lib/api/conversations-actions";
 import { MessagesPanel } from "@/components/features/dashboard-ong/MessagesPanel";
 import { PersoaneResursaTabs } from "@/components/features/dashboard-ong/PersoaneResursaTabs";
 
-export default async function OngPersoaneResursaMesajePage() {
+interface PageProps {
+  searchParams: Promise<{ conversatie?: string }>;
+}
+
+export default async function OngPersoaneResursaMesajePage({ searchParams }: PageProps) {
+  const { conversatie } = await searchParams;
   const conversationsRes = await getConversationsAction();
 
   return (
@@ -23,7 +28,7 @@ export default async function OngPersoaneResursaMesajePage() {
           {conversationsRes.error}
         </p>
       ) : (
-        <MessagesPanel initialConversations={conversationsRes.data ?? []} />
+        <MessagesPanel initialConversations={conversationsRes.data ?? []} initialSelectedId={conversatie} />
       )}
     </div>
   );

@@ -1,7 +1,12 @@
 import { getMentorConversationsAction } from "@/lib/api/mentor-conversations-actions";
 import { MessagesPanel } from "@/components/features/dashboard-mentor/MessagesPanel";
 
-export default async function MentorMesajePage() {
+interface PageProps {
+  searchParams: Promise<{ conversatie?: string }>;
+}
+
+export default async function MentorMesajePage({ searchParams }: PageProps) {
+  const { conversatie } = await searchParams;
   const conversationsRes = await getMentorConversationsAction();
 
   return (
@@ -20,7 +25,7 @@ export default async function MentorMesajePage() {
           {conversationsRes.error}
         </p>
       ) : (
-        <MessagesPanel initialConversations={conversationsRes.data ?? []} />
+        <MessagesPanel initialConversations={conversationsRes.data ?? []} initialSelectedId={conversatie} />
       )}
     </div>
   );

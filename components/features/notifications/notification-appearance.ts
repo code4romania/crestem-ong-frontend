@@ -2,8 +2,11 @@ import {
   ArrowLeftRight,
   Building2,
   Calendar,
+  CalendarClock,
   Flag,
+  Hourglass,
   Layers,
+  MessageCircle,
   UserCheck,
   UserCog,
   UserPlus,
@@ -33,6 +36,9 @@ export const NOTIFICATION_APPEARANCE: Record<NotificationType, NotificationAppea
   "meeting-updated": { icon: Calendar, tile: BLUE },
   "meeting-cancelled": { icon: Calendar, tile: BLUE },
   "phase-ended": { icon: Flag, tile: PURPLE },
+  "phase-ending-soon": { icon: Hourglass, tile: AMBER },
+  "phase-dates-changed": { icon: CalendarClock, tile: PURPLE },
+  "message-received": { icon: MessageCircle, tile: BLUE },
 };
 
 /** A type this build does not know yet still renders, as a plain tile. */
